@@ -12,6 +12,7 @@ import {ContactInfoComponent} from './pages/contact-info/contact-info.component'
 import {DeliveryChartComponent} from './pages/delivery-chart/delivery-chart.component';
 import {FooterComponent} from './layout/footer/footer.component';
 import {HeaderComponent} from './layout/header/header.component';
+import {PageComponent} from './layout/page/page.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {HeaderComponent} from './layout/header/header.component';
     ContactInfoComponent,
     DeliveryChartComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PageComponent
   ],
   imports: [
     BrowserModule
