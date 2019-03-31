@@ -241,6 +241,7 @@ var SEMICOLON = SEMICOLON || {};
 		},
 
 		fullScreen: function(){
+      $fullScreenEl = $('.full-screen');
 			if( $fullScreenEl.length > 0 ) {
 				$fullScreenEl.each( function(){
 					var element = $(this),

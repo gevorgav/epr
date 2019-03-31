@@ -1,3 +1,278 @@
+<!-- Slider
+		============================================= -->
+<section id="slider" class="slider-element full-screen clearfix" style="background: url(../../../assets/real-estate/images/hero/2.jpg) top right no-repeat; background-size: cover;" data-height-md="550">
+
+  <div class="full-screen">
+    <div class="real-estate-tabs-slider">
+      <div class="container clearfix">
+        <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
+
+          <ul class="tab-nav clearfix">
+            <li class="noleftmargin"><a href="#tab-buy">Buy</a></li>
+            <li class="noleftmargin"><a href="#tab-rent">Rent</a></li>
+          </ul>
+
+          <div class="tab-container">
+            <div class="tab-content clearfix" id="tab-buy">
+              <form action="#" method="post" class="nobottommargin">
+                <div class="row">
+                  <div class="col-md-6 col-12 bottommargin-sm">
+                    <label for="">Choose Locations</label>
+                    <select class="selectpicker form-control" multiple data-live-search="true" data-size="6" style="width:100%;">
+                      <optgroup label="Alaskan/Hawaiian Time Zone">
+                        <option value="AK">Alaska</option>
+                        <option value="HI">Hawaii</option>
+                      </optgroup>
+                      <optgroup label="Pacific Time Zone">
+                        <option value="CA">California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="OR">Oregon</option>
+                        <option value="WA">Washington</option>
+                      </optgroup>
+                      <optgroup label="Mountain Time Zone">
+                        <option value="AZ">Arizona</option>
+                        <option value="CO">Colorado</option>
+                        <option value="ID">Idaho</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="UT">Utah</option>
+                        <option value="WY">Wyoming</option>
+                      </optgroup>
+                      <optgroup label="Central Time Zone">
+                        <option value="AL">Alabama</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TX">Texas</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="WI">Wisconsin</option>
+                      </optgroup>
+                      <optgroup label="Eastern Time Zone">
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="IN">Indiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="OH">Ohio</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WV">West Virginia</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-12 bottommargin-sm">
+                    <label for="">Property Type</label>
+                    <select class="selectpicker form-control" data-size="6" style="width:100%; line-height: 30px;">
+                      <option value="Any">Any</option>
+                      <optgroup label="Residential">
+                        <option value="Apartment">Apartment</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Building">Building</option>
+                      </optgroup>
+                      <optgroup label="Commercial">
+                        <option value="Shop">Shop</option>
+                        <option value="Office">Office</option>
+                        <option value="Warehouse">Warehouse</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col-6 bottommargin-sm">
+                    <label for="">Beds</label>
+                    <select class="selectpicker form-control" multiple data-size="6" data-placeholder="Any" style="width:100%; line-height: 30px;">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5+">5+</option>
+                    </select>
+                  </div>
+                  <div class="col-6 bottommargin-sm">
+                    <label for="">Baths</label>
+                    <select class="selectpicker form-control" multiple data-size="6" data-placeholder="Any" style="width:100%; line-height: 30px;">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5+">5+</option>
+                    </select>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col-md-6 col-12">
+                    <label for="" style="margin-bottom: 20px !important;">Price Range</label>
+                    <input class="price-range-slider" />
+                  </div>
+                  <div class="w-100 d-block d-md-none bottommargin-sm"></div>
+                  <div class="col-md-6 col-12">
+                    <label for="" style="margin-bottom: 20px !important;">Property Area</label>
+                    <input class="area-range-slider" />
+                  </div>
+                  <div class="col-md-12 clearfix">
+                    <button class="button button-3d button-rounded btn-block nomargin" style="margin-top: 35px !important;">Search Properties</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="tab-content clearfix" id="tab-rent">
+              <form action="#" method="post" class="nobottommargin">
+                <div class="row">
+                  <div class="col-md-6 col-12 bottommargin-sm">
+                    <label for="">Rental Locations</label>
+                    <select class="selectpicker form-control" multiple data-live-search="true" data-size="6" style="width:100%;">
+                      <optgroup label="Alaskan/Hawaiian Time Zone">
+                        <option value="AK">Alaska</option>
+                        <option value="HI">Hawaii</option>
+                      </optgroup>
+                      <optgroup label="Pacific Time Zone">
+                        <option value="CA">California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="OR">Oregon</option>
+                        <option value="WA">Washington</option>
+                      </optgroup>
+                      <optgroup label="Mountain Time Zone">
+                        <option value="AZ">Arizona</option>
+                        <option value="CO">Colorado</option>
+                        <option value="ID">Idaho</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="UT">Utah</option>
+                        <option value="WY">Wyoming</option>
+                      </optgroup>
+                      <optgroup label="Central Time Zone">
+                        <option value="AL">Alabama</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TX">Texas</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="WI">Wisconsin</option>
+                      </optgroup>
+                      <optgroup label="Eastern Time Zone">
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="IN">Indiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="OH">Ohio</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WV">West Virginia</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-12 bottommargin-sm">
+                    <label for="">Property Type</label>
+                    <select class="selectpicker form-control" data-size="6" style="width:100%; line-height: 30px;">
+                      <option value="Any">Any</option>
+                      <optgroup label="Residential">
+                        <option value="Apartment">Apartment</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Building">Building</option>
+                      </optgroup>
+                      <optgroup label="Commercial">
+                        <option value="Shop">Shop</option>
+                        <option value="Office">Office</option>
+                        <option value="Warehouse">Warehouse</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col-6 bottommargin-sm">
+                    <label for="">Beds</label>
+                    <select class="selectpicker form-control" multiple data-size="6" data-placeholder="Any" style="width:100%; line-height: 30px;">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5+">5+</option>
+                    </select>
+                  </div>
+                  <div class="col-6 bottommargin-sm">
+                    <label for="">Baths</label>
+                    <select class="selectpicker form-control" multiple data-size="6" data-placeholder="Any" style="width:100%; line-height: 30px;">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5+">5+</option>
+                    </select>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col-md-6 col-12">
+                    <label for="" style="margin-bottom: 20px !important;">Price Range</label>
+                    <input class="price-range-slider" />
+                  </div>
+                  <div class="w-100 d-block d-md-none bottommargin-sm"></div>
+                  <div class="col-md-6 col-12">
+                    <label for="" style="margin-bottom: 20px !important;">Property Area</label>
+                    <input class="area-range-slider" />
+                  </div>
+                  <div class="col-md-12 clearfix">
+                    <button class="button button-3d button-rounded btn-block nomargin" style="margin-top: 35px !important;">Search Rentals</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="video-wrap">
+      <!-- <video id="slide-video" preload="auto" loop autoplay muted>
+                    <source src='images/videos/explore.webm' type='video/webm' />
+                </video> -->
+      <div class="video-overlay" style="background-color: rgba(0,0,0,0.3); z-index: 1;"></div>
+    </div>
+  </div>
+
+</section><!-- #slider end -->
+
 <!-- Content
 		============================================= -->
 <section id="content">
@@ -225,7 +500,7 @@
         </div>
 
         <div class="col-lg-4">
-          <a href="#" style="background: url('../../../assets/0real-estate/images/cities/3.jpg') no-repeat center center; background-size: cover;">
+          <a href="#" style="background: url('../../../assets/real-estate/images/cities/3.jpg') no-repeat center center; background-size: cover;">
             <div class="vertical-middle dark center">
               <div class="heading-block nomargin noborder">
                 <h3 class="capitalize t500">San Francisco</h3>
@@ -402,7 +677,7 @@
                     </div>
                   </div>
                   <div class="col-md-5 bottommargin-sm">
-                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=-37.814107,144.963280&zoom=12&markers=-37.814107,144.963280&size=300x180" alt="Google Map" class="img-thumbnail">
+                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=-37.814107,144.963280&zoom=12&markers=-37.814107,144.963280&size=300x180&key=AIzaSyBgjNHuSQupmUhy6f--FwsByEfZKSRQXMw" alt="Google Map" class="img-thumbnail">
                   </div>
                 </div>
               </div>
@@ -435,3 +710,4 @@
   </div>
 
 </section>
+

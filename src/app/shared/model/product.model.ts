@@ -7,7 +7,7 @@ export class ProductModel extends ProductViewModel {
   private _description: string;
   private _rentalTerms: string;
   private _spaceRequired: string;
-  private _setupPolicy: Map<string, string>;
+  private _setupPolicy: Map<string, string>; //TODO in backend
   private _instructions: string;  // PDF file patch
   private _video: string;         // video patch
   private _safetyRules: string;   // image patch
