@@ -9,11 +9,11 @@ Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit{
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'app';
-
+  
   ngOnInit(): void {
-
+    
     // const user = Parse.User.logIn("arshak", "arshak90").then(function (data) {
     //   debugger
     // });
@@ -24,10 +24,11 @@ export class AppComponent implements OnInit, AfterViewInit{
     //   console.log(results);
     // });
   }
+  
   ngAfterViewInit() {
     const script = document.createElement('script');
     script.src = 'assets/js/functions.js';
     document.body.appendChild(script);
   }
-
+  
 }

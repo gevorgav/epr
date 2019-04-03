@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-
+  public selectedMoments = [
+    null,
+    null
+  ];
+  zipCode: number;
   constructor() { }
 
   ngOnInit() {
+  }
+  rent() {
+    console.log(this.selectedMoments);
   }
 
 }
