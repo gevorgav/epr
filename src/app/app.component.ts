@@ -15,14 +15,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
 
-    const user = Parse.User.logIn("arshak", "arshak90").then(function (data) {
-      Parse.Cloud.run("SendTest", {}).then(function(result) {
-        // make sure the set the email sent flag on the object
-        console.log("result :" + JSON.stringify(result))
-      }, function(error) {
-        // error
-      });
-    });
+    // const user = Parse.User.logIn("arshak", "arshak90").then(function (data) {
+    //   Parse.Cloud.run("SendTest", {}).then(function(result) {
+    //     // make sure the set the email sent flag on the object
+    //     console.log("result :" + JSON.stringify(result))
+    //   }, function(error) {
+    //     // error
+    //   });
+    // });
 
     // debugger
     // let Stores = Parse.Object.extend("QuestionAnswer");

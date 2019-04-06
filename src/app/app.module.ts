@@ -4,9 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {HomePageComponent} from './pages/home-page/home-page.component';
 import {CategoriesComponent} from './categories/categories.component';
-import {ProductComponent} from './product/product.component';
 import {CalculatorComponent} from './calculator/calculator.component';
-import {ProductListComponent} from './product-list/product-list.component';
 import {AboutUsComponent} from './pages/about-us/about-us.component';
 import {ContactInfoComponent} from './pages/contact-info/contact-info.component';
 import {DeliveryChartComponent} from './pages/delivery-chart/delivery-chart.component';
@@ -19,6 +17,7 @@ import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RentalItemComponent } from './pages/rental-item/rental-item.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 
 const appRoutes: Routes = [
   {
@@ -41,7 +40,11 @@ const appRoutes: Routes = [
     path: 'rentals',
     component: RentalsComponent
   },
-  {path: 'rental/:id', component: HeroDetailComponent},
+  {
+    path: 'login',
+    component: LoginPageComponent
+  },
+  {path: 'rental/:id', component: RentalItemComponent},
   {
     path: '**',
     redirectTo: '',
@@ -54,9 +57,7 @@ const appRoutes: Routes = [
     AppComponent,
     HomePageComponent,
     CategoriesComponent,
-    ProductComponent,
     CalculatorComponent,
-    ProductListComponent,
     AboutUsComponent,
     ContactInfoComponent,
     DeliveryChartComponent,
@@ -64,7 +65,8 @@ const appRoutes: Routes = [
     FooterComponent,
     RentalsComponent,
     RentalItemComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    LoginPageComponent
   ],
   imports: [
     RouterModule.forRoot(
