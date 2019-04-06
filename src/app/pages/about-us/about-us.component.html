@@ -1,14 +1,88 @@
-<p>
-  about-us works!
-</p>
-  Date Time Range From:
-  <input [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
-         [(ngModel)]="selectedMoments"
-         [selectMode]="'rangeFrom'">
-  <owl-date-time #dt12></owl-date-time>
 
-  Date Time Range To:
-  <input [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
-         [(ngModel)]="selectedMoments"
-         [selectMode]="'rangeTo'">
-  <owl-date-time #dt13></owl-date-time>
+<!-- Page Title
+	============================================= -->
+<section id="page-title" class="page-title-parallax page-title-dark" style="padding: 250px 0; background-image: url('../../../assets/images/about/parallax.jpg'); background-size: cover; background-position: center center;" data-bottom-top="background-position:0px 400px;" data-top-bottom="background-position:0px -500px;">
+
+  <div class="container clearfix">
+    <h1>About Us</h1>
+    <span>Everything you need to know about our Company</span>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Pages</a></li>
+      <li class="breadcrumb-item active" aria-current="page">About Us</li>
+    </ol>
+  </div>
+
+</section><!-- #page-title end -->
+
+<!-- Content
+	============================================= -->
+<section id="content">
+
+  <div class="content-wrap">
+
+    <div class="container clearfix">
+
+      <div class="col_one_third">
+
+        <div class="heading-block fancy-title nobottomborder title-bottom-border">
+          <h4>Why choose <span>Us</span>.</h4>
+        </div>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quidem minus id omnis, nam expedita, ea fuga commodi voluptas iusto, hic autem deleniti dolores explicabo labore enim repellat earum perspiciatis.</p>
+
+      </div>
+
+      <div class="col_one_third">
+
+        <div class="heading-block fancy-title nobottomborder title-bottom-border">
+          <h4>Our <span>Mission</span>.</h4>
+        </div>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quidem minus id omnis, nam expedita, ea fuga commodi voluptas iusto, hic autem deleniti dolores explicabo labore enim repellat earum perspiciatis.</p>
+
+      </div>
+
+      <div class="col_one_third col_last">
+
+        <div class="heading-block fancy-title nobottomborder title-bottom-border">
+          <h4>What we <span>Do</span>.</h4>
+        </div>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quidem minus id omnis, nam expedita, ea fuga commodi voluptas iusto, hic autem deleniti dolores explicabo labore enim repellat earum perspiciatis.</p>
+
+      </div>
+
+    </div>
+
+    <div class="section nomargin">
+      <div class="container clearfix">
+
+        <div class="col_one_fourth nobottommargin center" data-animate="bounceIn">
+          <i class="i-plain i-xlarge divcenter icon-line2-directions"></i>
+          <div class="counter counter-lined"><span data-from="100" data-to="846" data-refresh-interval="50" data-speed="2000"></span>K+</div>
+          <h5>Lines of Codes</h5>
+        </div>
+
+        <div class="col_one_fourth nobottommargin center" data-animate="bounceIn" data-delay="200">
+          <i class="i-plain i-xlarge divcenter nobottommargin icon-line2-graph"></i>
+          <div class="counter counter-lined"><span data-from="3000" data-to="15360" data-refresh-interval="100" data-speed="2500"></span>+</div>
+          <h5>KBs of HTML Files</h5>
+        </div>
+
+        <div class="col_one_fourth nobottommargin center" data-animate="bounceIn" data-delay="400">
+          <i class="i-plain i-xlarge divcenter nobottommargin icon-line2-layers"></i>
+          <div class="counter counter-lined"><span data-from="10" data-to="408" data-refresh-interval="25" data-speed="3500"></span>*</div>
+          <h5>No. of Templates</h5>
+        </div>
+
+        <div class="col_one_fourth nobottommargin center col_last" data-animate="bounceIn" data-delay="600">
+          <i class="i-plain i-xlarge divcenter nobottommargin icon-line2-clock"></i>
+          <div class="counter counter-lined"><span data-from="60" data-to="1200" data-refresh-interval="30" data-speed="2700"></span>+</div>
+          <h5>Hours of Coding</h5>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
