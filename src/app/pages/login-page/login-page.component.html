@@ -19,16 +19,8 @@
   <div class="content-wrap">
 
     <div class="container clearfix">
-
-      <div class="tabs divcenter nobottommargin clearfix" id="tab-login-register" style="max-width: 500px;">
-
-        <ul class="tab-nav tab-nav2 center clearfix">
-          <li class="inline-block"><a href="#tab-login">Login</a></li>
-          <li class="inline-block"><a href="#tab-register">Register</a></li>
-        </ul>
-
-        <div class="tab-container">
-
+      <mat-tab-group animationDuration="0ms" style="max-width: 500px;" class="nobottommargin clearfix divcenter">
+        <mat-tab label="Login">
           <div class="tab-content clearfix" id="tab-login">
             <div class="card nobottommargin">
               <div class="card-body" style="padding: 40px;">
@@ -55,7 +47,8 @@
               </div>
             </div>
           </div>
-
+        </mat-tab>
+        <mat-tab label="Register">
           <div class="tab-content clearfix" id="tab-register">
             <div class="card nobottommargin">
               <div class="card-body" style="padding: 40px;">
@@ -101,10 +94,8 @@
               </div>
             </div>
           </div>
-
-        </div>
-
-      </div>
+        </mat-tab>
+      </mat-tab-group>
 
     </div>
 

@@ -1,56 +1,9 @@
 <!-- Slider
 		============================================= -->
-<section id="slider" class="slider-element full-screen clearfix" style="background: url(../../../assets/real-estate/images/hero/2.jpg) top right no-repeat; background-size: cover;" data-height-md="550">
+<section id="slider" class="slider-element full-screen clearfix" style="background: url(../../../assets/images/party-at-home.jpg) top right no-repeat; background-size: cover;" data-height-md="550">
 
   <div class="full-screen">
-    <div class="real-estate-tabs-slider">
-      <div class="container clearfix">
-        <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
-
-          <ul class="tab-nav clearfix">
-            <li class="noleftmargin"><a href="#tab-rent">Rent</a></li>
-          </ul>
-
-          <div class="tab-container">
-
-            <div class="tab-content clearfix" id="tab-rent">
-              <div class="row">
-                <div class="col-md-12 col-12">
-                  <label for="start" style="margin-bottom: 20px !important;">Event Location</label>
-                  <input id="zipCode" name="zipCode" class="required sm-form-control input-block-level not-dark" [(ngModel)]="zipCode">
-                </div>
-                <div class="w-100"></div>
-                <div class="col-md-6 col-12">
-                  <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-                  <input  class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
-                         [(ngModel)]="selectedMoments"
-                         [selectMode]="'rangeFrom'" name="start">
-                  <owl-date-time #dt12></owl-date-time>
-                </div>
-                <div class="w-100 d-block d-md-none bottommargin-sm"></div>
-                <div class="col-md-6 col-12">
-                  <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
-                  <input  class="required sm-form-control input-block-level not-dark" id="end" [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
-                         [(ngModel)]="selectedMoments"
-                         [selectMode]="'rangeTo'" name="end">
-                  <owl-date-time #dt13></owl-date-time>
-                </div>
-                <div class="col-md-12 clearfix">
-                  <button class="button button-3d button-rounded btn-block nomargin" style="margin-top: 35px !important;" (click)="rent()">Submit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="video-wrap">
-      <!-- <video id="slide-video" preload="auto" loop autoplay muted>
-                    <source src='images/videos/explore.webm' type='video/webm' />
-                </video> -->
-      <div class="video-overlay" style="background-color: rgba(0,0,0,0.3); z-index: 1;"></div>
-    </div>
+    <app-location-date></app-location-date>
   </div>
 
 </section><!-- #slider end -->

@@ -12,12 +12,18 @@ import {FooterComponent} from './layout/footer/footer.component';
 import {HeaderComponent} from './layout/header/header.component';
 import {RouterModule, Routes} from '@angular/router';
 import {RentalsComponent} from './pages/rentals/rentals.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { RentalItemComponent } from './pages/rental-item/rental-item.component';
-import { CheckoutComponent } from './pages/checkout/checkout.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
+import {RentalItemComponent} from './pages/rental-item/rental-item.component';
+import {CheckoutComponent} from './pages/checkout/checkout.component';
+import {LoginPageComponent} from './pages/login-page/login-page.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatIconModule} from '@angular/material/icon';
+import { LocationDateComponent } from './pages/location-date/location-date.component';
+import {LocationDateService} from './shared/services/location-date.service';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 const appRoutes: Routes = [
   {
@@ -42,9 +48,13 @@ const appRoutes: Routes = [
   },
   {
     path: 'login',
-    component: LoginPageComponent
+    component: LoginPageComponent,
+    pathMatch: 'full'
   },
-  {path: 'rental/:id', component: RentalItemComponent},
+  {
+    path: 'rental/:id',
+    component: RentalItemComponent,
+  },
   {
     path: '**',
     redirectTo: '',
@@ -66,7 +76,8 @@ const appRoutes: Routes = [
     RentalsComponent,
     RentalItemComponent,
     CheckoutComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    LocationDateComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -75,11 +86,16 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    MatFormFieldModule,
+    MatTabsModule,
+    MatIconModule,
+    MatInputModule
   ],
-  providers: [],
+  providers: [LocationDateService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

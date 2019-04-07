@@ -1,0 +1,56 @@
+<div class="real-estate-tabs-slider">
+  <div class="container clearfix">
+    <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
+
+      <ul class="tab-nav clearfix">
+        <li class="noleftmargin"><a href="#tab-rent">Rent</a></li>
+      </ul>
+
+      <div class="tab-container">
+
+        <div class="tab-content clearfix" id="tab-rent">
+          <div class="row">
+            <div class="col-md-12 col-12">
+              <label for="start" style="margin-bottom: 20px !important;">Event Location</label>
+              <input formControlName="zipCode" class="required sm-form-control input-block-level not-dark">
+              <div class="alert alert-danger" *ngIf="form.zipCode.errors.required">
+                <div>
+                  Event location is required.
+                </div>
+              </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-6 col-12">
+              <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
+              <input  class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
+                      formControlName="start"
+                      [selectMode]="'rangeFrom'">
+              <div class="alert alert-danger">
+                <div>
+                  Start date is required.
+                </div>
+              </div>
+              <owl-date-time #dt12></owl-date-time>
+            </div>
+            <div class="w-100 d-block d-md-none bottommargin-sm"></div>
+            <div class="col-md-6 col-12">
+              <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
+              <input  class="required sm-form-control input-block-level not-dark" formControlName="end" [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
+                      [selectMode]="'rangeTo'">
+              <div class="alert alert-danger">
+                <div>
+                  End date is required.
+                </div>
+              </div>
+              <owl-date-time #dt13></owl-date-time>
+            </div>
+            <div class="col-md-12 clearfix">
+              <button class="button button-3d button-rounded btn-block nomargin" style="margin-top: 35px !important;" (click)="rent()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
