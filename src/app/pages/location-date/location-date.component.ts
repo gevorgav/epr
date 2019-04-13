@@ -22,17 +22,27 @@ export class LocationDateComponent implements OnInit {
               private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.locationDateForm = this.formBuilder.group({
-      zipCode: ['', Validators.required],
-      start: ['', Validators.required],
-      end: ['', [Validators.required, Validators.email]]
+    this.locationDateForm = new FormGroup({
+      'zipCode': new FormControl(this.zipCode, [
+        Validators.required
+      ]),
+      'start': new FormControl(this.selectedMoments[0], [
+        Validators.required
+      ]),
+      'end': new FormControl(this.selectedMoments[1], [
+        Validators.required
+      ]),
+      // 'power': new FormControl(this.hero.power, Validators.required)
     });
   }
 
-  get form() { return this.locationDateForm.controls; }
+  getFormControl(name: string) { return this.locationDateForm.get(name); }
 
   rent() {
-    console.log(this.selectedMoments+""+this.zipCode);
+    if (this.locationDateForm.valid){
+      console.log(this.selectedMoments+""+this.zipCode);
+    }
+   
   }
 
 }

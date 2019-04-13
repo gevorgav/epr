@@ -49,10 +49,11 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: { title: 'EPR login page.' }
   },
   {
-    path: 'rental/:id',
+    path: 'rental/:title',
     component: RentalItemComponent,
   },
   {

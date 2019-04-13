@@ -9,7 +9,7 @@ import {ProductViewModel} from '../model/product-view.model';
 
 Injectable();
 export class ProductHttpService extends ProductService {
-
+  
   getProduct(id: number): ProductModel {
     return undefined;
   }

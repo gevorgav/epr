@@ -12,36 +12,20 @@
           <div class="row">
             <div class="col-md-12 col-12">
               <label for="start" style="margin-bottom: 20px !important;">Event Location</label>
-              <input formControlName="zipCode" class="required sm-form-control input-block-level not-dark">
-              <div class="alert alert-danger" *ngIf="form.zipCode.errors.required">
-                <div>
-                  Event location is required.
-                </div>
-              </div>
+              <input class="required sm-form-control input-block-level not-dark">
             </div>
             <div class="w-100"></div>
             <div class="col-md-6 col-12">
               <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-              <input  class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
-                      formControlName="start"
+              <input [ngModel]="selectedMoments[0]" class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
                       [selectMode]="'rangeFrom'">
-              <div class="alert alert-danger">
-                <div>
-                  Start date is required.
-                </div>
-              </div>
               <owl-date-time #dt12></owl-date-time>
             </div>
             <div class="w-100 d-block d-md-none bottommargin-sm"></div>
             <div class="col-md-6 col-12">
               <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
-              <input  class="required sm-form-control input-block-level not-dark" formControlName="end" [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
+              <input [ngModel]="selectedMoments[1]" id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
                       [selectMode]="'rangeTo'">
-              <div class="alert alert-danger">
-                <div>
-                  End date is required.
-                </div>
-              </div>
               <owl-date-time #dt13></owl-date-time>
             </div>
             <div class="col-md-12 clearfix">
