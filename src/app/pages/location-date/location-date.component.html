@@ -1,40 +1,69 @@
-<div class="real-estate-tabs-slider">
-  <div class="container clearfix">
-    <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
-
-      <ul class="tab-nav clearfix">
-        <li class="noleftmargin"><a href="#tab-rent">Rent</a></li>
-      </ul>
-
-      <div class="tab-container">
-
-        <div class="tab-content clearfix" id="tab-rent">
-          <div class="row">
-            <div class="col-md-12 col-12">
-              <label for="start" style="margin-bottom: 20px !important;">Event Location</label>
-              <input class="required sm-form-control input-block-level not-dark">
-            </div>
-            <div class="w-100"></div>
-            <div class="col-md-6 col-12">
-              <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-              <input [ngModel]="selectedMoments[0]" class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
-                      [selectMode]="'rangeFrom'">
-              <owl-date-time #dt12></owl-date-time>
-            </div>
-            <div class="w-100 d-block d-md-none bottommargin-sm"></div>
-            <div class="col-md-6 col-12">
-              <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
-              <input [ngModel]="selectedMoments[1]" id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13"
-                      [selectMode]="'rangeTo'">
-              <owl-date-time #dt13></owl-date-time>
-            </div>
-            <div class="col-md-12 clearfix">
-              <button class="button button-3d button-rounded btn-block nomargin" style="margin-top: 35px !important;" (click)="rent()">Submit</button>
+<div class="tab-container">
+        <form [formGroup]="locationDateForm" (ngSubmit)="onSubmit()" *ngIf="!locationDateService.isSpecified" novalidate>
+          <div class="tab-content clearfix" id="tab-rent">
+            <div class="row">
+              <div class="col-md-12 col-12">
+                <label for="zipCode" style="margin-bottom: 20px !important;">Event Location</label>
+                <input formControlName="zipCode" class="required sm-form-control input-block-level not-dark" id="zipCode">
+                <div *ngIf="locationDateForm.controls['zipCode'].invalid && (locationDateForm.controls['zipCode'].dirty || locationDateForm.controls['zipCode'].touched)" class="alert alert-danger">
+                  <div *ngIf="locationDateForm.controls['zipCode'].errors.required">
+                    Location or zip code is required.
+                  </div>
+                </div>
+              </div>
+              <div class="w-100"></div>
+              <div class="col-md-6 col-12">
+                <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
+                <input class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12" formControlName="startDate">
+                <div *ngIf="locationDateForm.controls['startDate'].invalid && (locationDateForm.controls['startDate'].dirty || locationDateForm.controls['startDate'].touched)" class="alert alert-danger">
+                  <div *ngIf="locationDateForm.controls['startDate'].errors.required">
+                    Start date is required.
+                  </div>
+                </div>
+                <owl-date-time #dt12></owl-date-time>
+              </div>
+              <div class="w-100 d-block d-md-none bottommargin-sm"></div>
+              <div class="col-md-6 col-12">
+                <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
+                <input id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13" formControlName="endDate">
+                <div *ngIf="locationDateForm.controls['endDate'].invalid && (locationDateForm.controls['endDate'].dirty || locationDateForm.controls['endDate'].touched)" class="alert alert-danger">
+                  <div *ngIf="locationDateForm.controls['endDate'].errors.required">
+                    End date is required.
+                  </div>
+                </div>
+                <owl-date-time #dt13></owl-date-time>
+              </div>
+              <div class="col-md-12 clearfix">
+                <div *ngIf="locationDateForm.errors?.identityRevealed && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
+                  Start date con't be after end date.
+                </div>
+                <button type="submit" [disabled]="locationDateForm.pristine || locationDateForm.invalid" class="button button-3d button-rounded btn-block nomargin"
+                        style="margin-top: 35px !important;">Submit</button>
+              </div>
             </div>
           </div>
-        </div>
+        </form>
+        <ng-container *ngIf="locationDateService.isSpecified">
+          <div class="tab-content clearfix" id="tab-rent-view">
+            <div class="row">
+              <div class="col-md-12 col-12">
+                <label for="zipCodeView" style="margin-bottom: 20px !important;">Event Location</label>
+                <span class="required sm-form-control input-block-level not-dark" id="zipCodeView">{{locationDateService.locationDate.location}}</span>
+              </div>
+              <div class="w-100"></div>
+              <div class="col-md-6 col-12">
+                <label for="startDateView" style="margin-bottom: 20px !important;">Date Time Range From:</label>
+                <span class="required sm-form-control input-block-level not-dark" id="startDateView">{{locationDateService.locationDate.startDateTime.toLocaleString()}}</span>
+              </div>
+              <div class="w-100 d-block d-md-none bottommargin-sm"></div>
+              <div class="col-md-6 col-12">
+                <label for="endDateView" style="margin-bottom: 20px !important;">Date Time Range To:</label>
+                <span class="required sm-form-control input-block-level not-dark" id="endDateView">{{locationDateService.locationDate.endDateTime.toLocaleString()}}</span>
+              </div>
+              <div class="col-md-12 clearfix">
+                <button class="button button-3d button-rounded btn-block button-white button-light nomargin" (click)="edit()" style="margin-top: 35px !important;">Change</button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
-
-    </div>
-  </div>
-</div>

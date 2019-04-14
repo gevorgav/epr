@@ -3,7 +3,17 @@
 <section id="slider" class="slider-element full-screen clearfix" style="background: url(../../../assets/images/party-at-home.jpg) top right no-repeat; background-size: cover;" data-height-md="550">
 
   <div class="full-screen">
-    <app-location-date></app-location-date>
+    <div class="real-estate-tabs-slider">
+      <div class="container clearfix">
+        <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
+
+          <ul class="tab-nav clearfix">
+            <li class="noleftmargin"><a href="#tab-rent">Instant Price & Availability</a></li>
+          </ul>
+          <app-location-date></app-location-date>
+        </div>
+      </div>
+    </div>
   </div>
 
 </section><!-- #slider end -->
@@ -332,94 +342,109 @@
 
         <div class="tabs tabs-justify tabs-tb tabs-alt nobottommargin clearfix" id="realestate-tabs" data-active="2">
 
-          <ul class="tab-nav clearfix">
-            <li><a href="#realestate-tab-1">Why Us?</a></li>
-            <li><a href="#realestate-tab-2">Properties</a></li>
-            <li><a href="#realestate-tab-3">Legal</a></li>
-          </ul>
 
-          <div class="tab-container">
-
-            <div class="tab-content clearfix" id="realestate-tab-1">
-              <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
-              <div class="col_one_fourth nobottommargin center">
-                <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="964" data-refresh-interval="50" data-speed="2000"></span></div>
-                <h5>Floors Built</h5>
-              </div>
-
-              <div class="col_one_fourth nobottommargin center">
-                <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="8514" data-refresh-interval="50" data-speed="2500"></span></div>
-                <h5>Employees</h5>
-              </div>
-
-              <div class="col_one_fourth nobottommargin center">
-                <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="458" data-refresh-interval="50" data-speed="3500"></span></div>
-                <h5>Happy Clients</h5>
-              </div>
-
-              <div class="col_one_fourth nobottommargin center col_last">
-                <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="14" data-to="159" data-refresh-interval="15" data-speed="2700"></span></div>
-                <h5>Cities Served</h5>
-              </div>
-            </div>
-            <div class="tab-content clearfix" id="realestate-tab-2">
-              <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-              <div class="row clearfix">
-                <div class="col-md-4">
-                  <ul class="iconlist nobottommargin">
-                    <li><i class="icon-ok"></i> 100% Assurance</li>
-                    <li><i class="icon-ok"></i> Hard Working</li>
-                    <li><i class="icon-ok"></i> Trustworthy</li>
-                  </ul>
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">format_align_justify</mat-icon>
+                Why Us?
+              </ng-template>
+              <div class="tab-content clearfix" id="realestate-tab-1">
+                <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
+                <div class="col_one_fourth nobottommargin center">
+                  <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="964" data-refresh-interval="50" data-speed="2000"></span></div>
+                  <h5>Floors Built</h5>
                 </div>
-                <div class="col-md-4">
-                  <ul class="iconlist nobottommargin">
-                    <li><i class="icon-ok"></i> Intelligent</li>
-                    <li><i class="icon-ok"></i> Always Curious</li>
-                    <li><i class="icon-ok"></i> Perfectionists</li>
-                  </ul>
+
+                <div class="col_one_fourth nobottommargin center">
+                  <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="8514" data-refresh-interval="50" data-speed="2500"></span></div>
+                  <h5>Employees</h5>
                 </div>
-                <div class="col-md-4">
-                  <ul class="iconlist nobottommargin">
-                    <li><i class="icon-ok"></i> Friendly &amp; Helpful</li>
-                    <li><i class="icon-ok"></i> Accomodating Nature</li>
-                    <li><i class="icon-ok"></i> Available 24x7</li>
-                  </ul>
+
+                <div class="col_one_fourth nobottommargin center">
+                  <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="100" data-to="458" data-refresh-interval="50" data-speed="3500"></span></div>
+                  <h5>Happy Clients</h5>
+                </div>
+
+                <div class="col_one_fourth nobottommargin center col_last">
+                  <div class="counter ls1 t600" style="color: #D2D2D2;"><span data-from="14" data-to="159" data-refresh-interval="15" data-speed="2700"></span></div>
+                  <h5>Cities Served</h5>
                 </div>
               </div>
-            </div>
-            <div class="tab-content clearfix" id="realestate-tab-3">
+            </mat-tab>
 
-              <div class="clear-bottommargin-sm">
-                <div class="row clearfix">
-                  <div class="col-md-7 bottommargin-sm">
-                    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.</p>
-                    <div class="clear-bottommargin-sm">
-                      <div class="row clearfix">
-                        <div class="col-md-6 bottommargin-sm">
-                          <address>
-                            <strong>Headquarters:</strong><br>
-                            795 Folsom Ave, Suite 600<br>
-                            San Francisco, CA 94107<br>
-                          </address>
-                        </div>
-                        <div class="col-md-6 bottommargin-sm">
-                          <abbr title="Phone Number"><strong>Phone:</strong></abbr> (91) 8547 632521<br>
-                          <abbr title="Fax"><strong>Fax:</strong></abbr> (91) 11 4752 1433<br>
-                          <abbr title="Email Address"><strong>Email:</strong></abbr> info@canvas.com
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">info</mat-icon>
+                Properties
+              </ng-template>
+              <div class="tab-content clearfix" id="realestate-tab-2">
+                  <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+                  <div class="row clearfix">
+                    <div class="col-md-4">
+                      <ul class="iconlist nobottommargin">
+                        <li><i class="icon-ok"></i> 100% Assurance</li>
+                        <li><i class="icon-ok"></i> Hard Working</li>
+                        <li><i class="icon-ok"></i> Trustworthy</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-4">
+                      <ul class="iconlist nobottommargin">
+                        <li><i class="icon-ok"></i> Intelligent</li>
+                        <li><i class="icon-ok"></i> Always Curious</li>
+                        <li><i class="icon-ok"></i> Perfectionists</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-4">
+                      <ul class="iconlist nobottommargin">
+                        <li><i class="icon-ok"></i> Friendly &amp; Helpful</li>
+                        <li><i class="icon-ok"></i> Accomodating Nature</li>
+                        <li><i class="icon-ok"></i> Available 24x7</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon">rate_review</mat-icon>
+                Legal
+              </ng-template>
+              <div class="tab-content clearfix" id="realestate-tab-3">
+
+                <div class="clear-bottommargin-sm">
+                  <div class="row clearfix">
+                    <div class="col-md-7 bottommargin-sm">
+                      <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.</p>
+                      <div class="clear-bottommargin-sm">
+                        <div class="row clearfix">
+                          <div class="col-md-6 bottommargin-sm">
+                            <address>
+                              <strong>Headquarters:</strong><br>
+                              795 Folsom Ave, Suite 600<br>
+                              San Francisco, CA 94107<br>
+                            </address>
+                          </div>
+                          <div class="col-md-6 bottommargin-sm">
+                            <abbr title="Phone Number"><strong>Phone:</strong></abbr> (91) 8547 632521<br>
+                            <abbr title="Fax"><strong>Fax:</strong></abbr> (91) 11 4752 1433<br>
+                            <abbr title="Email Address"><strong>Email:</strong></abbr> info@canvas.com
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-5 bottommargin-sm">
-                    <!--<img src="https://maps.googleapis.com/maps/api/staticmap?center=-37.814107,144.963280&zoom=12&markers=-37.814107,144.963280&size=300x180&key=AIzaSyBgjNHuSQupmUhy6f&#45;&#45;FwsByEfZKSRQXMw" alt="Google Map" class="img-thumbnail">-->
+                    <div class="col-md-5 bottommargin-sm">
+                      <!--<img src="https://maps.googleapis.com/maps/api/staticmap?center=-37.814107,144.963280&zoom=12&markers=-37.814107,144.963280&size=300x180&key=AIzaSyBgjNHuSQupmUhy6f&#45;&#45;FwsByEfZKSRQXMw" alt="Google Map" class="img-thumbnail">-->
+                    </div>
                   </div>
                 </div>
+
               </div>
+            </mat-tab>
+          </mat-tab-group>
 
-            </div>
 
-          </div>
 
         </div>
 

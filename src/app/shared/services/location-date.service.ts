@@ -8,6 +8,10 @@ export class LocationDateService {
 
   private _isSpecified: boolean = false;
 
+  constructor() {
+    this._locationDate = new LocationDate(null, null, null);
+  }
+
   public setLocationDate(start: Date, end: Date, location: string){
     if (start && end && location){
       this._locationDate = new LocationDate(start, end, location);
@@ -22,6 +26,14 @@ export class LocationDateService {
 
   get locationDate() {
     return this._locationDate;
+  }
+
+  get isSpecified(): boolean {
+    return this._isSpecified;
+  }
+
+  set isSpecified(value: boolean) {
+    this._isSpecified = value;
   }
 }
 

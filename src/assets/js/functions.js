@@ -249,7 +249,7 @@ var SEMICOLON = SEMICOLON || {};
 						negativeHeight = element.attr('data-negative-height');
 
 					if( element.attr('id') == 'slider' ) {
-						var sliderHeightOff = $slider.offset().top;
+						var sliderHeightOff =  $('#slider').offset().top;
 						scrHeight = scrHeight - sliderHeightOff;
 						if( element.find('.slider-parallax-inner').length > 0 ) {
 							var transformVal = element.find('.slider-parallax-inner').css('transform'),
