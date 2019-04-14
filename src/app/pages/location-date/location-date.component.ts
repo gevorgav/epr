@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LocationDateService} from '../../shared/services/location-date.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-location-date',
@@ -9,40 +9,42 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class LocationDateComponent implements OnInit {
 
-
-  public selectedMoments = [
-    null,
-    null
-  ];
-  public zipCode: number;
-
   public locationDateForm: FormGroup;
 
-  constructor(private locationDateService: LocationDateService,
-              private formBuilder: FormBuilder) { }
+  constructor(private locationDateService: LocationDateService) { }
 
   ngOnInit() {
     this.locationDateForm = new FormGroup({
-      'zipCode': new FormControl(this.zipCode, [
+      'zipCode': new FormControl(this.locationDateService.locationDate.location, [
         Validators.required
       ]),
-      'start': new FormControl(this.selectedMoments[0], [
+      'startDate': new FormControl(this.locationDateService.locationDate.startDateTime, [
         Validators.required
       ]),
-      'end': new FormControl(this.selectedMoments[1], [
+      'endDate': new FormControl(this.locationDateService.locationDate.endDateTime, [
         Validators.required
       ]),
-      // 'power': new FormControl(this.hero.power, Validators.required)
-    });
+    }, { validators: identityRevealedValidator });
   }
 
-  getFormControl(name: string) { return this.locationDateForm.get(name); }
 
-  rent() {
+
+  onSubmit() {
     if (this.locationDateForm.valid){
-      console.log(this.selectedMoments+""+this.zipCode);
+      this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.locationDateForm.get('zipCode').value);
+      this.locationDateService.isSpecified = true;
     }
-   
   }
 
+  edit() {
+    this.locationDateService.isSpecified = false;
+  }
 }
+
+export const identityRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+  const zipCode = control.get('zipCode');
+  const startDate = control.get('startDate');
+  const endDate = control.get('endDate');
+
+  return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? { 'identityRevealed': true } : null;
+};

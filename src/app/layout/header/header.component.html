@@ -13,9 +13,9 @@
       <!-- Logo
                 ============================================= -->
       <div id="logo">
-        <a href="" class="standard-logo" data-dark-logo="images/logo-dark.png"><img
+        <a routerLink="home" class="standard-logo" data-dark-logo="images/logo-dark.png"><img
           src="../../../assets/images/logo/lrg-epr-logo.png" alt="Canvas Logo"></a>
-        <a href="" class="retina-logo" data-dark-logo="images/logo-dark@2x.png"><img
+        <a routerLink="home" class="retina-logo" data-dark-logo="images/logo-dark@2x.png"><img
           src="../../../assets/images/logo/lrg-epr-logo.png" alt="Canvas Logo"></a>
       </div><!-- #logo end -->
 
@@ -23,14 +23,14 @@
                 ============================================= -->
       <nav id="primary-menu">
         <ul>
-          <li class="current"><a routerLink="">
+          <li routerLinkActive="current"><a routerLink="home">
             <div>Home</div>
           </a></li>
-          <li><a routerLink="/rentals">
+          <li routerLinkActive="current"><a routerLink="/rentals">
             <div>Rentals</div>
           </a>
             <ul>
-              <li><a href="demos/real-estate/single-property.html">
+              <li ><a href="demos/real-estate/single-property.html">
                 <div>Condo Apartments</div>
               </a></li>
               <li><a href="demos/real-estate/single-property.html">
@@ -41,13 +41,13 @@
               </a></li>
             </ul>
           </li>
-          <li><a routerLink="/delivery-chart">
+          <li routerLinkActive="current"><a routerLink="/delivery-chart">
             <div>Delivery Chart</div>
           </a></li>
-          <li><a routerLink="/about-us">
+          <li routerLinkActive="current"><a routerLink="/about-us">
             <div>About Us</div>
           </a></li>
-          <li><a routerLink="/contact-info">
+          <li routerLinkActive="current"><a routerLink="/contact-info">
             <div>Contact Info</div>
           </a></li>
           <!--<li><a routerLink="demos/real-estate/listing.html"><div>Listing</div></a></li>-->
@@ -59,7 +59,7 @@
         <div class="top-links">
           <ul>
             <li class="d-md-none d-lg-block"><a href="#"><i class="icon-call"></i> +1800-123-7890</a></li>
-            <li><a routerLink="login" class="side-panel-trigger">Login/Register</a></li>
+            <li routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a></li>
           </ul>
         </div>
         <div id="top-cart">

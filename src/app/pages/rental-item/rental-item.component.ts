@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, NavigationStart, ParamMap, Router} from '@angular/router';
 import {Observable} from 'rxjs/internal/Observable';
 import {map, switchMap} from 'rxjs/operators';
+import {LocationDateService} from '../../shared/services/location-date.service';
 declare var SEMICOLON:any;
 declare var $: any;
 
@@ -18,6 +19,7 @@ export class RentalItemComponent implements OnInit , AfterViewInit{
   private itemId: number;
 
   constructor(private titleService: Title,
+              private locationService: LocationDateService,
               private route: ActivatedRoute,
               private router: Router) { }
 
@@ -30,7 +32,13 @@ export class RentalItemComponent implements OnInit , AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.initGallery();
+    this.router.events.subscribe(res=>{
+      if (res instanceof NavigationEnd){
+        if (res.url === "/home" || res.url === "/" || res.url === "" || res.url.indexOf("/rental/") > -1){
+          this.initGallery();
+        }
+      }
+    })
   }
   
   private getRouteParams() {
@@ -45,13 +53,29 @@ export class RentalItemComponent implements OnInit , AfterViewInit{
   }
   
   private initGallery() {
-    setTimeout(()=>{
-      SEMICOLON.widget.init();
-    },1000);
-    $('#linked-to-gallery a').click(function() {
-      var imageLink = $(this).attr('data-image');
-      $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
-      return false;
-    });
+    setTimeout(() => {
+      setTimeout(() => {
+          SEMICOLON.documentOnReady.init();
+          setTimeout(() => {
+            SEMICOLON.documentOnLoad.init();
+            setTimeout(() => {
+              SEMICOLON.documentOnResize.init();
+              setTimeout(() => {
+                SEMICOLON.widget.init();
+                setTimeout(() => {
+                  $('.css3-spinner').remove();
+                  $('#linked-to-gallery a').click(function() {
+                    var imageLink = $(this).attr('data-image');
+                    $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
+                    return false;
+                  });
+                }, 10);
+              }, 10);
+            }, 10);
+          }, 10);
+        }
+        , 10);
+    }, 100);
+
   }
 }

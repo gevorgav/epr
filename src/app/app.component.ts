@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const script = document.createElement('script');
     script.src = 'assets/js/functions.js';
     document.body.appendChild(script);
+
   }
   
   private setTitles() {

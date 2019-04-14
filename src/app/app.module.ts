@@ -24,10 +24,11 @@ import { LocationDateComponent } from './pages/location-date/location-date.compo
 import {LocationDateService} from './shared/services/location-date.service';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { PageComponent } from './layout/page/page.component';
 
 const appRoutes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomePageComponent
   },
   {
@@ -49,7 +50,6 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
-    pathMatch: 'full',
     data: { title: 'EPR login page.' }
   },
   {
@@ -58,8 +58,7 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
-    pathMatch: 'full'
+    redirectTo: 'home'
   }
 ];
 
@@ -78,7 +77,8 @@ const appRoutes: Routes = [
     RentalItemComponent,
     CheckoutComponent,
     LoginPageComponent,
-    LocationDateComponent
+    LocationDateComponent,
+    PageComponent
   ],
   imports: [
     RouterModule.forRoot(
