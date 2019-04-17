@@ -11,34 +11,32 @@ declare var $: any;
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor() {
   }
-
+  
   ngOnInit() {
   }
-
+  
   ngAfterViewInit(): void {
     this.initGallery();
   }
-
+  
   private initGallery() {
     setTimeout(() => {
-      setTimeout(() => {
-          SEMICOLON.documentOnReady.init();
+        SEMICOLON.documentOnReady.init();
+        setTimeout(() => {
+          SEMICOLON.documentOnLoad.init();
           setTimeout(() => {
-            SEMICOLON.documentOnLoad.init();
+            SEMICOLON.documentOnResize.init();
             setTimeout(() => {
-              SEMICOLON.documentOnResize.init();
+              SEMICOLON.widget.init();
               setTimeout(() => {
-                SEMICOLON.widget.init();
-                setTimeout(() => {
-                  $('.css3-spinner').remove();
-                }, 10);
+                $('.css3-spinner').remove();
               }, 10);
             }, 10);
           }, 10);
-        }
-        , 10);
-    }, 100);
-    $('#linked-to-gallery a').click(function() {
+        }, 10);
+      }
+      , 1000);
+    $('#linked-to-gallery a').click(function () {
       var imageLink = $(this).attr('data-image');
       $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
       return false;

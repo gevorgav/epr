@@ -24,23 +24,26 @@
           <div class="tab-content clearfix" id="tab-login">
             <div class="card nobottommargin">
               <div class="card-body" style="padding: 40px;">
-                <form id="login-form" name="login-form" class="nobottommargin" action="#" method="post">
+                <form id="login-form" [formGroup]="userLoginForm" (ngSubmit)="onSubmitLogin()">
 
                   <h3>Login to your Account</h3>
 
                   <div class="col_full">
                     <label for="login-form-username">Username:</label>
-                    <input type="text" id="login-form-username" name="login-form-username" value="" class="form-control" />
+                    <input formControlName="username" type="text" id="login-form-username" name="login-form-username" value="" class="form-control" />
                   </div>
 
                   <div class="col_full">
                     <label for="login-form-password">Password:</label>
-                    <input type="password" id="login-form-password" name="login-form-password" value="" class="form-control" />
+                    <input formControlName="password" type="password" id="login-form-password" name="login-form-password" value="" class="form-control" />
                   </div>
 
                   <div class="col_full nobottommargin">
-                    <button class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" value="login">Login</button>
-                    <a href="#" class="fright">Forgot Password?</a>
+                    <div *ngIf="loginErrorMessage" class="cross-validation-error-message alert alert-danger">
+                      {{loginErrorMessage}}
+                    </div>
+                    <button class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" value="login" type="submit">Login</button>
+                    <!--<a href="#" class="fright">Forgot Password?</a>-->
                   </div>
 
                 </form>
@@ -54,40 +57,88 @@
               <div class="card-body" style="padding: 40px;">
                 <h3>Register for an Account</h3>
 
-                <form id="register-form" name="register-form" class="nobottommargin" action="#" method="post">
+                <form id="register-form" name="register-form" class="nobottommargin" [formGroup]="userRegisterForm" (ngSubmit)="onSubmitRegistration()">
 
                   <div class="col_full">
                     <label for="register-form-name">Name:</label>
-                    <input type="text" id="register-form-name" name="register-form-name" value="" class="form-control" />
+                    <input formControlName="name" type="text" id="register-form-name" name="register-form-name" value="" class="form-control" />
+                    <div *ngIf="userRegisterForm.controls['name'].invalid && (userRegisterForm.controls['name'].dirty || userRegisterForm.controls['name'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['name'].errors.required">
+                        Name is required.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full">
                     <label for="register-form-email">Email Address:</label>
-                    <input type="text" id="register-form-email" name="register-form-email" value="" class="form-control" />
+                    <input formControlName="email" type="text" id="register-form-email" name="register-form-email" value="" class="form-control"  [email]="true"/>
+                    <div *ngIf="userRegisterForm.controls['email'].invalid && (userRegisterForm.controls['email'].dirty || userRegisterForm.controls['email'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['email'].errors.required">
+                        Email Address is required.
+                      </div>
+                      <div *ngIf="userRegisterForm.controls['email'].errors.email">
+                        Email Address is invalid.
+                      </div>
+                      <div *ngIf="userRegisterForm.controls['email'].errors.emailTaken">
+                        Email Address is already registered.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full">
                     <label for="register-form-username">Choose a Username:</label>
-                    <input type="text" id="register-form-username" name="register-form-username" value="" class="form-control" />
+                    <input formControlName="username" type="text" id="register-form-username" name="register-form-username" value="" class="form-control" />
+                    <div *ngIf="userRegisterForm.controls['username'].invalid && (userRegisterForm.controls['username'].dirty || userRegisterForm.controls['username'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['username'].errors.required">
+                        Username is required.
+                      </div>
+                      <div *ngIf="userRegisterForm.controls['username'].errors.usernameTaken">
+                        Username is already registered.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full">
                     <label for="register-form-phone">Phone:</label>
-                    <input type="text" id="register-form-phone" name="register-form-phone" value="" class="form-control" />
+                    <input formControlName="phone" type="text" id="register-form-phone" name="register-form-phone" value="" class="form-control" />
+                    <div *ngIf="userRegisterForm.controls['phone'].invalid && (userRegisterForm.controls['phone'].dirty || userRegisterForm.controls['phone'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['phone'].errors.required">
+                        Phone is required.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full">
                     <label for="register-form-password">Choose Password:</label>
-                    <input type="password" id="register-form-password" name="register-form-password" value="" class="form-control" />
+                    <input formControlName="password" type="password" id="register-form-password" name="register-form-password" value="" class="form-control" />
+                    <div *ngIf="userRegisterForm.controls['password'].invalid && (userRegisterForm.controls['password'].dirty || userRegisterForm.controls['password'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['password'].errors.required">
+                        Password is required.
+                      </div>
+                      <div *ngIf="userRegisterForm.controls['password'].errors?.minlength">
+                        Password min length is 6.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full">
                     <label for="register-form-repassword">Re-enter Password:</label>
-                    <input type="password" id="register-form-repassword" name="register-form-repassword" value="" class="form-control" />
+                    <input formControlName="repassword" type="password" id="register-form-repassword" name="register-form-repassword" value="" class="form-control" />
+                    <div *ngIf="userRegisterForm.controls['repassword'].invalid && (userRegisterForm.controls['repassword'].dirty || userRegisterForm.controls['repassword'].touched)" class="alert alert-danger">
+                      <div *ngIf="userRegisterForm.controls['repassword'].errors.required">
+                        Password is required.
+                      </div>
+                      <div *ngIf="userRegisterForm.controls['repassword'].errors?.minlength">
+                        Password min length is 6.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col_full nobottommargin">
-                    <button class="button button-3d button-black nomargin" id="register-form-submit" name="register-form-submit" value="register">Register Now</button>
+                    <div *ngIf="userRegisterForm.errors?.userRevealedValidator && (userRegisterForm.touched || userRegisterForm.dirty)" class="cross-validation-error-message alert alert-danger">
+                      Incorrect password.
+                    </div>
+                    <button type="submit" class="button button-3d button-black nomargin" id="register-form-submit" name="register-form-submit" value="register">Register Now</button>
                   </div>
 
                 </form>

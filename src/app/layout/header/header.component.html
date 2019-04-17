@@ -50,6 +50,9 @@
           <li routerLinkActive="current"><a routerLink="/contact-info">
             <div>Contact Info</div>
           </a></li>
+          <li *ngIf="(getIsAdmin() | async)" routerLinkActive="current"><a routerLink="/dashboard">
+            <div>Dashboard</div>
+          </a></li>
           <!--<li><a routerLink="demos/real-estate/listing.html"><div>Listing</div></a></li>-->
           <!--<li><a routerLink="demos/real-estate/contact.html"><div>Contact</div></a></li>-->
         </ul>
@@ -58,8 +61,9 @@
                     ============================================= -->
         <div class="top-links">
           <ul>
-            <li class="d-md-none d-lg-block"><a href="#"><i class="icon-call"></i> +1800-123-7890</a></li>
-            <li routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a></li>
+            <li class="d-md-none d-lg-block"><a routerLink="#"><i class="icon-call"></i> +1800-123-7890</a></li>
+            <li *ngIf="isLogin()" routerLinkActive="current"><a routerLink="#" class="side-panel-trigger">{{getCurrentUser()}}</a></li>
+            <li *ngIf="!isLogin()" routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a></li>
           </ul>
         </div>
         <div id="top-cart">

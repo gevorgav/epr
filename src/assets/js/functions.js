@@ -2302,7 +2302,7 @@ var SEMICOLON = SEMICOLON || {};
 		tabs: function(){
 
 			if( !$().tabs ) {
-				console.log('tabs: Tabs not Defined.');
+				// console.log('tabs: Tabs not Defined.');
 				return true;
 			}
 
@@ -2366,7 +2366,7 @@ var SEMICOLON = SEMICOLON || {};
 		tabsResponsive: function(){
 
 			if( !$().tabs ) {
-				console.log('tabs: Tabs not Defined.');
+				// console.log('tabs: Tabs not Defined.');
 				return true;
 			}
 
@@ -2392,7 +2392,7 @@ var SEMICOLON = SEMICOLON || {};
 		tabsResponsiveResize: function(){
 
 			if( !$().tabs ) {
-				console.log('tabs: Tabs not Defined.');
+				// console.log('tabs: Tabs not Defined.');
 				return true;
 			}
 

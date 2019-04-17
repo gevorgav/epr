@@ -25,6 +25,9 @@ import {LocationDateService} from './shared/services/location-date.service';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { PageComponent } from './layout/page/page.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import {ParseService} from './shared/services/parse.service';
+import { AuthGuardService as AuthGuard } from './shared/services/auth-guard.service';
 
 const appRoutes: Routes = [
   {
@@ -46,6 +49,10 @@ const appRoutes: Routes = [
   {
     path: 'rentals',
     component: RentalsComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
   },
   {
     path: 'login',
@@ -78,12 +85,13 @@ const appRoutes: Routes = [
     CheckoutComponent,
     LoginPageComponent,
     LocationDateComponent,
-    PageComponent
+    PageComponent,
+    DashboardComponent
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: true} // <-- debugging purposes only
+      {enableTracing: false} // <-- debugging purposes only
     ),
     BrowserModule,
     FormsModule,
@@ -96,7 +104,11 @@ const appRoutes: Routes = [
     MatIconModule,
     MatInputModule
   ],
-  providers: [LocationDateService],
+  providers: [
+    LocationDateService,
+    ParseService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
