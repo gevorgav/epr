@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
@@ -10,6 +10,8 @@ import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from 
 export class LocationDateComponent implements OnInit {
 
   public locationDateForm: FormGroup;
+  
+  @Output() emitSubmit = new EventEmitter<boolean>();
 
   constructor(private locationDateService: LocationDateService) { }
 
@@ -33,6 +35,7 @@ export class LocationDateComponent implements OnInit {
     if (this.locationDateForm.valid){
       this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.locationDateForm.get('zipCode').value);
       this.locationDateService.isSpecified = true;
+      this.emitSubmit.emit(true);
     }
   }
 

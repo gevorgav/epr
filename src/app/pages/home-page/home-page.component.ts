@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -9,7 +10,7 @@ declare var $: any;
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-  constructor() {
+  constructor(private router: Router) {
   }
   
   ngOnInit() {
@@ -17,6 +18,10 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   
   ngAfterViewInit(): void {
     this.initGallery();
+  }
+  
+  locationDateSubmitted(){
+    this.router.navigate(['rentals']);
   }
   
   private initGallery() {

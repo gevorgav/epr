@@ -1,5 +1,3 @@
-
-
 <!-- Header
 		============================================= -->
 <header id="header" class="full-header">
@@ -30,7 +28,7 @@
             <div>Rentals</div>
           </a>
             <ul>
-              <li ><a href="demos/real-estate/single-property.html">
+              <li><a href="demos/real-estate/single-property.html">
                 <div>Condo Apartments</div>
               </a></li>
               <li><a href="demos/real-estate/single-property.html">
@@ -50,7 +48,7 @@
           <li routerLinkActive="current"><a routerLink="/contact-info">
             <div>Contact Info</div>
           </a></li>
-          <li *ngIf="(getIsAdmin() | async)" routerLinkActive="current"><a routerLink="/dashboard">
+          <li *ngIf="isLogin()" routerLinkActive="current"><a routerLink="/dashboard">
             <div>Dashboard</div>
           </a></li>
           <!--<li><a routerLink="demos/real-estate/listing.html"><div>Listing</div></a></li>-->
@@ -63,44 +61,45 @@
           <ul>
             <li class="d-md-none d-lg-block"><a routerLink="#"><i class="icon-call"></i> +1800-123-7890</a></li>
             <li *ngIf="isLogin()" routerLinkActive="current"><a routerLink="#" class="side-panel-trigger">{{getCurrentUser()}}</a></li>
-            <li *ngIf="!isLogin()" routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a></li>
+            <li *ngIf="isLogin()"><a href="#" (click)="logout()" data-lightbox="inline" class="header-login-trigger"><i class="icon-line2-login"></i></a></li>
+            <li *ngIf="!isLogin()" routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a>
+            </li>
           </ul>
         </div>
         <div id="top-cart">
-          <a href="#" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span>5</span></a>
-          <div class="top-cart-content">
-            <div class="top-cart-title">
-              <h4>Shopping Cart</h4>
-            </div>
-            <div class="top-cart-items">
-              <div class="top-cart-item clearfix">
-                <div class="top-cart-item-image">
-                  <a href="#"><img src="../../../assets/images/shop/small/1.jpg" alt="Blue Round-Neck Tshirt"/></a>
-                </div>
-                <div class="top-cart-item-desc">
-                  <a href="#">Blue Round-Neck Tshirt</a>
-                  <span class="top-cart-item-price">$19.99</span>
-                  <span class="top-cart-item-quantity">x 2</span>
-                </div>
-              </div>
-              <div class="top-cart-item clearfix">
-                <div class="top-cart-item-image">
-                  <a href="#"><img src="../../../assets/images/shop/small/6.jpg" alt="Light Blue Denim Dress"/></a>
-                </div>
-                <div class="top-cart-item-desc">
-                  <a href="#">Light Blue Denim Dress</a>
-                  <span class="top-cart-item-price">$24.99</span>
-                  <span class="top-cart-item-quantity">x 3</span>
-                </div>
-              </div>
-            </div>
-            <div class="top-cart-action clearfix">
-              <span class="fleft top-checkout-price">$114.95</span>
-              <button class="button button-3d button-small nomargin fright">View Cart</button>
-            </div>
-          </div>
+          <a routerLink="cart" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span>5</span></a>
+          <!--<div class="top-cart-content">-->
+            <!--<div class="top-cart-title">-->
+              <!--<h4>Shopping Cart</h4>-->
+            <!--</div>-->
+            <!--<div class="top-cart-items">-->
+              <!--<div class="top-cart-item clearfix">-->
+                <!--<div class="top-cart-item-image">-->
+                  <!--<a href="#"><img src="../../../assets/images/shop/small/1.jpg" alt="Blue Round-Neck Tshirt"/></a>-->
+                <!--</div>-->
+                <!--<div class="top-cart-item-desc">-->
+                  <!--<a href="#">Blue Round-Neck Tshirt</a>-->
+                  <!--<span class="top-cart-item-price">$19.99</span>-->
+                  <!--<span class="top-cart-item-quantity">x 2</span>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="top-cart-item clearfix">-->
+                <!--<div class="top-cart-item-image">-->
+                  <!--<a href="#"><img src="../../../assets/images/shop/small/6.jpg" alt="Light Blue Denim Dress"/></a>-->
+                <!--</div>-->
+                <!--<div class="top-cart-item-desc">-->
+                  <!--<a href="#">Light Blue Denim Dress</a>-->
+                  <!--<span class="top-cart-item-price">$24.99</span>-->
+                  <!--<span class="top-cart-item-quantity">x 3</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="top-cart-action clearfix">-->
+              <!--<span class="fleft top-checkout-price">$114.95</span>-->
+              <!--<button class="button button-3d button-small nomargin fright">View Cart</button>-->
+            <!--</div>-->
+          <!--</div>-->
         </div><!-- #top-cart end -->
-
 
 
       </nav><!-- #primary-menu end -->

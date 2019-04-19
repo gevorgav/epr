@@ -23,13 +23,16 @@ export class HeaderComponent implements OnInit {
   }
   
   getIsAdmin(){
-    return this.parseService.$isAdmin;
+    return this.parseService.initAdmin();
   }
   
   getCurrentUser(){
     return this.parseService.getCurrentUser().getUsername();
   }
   
-  
+  logout(){
+    this.parseService.parse.User.logOut();
+    this.router.navigate(["login"]);
+  }
 
 }

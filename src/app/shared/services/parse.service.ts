@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import * as Parse from "parse";
-import {Subject} from 'rxjs/internal/Subject';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
@@ -10,8 +9,6 @@ Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 })
 export class ParseService {
   public parse;
-  
-  public $isAdmin: Subject<boolean> = new Subject<boolean>();
   
   constructor(){
     this.parse = Parse;
@@ -25,23 +22,27 @@ export class ParseService {
     return this.parse.User.current();
   }
   
-  initAdmin(){
+  initAdmin(): Promise<boolean>{
     if (Parse.User.current()){
       let that = this;
       let queryRole = new Parse.Query(Parse.Role);
       queryRole.equalTo('name', 'admin');
-      queryRole.find().then((res)=>{
+      return queryRole.find().then((res)=>{
         let adminRelation = new Parse.Relation(res[0], 'users');
         let queryAdmins = adminRelation.query();
         queryAdmins.equalTo('objectId', Parse.User.current().id);
-        queryAdmins.find().then((result)=>{
+        return queryAdmins.find().then((result)=>{
           if (result.length > 0){
-            that.$isAdmin.next(true)
+            return true
           } else {
-            that.$isAdmin.next(false)
+            return false
           }
         })
       });
+    }else {
+      return  new Promise(function(resolve, reject) {
+        resolve(false);
+      })
     }
   }
   

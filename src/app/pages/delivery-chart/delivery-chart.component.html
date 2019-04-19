@@ -17,20 +17,17 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>Agoura Hills **</td>
-            <td>91301, 91376, 91377</td>
-            <td>$15.00</td>
-          </tr>
-          <tr>
-            <td>Agua Dulce</td>
-            <td>91390</td>
-            <td>$50.00</td>
-          </tr>
-          <tr>
-            <td>Alhambra</td>
-            <td>91801, 91802, 91803</td>
-            <td>Free</td>
+          <tr *ngFor="let item of delideryCharts" >
+            <td>{{item.city}}</td>
+            <td>
+              <ng-container *ngFor="let zip of item.zipCodes; let i = index">
+                {{zip.zipCode}}
+                <ng-container *ngIf="i !== item.zipCodes.length-1">
+                  ,
+                </ng-container>
+              </ng-container>
+            </td>
+            <td>${{item.price}}</td>
           </tr>
           </tbody>
         </table>

@@ -27,12 +27,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { PageComponent } from './layout/page/page.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import {ParseService} from './shared/services/parse.service';
-import { AuthGuardService as AuthGuard } from './shared/services/auth-guard.service';
+import {AuthGuardLoginService, AuthGuardService as AuthGuard} from './shared/services/auth-guard.service';
+import { CartComponent } from './pages/cart/cart.component';
+import {DeliveryChartHttpService} from './shared/services/delivery-chart-http.service';
+import {DeliveryChartService} from './shared/services/delivery-chart.service';
 
 const appRoutes: Routes = [
   {
     path: 'home',
-    component: HomePageComponent
+    component: HomePageComponent,
+    data: { title: 'Entertainment Party Rentals.' }
   },
   {
     path: 'about-us',
@@ -53,15 +57,21 @@ const appRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
     component: LoginPageComponent,
+    canActivate: [AuthGuardLoginService],
     data: { title: 'EPR login page.' }
   },
   {
     path: 'rental/:title',
     component: RentalItemComponent,
+  },
+  {
+    path: 'cart',
+    component: CartComponent,
   },
   {
     path: '**',
@@ -86,7 +96,8 @@ const appRoutes: Routes = [
     LoginPageComponent,
     LocationDateComponent,
     PageComponent,
-    DashboardComponent
+    DashboardComponent,
+    CartComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -107,7 +118,9 @@ const appRoutes: Routes = [
   providers: [
     LocationDateService,
     ParseService,
-    AuthGuard
+    AuthGuard,
+    AuthGuardLoginService,
+    {provide: DeliveryChartService, useClass: DeliveryChartHttpService}
   ],
   bootstrap: [AppComponent]
 })

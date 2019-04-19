@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
+import {DeliveryChartModel} from '../../shared/model/delivery-chart.model';
 
 @Component({
   selector: 'app-delivery-cart',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DeliveryChartComponent implements OnInit {
 
-  constructor() { }
+  constructor(private deliveryChartService: DeliveryChartService) { }
+  
+  public delideryCharts : DeliveryChartModel[] = [];
 
   ngOnInit() {
+    this.deliveryChartService.getDeliveryLocations().subscribe((res)=>{
+      this.delideryCharts = res;
+    });
   }
 
 }
