@@ -13,8 +13,8 @@ import {from} from 'rxjs/internal/observable/from';
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
   
-  static DELIVERYCHART = "DeliveryChart";
-  static ZIPCODE = "ZipCode";
+  static DELIVERY_CHART = "DeliveryChart";
+  static ZIP_CODE = "ZipCode";
   
   constructor(private parse: ParseService) {
     super();
@@ -29,19 +29,18 @@ export class DeliveryChartHttpService extends DeliveryChartService{
   }
 
   getDeliveryLocations(): Observable<Array<DeliveryChartModel>> {
-    let delivery = this.parse.parse.Object.extend(DeliveryChartHttpService.DELIVERYCHART);
+    let delivery = this.parse.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let query = new this.parse.parse.Query(delivery);
+    let deliveryLocations = [];
     let promise = query.find().then((res: any[])=>{
-      let deliveryLocations = [];
       for (let delivery of res){
-        let adminRelation = new Parse.Relation(delivery, 'zipCode');
-        let queryAdmins = adminRelation.query();
         let deliveryLocation = new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price']);
-        deliveryLocations.push(deliveryLocation);
-        queryAdmins.find().then((zip: any[])=>{
+        delivery.relation('zipCode').query().find().then((zip: any[])=>{
           deliveryLocation.zipCodes = [];
           deliveryLocation.zipCodes.push(...DeliveryChartHttpService.forOne(zip));
-        })
+        }).finally(()=>{
+          deliveryLocations.push(deliveryLocation)
+        });
       }
       return deliveryLocations;
     });

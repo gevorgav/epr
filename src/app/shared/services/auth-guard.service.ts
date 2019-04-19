@@ -4,6 +4,7 @@ import {Router, CanActivate, RouterStateSnapshot, ActivatedRouteSnapshot, UrlTre
 import {ParseService} from './parse.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {of} from 'rxjs/internal/observable/of';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
@@ -12,7 +13,14 @@ export class AuthGuardService implements CanActivate {
   
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.parse.isAuth()) {
-      return this.parse.initAdmin()
+      return this.parse.isAdmin().pipe(map((res)=>{
+        if (res){
+          return true;
+        } else {
+          this.router.navigate(['home']);
+          return false;
+        }
+      }));
     }else {
       this.router.navigate(['home']);
       return of(false);

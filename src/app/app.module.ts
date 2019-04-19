@@ -31,6 +31,7 @@ import {AuthGuardLoginService, AuthGuardService as AuthGuard} from './shared/ser
 import { CartComponent } from './pages/cart/cart.component';
 import {DeliveryChartHttpService} from './shared/services/delivery-chart-http.service';
 import {DeliveryChartService} from './shared/services/delivery-chart.service';
+import {MatAutocompleteModule} from '@angular/material';
 
 const appRoutes: Routes = [
   {
@@ -111,6 +112,7 @@ const appRoutes: Routes = [
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     MatFormFieldModule,
+    MatAutocompleteModule,
     MatTabsModule,
     MatIconModule,
     MatInputModule

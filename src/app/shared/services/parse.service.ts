@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as Parse from "parse";
+import {from, Observable, of, Subject} from 'rxjs';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
@@ -9,6 +10,7 @@ Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 })
 export class ParseService {
   public parse;
+  public $loginSubject: Subject<any> =  new Subject<any>(); // true - login, false - logout.
   
   constructor(){
     this.parse = Parse;
@@ -22,28 +24,33 @@ export class ParseService {
     return this.parse.User.current();
   }
   
-  initAdmin(): Promise<boolean>{
+  isAdmin(): Observable<boolean>{
     if (Parse.User.current()){
       let that = this;
       let queryRole = new Parse.Query(Parse.Role);
       queryRole.equalTo('name', 'admin');
-      return queryRole.find().then((res)=>{
+      let promise = queryRole.find().then((res)=>{
         let adminRelation = new Parse.Relation(res[0], 'users');
         let queryAdmins = adminRelation.query();
         queryAdmins.equalTo('objectId', Parse.User.current().id);
         return queryAdmins.find().then((result)=>{
-          if (result.length > 0){
-            return true
-          } else {
-            return false
-          }
+          return result.length > 0;
         })
       });
+      return from(promise);
     }else {
-      return  new Promise(function(resolve, reject) {
-        resolve(false);
-      })
+      return  of(false);
     }
+  }
+
+  login(username: string, password:string){
+    let promise = this.parse.User.logIn(username, password);
+    return from(promise);
+  }
+
+  logOut(){
+    this.$loginSubject.next(false);
+    return from(this.parse.User.logOut());
   }
   
 }

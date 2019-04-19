@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   
   ngOnInit(): void {
     this.setTitles();
-    this.parseService.initAdmin();
+    // this.parseService.isAdmin();
     let _this = this;
     // const user = this.parseService.parse.User.logIn("Sevak", "vardan2018").then(function (data) {
     //   console.log(data);

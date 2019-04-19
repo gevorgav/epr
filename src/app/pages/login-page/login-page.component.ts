@@ -35,9 +35,9 @@ export class LoginPageComponent implements OnInit {
   onSubmitLogin(){
     let that = this;
     if (this.userLoginForm.valid) {
-      const user = this.parseService.parse.User.logIn(this.userLoginForm.get('username').value,
-        this.userLoginForm.get('password').value).then(function (data) {
-        that.parseService.initAdmin();
+      this.parseService.login(this.userLoginForm.get('username').value,
+        this.userLoginForm.get('password').value).subscribe(function (data) {
+        that.parseService.$loginSubject.next(true);
         that.router.navigate(["home"]);
       }, function (error) {
         that.loginErrorMessage = error.message;
