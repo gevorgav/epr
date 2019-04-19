@@ -4,11 +4,18 @@
             <div class="row">
               <div class="col-md-12 col-12">
                 <label for="zipCode" style="margin-bottom: 20px !important;">Event Location</label>
-                <input formControlName="zipCode" class="required sm-form-control input-block-level not-dark" id="zipCode">
-                <div *ngIf="locationDateForm.controls['zipCode'].invalid && (locationDateForm.controls['zipCode'].dirty || locationDateForm.controls['zipCode'].touched)" class="alert alert-danger">
-                  <div *ngIf="locationDateForm.controls['zipCode'].errors.required">
-                    Location or zip code is required.
-                  </div>
+                <mat-form-field style="width: 100%;" >
+                  <input type="text"  matInput placeholder="Enter Zip Code or City" required formControlName="zipCode" [matAutocomplete]="autoGroup"  id="zipCode">
+                  <mat-autocomplete #autoGroup="matAutocomplete">
+                    <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+                      <mat-option *ngFor="let name of group.names" [value]="name">
+                        {{name}}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <div *ngIf="locationDateForm.errors?.incorrectZipLocation && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
+                  Sorry, there is no branch that currently provides service for.
                 </div>
               </div>
               <div class="w-100"></div>
