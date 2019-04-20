@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {CategoryService} from '../../shared/services/category.service';
+import {CategoryModel} from '../../shared/model/category.model';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -10,10 +12,14 @@ declare var $: any;
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private categoryService: CategoryService) {
   }
-  
+
+  public categories: CategoryModel[] = [];
+
   ngOnInit() {
+    this.initCategories();
   }
   
   ngAfterViewInit(): void {
@@ -46,5 +52,23 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
       return false;
     });
+  }
+
+  private initCategories() {
+    this.categoryService.getCategories().subscribe(res=>{
+      this.categories = res;
+    })
+  }
+
+  public navigate(id: string, title: string){
+    this.router.navigate(['/rentals', title], { queryParams: { id: id }} );
+  }
+
+  getClass(index: number) {
+    if (index === 0 || index === 1 || index === 11 || index === 12) {
+      return "col-lg-6";
+    }
+
+    return "col-lg-4";
   }
 }

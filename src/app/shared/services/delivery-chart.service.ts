@@ -9,4 +9,5 @@ export abstract class DeliveryChartService {
   abstract getDeliveryLocationById(id: number): DeliveryChartModel;
   abstract getDeliveryLocationByZipCode(zipCode: number): DeliveryChartModel;
   abstract getDeliveryLocationByCity(cirty: string): DeliveryChartModel;
+  abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
 }

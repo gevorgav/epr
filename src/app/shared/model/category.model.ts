@@ -5,14 +5,12 @@ export class CategoryModel {
   private _id: number;
   private _title: string;
   private _description: string;
-  private _productsCount: number;
   private _imageUrl: string;
 
-  constructor(id: number, title: string, description: string, productsCount: number, imageUrl: string) {
+  constructor(id: number, title: string, description: string, imageUrl: string) {
     this._id = id;
     this._title = title;
     this._description = description;
-    this._productsCount = productsCount;
     this._imageUrl = imageUrl;
   }
 
@@ -26,10 +24,6 @@ export class CategoryModel {
 
   get description(): string {
     return this._description;
-  }
-
-  get productsCount(): number {
-    return this._productsCount;
   }
 
   get imageUrl(): string {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {RoutingService} from '../../shared/services/routing.service';
 
 @Component({
   selector: 'app-rentals',
@@ -8,13 +9,15 @@ import {Router} from '@angular/router';
 })
 export class RentalsComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private routingService: RoutingService) { }
 
   ngOnInit() {
   }
   
-  public navigate(id: number, title: string){
-    this.router.navigate(['/rental', title], { queryParams: { id: id }} );
+  public navigate(id: string, title: string){
+    this.router.navigate(['/rental', title] );
+    this.routingService.itemIdSubject.next(id);
   }
 
 }

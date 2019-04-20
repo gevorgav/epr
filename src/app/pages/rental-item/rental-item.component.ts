@@ -4,6 +4,7 @@ import {ActivatedRoute, NavigationEnd, NavigationStart, ParamMap, Router} from '
 import {Observable} from 'rxjs/internal/Observable';
 import {map, switchMap} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
+import {RoutingService} from '../../shared/services/routing.service';
 declare var SEMICOLON:any;
 declare var $: any;
 
@@ -21,14 +22,18 @@ export class RentalItemComponent implements OnInit , AfterViewInit{
   constructor(private titleService: Title,
               private locationService: LocationDateService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private routingService: RoutingService) { }
 
   ngOnInit() {
     this.getRouteParams();
     this.title$.subscribe();
     this.route.queryParams.subscribe(res=>{
       this.itemId = (+res['id'] || 0);
-    })
+    });
+    this.routingService.itemIdSubject.subscribe(res=>{
+      console.log(res);
+    });
   }
 
   ngAfterViewInit(): void {

@@ -1,7 +1,8 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
-import {Subject} from 'rxjs/internal/Subject';
+import {CategoryService} from '../../shared/services/category.service';
+import {CategoryModel} from '../../shared/model/category.model';
 
 @Component({
   selector: 'app-header',
@@ -12,14 +13,18 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   public isAdmin: boolean = false;
 
+  public categories : CategoryModel[] = [];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private parseService: ParseService) { }
+              private parseService: ParseService,
+              private categoryService: CategoryService) { }
 
   ngOnInit() {
+    this.initCategories();
     this.parseService.isAdmin().subscribe(isAdmin => {
       this.isAdmin = isAdmin;
-    })
+    });
     this.parseService.$loginSubject.subscribe(res=>{
       if (res === false){
         this.isAdmin = res;
@@ -47,4 +52,9 @@ export class HeaderComponent implements OnInit , AfterViewInit{
     })
   }
 
+  private initCategories() {
+    this.categoryService.getCategories().subscribe(res=>{
+      this.categories = res;
+    })
+  }
 }

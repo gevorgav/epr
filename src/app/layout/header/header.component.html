@@ -28,14 +28,8 @@
             <div>Rentals</div>
           </a>
             <ul>
-              <li><a href="demos/real-estate/single-property.html">
-                <div>Condo Apartments</div>
-              </a></li>
-              <li><a href="demos/real-estate/single-property.html">
-                <div>Luxury Villas</div>
-              </a></li>
-              <li><a href="demos/real-estate/single-property.html">
-                <div>Premium Estates</div>
+              <li *ngFor="let category of categories"><a routerLink="#">
+                <div>{{category.title}}</div>
               </a></li>
             </ul>
           </li>

@@ -28,10 +28,7 @@ export class DeliveryChartComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.deliveryChartService.getDeliveryLocations().subscribe((res) => {
       this.deliveryChartsSearch = this.allDeliveryCharts = res;
-      setTimeout(() => {
-        this.initAutoCompleteOptions();
-      }, 1000);
-
+      this.initAutoCompleteOptions();
     });
     this.stateGroupOptions = this.stateForm.get('stateGroup')!.valueChanges
       .pipe(

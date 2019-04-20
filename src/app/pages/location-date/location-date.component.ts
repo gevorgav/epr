@@ -21,7 +21,6 @@ export class LocationDateComponent implements OnInit {
   stateGroupOptions: Observable<StateGroup[]>;
 
   public allDeliveryCharts: DeliveryChartModel[] = [];
-  public deliveryChartsSearch: DeliveryChartModel[] = [];
 
   @Output() emitSubmit = new EventEmitter<boolean>();
 
@@ -42,12 +41,9 @@ export class LocationDateComponent implements OnInit {
       ]),
     }, {validators: identityRevealedValidator});
 
-    this.deliveryChartService.getDeliveryLocations().subscribe((res) => {
-      this.deliveryChartsSearch = this.allDeliveryCharts = res;
-      setTimeout(() => {
-        this.initAutoCompleteOptions();
-      }, 1000);
-
+     this.deliveryChartService.getDeliveryLocations().subscribe(res=>{
+       this.allDeliveryCharts = res;
+       this.initAutoCompleteOptions()
     });
 
     this.stateGroupOptions = this.locationDateForm.valueChanges

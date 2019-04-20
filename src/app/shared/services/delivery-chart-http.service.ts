@@ -9,12 +9,16 @@ import * as Parse from "parse";
 import {Observer} from 'rxjs/internal/types';
 import {Observable} from 'rxjs/internal/Observable';
 import {from} from 'rxjs/internal/observable/from';
+import {concatAll, concatMap, delay, flatMap, map, mergeMap, reduce, tap} from 'rxjs/operators';
+import {forkJoin, of, zip} from 'rxjs';
 
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
   
   static DELIVERY_CHART = "DeliveryChart";
   static ZIP_CODE = "ZipCode";
+
+  private _deliveryLocations : DeliveryChartModel[] = [];
   
   constructor(private parse: ParseService) {
     super();
@@ -28,24 +32,56 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return undefined;
   }
 
+  getDeliveryLocationsFromCash(): DeliveryChartModel[] {
+    return null;
+  }
+
   getDeliveryLocations(): Observable<Array<DeliveryChartModel>> {
     let delivery = this.parse.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let query = new this.parse.parse.Query(delivery);
-    let deliveryLocations = [];
     let promise = query.find().then((res: any[])=>{
-      for (let delivery of res){
-        let deliveryLocation = new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price']);
-        delivery.relation('zipCode').query().find().then((zip: any[])=>{
-          deliveryLocation.zipCodes = [];
-          deliveryLocation.zipCodes.push(...DeliveryChartHttpService.forOne(zip));
-        }).finally(()=>{
-          deliveryLocations.push(deliveryLocation)
-        });
-      }
-      return deliveryLocations;
+      return res;
     });
-    return from(promise);
+    return from(promise).pipe(
+      map((res: any[])=>{
+        let deliveryLocations : Array<DeliveryChartModel> = [];
+        for (let delivery of res){
+          let zip: Observable<ZipCode[]> = from(delivery.relation('zipCode').query().find().then((zip: any[])=>{
+            return DeliveryChartHttpService.forOne(zip);
+          }));
+          let deliveryLocation = new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], zip);
+
+          deliveryLocations.push(deliveryLocation);
+        }
+        return deliveryLocations;
+      }),
+      flatMap(
+        (deliveries: DeliveryChartModel[])=> forkJoin(deliveries.map(
+          (deliveryFork:DeliveryChartModel)=>{
+            return forkJoin(deliveryFork.$zipCodes).pipe(map((zipCodes:ZipCode[][])=>{
+              deliveryFork.zipCodes = zipCodes[0];
+              return deliveryFork;
+            }))
+          }
+        ))
+      ));
   }
+
+
+//   let promise = delivery.relation('zipCode').query().find().then((zip: any[])=>{
+//     return zip;
+//   });
+//   let $zips: Observable<any>[]= [];
+//   $zips.push(from(promise));
+//   for (let $zip of $zips) {
+//   $zip.pipe()
+// }
+// from(promise).pipe(map((zips: any[])=>{
+//   for (let zip of zips) {
+//     deliveryLocation.zipCodes.push(...DeliveryChartHttpService.forOne(zip))
+//   }
+//   return deliveryLocations;
+// }));
   
   getDeliveryLocationByCity(city: string): DeliveryChartModel {
     return undefined;
@@ -62,5 +98,4 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     }
     return items;
   }
-  
 }

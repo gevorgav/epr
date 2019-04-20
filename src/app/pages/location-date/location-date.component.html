@@ -15,7 +15,7 @@
                   </mat-autocomplete>
                 </mat-form-field>
                 <div *ngIf="locationDateForm.errors?.incorrectZipLocation && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
-                  Sorry, there is no branch that currently provides service for.
+                  Sorry, there is no branch that currently provides service for {{locationDateForm.get('zipCode')?.value}} .
                 </div>
               </div>
               <div class="w-100"></div>
