@@ -2,7 +2,7 @@
  * @author Gevorg Avetisyan on 3/16/2019.
  */
 export class ProductViewModel {
-  private _id: number;
+  private _id: string;
   private _title: string;
   private _price: number;
   private _images: Array<string>; // images patch
@@ -10,7 +10,7 @@ export class ProductViewModel {
   private _isHotDeal: boolean;
   private _itemSize: string;
 
-  constructor(id: number, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string) {
+  constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string) {
     this._id = id;
     this._title = title;
     this._price = price;
@@ -20,7 +20,7 @@ export class ProductViewModel {
     this._itemSize = itemSize;
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 
