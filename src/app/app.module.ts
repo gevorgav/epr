@@ -27,7 +27,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { PageComponent } from './layout/page/page.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import {ParseService} from './shared/services/parse.service';
-import {AuthGuardLoginService, AuthGuardService as AuthGuard} from './shared/services/auth-guard.service';
+import {AuthGuardLoginService, AuthGuardService as AuthGuard, AuthGuardVerificationService} from './shared/services/auth-guard.service';
 import { CartComponent } from './pages/cart/cart.component';
 import {DeliveryChartHttpService} from './shared/services/delivery-chart-http.service';
 import {DeliveryChartService} from './shared/services/delivery-chart.service';
@@ -35,6 +35,7 @@ import {MatAutocompleteModule} from '@angular/material';
 import {CategoryService} from './shared/services/category.service';
 import {CategoryHttpService} from './shared/services/category-http.service';
 import {RoutingService} from './shared/services/routing.service';
+import { VerificationComponent } from './pages/verification/verification.component';
 
 const appRoutes: Routes = [
   {
@@ -53,6 +54,10 @@ const appRoutes: Routes = [
   {
     path: 'delivery-chart',
     component: DeliveryChartComponent
+  },
+  {
+    path: 'rentals/:id',
+    component: RentalsComponent
   },
   {
     path: 'rentals',
@@ -78,6 +83,11 @@ const appRoutes: Routes = [
     component: CartComponent,
   },
   {
+    path: 'verification-page',
+    component: VerificationComponent,
+    canActivate: [AuthGuardVerificationService]
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }
@@ -101,7 +111,8 @@ const appRoutes: Routes = [
     LocationDateComponent,
     PageComponent,
     DashboardComponent,
-    CartComponent
+    CartComponent,
+    VerificationComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -125,6 +136,7 @@ const appRoutes: Routes = [
     ParseService,
     AuthGuard,
     AuthGuardLoginService,
+    AuthGuardVerificationService,
     RoutingService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
     {provide: CategoryService, useClass: CategoryHttpService}

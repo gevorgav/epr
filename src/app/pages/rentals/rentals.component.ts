@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, ResolveEnd, Router} from '@angular/router';
 import {RoutingService} from '../../shared/services/routing.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {CategoryService} from '../../shared/services/category.service';
@@ -17,44 +17,61 @@ declare var elementFilterCount: any;
   templateUrl: './rentals.component.html',
   styleUrls: ['./rentals.component.css']
 })
-export class RentalsComponent implements OnInit, AfterViewInit{
+export class RentalsComponent implements OnInit, AfterViewInit {
 
-  public categories : CategoryModel[] = [];
+  public categories: CategoryModel[] = [];
   private activeCategory: CategoryModel;
-  
+
   constructor(private router: Router,
               private routingService: RoutingService,
-              private categoryService: CategoryService) { }
+              private route: ActivatedRoute,
+              private categoryService: CategoryService) {
+  }
 
   ngOnInit() {
-    this.categoryService.getCategoriesWithDependency().subscribe(res=>{
+    this.categoryService.getCategoriesWithDependency().subscribe(res => {
       this.categories = res;
       this.activeCategory = res[0];
-    })
+      this.subscribeAndInit();
+    });
   }
-  
-  categoryOnClick(category: CategoryModel){
+
+  categoryOnClick(category: CategoryModel) {
     this.activeCategory = category;
   }
-  
-  activeCategoryStyle(category: CategoryModel){
-    if (category === this.activeCategory){
+
+  activeCategoryStyle(category: CategoryModel) {
+    if (category === this.activeCategory) {
       return 'active-filter';
     }
     return '';
   }
-  
+
   ngAfterViewInit(): void {
-    this.initGallery();
   }
-  
-  private initGallery() {
-  
-  }
-  
-  public navigate(id: string, title: string){
-    this.router.navigate(['/rental', title] );
+
+  public navigate(id: string, title: string) {
+    this.router.navigate(['/rental', title]);
     this.routingService.itemIdSubject.next(id);
+  }
+
+  subscribeAndInit(){
+    this.initCategory();
+    this.router.events.subscribe(res => {
+      if (res instanceof ResolveEnd && res.url.indexOf('/rentals/') > -1) {
+        this.initCategory(res);
+      }
+    });
+  }
+
+  private initCategory(routs?: ResolveEnd) {
+    let categoryId = routs ? routs.urlAfterRedirects.replace("/rentals/","") :this.route.snapshot.params['id'];
+
+    this.categories.forEach((value: CategoryModel) => {
+      if (value.id === categoryId) {
+        this.activeCategory = value;
+      }
+    });
   }
 
 }

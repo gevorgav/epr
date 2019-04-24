@@ -90,7 +90,8 @@ export class CategoryHttpService extends CategoryService{
   
   private static parseObjectToProductView(parseObject: any): ProductViewModel{
     return new ProductViewModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'],
-      parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize']);
+      parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'],
+      parseObject.attributes['pathParam']);
   }
   
   private static forOne(parseObject: any[]): ProductViewModel[]{

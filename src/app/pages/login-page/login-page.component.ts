@@ -65,7 +65,9 @@ export class LoginPageComponent implements OnInit {
         //.getUsers() is equal .relation('users')
         if(role){
           role.getUsers().add(user);
-          return role.save(null, { });
+          role.save(null, { }).then(res=>{
+            that.router.navigate(["verification-page"]);
+          })
         }else{
           return that.parseService.parse.Promise.error("no such role");
         }

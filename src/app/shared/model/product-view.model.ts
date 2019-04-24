@@ -9,8 +9,9 @@ export class ProductViewModel {
   private _isNew: boolean;
   private _isHotDeal: boolean;
   private _itemSize: string;
+  private _pathParam: string;
 
-  constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string) {
+  constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string, pathParam: string) {
     this._id = id;
     this._title = title;
     this._price = price;
@@ -18,6 +19,7 @@ export class ProductViewModel {
     this._isNew = isNew;
     this._isHotDeal = isHotDeal;
     this._itemSize = itemSize;
+    this._pathParam = pathParam;
   }
 
   get id(): string {
@@ -46,5 +48,9 @@ export class ProductViewModel {
 
   get itemSize(): string {
     return this._itemSize;
+  }
+
+  get pathParam(): string {
+    return this._pathParam;
   }
 }

@@ -17,15 +17,18 @@ export class ParseService {
   }
   
   isAuth(): boolean{
-    return !!this.parse.User.current();
+    return !!(this.parse.User.current() && this.parse.User.current().authenticated());
   }
   
   getCurrentUser(){
-    return this.parse.User.current();
+    if (this.parse.User.current() && this.parse.User.current().authenticated()) {
+      return this.parse.User.current();
+    }
+    return null;
   }
   
   isAdmin(): Observable<boolean>{
-    if (Parse.User.current()){
+    if (Parse.User.current() && this.parse.User.current().authenticated()){
       let that = this;
       let queryRole = new Parse.Query(Parse.Role);
       queryRole.equalTo('name', 'admin');

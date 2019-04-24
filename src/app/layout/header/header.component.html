@@ -28,7 +28,7 @@
             <div>Rentals</div>
           </a>
             <ul>
-              <li *ngFor="let category of categories"><a routerLink="#">
+              <li *ngFor="let category of categories"><a [routerLink]="['/rentals', category.id]">
                 <div>{{category.title}}</div>
               </a></li>
             </ul>

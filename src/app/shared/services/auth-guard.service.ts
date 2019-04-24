@@ -42,3 +42,18 @@ export class AuthGuardLoginService implements CanActivate {
     }
   }
 }
+
+@Injectable()
+export class AuthGuardVerificationService implements CanActivate {
+  constructor(private parse: ParseService, public router: Router) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    if (!this.parse.parse.User.current() || (this.parse.parse.User.current() && this.parse.parse.User.current().authenticated())) {
+      this.router.navigate(['home']);
+      return of(false);
+    }else {
+      return of(true)
+    }
+  }
+}
