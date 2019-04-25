@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Epr</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Stylesheets
+	============================================= -->
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400i|Roboto:300,400,500,700|Rubik:400,600" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="assets/css/styles.css" type="text/css" />
+  <link rel="stylesheet" href="assets/css/dark.css" type="text/css" />
+
+  <!-- Real Estate Demo Specific Stylesheet -->
+  <link rel="stylesheet" href="assets/real-estate/real-estate.css" type="text/css" />
+  <link rel="stylesheet" href="assets/real-estate/css/font-icons.css" type="text/css" />
+  <!-- / -->
+
+  <link rel="stylesheet" href="assets/css/font-icons.css" type="text/css" />
+  <link rel="stylesheet" href="assets/css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="assets/css/magnific-popup.css" type="text/css" />
+
+  <link rel="stylesheet" href="assets/real-estate/fonts.css" type="text/css" />
+
+  <!-- Bootstrap Select CSS -->
+  <link rel="stylesheet" href="assets/css/components/bs-select.css" type="text/css" />
+
+  <!-- Bootstrap Switch CSS -->
+  <link rel="stylesheet" href="assets/css/components/bs-switches.css" type="text/css" />
+
+  <!-- Range Slider CSS -->
+  <link rel="stylesheet" href="assets/css/components/ion.rangeslider.css" type="text/css" />
+
+  <link rel="stylesheet" href="assets/css/responsive.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="stretched side-push-panel device-xl quick-contact-form-ready">
+  <app-root></app-root>
+  <!-- External JavaScripts
+	============================================= -->
+  <script src="assets/js/jquery.js"></script>
+  <script src="assets/js/plugins.js"></script>
+
+  <!-- Bootstrap Select Plugin -->
+  <script src="assets/js/components/bs-select.js"></script>
+
+  <!-- Bootstrap Switch Plugin -->
+  <script src="assets/js/components/bs-switches.js"></script>
+
+  <!-- Range Slider Plugin -->
+  <script src="assets/js/components/rangeslider.min.js"></script>
+
+
+  <!--<script src="assets/js/functions.js"></script>-->
+
+  <script>
+
+    jQuery(document).ready(function(){
+
+      jQuery(".price-range-slider").ionRangeSlider({
+        type: "double",
+        prefix: "$",
+        min: 200,
+        max: 10000,
+        max_postfix: "+"
+      });
+
+      jQuery(".area-range-slider").ionRangeSlider({
+        type: "double",
+        min: 50,
+        max: 20000,
+        from: 50,
+        to: 20000,
+        postfix: " sqm.",
+        max_postfix: "+"
+      });
+
+      jQuery(".bt-switch").bootstrapSwitch();
+
+    });
+
+  </script>
+<script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="es2015-polyfills.js" nomodule></script><script type="text/javascript" src="polyfills.js"></script><script type="text/javascript" src="styles.js"></script><script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="main.js"></script></body>
+</html>
