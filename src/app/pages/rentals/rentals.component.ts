@@ -20,7 +20,7 @@ declare var elementFilterCount: any;
 export class RentalsComponent implements OnInit, AfterViewInit {
 
   public categories: CategoryModel[] = [];
-  private activeCategory: CategoryModel;
+  public activeCategory: CategoryModel;
 
   constructor(private router: Router,
               private routingService: RoutingService,

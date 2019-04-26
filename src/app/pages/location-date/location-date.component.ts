@@ -114,6 +114,10 @@ export class LocationDateComponent implements OnInit {
     this.stateGroups.push(cities, zipCodes);
   }
 
+  isSpecified(){
+    return this.locationDateService.isSpecified;
+  }
+
 }
 
 export const identityRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {

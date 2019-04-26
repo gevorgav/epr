@@ -82,7 +82,7 @@
 
             <!-- Product Single - Quantity & Cart Button
 								============================================= -->
-            <form *ngIf="locationService.isSpecified" class="cart nobottommargin clearfix" method="post" enctype='multipart/form-data'>
+            <form *ngIf="isSpecified()" class="cart nobottommargin clearfix" method="post" enctype='multipart/form-data'>
               <div class="line"></div>
               <div class="quantity clearfix">
                 <input type="button" value="-" class="minus">

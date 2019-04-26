@@ -36,6 +36,8 @@ import {CategoryService} from './shared/services/category.service';
 import {CategoryHttpService} from './shared/services/category-http.service';
 import {RoutingService} from './shared/services/routing.service';
 import { VerificationComponent } from './pages/verification/verification.component';
+import {ProductService} from './shared/services/product.service';
+import {ProductHttpService} from './shared/services/product-http.service';
 
 const appRoutes: Routes = [
   {
@@ -139,6 +141,7 @@ const appRoutes: Routes = [
     AuthGuardVerificationService,
     RoutingService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
+    {provide: ProductService, useClass: ProductHttpService},
     {provide: CategoryService, useClass: CategoryHttpService}
   ],
   bootstrap: [AppComponent]

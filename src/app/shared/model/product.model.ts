@@ -12,7 +12,9 @@ export class ProductModel extends ProductViewModel {
   private _video: string;         // video patch
   private _safetyRules: string;   // image patch
 
-  constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string, pathParam: string, description: string, rentalTerms: string, spaceRequired: string, setupPolicy: Map<string, string>, instructions: string, video: string, safetyRules: string) {
+  constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string,
+              pathParam: string, description: string, rentalTerms: string, spaceRequired: string, setupPolicy: Map<string, string>,
+              instructions: string, video: string, safetyRules: string) {
     super(id, title, price, images, isNew, isHotDeal, itemSize, pathParam);
     this._description = description;
     this._rentalTerms = rentalTerms;

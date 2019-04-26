@@ -2,6 +2,10 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
+import {ProductViewModel} from '../../shared/model/product-view.model';
+import {Observable} from 'rxjs';
+import {ProductService} from '../../shared/services/product.service';
+import {ProductModel} from '../../shared/model/product.model';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -13,13 +17,17 @@ declare var $: any;
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private productService: ProductService) {
   }
 
   public categories: CategoryModel[] = [];
 
+  public featuredRentalProducts: ProductViewModel[] = [];
+
   ngOnInit() {
     this.initCategories();
+    this.initProducts();
   }
   
   ngAfterViewInit(): void {
@@ -55,9 +63,17 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   private initCategories() {
-    this.categoryService.getCategories().subscribe(res=>{
+    this.categoryService.getCategoriesWithDependency().subscribe(res=>{
       this.categories = res;
     })
+  }
+
+  private initFeaturedRentalProducts(res:ProductModel[]){
+    for (let product of res){
+      if (product.isNew || product.isHotDeal){
+        this.featuredRentalProducts.push(product);
+      }
+    }
   }
 
   public navigate(id: string, title: string){
@@ -70,5 +86,11 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     }
 
     return "col-lg-4";
+  }
+
+  private initProducts() {
+    this.productService.getProducts().subscribe((res:ProductModel[])=>{
+      this.initFeaturedRentalProducts(res);
+    })
   }
 }

@@ -1,5 +1,5 @@
 <div class="tab-container">
-        <form [formGroup]="locationDateForm" *ngIf="!locationDateService.isSpecified" novalidate>
+        <form [formGroup]="locationDateForm" *ngIf="!isSpecified()" novalidate>
           <div class="tab-content clearfix" id="tab-rent">
             <div class="row">
               <div class="col-md-12 col-12">
@@ -50,7 +50,7 @@
             </div>
           </div>
         </form>
-        <ng-container *ngIf="locationDateService.isSpecified">
+        <ng-container *ngIf="isSpecified()">
           <div class="tab-content clearfix" id="tab-rent-view">
             <div class="row">
               <div class="col-md-12 col-12">

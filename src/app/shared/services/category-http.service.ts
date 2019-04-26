@@ -7,9 +7,7 @@ import {CategoryModel} from '../model/category.model';
 import {ParseService} from './parse.service';
 import {from, Observable} from 'rxjs';
 import {ProductViewModel} from '../model/product-view.model';
-import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
 import {forkJoin} from 'rxjs/index';
-import {DeliveryChartHttpService} from './delivery-chart-http.service';
 import {map} from 'rxjs/operators';
 import {flatMap} from 'rxjs/internal/operators';
 

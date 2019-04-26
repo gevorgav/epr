@@ -81,6 +81,9 @@ export class RentalItemComponent implements OnInit , AfterViewInit{
         }
         , 10);
     }, 100);
+  }
 
+  isSpecified(){
+    return this.locationService.isSpecified;
   }
 }
