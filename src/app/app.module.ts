@@ -41,7 +41,7 @@ import {ProductHttpService} from './shared/services/product-http.service';
 
 const appRoutes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomePageComponent,
     data: { title: 'Entertainment Party Rentals.' }
   },
@@ -91,7 +91,7 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: ''
   }
 ];
 
