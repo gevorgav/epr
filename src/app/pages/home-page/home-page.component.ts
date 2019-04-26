@@ -93,4 +93,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       this.initFeaturedRentalProducts(res);
     })
   }
+  
+  getCategoryImage(category: CategoryModel) {
+    return ;
+  }
 }

@@ -53,7 +53,7 @@
                     ============================================= -->
         <div class="top-links">
           <ul>
-            <li class="d-md-none d-lg-block"><a routerLink="#"><i class="icon-call"></i> +1800-123-7890</a></li>
+            <li class="d-md-none d-lg-block"><a routerLink=""><i class="icon-call"></i> +1800-123-7890</a></li>
             <li *ngIf="isLogin()" routerLinkActive="current"><a routerLink="#" class="side-panel-trigger">{{getCurrentUser()}}</a></li>
             <li *ngIf="isLogin()"><a href="#" (click)="logout()" data-lightbox="inline" class="header-login-trigger"><i class="icon-line2-login"></i></a></li>
             <li *ngIf="!isLogin()" routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a>
@@ -61,7 +61,7 @@
           </ul>
         </div>
         <div id="top-cart">
-          <a routerLink="cart" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span>5</span></a>
+          <a routerLink="" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span>5</span></a>
           <!--<div class="top-cart-content">-->
             <!--<div class="top-cart-title">-->
               <!--<h4>Shopping Cart</h4>-->

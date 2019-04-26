@@ -10,7 +10,7 @@
         <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
 
           <ul class="tab-nav clearfix">
-            <li class="noleftmargin"><a routerLink="#">Instant Price & Availability</a></li>
+            <li class="noleftmargin"><a routerLink="">Instant Price & Availability</a></li>
           </ul>
           <app-location-date (emitSubmit)="locationDateSubmitted()"></app-location-date>
         </div>
@@ -108,7 +108,7 @@
         <!--<a routerLink="#" class="button button-small button-rounded button-border button-border-thin t500 nomargin"-->
         <!--style="position: absolute; top: 7px; right: 0;">Check All</a>-->
 
-        <div *ngIf="featuredRentalProducts.length > 0"
+        <div *ngIf="featuredRentalProducts.length > 2"
              class="real-estate owl-carousel image-carousel carousel-widget bottommargin-lg" data-margin="10"
              data-nav="true" data-loop="true" data-pagi="false" data-items-xs="1" data-items-sm="1" data-items-md="2"
              data-items-lg="3" data-items-xl="3">
@@ -116,13 +116,13 @@
           <div class="oc-item" *ngFor="let product of featuredRentalProducts">
             <div class="real-estate-item">
               <div class="real-estate-item-image">
-                <div class="badge badge-danger bgcolor-2" *ngIf="product.isHotDeal">Hot Deal</div>
-                <div class="badge badge-danger bgcolor-2" *ngIf="product.isNew">New!</div>
+                <div class="badge badge-success" *ngIf="product.isHotDeal">Hot Deal</div>
+                <div class="badge badge-danger" *ngIf="product.isNew && !product.isHotDeal">New!</div>
                 <a [routerLink]="['/rental', product.pathParam]">
                   <img src="{{product.images[0]}}" alt="{{product.title}}">
                 </a>
                 <div class="real-estate-item-price">
-                  {{product.price}}
+                  ${{product.price}}
                 </div>
               </div>
 
@@ -155,7 +155,7 @@
         <ng-container *ngFor="let category of categories; let i = index">
           <div [ngClass]="getClass(i)">
             <a [routerLink]="['/rentals', category.id]"
-               style="background: url('../../../assets/real-estate/images/cities/4.jpg') no-repeat bottom center; background-size: cover;">
+               [ngStyle]="{'background': 'url('+category.items[0].images[0]+') no-repeat bottom center', 'background-size': 'cover'}" >
               <div class="vertical-middle dark center">
                 <div class="heading-block nomargin noborder">
                   <h3 class="capitalize t500">{{category.title}}</h3>
