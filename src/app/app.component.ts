@@ -10,7 +10,7 @@ import {DeliveryChartService} from './shared/services/delivery-chart.service';
 import { zip} from 'rxjs';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
-(Parse as any).serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
+(Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 
 @Component({
   selector: 'app-root',
