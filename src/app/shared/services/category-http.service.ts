@@ -18,7 +18,7 @@ export class CategoryHttpService extends CategoryService{
 
   private _categories: CategoryModel[] = [];
 
-  constructor(private parse: ParseService) {
+  constructor(private parseService: ParseService) {
     super();
   }
 
@@ -32,8 +32,8 @@ export class CategoryHttpService extends CategoryService{
   }
 
   getCategories(): Observable<Array<CategoryModel>> {
-    let category = this.parse.parse.Object.extend(CategoryHttpService.CATEGORY);
-    let query = new this.parse.parse.Query(category);
+    let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+    let query = new this.parseService.parse.Query(category);
     let promise = query.find().then(res=>{
       let categories = [];
       for (let item of res) {
@@ -56,8 +56,8 @@ export class CategoryHttpService extends CategoryService{
   }
   
   getCategoriesWithDependency(): Observable<Array<CategoryModel>> {
-    let category = this.parse.parse.Object.extend(CategoryHttpService.CATEGORY);
-    let query = new this.parse.parse.Query(category);
+    let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+    let query = new this.parseService.parse.Query(category);
     let promise = query.find().then((res: any[])=>{
       return res;
     });
@@ -98,5 +98,43 @@ export class CategoryHttpService extends CategoryService{
       items.push(CategoryHttpService.parseObjectToProductView(item));
     }
     return items;
+  }
+
+  deleteCategory(id: string): Observable<any> {
+    const Product = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+    const query = new this.parseService.parse.Query(Product);
+    query.equalTo("objectId", id);
+    const promise = query.first().then((result) =>{
+      return result.destroy({});
+    });
+    return from(promise);
+  }
+
+  saveCategory(model: CategoryModel): Observable<any> {
+    let Category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+    let category = new Category();
+    this.setFields(category, model);
+    let promise;
+    if (model.id) {
+      const query = new this.parseService.parse.Query(Category);
+      query.equalTo("objectId", model.id);
+      promise = query.first().then(
+        res => {
+          this.setFields(res, model);
+          return res.save()
+        }
+      );
+    } else {
+      promise = category.save().then(category => {
+        return category.save()
+      });
+    }
+    return from(promise);
+  }
+
+  private setFields(category: any, model: CategoryModel) {
+      category.set('title', model.title);
+      category.set('description', model.description);
+      category.set('imageUrl', model.imageUrl);
   }
 }

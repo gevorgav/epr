@@ -41,7 +41,7 @@ var ProductComponent = /** @class */ (function () {
                 if (data && data.product) {
                     _this.productService.saveProduct(data.product)
                         .subscribe(function (res) {
-                        console.log(res);
+                        _this.initProducts();
                     }, function (erorr) { return handleError(erorr); });
                 }
             });

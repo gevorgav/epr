@@ -112,31 +112,30 @@ export class DeliveryChartHttpService extends DeliveryChartService{
   saveDeliveryChart(model: DeliveryChartModel): Observable<any> {
     const DeliveryChart = this.parseService.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let delivery = new DeliveryChart();
-    const ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService.ZIP_CODE);
-    // let zipCodes = this.setZipCodeFields(ZipCode, model.zipCodes);
-    let zipCode = new ZipCode();
-    zipCode.set('city', model.zipCodes[0]);
+    let zipCodes = this.setZipCodeFields(model.zipCodes);
+
+    // zipCode.set('zipCode', model.zipCodes[0].zipCode);
     this.setDeliveryChartFields(delivery, model);
 
     let promise;
-    if (false && model.id) { // TODO
-      // update
-      // delivery.save(null).then(saved => {
-      //   let relation = saved.relation('zipCodes');
-      //   relation.add()
-      // }
+    let _this = this;
+    if (model.id) {
+      const query = new this.parseService.parse.Query(DeliveryChart);
+      query.equalTo("objectId", model.id);
+      promise = query.first().then(
+        res => {
+          this.setDeliveryChartFields(res, model);
+          this.parseService.parse.Object.saveAll(zipCodes).then(() => {
+            zipCodes.forEach(item => res.relation('zipCode').add(item));
+            return res.save();
+          });
+        }
+      );
     } else {
-      // create
-      // promise = zipCode.save().then(savedZipCodes => {
-        return delivery.save().then(savedDelivery => {
-          return savedDelivery.save(delivery);
-        })
-      // })
-      // promise = delivery.save().then(savedDelivery => {
-      //   let zipCodeRelation = savedDelivery.relation('zipCodes');
-      //   return zipCodeRelation.save(zipCode);
-      // })
-
+      promise = this.parseService.parse.Object.saveAll(zipCodes).then(() => {
+        zipCodes.forEach(item => delivery.relation('zipCode').add(item));
+        return delivery.save();
+      });
     }
     return from(promise);
   }
@@ -148,11 +147,13 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     deliveryChart.set('locationId', model.locationId);
   }
 
-  private setZipCodeFields(constructor: any, zipCodes: ZipCode[]): any[] {
+  private setZipCodeFields(zipCodes: ZipCode[]): any[] {
+    const ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService.ZIP_CODE);
     let res = [];
+    zipCodes = zipCodes.filter(item => !item.id);
     for (let code of zipCodes) {
-      let zipCode = new constructor();
-      zipCode.set('city', code.zipCode);
+      let zipCode = new ZipCode();
+      zipCode.set('zipCode', code.zipCode);
       res.push(zipCode);
     }
     return res;

@@ -8,7 +8,7 @@ var DashboardComponent = /** @class */ (function () {
         this.items = [
             { routerLink: 'product', name: 'Product', isActive: true },
             { routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false },
-            { routerLink: 'zip-code', name: 'Zip code', isActive: false },
+            { routerLink: 'category', name: 'Category', isActive: false },
         ];
     }
     DashboardComponent.prototype.ngOnInit = function () {

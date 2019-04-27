@@ -32,13 +32,14 @@ import { CategoryHttpService } from './shared/services/category-http.service';
 import { RoutingService } from './shared/services/routing.service';
 import { MaterialModule } from "./mat/material.module";
 import { ProductComponent } from './pages/dashboard/product/product.component';
-import { ZipCodeComponent } from './pages/dashboard/zip-code/zip-code.component';
 import { DeliveryChartComponent as DashboardDeliveryChartComponent } from './pages/dashboard/delivery-chart/delivery-chart.component';
 import { ProductService } from "./shared/services/product.service";
 import { ProductHttpService } from "./shared/services/product-http.service";
 import { ProductPopupComponent } from './pages/dashboard/product/product-popup/product-popup.component';
 import { DeliveryChartPopupComponent } from './pages/dashboard/delivery-chart/delivery-chart-popup/delivery-chart-popup.component';
 import { VerificationComponent } from './pages/verification/verification.component';
+import { CategoryComponent } from './pages/dashboard/category/category.component';
+import { CategoryPopupComponent } from './pages/dashboard/category/category-popup/category-popup.component';
 var appRoutes = [
     {
         path: '',
@@ -72,7 +73,7 @@ var appRoutes = [
         children: [
             { path: 'delivery-chart', component: DashboardDeliveryChartComponent },
             { path: 'product', component: ProductComponent },
-            { path: 'zip-code', component: ZipCodeComponent }
+            { path: 'category', component: CategoryComponent },
         ]
     },
     {
@@ -123,12 +124,13 @@ var AppModule = /** @class */ (function () {
                 DashboardComponent,
                 CartComponent,
                 ProductComponent,
-                ZipCodeComponent,
                 DashboardDeliveryChartComponent,
                 ProductPopupComponent,
                 DeliveryChartPopupComponent,
                 CartComponent,
-                VerificationComponent
+                VerificationComponent,
+                CategoryComponent,
+                CategoryPopupComponent
             ],
             imports: [
                 RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only

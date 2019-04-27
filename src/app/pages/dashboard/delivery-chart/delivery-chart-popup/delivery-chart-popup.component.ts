@@ -39,14 +39,13 @@ export class DeliveryChartPopupComponent implements OnInit {
 
       ]),
     });
-    console.log(this.form);
   }
 
   private initZipCodes() {
     const res = [];
     if (this.deliveryChart.zipCodes){
       for (let code of this.deliveryChart.zipCodes) {
-        res.push(this.createZipCode(code.zipCode))
+        res.push(this.createZipCode(code.zipCode, code.id))
       }
     }
     return res;
@@ -64,7 +63,7 @@ export class DeliveryChartPopupComponent implements OnInit {
   }
 
   removeZipCode(index: number) {
-    this.form.get('zipCodes').value.splice(index, 1);
+    (this.form.get('zipCodes') as FormArray).controls.splice(index, 1);
   }
 
   addZipCode() {

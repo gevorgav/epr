@@ -55,7 +55,7 @@ export class ProductComponent implements OnInit {
             this.productService.saveProduct(data.product)
               .subscribe(
                 res => {
-                  console.log(res);
+                    this.initProducts();
                 },
                 erorr => handleError(erorr))
           }
@@ -96,5 +96,9 @@ export class ProductComponent implements OnInit {
           handleError(error);
         }
       )
+  }
+
+  applyFilter($event) {
+    this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
   }
 }

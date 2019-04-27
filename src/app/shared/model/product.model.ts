@@ -19,7 +19,7 @@ export class ProductModel extends ProductViewModel {
     this._description = description;
     this._rentalTerms = rentalTerms;
     this._spaceRequired = spaceRequired;
-    this._setupPolicy = setupPolicy;
+    this._setupPolicy = setupPolicy || new Map();
     this._instructions = instructions;
     this._video = video;
     this._safetyRules = safetyRules;

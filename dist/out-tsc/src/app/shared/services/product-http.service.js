@@ -11,9 +11,9 @@ import { ParseService } from "./parse.service";
 var ProductHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(ProductHttpService, _super);
     function ProductHttpService(parseService) {
-        var _this = _super.call(this) || this;
-        _this.parseService = parseService;
-        return _this;
+        var _this_1 = _super.call(this) || this;
+        _this_1.parseService = parseService;
+        return _this_1;
     }
     ProductHttpService_1 = ProductHttpService;
     ProductHttpService.prototype.getAllProducts = function () {
@@ -48,6 +48,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         return from(promise);
     };
     ProductHttpService.prototype.saveProduct = function (productToSave) {
+        var _this_1 = this;
         var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
         var product = new Product();
         this.setFields(product, productToSave);
@@ -55,8 +56,10 @@ var ProductHttpService = /** @class */ (function (_super) {
         if (productToSave.id) {
             var query = new this.parseService.parse.Query(Product);
             query.equalTo("objectId", productToSave.id);
-            promise = query.first().then(function (result) {
-                return result.save(product);
+            var _this = this;
+            promise = query.first().then(function (res) {
+                _this_1.setFields(res, productToSave);
+                return res.save();
             });
         }
         else {
@@ -64,17 +67,6 @@ var ProductHttpService = /** @class */ (function (_super) {
                 return product.save();
             });
         }
-        //   const query = new this.parseService.parse.Query(Product);
-        //   query.equalTo("objectId", productToSave.id);
-        // promise = query.first({
-        //   success: (result) => {
-        //     if (result) {
-        //       return result.save(product)
-        //     } else {
-        //       return product.save()
-        //     }
-        //   }
-        // });
         return from(promise);
     };
     ProductHttpService.prototype.getBestDealProducts = function (count) {

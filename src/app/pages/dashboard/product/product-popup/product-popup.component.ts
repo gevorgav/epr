@@ -1,8 +1,11 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ProductModel} from "../../../../shared/model/product.model";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ParseService} from "../../../../shared/services/parse.service";
+import {CategoryService} from '../../../../shared/services/category.service';
+import {CategoryModel} from '../../../../shared/model/category.model';
+import {handleError} from '../../../../shared/util/error-handler';
 
 @Component({
   selector: 'app-product-popup',
@@ -12,25 +15,29 @@ import {ParseService} from "../../../../shared/services/parse.service";
 export class ProductPopupComponent implements OnInit {
 
   product: ProductModel;
+  categories: CategoryModel[];
 
   public form: FormGroup;
+  formBuilder: FormBuilder = new FormBuilder();
 
   @ViewChild('input') inputRef: ElementRef;
   imagePreviews: any[] = [];
   videoPreview: any[] = [];
 
+  setupPolicyKeys: string[] = [];
+  setupPolicyValues: string[] = [];
+
   constructor(public dialogRef: MatDialogRef<ProductPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private parseService: ParseService) {
+              private parseService: ParseService,
+              private categoryService: CategoryService) {
     this.product = this.data.product;
   }
 
-  get editMode() {
-    return this.product && this.product.id;
-  }
-
   ngOnInit() {
+    this.initSafetyRules();
     this.initForm();
+    this.getCategories();
   }
 
   onSubmit() {
@@ -48,7 +55,7 @@ export class ProductPopupComponent implements OnInit {
           this.form.get('description').value,
           this.form.get('rentalTerms').value,
           this.form.get('spaceRequired').value,
-          this.form.get('setupPolicy').value,
+          this.getSetupPolicy(),
           this.form.get('instructions').value,
           this.product.video,
           this.form.get('safetyRules').value
@@ -67,12 +74,7 @@ export class ProductPopupComponent implements OnInit {
   }
 
   filterImages(src) {
-    console.log(src);
-    console.log(this.form.get('images').value);
-    console.log(this.form.get('images').value.filter(item => item !== src));
     this.form.get('images').setValue(this.form.get('images').value.filter(item => item !== src));
-    console.log('a');
-    console.log(this.form.get('images').value);
   }
 
   filterImagePreviews(del) {
@@ -83,62 +85,114 @@ export class ProductPopupComponent implements OnInit {
     if (event.target.files.length > 0) {
       const files = event.target.files;
       for (let file of files) {
-        // const reader = new FileReader()
-        // reader.onload = () => {
-        //   this.imagePreviews.push({preview: reader.result, path: file.lastModified + file.name, file: file});
-        // };
-        // reader.readAsDataURL(file)
         let parseFile = new this.parseService.parse.File(file.name, file);
-        let promise = parseFile.save().then((result) => {
+        parseFile.save().then((result) => {
           console.log(result.url());
           this.form.get('images').value.push(result.url());
         });
       }
-
     }
   }
 
   private initForm() {
-    this.form = new FormGroup({
-      title: new FormControl(this.product.title, [
+    this.form = this.formBuilder.group({
+      title: this.formBuilder.control(this.product.title, [
         Validators.required
       ]),
-      price: new FormControl(this.product.price, [
+      price: this.formBuilder.control(this.product.price, [
         Validators.required
       ]),
-      description: new FormControl(this.product.description, [
+      description: this.formBuilder.control(this.product.description, [
 
       ]),
-      itemSize: new FormControl(this.product.itemSize, [
+      itemSize:this.formBuilder.control(this.product.itemSize, [
 
       ]),
-      isHotDeal: new FormControl(this.product.isHotDeal, [
+      isHotDeal: this.formBuilder.control(this.product.isHotDeal, [
 
       ]),
-      isNew: new FormControl(this.product.isNew, [
+      isNew: this.formBuilder.control(this.product.isNew, [
 
       ]),
-      rentalTerms: new FormControl(this.product.rentalTerms, [
+      rentalTerms: this.formBuilder.control(this.product.rentalTerms, [
 
       ]),
-      spaceRequired: new FormControl(this.product.spaceRequired, [
+      spaceRequired: this.formBuilder.control(this.product.spaceRequired, [
 
       ]),
-      setupPolicy: new FormControl(this.product.setupPolicy, [
+      setupPolicyKeys: this.formBuilder.array(this.initSetupPolicyKeys()),
+      setupPolicyValues: this.formBuilder.array(this.initSetupPolicyValues()),
+      instructions: this.formBuilder.control(this.product.instructions, [
 
       ]),
-      instructions: new FormControl(this.product.instructions, [
+      safetyRules: this.formBuilder.control(this.product.safetyRules, [
 
       ]),
-      safetyRules: new FormControl(this.product.safetyRules, [
+      images: this.formBuilder.control(this.product.images, [
 
       ]),
-      images: new FormControl(this.product.images, [
-
-      ]),
-      video: new FormControl(this.product.video, [
+      video: this.formBuilder.control(this.product.video, [
 
       ]),
     })
+  }
+
+  private initSafetyRules() {
+    this.product.setupPolicy.forEach((value, key) => {
+      this.setupPolicyKeys.push(key);
+      this.setupPolicyValues.push(value)
+    });
+
+  }
+
+  private initSetupPolicyKeys() {
+    const res = [];
+    this.setupPolicyKeys.forEach(item => res.push(this.createGroup(item)));
+    return res;
+  }
+
+  private initSetupPolicyValues() {
+    const res = [];
+    this.setupPolicyValues.forEach(item => res.push(this.createGroup(item)));
+    return res;
+  }
+
+  createGroup(name?: string): FormGroup {
+    return this.formBuilder.group({
+      name: this.formBuilder.control(name || '', [
+        Validators.required
+      ]),
+    });
+  }
+
+  addSetupPolicy() {
+    (this.form.get('setupPolicyKeys') as FormArray).push(this.createGroup());
+    (this.form.get('setupPolicyValues') as FormArray).push(this.createGroup());
+  }
+
+  removeSafetyRule(index: number) {
+    (this.form.get('setupPolicyKeys') as FormArray).removeAt(index);
+    (this.form.get('setupPolicyValues') as FormArray).removeAt(index);
+  }
+
+  private getSetupPolicy(): Map<string, string> {
+    let res = new Map();
+    for (let i = 0; i < (this.form.get('setupPolicyKeys') as FormArray).controls.length; ++i) {
+      res.set(
+        (this.form.get('setupPolicyKeys') as FormArray).controls[i].get('name').value,
+        (this.form.get('setupPolicyValues') as FormArray).controls[i].get('name').value
+      );
+    }
+    return res;
+  }
+
+  private getCategories() {
+    this.categoryService.getCategories()
+      .subscribe(
+        res => {
+          this.categories = res;
+        },
+        error => handleError(error)
+      )
   }
 }

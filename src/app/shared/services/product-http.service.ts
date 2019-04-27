@@ -5,6 +5,7 @@ import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
 import {from, Observable, zip} from "rxjs";
 import {ParseService} from "./parse.service";
+import {handleError} from '../util/error-handler';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -57,30 +58,19 @@ export class ProductHttpService extends ProductService {
     this.setFields(product, productToSave);
     let promise;
     if (productToSave.id) {
-      // const query = new this.parseService.parse.Query(Product);
-      // query.equalTo("objectId", productToSave.id);
-      // promise = query.first().then((result) =>{
-      //   return result.save(product);
-      // });
-      promise = product.save().then(product => {
-        return product.save()
-      });
+      const query = new this.parseService.parse.Query(Product);
+      query.equalTo("objectId", productToSave.id);
+      promise = query.first().then(
+        res => {
+          this.setFields(res, productToSave);
+          return res.save()
+        }
+      );
     } else {
       promise = product.save().then(product => {
         return product.save()
       });
     }
-    //   const query = new this.parseService.parse.Query(Product);
-    //   query.equalTo("objectId", productToSave.id);
-    // promise = query.first({
-    //   success: (result) => {
-    //     if (result) {
-    //       return result.save(product)
-    //     } else {
-    //       return product.save()
-    //     }
-    //   }
-    // });
     return from(promise);
   }
 
@@ -129,7 +119,7 @@ export class ProductHttpService extends ProductService {
       item.attributes['description'],
       item.attributes['rentalTerms'],
       item.attributes['spaceRequired'],
-      item.attributes['setupPolicy'],
+      new Map(Object.entries(item.attributes['setupPolicy'])),
       item.attributes['instructions'],
       item.attributes['video'],
       item.attributes['safetyRules']
@@ -159,7 +149,7 @@ export class ProductHttpService extends ProductService {
       product.set('description', productToSave.description);
       product.set('rentalTerms', productToSave.rentalTerms);
       product.set('spaceRequired', productToSave.spaceRequired);
-      product.set('setupPolicy', productToSave.setupPolicy);
+      product.set('setupPolicy', this.mapToObject(productToSave.setupPolicy));
       product.set('instructions', productToSave.instructions);
       product.set('video', productToSave.video);
       product.set('safetyRules', productToSave.safetyRules);
@@ -168,5 +158,11 @@ export class ProductHttpService extends ProductService {
 
   pathParamFromName(name: string) {
     return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+  }
+
+  mapToObject(map: Map) {
+    const obj = {};
+    map.forEach ((v,k) => { obj[k] = v });
+    return obj;
   }
 }

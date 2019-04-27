@@ -47,9 +47,7 @@ var DeliveryChartComponent = /** @class */ (function () {
             if (data) {
                 _this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
                     .subscribe(function (res) {
-                    if (res.id) {
-                        _this.initDeliveryCharts();
-                    }
+                    _this.initDeliveryCharts();
                 }, function (error) { return handleError(error); });
             }
         });

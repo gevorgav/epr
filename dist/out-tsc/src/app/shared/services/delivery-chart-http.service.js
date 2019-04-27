@@ -12,10 +12,10 @@ import { forkJoin } from 'rxjs';
 var DeliveryChartHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(DeliveryChartHttpService, _super);
     function DeliveryChartHttpService(parseService) {
-        var _this = _super.call(this) || this;
-        _this.parseService = parseService;
-        _this._deliveryLocations = [];
-        return _this;
+        var _this_1 = _super.call(this) || this;
+        _this_1.parseService = parseService;
+        _this_1._deliveryLocations = [];
+        return _this_1;
     }
     DeliveryChartHttpService_1 = DeliveryChartHttpService;
     DeliveryChartHttpService.prototype.getDeliveryLocationById = function (id) {
@@ -89,6 +89,7 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         return from(promise);
     };
     DeliveryChartHttpService.prototype.saveDeliveryChart = function (model) {
+        var _this_1 = this;
         var DeliveryChart = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
         var delivery = new DeliveryChart();
         var ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.ZIP_CODE);
@@ -97,24 +98,19 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         zipCode.set('city', model.zipCodes[0]);
         this.setDeliveryChartFields(delivery, model);
         var promise;
-        if (false && model.id) { // TODO
-            // update
-            // delivery.save(null).then(saved => {
-            //   let relation = saved.relation('zipCodes');
-            //   relation.add()
-            // }
+        if (model.id) {
+            var query = new this.parseService.parse.Query(DeliveryChart);
+            query.equalTo("objectId", model.id);
+            var _this = this;
+            promise = query.first().then(function (res) {
+                _this_1.setDeliveryChartFields(res, model);
+                return res.save();
+            });
         }
         else {
-            // create
-            // promise = zipCode.save().then(savedZipCodes => {
-            return delivery.save().then(function (savedDelivery) {
-                return savedDelivery.save(delivery);
+            promise = delivery.save().then(function (product) {
+                return product.save();
             });
-            // })
-            // promise = delivery.save().then(savedDelivery => {
-            //   let zipCodeRelation = savedDelivery.relation('zipCodes');
-            //   return zipCodeRelation.save(zipCode);
-            // })
         }
         return from(promise);
     };

@@ -11,17 +11,19 @@ export class DashboardComponent implements OnInit {
   items: DashboardItem[] = [
     {routerLink: 'product', name: 'Product', isActive: true},
     {routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false},
-    {routerLink: 'zip-code', name: 'Zip code', isActive: false},
+    {routerLink: 'category', name: 'Category', isActive: false},
   ];
+
+  searchValue: string;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.router.navigate([this.items[0].routerLink],{relativeTo: this.activatedRoute});
+    this.selectTab(this.items[0])
   }
 
-  changeActive(item: DashboardItem): void {
+  selectTab(item: DashboardItem): void {
     this.items.forEach(item => item.isActive = false);
     item.isActive = true;
     this.router.navigate([item.routerLink],{relativeTo: this.activatedRoute});

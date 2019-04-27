@@ -62,9 +62,7 @@ export class DeliveryChartComponent implements OnInit {
           this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
             .subscribe(
               res => {
-                if (res.id) {
                   this.initDeliveryCharts();
-                }
               },
               error => handleError(error)
             )
@@ -94,5 +92,9 @@ export class DeliveryChartComponent implements OnInit {
         },
         error => handleError(error)
       )
+  }
+
+  applyFilter($event) {
+    this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
   }
 }

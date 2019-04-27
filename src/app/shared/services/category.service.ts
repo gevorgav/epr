@@ -9,4 +9,6 @@ export abstract class CategoryService {
   abstract getCategories(): Observable<Array<CategoryModel>>;
   abstract getCategoriesWithDependency(): Observable<Array<CategoryModel>>;
   abstract getCategoryItems(categoryId: string): Observable<Array<ProductViewModel>>
+  abstract deleteCategory(id: string): Observable<any>;
+  abstract saveCategory(model: CategoryModel): Observable<any>;
 }
