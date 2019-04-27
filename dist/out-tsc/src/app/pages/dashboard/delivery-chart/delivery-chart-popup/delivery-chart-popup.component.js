@@ -24,14 +24,13 @@ var DeliveryChartPopupComponent = /** @class */ (function () {
             ]),
             locationId: this.formBuilder.control(this.deliveryChart.locationId, []),
         });
-        console.log(this.form);
     };
     DeliveryChartPopupComponent.prototype.initZipCodes = function () {
         var res = [];
         if (this.deliveryChart.zipCodes) {
             for (var _i = 0, _a = this.deliveryChart.zipCodes; _i < _a.length; _i++) {
                 var code = _a[_i];
-                res.push(this.createZipCode(code.zipCode));
+                res.push(this.createZipCode(code.zipCode, code.id));
             }
         }
         return res;
@@ -45,7 +44,7 @@ var DeliveryChartPopupComponent = /** @class */ (function () {
         });
     };
     DeliveryChartPopupComponent.prototype.removeZipCode = function (index) {
-        this.form.get('zipCodes').value.splice(index, 1);
+        this.form.get('zipCodes').controls.splice(index, 1);
     };
     DeliveryChartPopupComponent.prototype.addZipCode = function () {
         var items = this.form.get('zipCodes');

@@ -77,6 +77,9 @@ var ProductComponent = /** @class */ (function () {
             handleError(error);
         });
     };
+    ProductComponent.prototype.applyFilter = function ($event) {
+        this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
+    };
     ProductComponent = tslib_1.__decorate([
         Component({
             selector: 'app-product',

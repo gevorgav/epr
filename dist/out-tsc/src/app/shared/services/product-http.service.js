@@ -11,9 +11,9 @@ import { ParseService } from "./parse.service";
 var ProductHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(ProductHttpService, _super);
     function ProductHttpService(parseService) {
-        var _this_1 = _super.call(this) || this;
-        _this_1.parseService = parseService;
-        return _this_1;
+        var _this = _super.call(this) || this;
+        _this.parseService = parseService;
+        return _this;
     }
     ProductHttpService_1 = ProductHttpService;
     ProductHttpService.prototype.getAllProducts = function () {
@@ -48,7 +48,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         return from(promise);
     };
     ProductHttpService.prototype.saveProduct = function (productToSave) {
-        var _this_1 = this;
+        var _this = this;
         var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
         var product = new Product();
         this.setFields(product, productToSave);
@@ -56,9 +56,8 @@ var ProductHttpService = /** @class */ (function (_super) {
         if (productToSave.id) {
             var query = new this.parseService.parse.Query(Product);
             query.equalTo("objectId", productToSave.id);
-            var _this = this;
             promise = query.first().then(function (res) {
-                _this_1.setFields(res, productToSave);
+                _this.setFields(res, productToSave);
                 return res.save();
             });
         }
@@ -85,7 +84,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         return new ProductViewModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam']);
     };
     ProductHttpService.convertToProductModel = function (item) {
-        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'], item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules']);
+        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], new Map(Object.entries(item.attributes['setupPolicy'])), item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules']);
     };
     ProductHttpService.prototype.getProducts = function (count) {
         var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
@@ -110,7 +109,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         product.set('description', productToSave.description);
         product.set('rentalTerms', productToSave.rentalTerms);
         product.set('spaceRequired', productToSave.spaceRequired);
-        product.set('setupPolicy', productToSave.setupPolicy);
+        product.set('setupPolicy', this.mapToObject(productToSave.setupPolicy));
         product.set('instructions', productToSave.instructions);
         product.set('video', productToSave.video);
         product.set('safetyRules', productToSave.safetyRules);
@@ -118,6 +117,20 @@ var ProductHttpService = /** @class */ (function (_super) {
     };
     ProductHttpService.prototype.pathParamFromName = function (name) {
         return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    };
+    ProductHttpService.prototype.getProductByPatch = function (patch) {
+        var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        var query = new this.parseService.parse.Query(product);
+        query.equalTo('pathParam', patch);
+        var promise = query.first().then(function (res) {
+            return res ? ProductHttpService_1.convertToProductModel(res) : null;
+        });
+        return from(promise);
+    };
+    ProductHttpService.prototype.mapToObject = function (map) {
+        var obj = {};
+        map.forEach(function (v, k) { obj[k] = v; });
+        return obj;
     };
     var ProductHttpService_1;
     ProductHttpService.PRODUCT = "Product";

@@ -66,6 +66,9 @@ var DeliveryChartComponent = /** @class */ (function () {
             _this.dataSource = new MatTableDataSource(_this.deliveryCharts);
         }, function (error) { return handleError(error); });
     };
+    DeliveryChartComponent.prototype.applyFilter = function ($event) {
+        this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
+    };
     DeliveryChartComponent = tslib_1.__decorate([
         Component({
             selector: 'app-delivery-chart',

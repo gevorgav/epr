@@ -13,9 +13,9 @@ import { map } from 'rxjs/operators';
 import { flatMap } from 'rxjs/internal/operators';
 var CategoryHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(CategoryHttpService, _super);
-    function CategoryHttpService(parse) {
+    function CategoryHttpService(parseService) {
         var _this = _super.call(this) || this;
-        _this.parse = parse;
+        _this.parseService = parseService;
         _this._categories = [];
         return _this;
     }
@@ -34,8 +34,8 @@ var CategoryHttpService = /** @class */ (function (_super) {
         configurable: true
     });
     CategoryHttpService.prototype.getCategories = function () {
-        var category = this.parse.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parse.parse.Query(category);
+        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var query = new this.parseService.parse.Query(category);
         var promise = query.find().then(function (res) {
             var categories = [];
             for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
@@ -53,11 +53,18 @@ var CategoryHttpService = /** @class */ (function (_super) {
         return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl']);
     };
     CategoryHttpService.prototype.getCategoryItems = function (categoryId) {
-        return undefined;
+        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
+        var promise = query.first().then(function (res) {
+            return res.relation('products').query().find().then(function (products) {
+                return products;
+            });
+        });
+        return from(promise);
     };
     CategoryHttpService.prototype.getCategoriesWithDependency = function () {
-        var category = this.parse.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parse.parse.Query(category);
+        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var query = new this.parseService.parse.Query(category);
         var promise = query.find().then(function (res) {
             return res;
         });
@@ -90,8 +97,55 @@ var CategoryHttpService = /** @class */ (function (_super) {
         }
         return items;
     };
+    CategoryHttpService.prototype.getCategoryByProductId = function (productId) {
+        var productQuery = new this.parseService.parse.Query("Product");
+        productQuery.contains("objectId", productId);
+        var categoryQuery = new this.parseService.parse.Query(CategoryHttpService_1.CATEGORY);
+        categoryQuery.matchesQuery("products", productQuery);
+        var promise = categoryQuery.first().then(function (list) {
+            return CategoryHttpService_1.convertToCategoryModel(list);
+        }, function (error) {
+            console.log(error);
+        });
+        return from(promise);
+    };
+    CategoryHttpService.prototype.deleteCategory = function (id) {
+        var Product = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var query = new this.parseService.parse.Query(Product);
+        query.equalTo("objectId", id);
+        var promise = query.first().then(function (result) {
+            return result.destroy({});
+        });
+        return from(promise);
+    };
+    CategoryHttpService.prototype.saveCategory = function (model) {
+        var _this = this;
+        var Category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var category = new Category();
+        this.setFields(category, model);
+        var promise;
+        if (model.id) {
+            var query = new this.parseService.parse.Query(Category);
+            query.equalTo("objectId", model.id);
+            promise = query.first().then(function (res) {
+                _this.setFields(res, model);
+                return res.save();
+            });
+        }
+        else {
+            promise = category.save().then(function (category) {
+                return category.save();
+            });
+        }
+        return from(promise);
+    };
+    CategoryHttpService.prototype.setFields = function (category, model) {
+        category.set('title', model.title);
+        category.set('description', model.description);
+        category.set('imageUrl', model.imageUrl);
+    };
     var CategoryHttpService_1;
-    CategoryHttpService.CATEGORY = "Category";
+    CategoryHttpService.CATEGORY = 'Category';
     CategoryHttpService = CategoryHttpService_1 = tslib_1.__decorate([
         Injectable(),
         tslib_1.__metadata("design:paramtypes", [ParseService])

@@ -92,24 +92,26 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         var _this_1 = this;
         var DeliveryChart = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
         var delivery = new DeliveryChart();
-        var ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.ZIP_CODE);
-        // let zipCodes = this.setZipCodeFields(ZipCode, model.zipCodes);
-        var zipCode = new ZipCode();
-        zipCode.set('city', model.zipCodes[0]);
+        var zipCodes = this.setZipCodeFields(model.zipCodes);
+        // zipCode.set('zipCode', model.zipCodes[0].zipCode);
         this.setDeliveryChartFields(delivery, model);
         var promise;
+        var _this = this;
         if (model.id) {
             var query = new this.parseService.parse.Query(DeliveryChart);
             query.equalTo("objectId", model.id);
-            var _this = this;
             promise = query.first().then(function (res) {
                 _this_1.setDeliveryChartFields(res, model);
-                return res.save();
+                _this_1.parseService.parse.Object.saveAll(zipCodes).then(function () {
+                    zipCodes.forEach(function (item) { return res.relation('zipCode').add(item); });
+                    return res.save();
+                });
             });
         }
         else {
-            promise = delivery.save().then(function (product) {
-                return product.save();
+            promise = this.parseService.parse.Object.saveAll(zipCodes).then(function () {
+                zipCodes.forEach(function (item) { return delivery.relation('zipCode').add(item); });
+                return delivery.save();
             });
         }
         return from(promise);
@@ -120,12 +122,14 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         deliveryChart.set('price', model.price);
         deliveryChart.set('locationId', model.locationId);
     };
-    DeliveryChartHttpService.prototype.setZipCodeFields = function (constructor, zipCodes) {
+    DeliveryChartHttpService.prototype.setZipCodeFields = function (zipCodes) {
+        var ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.ZIP_CODE);
         var res = [];
+        zipCodes = zipCodes.filter(function (item) { return !item.id; });
         for (var _i = 0, zipCodes_1 = zipCodes; _i < zipCodes_1.length; _i++) {
             var code = zipCodes_1[_i];
-            var zipCode = new constructor();
-            zipCode.set('city', code.zipCode);
+            var zipCode = new ZipCode();
+            zipCode.set('zipCode', code.zipCode);
             res.push(zipCode);
         }
         return res;

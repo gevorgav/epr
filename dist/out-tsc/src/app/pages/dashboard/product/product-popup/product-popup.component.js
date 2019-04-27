@@ -2,31 +2,32 @@ import * as tslib_1 from "tslib";
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { ProductModel } from "../../../../shared/model/product.model";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, Validators } from '@angular/forms';
 import { ParseService } from "../../../../shared/services/parse.service";
+import { CategoryService } from '../../../../shared/services/category.service';
+import { handleError } from '../../../../shared/util/error-handler';
 var ProductPopupComponent = /** @class */ (function () {
-    function ProductPopupComponent(dialogRef, data, parseService) {
+    function ProductPopupComponent(dialogRef, data, parseService, categoryService) {
         this.dialogRef = dialogRef;
         this.data = data;
         this.parseService = parseService;
+        this.categoryService = categoryService;
+        this.formBuilder = new FormBuilder();
         this.imagePreviews = [];
         this.videoPreview = [];
+        this.setupPolicyKeys = [];
+        this.setupPolicyValues = [];
         this.product = this.data.product;
     }
-    Object.defineProperty(ProductPopupComponent.prototype, "editMode", {
-        get: function () {
-            return this.product && this.product.id;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ProductPopupComponent.prototype.ngOnInit = function () {
+        this.initSafetyRules();
         this.initForm();
+        this.getCategories();
     };
     ProductPopupComponent.prototype.onSubmit = function () {
         if (this.form.valid) {
             this.dialogRef.close({
-                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.form.get('setupPolicy').value, this.form.get('instructions').value, this.product.video, this.form.get('safetyRules').value)
+                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.getSetupPolicy(), this.form.get('instructions').value, this.product.video, this.form.get('safetyRules').value)
             });
         }
     };
@@ -37,12 +38,7 @@ var ProductPopupComponent = /** @class */ (function () {
         this.inputRef.nativeElement.click();
     };
     ProductPopupComponent.prototype.filterImages = function (src) {
-        console.log(src);
-        console.log(this.form.get('images').value);
-        console.log(this.form.get('images').value.filter(function (item) { return item !== src; }));
         this.form.get('images').setValue(this.form.get('images').value.filter(function (item) { return item !== src; }));
-        console.log('a');
-        console.log(this.form.get('images').value);
     };
     ProductPopupComponent.prototype.filterImagePreviews = function (del) {
         this.imagePreviews = this.imagePreviews.filter(function (item) { return item != del; });
@@ -53,13 +49,8 @@ var ProductPopupComponent = /** @class */ (function () {
             var files = event.target.files;
             for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
                 var file = files_1[_i];
-                // const reader = new FileReader()
-                // reader.onload = () => {
-                //   this.imagePreviews.push({preview: reader.result, path: file.lastModified + file.name, file: file});
-                // };
-                // reader.readAsDataURL(file)
                 var parseFile = new this.parseService.parse.File(file.name, file);
-                var promise = parseFile.save().then(function (result) {
+                parseFile.save().then(function (result) {
                     console.log(result.url());
                     _this.form.get('images').value.push(result.url());
                 });
@@ -67,25 +58,74 @@ var ProductPopupComponent = /** @class */ (function () {
         }
     };
     ProductPopupComponent.prototype.initForm = function () {
-        this.form = new FormGroup({
-            title: new FormControl(this.product.title, [
+        this.form = this.formBuilder.group({
+            title: this.formBuilder.control(this.product.title, [
                 Validators.required
             ]),
-            price: new FormControl(this.product.price, [
+            price: this.formBuilder.control(this.product.price, [
                 Validators.required
             ]),
-            description: new FormControl(this.product.description, []),
-            itemSize: new FormControl(this.product.itemSize, []),
-            isHotDeal: new FormControl(this.product.isHotDeal, []),
-            isNew: new FormControl(this.product.isNew, []),
-            rentalTerms: new FormControl(this.product.rentalTerms, []),
-            spaceRequired: new FormControl(this.product.spaceRequired, []),
-            setupPolicy: new FormControl(this.product.setupPolicy, []),
-            instructions: new FormControl(this.product.instructions, []),
-            safetyRules: new FormControl(this.product.safetyRules, []),
-            images: new FormControl(this.product.images, []),
-            video: new FormControl(this.product.video, []),
+            description: this.formBuilder.control(this.product.description, []),
+            itemSize: this.formBuilder.control(this.product.itemSize, []),
+            isHotDeal: this.formBuilder.control(this.product.isHotDeal, []),
+            isNew: this.formBuilder.control(this.product.isNew, []),
+            rentalTerms: this.formBuilder.control(this.product.rentalTerms, []),
+            spaceRequired: this.formBuilder.control(this.product.spaceRequired, []),
+            setupPolicyKeys: this.formBuilder.array(this.initSetupPolicyKeys()),
+            setupPolicyValues: this.formBuilder.array(this.initSetupPolicyValues()),
+            instructions: this.formBuilder.control(this.product.instructions, []),
+            safetyRules: this.formBuilder.control(this.product.safetyRules, []),
+            images: this.formBuilder.control(this.product.images, []),
+            video: this.formBuilder.control(this.product.video, []),
         });
+    };
+    ProductPopupComponent.prototype.initSafetyRules = function () {
+        var _this = this;
+        this.product.setupPolicy.forEach(function (value, key) {
+            _this.setupPolicyKeys.push(key);
+            _this.setupPolicyValues.push(value);
+        });
+    };
+    ProductPopupComponent.prototype.initSetupPolicyKeys = function () {
+        var _this = this;
+        var res = [];
+        this.setupPolicyKeys.forEach(function (item) { return res.push(_this.createGroup(item)); });
+        return res;
+    };
+    ProductPopupComponent.prototype.initSetupPolicyValues = function () {
+        var _this = this;
+        var res = [];
+        this.setupPolicyValues.forEach(function (item) { return res.push(_this.createGroup(item)); });
+        return res;
+    };
+    ProductPopupComponent.prototype.createGroup = function (name) {
+        return this.formBuilder.group({
+            name: this.formBuilder.control(name || '', [
+                Validators.required
+            ]),
+        });
+    };
+    ProductPopupComponent.prototype.addSetupPolicy = function () {
+        this.form.get('setupPolicyKeys').push(this.createGroup());
+        this.form.get('setupPolicyValues').push(this.createGroup());
+    };
+    ProductPopupComponent.prototype.removeSafetyRule = function (index) {
+        this.form.get('setupPolicyKeys').removeAt(index);
+        this.form.get('setupPolicyValues').removeAt(index);
+    };
+    ProductPopupComponent.prototype.getSetupPolicy = function () {
+        var res = new Map();
+        for (var i = 0; i < this.form.get('setupPolicyKeys').controls.length; ++i) {
+            res.set(this.form.get('setupPolicyKeys').controls[i].get('name').value, this.form.get('setupPolicyValues').controls[i].get('name').value);
+        }
+        return res;
+    };
+    ProductPopupComponent.prototype.getCategories = function () {
+        var _this = this;
+        this.categoryService.getCategories()
+            .subscribe(function (res) {
+            _this.categories = res;
+        }, function (error) { return handleError(error); });
     };
     tslib_1.__decorate([
         ViewChild('input'),
@@ -98,7 +138,8 @@ var ProductPopupComponent = /** @class */ (function () {
             styleUrls: ['./product-popup.component.css']
         }),
         tslib_1.__param(1, Inject(MAT_DIALOG_DATA)),
-        tslib_1.__metadata("design:paramtypes", [MatDialogRef, Object, ParseService])
+        tslib_1.__metadata("design:paramtypes", [MatDialogRef, Object, ParseService,
+            CategoryService])
     ], ProductPopupComponent);
     return ProductPopupComponent;
 }());

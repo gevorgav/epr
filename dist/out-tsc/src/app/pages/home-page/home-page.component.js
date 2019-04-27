@@ -50,12 +50,12 @@ var HomePageComponent = /** @class */ (function () {
         });
     };
     HomePageComponent.prototype.initFeaturedRentalProducts = function (res) {
-        for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
-            var product = res_1[_i];
+        var _this = this;
+        res.forEach(function (product) {
             if (product.isNew || product.isHotDeal) {
-                this.featuredRentalProducts.push(product);
+                _this.featuredRentalProducts.push(product);
             }
-        }
+        });
     };
     HomePageComponent.prototype.navigate = function (id, title) {
         this.router.navigate(['/rentals', title], { queryParams: { id: id } });
@@ -71,9 +71,6 @@ var HomePageComponent = /** @class */ (function () {
         this.productService.getAllProducts().subscribe(function (res) {
             _this.initFeaturedRentalProducts(res);
         });
-    };
-    HomePageComponent.prototype.getCategoryImage = function (category) {
-        return;
     };
     HomePageComponent = tslib_1.__decorate([
         Component({

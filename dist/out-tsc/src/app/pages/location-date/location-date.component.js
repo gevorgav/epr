@@ -25,7 +25,7 @@ var LocationDateComponent = /** @class */ (function () {
             'endDate': new FormControl(this.locationDateService.locationDate.endDateTime, [
                 Validators.required
             ]),
-        }, { validators: identityRevealedValidator });
+        }, { validators: [identityRevealedValidator, identityTimeValidator] });
         this.deliveryChartService.getDeliveryLocations().subscribe(function (res) {
             _this.allDeliveryCharts = res;
             _this.initAutoCompleteOptions();
@@ -112,9 +112,13 @@ var LocationDateComponent = /** @class */ (function () {
 }());
 export { LocationDateComponent };
 export var identityRevealedValidator = function (control) {
-    var zipCode = control.get('zipCode');
     var startDate = control.get('startDate');
     var endDate = control.get('endDate');
     return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? { 'identityRevealed': true } : null;
+};
+export var identityTimeValidator = function (control) {
+    var startDate = control.get('startDate');
+    var now = new Date();
+    return startDate.value && (startDate.value.getTime() - now.getTime() < 54000000) ? { 'identityTime': true } : null;
 };
 //# sourceMappingURL=location-date.component.js.map

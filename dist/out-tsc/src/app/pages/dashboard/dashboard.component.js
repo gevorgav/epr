@@ -12,9 +12,9 @@ var DashboardComponent = /** @class */ (function () {
         ];
     }
     DashboardComponent.prototype.ngOnInit = function () {
-        this.router.navigate([this.items[0].routerLink], { relativeTo: this.activatedRoute });
+        this.selectTab(this.items[0]);
     };
-    DashboardComponent.prototype.changeActive = function (item) {
+    DashboardComponent.prototype.selectTab = function (item) {
         this.items.forEach(function (item) { return item.isActive = false; });
         item.isActive = true;
         this.router.navigate([item.routerLink], { relativeTo: this.activatedRoute });
