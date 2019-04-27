@@ -15,7 +15,7 @@ export class ProductViewModel {
     this._id = id;
     this._title = title;
     this._price = price;
-    this._images = images;
+    this._images = images || [];
     this._isNew = isNew;
     this._isHotDeal = isHotDeal;
     this._itemSize = itemSize;

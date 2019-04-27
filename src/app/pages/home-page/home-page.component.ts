@@ -89,7 +89,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   private initProducts() {
-    this.productService.getProducts().subscribe((res:ProductModel[])=>{
+    this.productService.getAllProducts().subscribe((res:ProductModel[])=>{
       this.initFeaturedRentalProducts(res);
     })
   }

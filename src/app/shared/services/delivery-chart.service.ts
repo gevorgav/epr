@@ -10,4 +10,6 @@ export abstract class DeliveryChartService {
   abstract getDeliveryLocationByZipCode(zipCode: number): DeliveryChartModel;
   abstract getDeliveryLocationByCity(cirty: string): DeliveryChartModel;
   abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
+  abstract saveDeliveryChart(model: DeliveryChartModel): Observable<any>;
+  abstract deleteDeliveryChart(id: string): Observable<any>;
 }

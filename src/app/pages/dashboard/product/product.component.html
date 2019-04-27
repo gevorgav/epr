@@ -1,0 +1,28 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef> Title</th>
+    <td mat-cell *matCellDef="let element"> {{element.title}}</td>
+  </ng-container>
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef> Price</th>
+    <td mat-cell *matCellDef="let element"> {{element.price}}</td>
+  </ng-container>
+  <ng-container matColumnDef="isHotDeal">
+    <th mat-header-cell *matHeaderCellDef> Hot Deal</th>
+    <td mat-cell *matCellDef="let element"><mat-checkbox [checked]="element.isHotDeal" disabled ></mat-checkbox></td>
+  </ng-container>
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef> </th>
+    <td mat-cell *matCellDef="let element"><mat-icon aria-label="Edit" (click)="edit(element.id)">edit</mat-icon></td>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef> </th>
+    <td mat-cell *matCellDef="let element"><mat-icon aria-label="Delete"
+                                              (click)="remove(element.id)">delete</mat-icon></td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<button mat-raised-button color="primary" (click)="addProduct()"> Add Product</button>

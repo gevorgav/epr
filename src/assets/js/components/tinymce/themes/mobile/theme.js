@@ -8355,7 +8355,7 @@ var mobile = (function (exports) {
       ]),
       defaulted$1('ignoreFocus', false),
       defaulted$1('domModification', {}),
-      output$1('builder', builder),
+      output$1('formBuilder', builder),
       defaulted$1('eventOrder', {})
     ];
 
@@ -8369,7 +8369,7 @@ var mobile = (function (exports) {
     var schema$b = [
       strict$1('dom'),
       strict$1('components'),
-      output$1('builder', builder$1)
+      output$1('formBuilder', builder$1)
     ];
 
     var owner$2 = function () {
@@ -8480,7 +8480,7 @@ var mobile = (function (exports) {
       ]),
       defaulted$1('domModification', {}),
       defaultUidsSchema(parts()),
-      output$1('builder', builder$2)
+      output$1('formBuilder', builder$2)
     ];
 
     var itemSchema$1 = choose$1('type', {
@@ -8521,7 +8521,7 @@ var mobile = (function (exports) {
         factory: {
           sketch: function (spec) {
             var itemInfo = asRawOrDie('menu.spec item', itemSchema$1, spec);
-            return itemInfo.builder(itemInfo);
+            return itemInfo.formBuilder(itemInfo);
           }
         },
         name: 'items',
