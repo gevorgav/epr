@@ -41,7 +41,7 @@
               <!--</div>-->
             </div>
             <div class="product-desc center">
-              <div class="product-title"><h3><a href="#">{{product.title}}</a></h3></div>
+              <div class="product-title"><h3><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3></div>
               <div class="product-price">
                 <!--<del>$45.99</del>-->
                 <ins>${{product.price}}</ins>

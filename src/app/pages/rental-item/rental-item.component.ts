@@ -5,7 +5,14 @@ import {Observable} from 'rxjs/internal/Observable';
 import {map, switchMap} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {RoutingService} from '../../shared/services/routing.service';
-declare var SEMICOLON:any;
+import {ProductModel} from '../../shared/model/product.model';
+import {ProductService} from '../../shared/services/product.service';
+import {ZipCode} from '../../shared/model/delivery-chart.model';
+import {zip} from 'rxjs';
+import {CategoryService} from '../../shared/services/category.service';
+import {CategoryModel} from '../../shared/model/category.model';
+
+declare var SEMICOLON: any;
 declare var $: any;
 
 @Component({
@@ -13,77 +20,84 @@ declare var $: any;
   templateUrl: './rental-item.component.html',
   styleUrls: ['./rental-item.component.css']
 })
-export class RentalItemComponent implements OnInit , AfterViewInit{
+export class RentalItemComponent implements OnInit, AfterViewInit {
 
+  public galleryOptions = [
+    {'imageSize': 'contain'},
+    {'breakpoint': 500, 'width': '300px', 'height': '300px', 'thumbnailsColumns': 3},
+    {'breakpoint': 300, 'width': '100%', 'height': '200px', 'thumbnailsColumns': 2},
+  ];
+  public galleryImages = [];
   public reviewsCount: number = 4;
-  private title$: Observable<any>;
-  private itemId: number;
+  public products: ProductModel[] = [];
+  private title$ = this.route.paramMap;
+  private selectedProduct: ProductModel;
+
 
   constructor(private titleService: Title,
               private locationService: LocationDateService,
               private route: ActivatedRoute,
               private router: Router,
-              private routingService: RoutingService) { }
+              private routingService: RoutingService,
+              private productService: ProductService,
+              private categoryService: CategoryService) {
+  }
 
   ngOnInit() {
     this.getRouteParams();
-    this.title$.subscribe();
-    this.route.queryParams.subscribe(res=>{
-      this.itemId = (+res['id'] || 0);
-    });
-    this.routingService.itemIdSubject.subscribe(res=>{
+    this.routingService.itemIdSubject.subscribe(res => {
       console.log(res);
     });
   }
 
-  ngAfterViewInit(): void {
-    this.router.events.subscribe(res=>{
-      if (res instanceof NavigationEnd){
-        if (res.url === "/home" || res.url === "/" || res.url === "" || res.url.indexOf("/rental/") > -1){
-          this.initGallery();
-        }
+  private getSelectedProduct(productPatch: string) {
+    this.productService.getProductByPatch(productPatch).subscribe((res: ProductModel) => {
+      if (!res) {
+        this.router.navigate(['/404']);
       }
-    })
-  }
-  
-  private getRouteParams() {
-    this.title$ = this.route.paramMap.pipe(
-      map((params: ParamMap) =>
-        this.titleService.setTitle(params.get('title')))
-    );
-  }
-  
-  public navigate(id: number, title: string){
-    this.router.navigate(['/rental', title], { queryParams: { id: id }} );
-  }
-  
-  private initGallery() {
-    setTimeout(() => {
-      setTimeout(() => {
-          SEMICOLON.documentOnReady.init();
-          setTimeout(() => {
-            SEMICOLON.documentOnLoad.init();
-            setTimeout(() => {
-              SEMICOLON.documentOnResize.init();
-              setTimeout(() => {
-                SEMICOLON.widget.init();
-                setTimeout(() => {
-                  $('.css3-spinner').remove();
-                  $('#linked-to-gallery a').click(function() {
-                    var imageLink = $(this).attr('data-image');
-                    $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
-                    return false;
-                  });
-                }, 10);
-              }, 10);
-            }, 10);
-          }, 10);
-        }
-        , 10);
-    }, 100);
+      this.selectedProduct = res;
+      this.titleService.setTitle(res.title);
+      this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel)=>{
+        this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[])=>{
+          this.products = res.filter(product=> product.id !== this.selectedProduct.id);
+          console.log(res);
+        })
+      });
+      this.initGallery();
+    });
   }
 
-  isSpecified(){
+  ngAfterViewInit(): void {
+    this.router.events.subscribe(res => {
+      if (res instanceof NavigationEnd) {
+        if (res.url === '/home' || res.url === '/' || res.url === '' || res.url.indexOf('/rental/') > -1) {
+          // this.initGallery();
+        }
+      }
+    });
+  }
+
+  private getRouteParams() {
+    this.title$.subscribe((params: ParamMap) => {
+      this.getSelectedProduct(params.get('title'));
+    });
+  }
+
+  public navigate(id: number, title: string) {
+    this.router.navigate(['/rental', title], {queryParams: {id: id}});
+  }
+
+  private initGallery() {
+    for (let image of this.selectedProduct.images) {
+      this.galleryImages.push({
+        small: image,
+        medium: image,
+        big: image
+      });
+    }
+  }
+
+  isSpecified() {
     return this.locationService.isSpecified;
   }
 }

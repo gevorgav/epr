@@ -40,6 +40,7 @@ import { DeliveryChartPopupComponent } from './pages/dashboard/delivery-chart/de
 import { VerificationComponent } from './pages/verification/verification.component';
 import { CategoryComponent } from './pages/dashboard/category/category.component';
 import { CategoryPopupComponent } from './pages/dashboard/category/category-popup/category-popup.component';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 const appRoutes: Routes = [
   {
@@ -141,7 +142,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    MaterialModule
+    MaterialModule,
+    NgxGalleryModule
   ],
   providers: [
     LocationDateService,

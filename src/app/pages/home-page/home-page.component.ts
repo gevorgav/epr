@@ -69,11 +69,11 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   private initFeaturedRentalProducts(res:ProductModel[]){
-    for (let product of res){
+    res.forEach((product:ProductModel)=>{
       if (product.isNew || product.isHotDeal){
         this.featuredRentalProducts.push(product);
       }
-    }
+    });
   }
 
   public navigate(id: string, title: string){
@@ -92,9 +92,5 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe((res:ProductModel[])=>{
       this.initFeaturedRentalProducts(res);
     })
-  }
-  
-  getCategoryImage(category: CategoryModel) {
-    return ;
   }
 }

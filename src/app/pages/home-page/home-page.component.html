@@ -100,7 +100,7 @@
       <div class="clear"></div>
       <div class="line topmargin-sm bottommargin-lg"></div>
 
-      <div style="position: relative;">
+      <div style="position: relative;" *ngIf="featuredRentalProducts.length > 0">
         <div class="heading-block nobottomborder">
           <h3>Featured Rental Products</h3>
         </div>
@@ -108,8 +108,7 @@
         <!--<a routerLink="#" class="button button-small button-rounded button-border button-border-thin t500 nomargin"-->
         <!--style="position: absolute; top: 7px; right: 0;">Check All</a>-->
 
-        <div *ngIf="featuredRentalProducts.length > 2"
-             class="real-estate owl-carousel image-carousel carousel-widget bottommargin-lg" data-margin="10"
+        <div class="real-estate owl-carousel image-carousel carousel-widget bottommargin-lg" data-margin="10"
              data-nav="true" data-loop="true" data-pagi="false" data-items-xs="1" data-items-sm="1" data-items-md="2"
              data-items-lg="3" data-items-xl="3">
 

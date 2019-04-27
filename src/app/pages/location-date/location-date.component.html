@@ -44,6 +44,9 @@
                 <div *ngIf="locationDateForm.errors?.identityRevealed && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
                   Start date con't be after end date.
                 </div>
+                <div *ngIf="locationDateForm.errors?.identityTime && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
+                  Online bookings must be completed 15 hours prior to the requested date & time
+                </div>
                 <button type="button" (click)="onSubmit()" class="button button-3d button-rounded btn-block nomargin"
                         style="margin-top: 35px !important;">Submit</button>
               </div>

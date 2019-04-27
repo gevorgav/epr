@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
 export abstract class ProductService {
   abstract getAllProducts(): Observable<ProductViewModel[]>;
   abstract getProduct(id: string):  Observable<ProductModel>;
+  abstract getProductByPatch(patch: string):  Observable<ProductModel>;
   abstract getProductByCategoryId(categoryId: number);
   abstract saveProduct(product: ProductModel);
   abstract deleteProduct(id: string);

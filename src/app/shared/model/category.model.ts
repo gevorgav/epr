@@ -5,14 +5,14 @@ import {ProductViewModel} from './product-view.model';
 import {Observable} from 'rxjs/internal/Observable';
 
 export class CategoryModel {
-  private _id: number;
+  private _id: string;
   private _title: string;
   private _description: string;
   private _imageUrl: string;
   private _items: ProductViewModel[];
   private _$items: Observable<ProductViewModel[]>;
 
-  constructor(id: number, title: string, description: string, imageUrl: string, $items?: Observable<ProductViewModel[]>, items?: ProductViewModel[]) {
+  constructor(id: string, title: string, description: string, imageUrl: string, $items?: Observable<ProductViewModel[]>, items?: ProductViewModel[]) {
     this._id = id;
     this._title = title;
     this._description = description;
@@ -21,7 +21,7 @@ export class CategoryModel {
     this._$items = $items;
   }
 
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 

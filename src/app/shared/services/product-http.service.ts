@@ -3,7 +3,7 @@ import {ProductService} from './product.service';
 import {ProductModel} from '../model/product.model';
 import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
-import {from, Observable, zip} from "rxjs";
+import {from, Observable} from "rxjs";
 import {ParseService} from "./parse.service";
 import {handleError} from '../util/error-handler';
 
@@ -89,9 +89,6 @@ export class ProductHttpService extends ProductService {
   getProductByCategoryId(categoryId: number) {
   }
 
-
-
-
   // conversions
   static convertToProductViewModel(item: any): ProductViewModel {
     return new ProductViewModel(
@@ -160,7 +157,18 @@ export class ProductHttpService extends ProductService {
     return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
   }
 
-  mapToObject(map: Map) {
+  getProductByPatch(patch: string): Observable<ProductModel> {
+    let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
+    let query = new this.parseService.parse.Query(product);
+    query.equalTo('pathParam', patch);
+    let promise = query.first().then(res=>{
+      return res ? ProductHttpService.convertToProductModel(res) : null;
+    });
+    return from(promise);
+  }
+
+
+  mapToObject(map: Map<any,any>) {
     const obj = {};
     map.forEach ((v,k) => { obj[k] = v });
     return obj;

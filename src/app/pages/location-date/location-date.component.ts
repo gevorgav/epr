@@ -39,7 +39,7 @@ export class LocationDateComponent implements OnInit {
       'endDate': new FormControl(this.locationDateService.locationDate.endDateTime, [
         Validators.required
       ]),
-    }, {validators: identityRevealedValidator});
+    }, {validators: [identityRevealedValidator, identityTimeValidator]});
 
      this.deliveryChartService.getDeliveryLocations().subscribe(res=>{
        this.allDeliveryCharts = res;
@@ -121,9 +121,14 @@ export class LocationDateComponent implements OnInit {
 }
 
 export const identityRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-  const zipCode = control.get('zipCode');
   const startDate = control.get('startDate');
   const endDate = control.get('endDate');
 
   return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? {'identityRevealed': true} : null;
+};
+
+export const identityTimeValidator : ValidatorFn = (control: FormGroup): ValidationErrors | null =>{
+  const startDate = control.get('startDate');
+  let now = new Date();
+  return startDate.value && (startDate.value.getTime() - now.getTime() < 54000000) ? {'identityTime': true} : null;
 };
