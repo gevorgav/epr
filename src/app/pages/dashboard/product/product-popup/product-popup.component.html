@@ -1,0 +1,108 @@
+<div class="content-wrap">
+  <div class="clearfix">
+    <div class="card-body" style="padding: 40px;">
+      <h3>{{product?.title}}</h3>
+
+      <form id="product-form" name="product-form" class="nobottommargin" [formGroup]="form" >
+
+        <div class=" col col_half">
+          <label for="title">Title:</label>
+          <input formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
+          <div
+            *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
+            class="alert alert-danger">
+            <div *ngIf="form.controls['title'].errors.required">
+              Title is required.
+            </div>
+          </div>
+        </div>
+
+        <div class=" col col_half">
+          <label for="price">Price:</label>
+          <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
+          <div
+            *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
+            class="alert alert-danger">
+            <div *ngIf="form.controls['price'].errors.required">
+              Price is required.
+            </div>
+          </div>
+        </div>
+
+        <div class=" col col_full">
+          <label for="description">Description:</label>
+          <textarea formControlName="description" id="description" name="description" value=""
+                    class="form-control"></textarea>
+        </div>
+
+
+        <div class=" col col_one_third">
+          <label for="itemSize">Item size:</label>
+          <input formControlName="itemSize" type="text" id="itemSize" name="itemSize" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_fourth">
+          <label for="isNew">New:</label>
+          <input formControlName="isNew" type="checkbox" id="isNew" name="isNew" value="" class="form-control"/>
+        </div>
+
+        <div class=" col col_one_fourth">
+          <label for="isHotDeal">Hot deal:</label>
+          <input formControlName="isHotDeal" type="checkbox" id="isHotDeal" name="isHotDeal" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="rentalTerms">Rental terms:</label>
+          <input formControlName="rentalTerms" type="text" id="rentalTerms" name="rentalTerms" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="spaceRequired">Space Required:</label>
+          <input formControlName="spaceRequired" type="text" id="spaceRequired" name="spaceRequired" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="">Setup Policy:</label>
+          <label for="">????????????</label>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="instructions">Instructions:</label>
+          <input formControlName="instructions" type="text" id="instructions" name="instructions" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="safetyRules">Safety rules:</label>
+          <input formControlName="safetyRules" type="text" id="safetyRules" name="safetyRules" value=""
+                 class="form-control"/>
+        </div>
+
+        <div class=" col col_one_third">
+        <input type="file" (change)="onFileUpload($event)" #input style="display: none;">
+        <button color="primary" mat-button (click)="triggerClick()"><i class="material-icons left">backup</i>Attach picture</button>
+        </div>
+        <div *ngFor="let imageSrc of form.controls['images'].value" class="col col_one_sixth">
+          <img [src]="imageSrc" alt=""><mat-icon (click)="filterImages(imageSrc)">delete</mat-icon>
+        </div>
+        <div *ngFor="let item of imagePreviews" class="col col_one_sixth">
+          <img [src]="item.preview" alt=""><mat-icon (click)="filterImagePreviews(item)">delete</mat-icon>
+        </div>
+
+        <div class="col_full nobottommargin">
+          <button type="submit" class="button button-3d " id="submit" name="submit"
+                  value="submit" (click)="onSubmit()">Save
+          </button>
+          <button (click)="close()" class="button button-white button-3d " id="cancel" name="cancel" value="cancel">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

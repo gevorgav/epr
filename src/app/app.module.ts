@@ -18,12 +18,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RentalItemComponent} from './pages/rental-item/rental-item.component';
 import {CheckoutComponent} from './pages/checkout/checkout.component';
 import {LoginPageComponent} from './pages/login-page/login-page.component';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatIconModule} from '@angular/material/icon';
 import { LocationDateComponent } from './pages/location-date/location-date.component';
 import {LocationDateService} from './shared/services/location-date.service';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
 import { PageComponent } from './layout/page/page.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import {ParseService} from './shared/services/parse.service';
@@ -31,13 +27,18 @@ import {AuthGuardLoginService, AuthGuardService as AuthGuard, AuthGuardVerificat
 import { CartComponent } from './pages/cart/cart.component';
 import {DeliveryChartHttpService} from './shared/services/delivery-chart-http.service';
 import {DeliveryChartService} from './shared/services/delivery-chart.service';
-import {MatAutocompleteModule} from '@angular/material';
 import {CategoryService} from './shared/services/category.service';
 import {CategoryHttpService} from './shared/services/category-http.service';
 import {RoutingService} from './shared/services/routing.service';
+import {MaterialModule} from "./mat/material.module";
+import { ProductComponent } from './pages/dashboard/product/product.component';
+import { ZipCodeComponent } from './pages/dashboard/zip-code/zip-code.component';
+import { DeliveryChartComponent as DashboardDeliveryChartComponent } from './pages/dashboard/delivery-chart/delivery-chart.component';
+import {ProductService} from "./shared/services/product.service";
+import {ProductHttpService} from "./shared/services/product-http.service";
+import { ProductPopupComponent } from './pages/dashboard/product/product-popup/product-popup.component';
+import { DeliveryChartPopupComponent } from './pages/dashboard/delivery-chart/delivery-chart-popup/delivery-chart-popup.component';
 import { VerificationComponent } from './pages/verification/verification.component';
-import {ProductService} from './shared/services/product.service';
-import {ProductHttpService} from './shared/services/product-http.service';
 
 const appRoutes: Routes = [
   {
@@ -68,7 +69,12 @@ const appRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    children: [
+      {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
+      {path: 'product', component: ProductComponent},
+      {path: 'zip-code', component: ZipCodeComponent}
+    ]
   },
   {
     path: 'login',
@@ -114,6 +120,12 @@ const appRoutes: Routes = [
     PageComponent,
     DashboardComponent,
     CartComponent,
+    ProductComponent,
+    ZipCodeComponent,
+    DashboardDeliveryChartComponent,
+    ProductPopupComponent,
+    DeliveryChartPopupComponent,
+    CartComponent,
     VerificationComponent
   ],
   imports: [
@@ -127,11 +139,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatTabsModule,
-    MatIconModule,
-    MatInputModule
+    MaterialModule
   ],
   providers: [
     LocationDateService,
@@ -141,8 +149,12 @@ const appRoutes: Routes = [
     AuthGuardVerificationService,
     RoutingService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
+    {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},
-    {provide: CategoryService, useClass: CategoryHttpService}
+  ],
+  entryComponents: [
+    ProductPopupComponent,
+    DeliveryChartPopupComponent,
   ],
   bootstrap: [AppComponent]
 })
