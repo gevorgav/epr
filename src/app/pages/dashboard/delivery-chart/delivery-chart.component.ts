@@ -37,9 +37,7 @@ export class DeliveryChartComponent implements OnInit {
           this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
             .subscribe(
               res => {
-                if (res.id) {
                   this.initDeliveryCharts();
-                }
               },
               error => handleError(error)
             )

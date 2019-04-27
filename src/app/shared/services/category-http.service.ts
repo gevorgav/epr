@@ -126,6 +126,9 @@ export class CategoryHttpService extends CategoryService {
     const query = new this.parseService.parse.Query(Product);
     query.equalTo("objectId", id);
     const promise = query.first().then((result) =>{
+      result.relation('products').query().find().then(items => {
+        items.forEach(item => item.destroy())
+      });
       return result.destroy({});
     });
     return from(promise);

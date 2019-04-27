@@ -5,6 +5,7 @@ import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
 import {from, Observable} from "rxjs";
 import {ParseService} from "./parse.service";
+import {CategoryHttpService} from "./category-http.service";
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -51,23 +52,52 @@ export class ProductHttpService extends ProductService {
     return from(promise);
   }
 
-  saveProduct(productToSave: ProductModel) {
+  saveProduct(productToSave: ProductModel, newCategoryId: string, oldCategoryId?: string) {
     let Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let product = new Product();
     this.setFields(product, productToSave);
     let promise;
+    let _this = this;
     if (productToSave.id) {
       const query = new this.parseService.parse.Query(Product);
       query.equalTo("objectId", productToSave.id);
       promise = query.first().then(
         res => {
           this.setFields(res, productToSave);
-          return res.save()
+          return res.save().then(
+            savedProduct => {
+              if (newCategoryId !== oldCategoryId) {
+                let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+                let query = new _this.parseService.parse.Query(Category);
+                query.equalTo("objectId", oldCategoryId);
+                return query.first().then(category => {
+                  category.relation('products').remove(savedProduct);
+                  return category.save();
+                }).then(res => {
+                  let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+                  let query = new _this.parseService.parse.Query(Category);
+                  query.equalTo("objectId", newCategoryId);
+                  return query.first().then(category => {
+                    category.relation('products').add(savedProduct);
+                    return category.save();
+                  })
+                });
+              } else {
+                return savedProduct.save()
+              }
+            }
+          )
         }
       );
     } else {
       promise = product.save().then(product => {
-        return product.save()
+        let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+        let query = new _this.parseService.parse.Query(Category);
+        query.equalTo("objectId", newCategoryId);
+        return query.first().then(category => {
+          category.relation('products').add(product)
+          return category.save();
+        });
       });
     }
     return from(promise);
@@ -153,7 +183,7 @@ export class ProductHttpService extends ProductService {
   }
 
   pathParamFromName(name: string) {
-    return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    return new Date().getTime() + '-' + name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
   }
 
   getProductByPatch(patch: string): Observable<ProductModel> {

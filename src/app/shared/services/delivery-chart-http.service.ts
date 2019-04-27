@@ -104,7 +104,10 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     const query = new this.parseService.parse.Query(DeliveryChart);
     query.equalTo("objectId", id);
     const promise = query.first().then((result) =>{
-      return result.destroy({});
+      result.relation('zipCode').query().find().then(items => {
+        items.forEach(item => item.destroy())
+      });
+      return result.destroy();
     });
     return from(promise);
   }
@@ -125,7 +128,10 @@ export class DeliveryChartHttpService extends DeliveryChartService{
       promise = query.first().then(
         res => {
           this.setDeliveryChartFields(res, model);
-          this.parseService.parse.Object.saveAll(zipCodes).then(() => {
+          res.relation('zipCode').query().find().then(relatedItems => {
+            relatedItems.forEach(item => item.destroy())
+          });
+          return this.parseService.parse.Object.saveAll(zipCodes).then(() => {
             zipCodes.forEach(item => res.relation('zipCode').add(item));
             return res.save();
           });
@@ -150,7 +156,7 @@ export class DeliveryChartHttpService extends DeliveryChartService{
   private setZipCodeFields(zipCodes: ZipCode[]): any[] {
     const ZipCode = this.parseService.parse.Object.extend(DeliveryChartHttpService.ZIP_CODE);
     let res = [];
-    zipCodes = zipCodes.filter(item => !item.id);
+    // zipCodes = zipCodes.filter(item => !item.id);
     for (let code of zipCodes) {
       let zipCode = new ZipCode();
       zipCode.set('zipCode', code.zipCode);

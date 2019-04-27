@@ -5,6 +5,8 @@ import {handleError} from "../../../shared/util/error-handler";
 import {MatDialog, MatTableDataSource} from "@angular/material";
 import {ProductPopupComponent} from "./product-popup/product-popup.component";
 import {ProductModel} from "../../../shared/model/product.model";
+import {CategoryService} from "../../../shared/services/category.service";
+import {zip} from "rxjs";
 
 @Component({
   selector: 'app-product',
@@ -18,6 +20,7 @@ export class ProductComponent implements OnInit {
   displayedColumns = ['title', 'price', /*'isHotDeal',*/ 'edit', 'delete'];
 
   constructor(private productService: ProductService,
+              private categoryService: CategoryService,
               private dialog: MatDialog) {
 
   }
@@ -40,18 +43,21 @@ export class ProductComponent implements OnInit {
   }
 
   edit(id: string) {
-    this.productService.getProduct(id)
-      .subscribe(product => {
+    zip(
+      this.productService.getProduct(id),     // 0
+      this.categoryService.getCategoryByProductId(id), // 1
+    ).subscribe(([product, category]) => {
         const dialogRef = this.dialog.open(ProductPopupComponent, {
           data: {
-            product
+            product,
+            category
           },
           width: '80%',
           height: '95%'
         });
         dialogRef.afterClosed().subscribe(data => {
           if (data && data.product) {
-            this.productService.saveProduct(data.product)
+            this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId)
               .subscribe(
                 res => {
                     this.initProducts();
@@ -72,12 +78,10 @@ export class ProductComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(data => {
       if (data && data.product) {
-        this.productService.saveProduct(data.product)
+        this.productService.saveProduct(data.product, data.newCategoryId)
           .subscribe(
             res => {
-              if (res.id) {
                 this.initProducts();
-              }
             },
             erorr => handleError(erorr))
       }

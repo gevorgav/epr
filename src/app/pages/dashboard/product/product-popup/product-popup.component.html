@@ -31,7 +31,7 @@
 
         <div class="">
           <mat-form-field class=" col col_half">
-            <mat-select placeholder="Category">
+            <mat-select placeholder="Category" id="category" formControlName="category" [compareWith]="compareFn">
               <mat-option *ngFor="let category of categories" [value]="category.id">
                 {{category.title}}
               </mat-option>
@@ -131,9 +131,12 @@
           <div *ngFor="let imageSrc of form.controls['images'].value" class="col col_one_sixth">
             <img [src]="imageSrc" alt=""><mat-icon (click)="filterImages(imageSrc)">delete</mat-icon>
           </div>
-          <div *ngFor="let item of imagePreviews" class="col col_one_sixth">
-            <img [src]="item.preview" alt=""><mat-icon (click)="filterImagePreviews(item)">delete</mat-icon>
-          </div>
+        </div>
+
+        <div class=" col col_one_third">
+          <label for="video">Video:</label>
+          <input formControlName="video" type="text" id="video" name="video" value=""
+                 class="form-control"/>
         </div>
 
         <div class="col_full nobottommargin">

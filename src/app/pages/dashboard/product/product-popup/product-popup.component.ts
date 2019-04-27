@@ -21,11 +21,12 @@ export class ProductPopupComponent implements OnInit {
   formBuilder: FormBuilder = new FormBuilder();
 
   @ViewChild('input') inputRef: ElementRef;
-  imagePreviews: any[] = [];
-  videoPreview: any[] = [];
 
   setupPolicyKeys: string[] = [];
   setupPolicyValues: string[] = [];
+  get categoryId() {
+    return this.data.category ? this.data.category.id : ''
+  }
 
   constructor(public dialogRef: MatDialogRef<ProductPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -57,9 +58,11 @@ export class ProductPopupComponent implements OnInit {
           this.form.get('spaceRequired').value,
           this.getSetupPolicy(),
           this.form.get('instructions').value,
-          this.product.video,
+          this.form.get('video').value,
           this.form.get('safetyRules').value
-        )
+        ),
+        newCategoryId: this.form.get('category').value,
+        oldCategoryId: this.categoryId
       });
     }
   }
@@ -75,10 +78,6 @@ export class ProductPopupComponent implements OnInit {
 
   filterImages(src) {
     this.form.get('images').setValue(this.form.get('images').value.filter(item => item !== src));
-  }
-
-  filterImagePreviews(del) {
-    this.imagePreviews = this.imagePreviews.filter(item => item != del);
   }
 
   onFileUpload(event){
@@ -104,6 +103,9 @@ export class ProductPopupComponent implements OnInit {
       ]),
       description: this.formBuilder.control(this.product.description, [
 
+      ]),
+      category: this.formBuilder.control(this.categoryId, [
+        Validators.required
       ]),
       itemSize:this.formBuilder.control(this.product.itemSize, [
 
@@ -203,5 +205,11 @@ export class ProductPopupComponent implements OnInit {
         },
         error => handleError(error)
       )
+  }
+
+  compareFn: ((f1: any, f2: any) => boolean) | null = this.compare;
+
+  compare(f1: any, f2: any) {
+    return f1 === f2;
   }
 }
