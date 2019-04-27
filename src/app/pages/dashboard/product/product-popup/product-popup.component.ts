@@ -1,7 +1,7 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ProductModel} from "../../../../shared/model/product.model";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ParseService} from "../../../../shared/services/parse.service";
 import {CategoryService} from '../../../../shared/services/category.service';
 import {CategoryModel} from '../../../../shared/model/category.model';
@@ -166,6 +166,7 @@ export class ProductPopupComponent implements OnInit {
   }
 
   addSetupPolicy() {
+    // debugger;
     (this.form.get('setupPolicyKeys') as FormArray).push(this.createGroup());
     (this.form.get('setupPolicyValues') as FormArray).push(this.createGroup());
   }
@@ -184,6 +185,14 @@ export class ProductPopupComponent implements OnInit {
       );
     }
     return res;
+  }
+  
+  public getSetupPolicyValuesControls(){
+    return (this.form.get('setupPolicyValues') as FormArray).controls;
+  }
+  
+  public getSetupPolicyKeysControls(){
+    return (this.form.get('setupPolicyKeys') as FormArray).controls;
   }
 
   private getCategories() {

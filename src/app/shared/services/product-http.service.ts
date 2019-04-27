@@ -5,7 +5,6 @@ import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
 import {from, Observable} from "rxjs";
 import {ParseService} from "./parse.service";
-import {handleError} from '../util/error-handler';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -116,7 +115,7 @@ export class ProductHttpService extends ProductService {
       item.attributes['description'],
       item.attributes['rentalTerms'],
       item.attributes['spaceRequired'],
-      new Map(Object.entries(item.attributes['setupPolicy'])),
+      item.attributes['setupPolicy']?new Map(Object.entries(item.attributes['setupPolicy'])):null,
       item.attributes['instructions'],
       item.attributes['video'],
       item.attributes['safetyRules']

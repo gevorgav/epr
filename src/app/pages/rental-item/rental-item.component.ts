@@ -29,10 +29,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   ];
   public galleryImages = [];
   public reviewsCount: number = 4;
+  public selectedProduct: ProductModel;
   public products: ProductModel[] = [];
   private title$ = this.route.paramMap;
-  private selectedProduct: ProductModel;
-
 
   constructor(private titleService: Title,
               private locationService: LocationDateService,
@@ -46,7 +45,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getRouteParams();
     this.routingService.itemIdSubject.subscribe(res => {
-      console.log(res);
+      // console.log(res);
     });
   }
 

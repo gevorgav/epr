@@ -91,7 +91,7 @@
           <h4>Setup Policy:</h4>
           <button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button>
           <div class="col col_one_third">
-            <ng-container  formArrayName="setupPolicyKeys" *ngFor="let key of form.get('setupPolicyKeys').controls; let i = index;">
+            <ng-container  formArrayName="setupPolicyKeys" *ngFor="let key of getSetupPolicyKeysControls(); let i = index;">
               <ng-container [formGroupName]="i">
                 <input formControlName="name" placeholder=""  type="text" [id]="'key_' + i" name="key" value="" class="form-control"/>
               </ng-container>
@@ -105,7 +105,7 @@
             </ng-container>
           </div>
           <div class="col col_one_third">
-            <ng-container  formArrayName="setupPolicyValues" *ngFor="let key of form.get('setupPolicyValues').controls; let i = index;" >
+            <ng-container  formArrayName="setupPolicyValues" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;" >
               <ng-container [formGroupName]="i">
                 <input formControlName="name" placeholder=""  type="text" [id]="'value_' + i" name="value" value="" class="form-control"/>
               </ng-container>
@@ -118,7 +118,7 @@
               </div>
             </ng-container>
           </div>
-          <div class="col col_one_sixth" *ngFor="let key of form.get('setupPolicyValues').controls; let i = index;">
+          <div class="col col_one_sixth" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
             <mat-icon (click)="removeSafetyRule(i)">delete</mat-icon>
           </div>
         </div>

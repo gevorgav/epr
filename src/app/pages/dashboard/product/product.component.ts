@@ -33,7 +33,6 @@ export class ProductComponent implements OnInit {
           if (res.id) {
             this.initProducts();
           }
-          console.log(res);
         },
         error => handleError(error)
       )

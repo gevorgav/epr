@@ -29,7 +29,7 @@
 
         <div class=" col col_full">
           <label >Zip Codes:</label>
-          <ng-container  formArrayName="zipCodes" *ngFor="let zipCode of form.get('zipCodes').controls; let i = index;">
+          <ng-container  formArrayName="zipCodes" *ngFor="let zipCode of getZipCodesControls(); let i = index;">
             <ng-container [formGroupName]="i">
               <input formControlName="code" placeholder=""  type="text" [id]="'zipCode_' + i" name="zipCode" value="" class="form-control"/>
             </ng-container>

@@ -98,5 +98,9 @@ export class DeliveryChartPopupComponent implements OnInit {
     }
     return res;
   }
+  
+  public getZipCodesControls(){
+    return (this.form.get('zipCodes') as FormArray).controls
+  }
 
 }
