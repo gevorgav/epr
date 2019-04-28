@@ -11,6 +11,8 @@ import {forkJoin} from 'rxjs/index';
 import {map} from 'rxjs/operators';
 import {flatMap} from 'rxjs/internal/operators';
 import * as Parse from 'parse';
+import {ProductHttpService} from './product-http.service';
+import {ProductModel} from '../model/product.model';
 
 @Injectable()
 export class CategoryHttpService extends CategoryService {
@@ -56,8 +58,8 @@ export class CategoryHttpService extends CategoryService {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
     let promise = query.first().then(res =>{
-      return res.relation('products').query().find().then(products=>{
-        return products;
+      return res.relation('products').query().find().then(res=>{
+        return CategoryHttpService.forOne(res);
       })
     });
     return from(promise);
@@ -94,16 +96,30 @@ export class CategoryHttpService extends CategoryService {
       ));
   }
 
-  private static parseObjectToProductView(parseObject: any): ProductViewModel {
-    return new ProductViewModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'],
-      parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'],
-      parseObject.attributes['pathParam']);
+  private static parseObjectToProductModel(parseObject: any): ProductModel {
+    return new ProductModel(
+      parseObject.id,
+      parseObject.attributes['title'],
+      parseObject.attributes['price'],
+      parseObject.attributes['images'],
+      parseObject.attributes['isNew'],
+      parseObject.attributes['isHotDeal'],
+      parseObject.attributes['itemSize'],
+      parseObject.attributes['pathParam'],
+      parseObject.attributes['description'],
+      parseObject.attributes['rentalTerms'],
+      parseObject.attributes['spaceRequired'],
+      parseObject.attributes['setupPolicy']?new Map(Object.entries(parseObject.attributes['setupPolicy'])):null,
+      parseObject.attributes['instructions'],
+      parseObject.attributes['video'],
+      parseObject.attributes['safetyRules']
+    )
   }
 
   private static forOne(parseObject: any[]): ProductViewModel[] {
     let items: ProductViewModel[] = [];
     for (let item of parseObject) {
-      items.push(CategoryHttpService.parseObjectToProductView(item));
+      items.push(CategoryHttpService.parseObjectToProductModel(item));
     }
     return items;
   }

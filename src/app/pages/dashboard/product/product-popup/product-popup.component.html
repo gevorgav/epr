@@ -89,7 +89,8 @@
 
         <div class=" col col_full" >
           <h4>Setup Policy:</h4>
-          <button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button>
+          <div class=" col col_full" ><button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button></div>
+
           <div class="col col_one_third">
             <ng-container  formArrayName="setupPolicyKeys" *ngFor="let key of getSetupPolicyKeysControls(); let i = index;">
               <ng-container [formGroupName]="i">
@@ -118,7 +119,7 @@
               </div>
             </ng-container>
           </div>
-          <div class="col col_one_sixth" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
+          <div class="col col_one_sixth" style="margin-bottom: 10px!important;" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
             <mat-icon (click)="removeSafetyRule(i)">delete</mat-icon>
           </div>
         </div>

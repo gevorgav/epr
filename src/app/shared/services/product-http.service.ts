@@ -95,7 +95,7 @@ export class ProductHttpService extends ProductService {
         let query = new _this.parseService.parse.Query(Category);
         query.equalTo("objectId", newCategoryId);
         return query.first().then(category => {
-          category.relation('products').add(product)
+          category.relation('products').add(product);
           return category.save();
         });
       });
@@ -132,7 +132,7 @@ export class ProductHttpService extends ProductService {
     );
   }
 
-  private static convertToProductModel(item: any) {
+  public static convertToProductModel(item: any) {
     return new ProductModel(
       item.id,
       item.attributes['title'],

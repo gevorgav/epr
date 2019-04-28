@@ -13,9 +13,6 @@ import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {NgxGalleryAnimation} from 'ngx-gallery';
 
-declare var SEMICOLON: any;
-declare var $: any;
-
 @Component({
   selector: 'app-rental-item',
   templateUrl: './rental-item.component.html',
@@ -46,7 +43,8 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public galleryImages = [];
   public reviewsCount: number = 4;
   public selectedProduct: ProductModel;
-  public products: ProductModel[] = [];
+  public relatedProducts: ProductModel[] = [];
+  public itemCategory: CategoryModel;
   private title$ = this.route.paramMap;
   
   constructor(private titleService: Title,
@@ -73,9 +71,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       this.selectedProduct = res;
       this.titleService.setTitle(res.title);
       this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
+        this.itemCategory = res;
         this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[]) => {
-          this.products = res.filter(product => product.id !== this.selectedProduct.id);
-          console.log(res);
+          this.relatedProducts = res.filter(product => product.id !== this.selectedProduct.id);
         });
       });
       this.initGallery();
@@ -83,13 +81,6 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
   
   ngAfterViewInit(): void {
-    this.router.events.subscribe(res => {
-      if (res instanceof NavigationEnd) {
-        if (res.url === '/home' || res.url === '/' || res.url === '' || res.url.indexOf('/rental/') > -1) {
-          // this.initGallery();
-        }
-      }
-    });
   }
   
   private getRouteParams() {
@@ -103,6 +94,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
   
   private initGallery() {
+    this.galleryImages = [];
     for (let image of this.selectedProduct.images) {
       this.galleryImages.push({
         small: image,
@@ -114,5 +106,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   
   isSpecified() {
     return this.locationService.isSpecified;
+  }
+  
+  getSetupPolicy(){
+    return Array.from( this.selectedProduct.setupPolicy.keys() );
   }
 }

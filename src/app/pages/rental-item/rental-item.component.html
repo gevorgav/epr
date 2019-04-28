@@ -4,16 +4,16 @@
   <div class="container clearfix">
     <h1>{{selectedProduct?.title}}</h1>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="">Home</a></li>
-      <li class="breadcrumb-item"><a routerLink="/rentals">Rentals</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{selectedProduct?.title}}</li>
+      <li class="breadcrumb-item"><a [routerLink]="['']">Home</a></li>
+      <li class="breadcrumb-item"><a [routerLink]="['/rentals']">Rentals</a></li>
+      <li class="breadcrumb-item" *ngIf="itemCategory"><a [routerLink]="['/rentals', itemCategory.id]">{{itemCategory.title}}</a></li>
     </ol>
   </div>
 </section><!-- #page-title end -->
 
 <!-- Content
     ============================================= -->
-<section id="content">
+<section id="content" >
 
   <div class="content-wrap">
 
@@ -178,44 +178,29 @@
               <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon">info</mat-icon>
+                   Additional Info
+                </ng-template>
+                <div class="tab-content clearfix" >
+
+                  <table class="table table-striped table-bordered">
+                    <tbody>
+                    <tr *ngFor="let key of getSetupPolicy()">
+                      <td>{{key}}</td>
+                      <td>{{selectedProduct.setupPolicy.get(key)}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="example-tab-icon">assignment_turned_in</mat-icon>
                   Rental Terms
                 </ng-template>
                 <div class="tab-content clearfix" >
                   <p>{{selectedProduct.rentalTerms}}</p>
-
-                  <!--<table class="table table-striped table-bordered">-->
-                    <!--<tbody>-->
-                    <!--<tr>-->
-                      <!--<td>Size</td>-->
-                      <!--<td>Small, Medium &amp; Large</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Color</td>-->
-                      <!--<td>Pink &amp; White</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Waist</td>-->
-                      <!--<td>26 cm</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Length</td>-->
-                      <!--<td>40 cm</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Chest</td>-->
-                      <!--<td>33 inches</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Fabric</td>-->
-                      <!--<td>Cotton, Silk &amp; Synthetic</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                      <!--<td>Warranty</td>-->
-                      <!--<td>3 Months</td>-->
-                    <!--</tr>-->
-                    <!--</tbody>-->
-                  <!--</table>-->
-
                 </div>
               </mat-tab>
 
@@ -231,8 +216,8 @@
 
                     <ol class="commentlist clearfix">
 
-                      <li class="comment even thread-even depth-1" id="li-comment-1">
-                        <div id="comment-1" class="comment-wrap clearfix">
+                      <li class="comment even thread-even depth-1" id="li-comment-4">
+                        <div id="comment-4" class="comment-wrap clearfix">
 
                           <div class="comment-meta">
                             <div class="comment-author vcard">
@@ -307,137 +292,37 @@
 
       <div class="clear"></div><div class="line"></div>
 
-      <!--<div class="col_full nobottommargin">-->
+      <div class="col_full nobottommargin">
 
-        <!--<h4>Related Products</h4>-->
+        <h4>Related Products</h4>
 
-        <!--<div id="oc-product" class="owl-carousel product-carousel carousel-widget" data-margin="30" data-pagi="false" data-items-xs="1" data-items-sm="2" data-items-md="3" data-items-xl="4">-->
+        <div id="oc-product" class="owl-carousel product-carousel carousel-widget" data-margin="30" data-pagi="false" data-autoplay="5000" data-items-xs="1" data-items-sm="2" data-items-md="3" data-items-xl="4">
+          <div class="owl-item active" style="width: 262.5px; margin-right: 30px;" *ngFor="let product of relatedProducts">
+            <div class="oc-item" >
+              <div class="product iproduct clearfix">
+                <div class="product-image">
+                  <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img src="{{product.images[0]}}" alt="{{product.title}}"></a>
+                  <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[1]"><img src="{{product.images[1]}}" alt="{{product.title}}"></a>
+                  <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isNew">New !</div>
+                  <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isHotDeal">Hot Deal !</div>
+                </div>
+                <div class="product-desc center">
+                  <div class="product-title"><h3><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3></div>
+                  <div class="product-price"><ins>${{product.price}}</ins></div>
+                  <div class="product-rating">
+                    <i class="icon-star3"></i>
+                    <i class="icon-star3"></i>
+                    <i class="icon-star3"></i>
+                    <i class="icon-star3"></i>
+                    <i class="icon-star3"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <!--<div class="oc-item">-->
-            <!--<div class="product iproduct clearfix">-->
-              <!--<div class="product-image">-->
-                <!--<a href="#"><img src="../../../assets/images/shop/dress/1.jpg" alt="Checked Short Dress"></a>-->
-                <!--<a href="#"><img src="../../../assets/images/shop/dress/1-1.jpg" alt="Checked Short Dress"></a>-->
-                <!--<div class="sale-flash">50% Off*</div>-->
-                <!--<div class="product-overlay">-->
-                  <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                  <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="product-desc center">-->
-                <!--<div class="product-title"><h3><a href="#">Checked Short Dress</a></h3></div>-->
-                <!--<div class="product-price"><del>$24.99</del> <ins>$12.49</ins></div>-->
-                <!--<div class="product-rating">-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star-half-full"></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="oc-item">-->
-            <!--<div class="product iproduct clearfix">-->
-              <!--<div class="product-image">-->
-                <!--<a href="#"><img src="../../../assets/images/shop/pants/1-1.jpg" alt="Slim Fit Chinos"></a>-->
-                <!--<a href="#"><img src="../../../assets/images/shop/pants/1.jpg" alt="Slim Fit Chinos"></a>-->
-                <!--<div class="product-overlay">-->
-                  <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                  <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="product-desc center">-->
-                <!--<div class="product-title"><h3><a href="#">Slim Fit Chinos</a></h3></div>-->
-                <!--<div class="product-price">$39.99</div>-->
-                <!--<div class="product-rating">-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star-half-full"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="oc-item">-->
-            <!--<div class="product iproduct clearfix">-->
-              <!--<div class="product-image">-->
-                <!--<a href="#"><img src="../../../assets/images/shop/shoes/1-1.jpg" alt="Dark Brown Boots"></a>-->
-                <!--<a href="#"><img src="../../../assets/images/shop/shoes/1.jpg" alt="Dark Brown Boots"></a>-->
-                <!--<div class="product-overlay">-->
-                  <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                  <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="product-desc center">-->
-                <!--<div class="product-title"><h3><a href="#">Dark Brown Boots</a></h3></div>-->
-                <!--<div class="product-price">$49</div>-->
-                <!--<div class="product-rating">-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="oc-item">-->
-            <!--<div class="product iproduct clearfix">-->
-              <!--<div class="product-image">-->
-                <!--<a href="#"><img src="../../../assets/images/shop/dress/2.jpg" alt="Light Blue Denim Dress"></a>-->
-                <!--<a href="#"><img src="../../../assets/images/shop/dress/2-2.jpg" alt="Light Blue Denim Dress"></a>-->
-                <!--<div class="product-overlay">-->
-                  <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                  <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="product-desc center">-->
-                <!--<div class="product-title"><h3><a href="#">Light Blue Denim Dress</a></h3></div>-->
-                <!--<div class="product-price">$19.95</div>-->
-                <!--<div class="product-rating">-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <!--<div class="oc-item">-->
-            <!--<div class="product iproduct clearfix">-->
-              <!--<div class="product-image">-->
-                <!--<a href="#"><img src="../../../assets/images/shop/sunglasses/1.jpg" alt="Unisex Sunglasses"></a>-->
-                <!--<a href="#"><img src="../../../assets/images/shop/sunglasses/1-1.jpg" alt="Unisex Sunglasses"></a>-->
-                <!--<div class="sale-flash">Sale!</div>-->
-                <!--<div class="product-overlay">-->
-                  <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                  <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="product-desc center">-->
-                <!--<div class="product-title"><h3><a href="#">Unisex Sunglasses</a></h3></div>-->
-                <!--<div class="product-price"><del>$19.99</del> <ins>$11.99</ins></div>-->
-                <!--<div class="product-rating">-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star3"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                  <!--<i class="icon-star-empty"></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-        <!--</div>-->
-
-      <!--</div>-->
+      </div>
 
     </div>
 
