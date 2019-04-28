@@ -31,8 +31,14 @@
           </div>
         </div>
 
-        <button mat-raised-button color="primary" (click)="submit()">Save</button>
-        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <div class="col_full nobottommargin">
+          <button type="submit" class="button button-3d " id="submit" name="submit"
+                  value="submit" (click)="submit()">Save
+          </button>
+          <button (click)="cancel()" class="button button-white button-3d " id="cancel" name="cancel" value="cancel">
+            Cancel
+          </button>
+        </div>
 
       </form>
     </div>

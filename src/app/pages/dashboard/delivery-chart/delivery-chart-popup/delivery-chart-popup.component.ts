@@ -63,7 +63,7 @@ export class DeliveryChartPopupComponent implements OnInit {
   }
 
   removeZipCode(index: number) {
-    (this.form.get('zipCodes') as FormArray).controls.splice(index, 1);
+    (this.form.get('zipCodes') as FormArray).removeAt(index);
   }
 
   addZipCode() {
@@ -83,6 +83,8 @@ export class DeliveryChartPopupComponent implements OnInit {
           null
         )
       })
+    } else {
+      this.form.markAsTouched()
     }
 
   }

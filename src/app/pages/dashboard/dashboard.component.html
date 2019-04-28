@@ -1,11 +1,14 @@
-<section class="wrapper clearfix">
-  <div class="col col_one_sixth">
-    <mat-list role="list">
-      <mat-list-item *ngFor="let item of items" role="listitem" (click)="selectTab(item)" [ngClass]="{'is-active': item.isActive}">{{item.name}}
-      </mat-list-item>
-    </mat-list>
-  </div>
-  <div class="col col_two_third ">
-    <router-outlet></router-outlet>
+<section class="">
+  <div class="row">
+    <div >
+      <mat-list role="list" class="mat-elevation-z8 col">
+        <mat-list-item *ngFor="let item of items" role="listitem" (click)="selectTab(item)"
+                       [ngClass]="{'is-active': item.isActive}">{{item.name}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="col col_five_sixth ">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </section>

@@ -38,6 +38,8 @@ export class CategoryPopupComponent implements OnInit {
           )
         }
       );
+    } else {
+      this.form.markAsTouched()
     }
   }
 

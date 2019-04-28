@@ -1,51 +1,71 @@
 <div class="content-wrap">
   <div class="clearfix">
     <div class="card-body" style="padding: 40px;">
-      <form id="form" name="form" class="nobottommargin" [formGroup]="form" >
+      <form id="form" name="form" class="nobottommargin" [formGroup]="form">
 
-        <div class=" col col_full">
-          <label for="city">City:</label>
-          <input formControlName="city" type="text" id="city" name="city" value="" class="form-control"/>
-          <div
-            *ngIf="form.controls['city'].invalid && (form.controls['city'].dirty || form.controls['city'].touched)"
-            class="alert alert-danger">
-            <div *ngIf="form.controls['city'].errors.required">
-              City is required.
-            </div>
-          </div>
-        </div>
-
-        <div class=" col col_full">
-          <label for="price">Price:</label>
-          <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
-          <div
-            *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
-            class="alert alert-danger">
-            <div *ngIf="form.controls['price'].errors.required">
-              Price is required.
-            </div>
-          </div>
-        </div>
-
-        <div class=" col col_full">
-          <label >Zip Codes:</label>
-          <ng-container  formArrayName="zipCodes" *ngFor="let zipCode of getZipCodesControls(); let i = index;">
-            <ng-container [formGroupName]="i">
-              <input formControlName="code" placeholder=""  type="text" [id]="'zipCode_' + i" name="zipCode" value="" class="form-control"/>
-            </ng-container>
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label for="city">City:</label>
+            <input formControlName="city" type="text" id="city" name="city" value="" class="form-control"/>
             <div
-              *ngIf="form.get('zipCodes').controls[i].invalid && (form.get('zipCodes').controls[i].dirty || form.get('zipCodes').controls[i].touched)"
+              *ngIf="form.controls['city'].invalid && (form.controls['city'].dirty || form.controls['city'].touched)"
               class="alert alert-danger">
-              <div *ngIf="form.get('zipCodes').controls[i].controls.code.errors.required">
-                Zip code can't be empty
+              <div *ngIf="form.controls['city'].errors.required">
+                City is required.
               </div>
             </div>
-          </ng-container>
-          <button mat-button color="primary" (click)="addZipCode()">Add Zip Code</button>
+          </div>
         </div>
 
-        <button mat-raised-button color="primary" (click)="submit()">Save</button>
-        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label for="price">Price:</label>
+            <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
+            <div
+              *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['price'].errors.required">
+                Price is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label>Zip Codes:</label>
+            <ng-container formArrayName="zipCodes" *ngFor="let zipCode of getZipCodesControls(); let i = index;">
+              <ng-container [formGroupName]="i">
+                <input formControlName="code" placeholder="" type="text" [id]="'zipCode_' + i" name="zipCode" value=""
+                       class="form-control col col_five_sixth"/>
+              </ng-container>
+              <div
+                *ngIf="form.get('zipCodes').controls[i].invalid && (form.get('zipCodes').controls[i].dirty || form.get('zipCodes').controls[i].touched)"
+                class="alert alert-danger col_five_sixth">
+                <div *ngIf="form.get('zipCodes').controls[i].controls.code.errors.required">
+                  Zip code can't be empty
+                </div>
+              </div>
+              <mat-icon (click)="removeZipCode(i)" class="col col_five_sixth">delete</mat-icon>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col col_full">
+            <button mat-button color="primary" (click)="addZipCode()">Add Zip Code</button>
+          </div>
+        </div>
+
+
+        <div class="col_full nobottommargin">
+          <button type="submit" class="button button-3d " id="submit" name="submit"
+                  value="submit" (click)="submit()">Save
+          </button>
+          <button (click)="cancel()" class="button button-white button-3d " id="cancel" name="cancel" value="cancel">
+            Cancel
+          </button>
+        </div>
 
       </form>
     </div>

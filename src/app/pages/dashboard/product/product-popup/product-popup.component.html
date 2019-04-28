@@ -3,139 +3,181 @@
     <div class="card-body" style="padding: 40px;">
       <h3>{{product?.title}}</h3>
 
-      <form id="product-form" name="product-form" class="nobottommargin" [formGroup]="form" >
+      <form id="product-form" name="product-form" class="nobottommargin" [formGroup]="form">
 
-        <div class=" col col_half">
-          <label for="title">Title:</label>
-          <input formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
-          <div
-            *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
-            class="alert alert-danger">
-            <div *ngIf="form.controls['title'].errors.required">
-              Title is required.
+        <div class="row clearfix">
+          <div class="col col_half">
+            <label for="title">Title:</label>
+            <input formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
+            <div
+              *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['title'].errors.required">
+                Title is required.
+              </div>
+            </div>
+          </div>
+          <div class="col col_half">
+            <label for="price">Price:</label>
+            <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
+            <div
+              *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['price'].errors.required">
+                Price is required.
+              </div>
             </div>
           </div>
         </div>
 
-        <div class=" col col_half">
-          <label for="price">Price:</label>
-          <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
-          <div
-            *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
-            class="alert alert-danger">
-            <div *ngIf="form.controls['price'].errors.required">
-              Price is required.
-            </div>
+        <div class="row clearfix">
+          <div class=" col col_half">
+            <mat-form-field class=" col_full">
+              <mat-select placeholder="Category" id="category" formControlName="category" [compareWith]="compareFn">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{category.title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class=" col col_one_fourth">
+            <mat-checkbox
+              class=""
+              [formControlName]="'isNew'"
+              labelPosition="before">
+              Is new
+            </mat-checkbox>
+          </div>
+
+          <div class=" col col_one_fourth">
+            <mat-checkbox
+              class=""
+              [formControlName]="'isHotDeal'"
+              labelPosition="before">
+              Hot deal:
+            </mat-checkbox>
           </div>
         </div>
 
-        <div class="">
-          <mat-form-field class=" col col_half">
-            <mat-select placeholder="Category" id="category" formControlName="category" [compareWith]="compareFn">
-              <mat-option *ngFor="let category of categories" [value]="category.id">
-                {{category.title}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          </div>
-
-        <div class=" col col_full">
-          <label for="description">Description:</label>
-          <textarea formControlName="description" id="description" name="description" value=""
-                    class="form-control"></textarea>
-        </div>
-
-        <div class=" col col_full">
-          <label for="instructions">Instructions:</label>
-          <textarea formControlName="instructions" type="text" id="instructions" name="instructions" value=""
-                    class="form-control"></textarea>
-        </div>
-
-
-        <div class=" col col_one_third">
-          <label for="itemSize">Item size:</label>
-          <input formControlName="itemSize" type="text" id="itemSize" name="itemSize" value=""
-                 class="form-control"/>
-        </div>
-
-        <div class=" col col_one_fourth">
-          <label for="isNew">New:</label>
-          <input formControlName="isNew" type="checkbox" id="isNew" name="isNew" value="" class="form-control"/>
-        </div>
-
-        <div class=" col col_one_fourth">
-          <label for="isHotDeal">Hot deal:</label>
-          <input formControlName="isHotDeal" type="checkbox" id="isHotDeal" name="isHotDeal" value=""
-                 class="form-control"/>
-        </div>
-
-        <div class=" col col_one_third">
-          <label for="rentalTerms">Rental terms:</label>
-          <input formControlName="rentalTerms" type="text" id="rentalTerms" name="rentalTerms" value=""
-                 class="form-control"/>
-        </div>
-
-        <div class=" col col_one_third">
-          <label for="spaceRequired">Space Required:</label>
-          <input formControlName="spaceRequired" type="text" id="spaceRequired" name="spaceRequired" value=""
-                 class="form-control"/>
-        </div>
-
-        <div class=" col col_one_third">
-          <label for="safetyRules">Safety rules:</label>
-          <input formControlName="safetyRules" type="text" id="safetyRules" name="safetyRules" value=""
-                 class="form-control"/>
-        </div>
-
-        <div class=" col col_full" >
-          <h4>Setup Policy:</h4>
-          <div class=" col col_full" ><button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button></div>
-
-          <div class="col col_one_third">
-            <ng-container  formArrayName="setupPolicyKeys" *ngFor="let key of getSetupPolicyKeysControls(); let i = index;">
-              <ng-container [formGroupName]="i">
-                <input formControlName="name" placeholder=""  type="text" [id]="'key_' + i" name="key" value="" class="form-control"/>
-              </ng-container>
-              <div
-                *ngIf="form.get('setupPolicyKeys').controls[i].invalid && (form.get('setupPolicyKeys').controls[i].dirty || form.get('setupPolicyKeys').controls[i].touched)"
-                class="alert alert-danger">
-                <div *ngIf="form.get('setupPolicyKeys').controls[i].controls.name.errors.required">
-                  Setup Policy key can't be empty
-                </div>
-              </div>
-            </ng-container>
-          </div>
-          <div class="col col_one_third">
-            <ng-container  formArrayName="setupPolicyValues" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;" >
-              <ng-container [formGroupName]="i">
-                <input formControlName="name" placeholder=""  type="text" [id]="'value_' + i" name="value" value="" class="form-control"/>
-              </ng-container>
-              <div
-                *ngIf="form.get('setupPolicyValues').controls[i].invalid && (form.get('setupPolicyValues').controls[i].dirty || form.get('setupPolicyValues').controls[i].touched)"
-                class="alert alert-danger">
-                <div *ngIf="form.get('setupPolicyValues').controls[i].controls.name.errors.required">
-                  Setup Policy value can't be empty
-                </div>
-              </div>
-            </ng-container>
-          </div>
-          <div class="col col_one_sixth" style="margin-bottom: 10px!important;" *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
-            <mat-icon (click)="removeSafetyRule(i)">delete</mat-icon>
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label for="description">Description:</label>
+            <textarea formControlName="description" id="description" name="description" value=""
+                      class="form-control"></textarea>
           </div>
         </div>
 
-        <div class="col col_full">
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label for="instructions">Instructions:</label>
+            <textarea formControlName="instructions" type="text" id="instructions" name="instructions" value=""
+                      class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="row clearfix">
           <div class=" col col_one_third">
-            <input type="file" (change)="onFileUpload($event)" #input style="display: none;">
-            <button color="primary" mat-button (click)="triggerClick()"><i class="material-icons left">backup</i>Attach picture</button>
+            <label for="itemSize">Item size:</label>
+            <input formControlName="itemSize" type="text" id="itemSize" name="itemSize" value=""
+                   class="form-control"/>
           </div>
-          <div *ngFor="let imageSrc of form.controls['images'].value" class="col col_one_sixth">
-            <img [src]="imageSrc" alt=""><mat-icon (click)="filterImages(imageSrc)">delete</mat-icon>
+
+          <div class=" col col_one_third">
+            <label for="spaceRequired">Space Required:</label>
+            <input formControlName="spaceRequired" type="text" id="spaceRequired" name="spaceRequired" value=""
+                   class="form-control"/>
           </div>
         </div>
 
+        <div class="row clearfix">
+          <div class=" col col_half">
+            <label for="safetyRules">Safety rules:</label>
+            <textarea formControlName="safetyRules" type="text" id="safetyRules" name="safetyRules" value=""
+                      class="form-control"></textarea>
+          </div>
+
+          <div class=" col col_half">
+            <label for="rentalTerms">Rental terms:</label>
+            <textarea formControlName="rentalTerms" type="text" id="rentalTerms" name="rentalTerms" value=""
+                      class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <div class="row clearfix">
+              <div class="col col_five_sixth">
+                <label>Setup Policy:</label>
+              </div>
+              <div class="col col_one_sixth">
+                <button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button>
+              </div>
+            </div>
+            <div class="row clearfix" >
+              <div class="col col_one_third">
+                <ng-container formArrayName="setupPolicyKeys"
+                              *ngFor="let key of getSetupPolicyKeysControls(); let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <div class="row setup-policy-row">
+                      <input formControlName="name" placeholder="" type="text" [id]="'key_' + i" name="key" value=""
+                             class="form-control"/>
+                    </div>
+                  </ng-container>
+                  <div
+                    *ngIf="form.get('setupPolicyKeys').controls[i].invalid && (form.get('setupPolicyKeys').controls[i].dirty || form.get('setupPolicyKeys').controls[i].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="form.get('setupPolicyKeys').controls[i].controls.name.errors.required">
+                      Setup Policy key can't be empty
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="col col_half setup-policy-row">
+                <ng-container formArrayName="setupPolicyValues"
+                              *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
+                  <ng-container [formGroupName]="i">
+                    <div class="row setup-policy-row">
+                    <input formControlName="name" placeholder="" type="text" [id]="'value_' + i" name="value" value=""
+                           class="form-control"/>
+                    </div>
+                  </ng-container>
+                  <div
+                    *ngIf="form.get('setupPolicyValues').controls[i].invalid && (form.get('setupPolicyValues').controls[i].dirty || form.get('setupPolicyValues').controls[i].touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="form.get('setupPolicyValues').controls[i].controls.name.errors.required">
+                      Setup Policy value can't be empty
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="col col_one_sixth" >
+                <div class="row clearfix del-row setup-policy-row"  *ngFor="let key of getSetupPolicyValuesControls(); let i = index;">
+                  <mat-icon (click)="removeSetupPolicy(i)">delete</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row clearfix">
+          <div class="col col_full">
+            <div class=" col col_one_third">
+              <input type="file" (change)="onFileUpload($event)" #input style="display: none;">
+              <button color="primary" mat-button (click)="triggerClick()"><i class="material-icons left">backup</i>Attach
+                picture
+              </button>
+            </div>
+            <div *ngFor="let imageSrc of form.controls['images'].value" class="col col_one_sixth">
+              <mat-icon (click)="filterImages(imageSrc)">delete</mat-icon>
+              <img [src]="imageSrc" alt="">
+            </div>
+          </div>
+        </div>
+
+
         <div class=" col col_one_third">
-          <label for="video">Video:</label>
+          <label for="video">Video URL:</label>
           <input formControlName="video" type="text" id="video" name="video" value=""
                  class="form-control"/>
         </div>

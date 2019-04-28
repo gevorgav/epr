@@ -64,6 +64,8 @@ export class ProductPopupComponent implements OnInit {
         newCategoryId: this.form.get('category').value,
         oldCategoryId: this.categoryId
       });
+    } else {
+      this.form.markAsTouched()
     }
   }
 
@@ -173,7 +175,7 @@ export class ProductPopupComponent implements OnInit {
     (this.form.get('setupPolicyValues') as FormArray).push(this.createGroup());
   }
 
-  removeSafetyRule(index: number) {
+  removeSetupPolicy(index: number) {
     (this.form.get('setupPolicyKeys') as FormArray).removeAt(index);
     (this.form.get('setupPolicyValues') as FormArray).removeAt(index);
   }

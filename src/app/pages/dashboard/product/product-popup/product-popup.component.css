@@ -2,3 +2,12 @@
 .material-icons {
   cursor: pointer;
 }
+
+.del-row {
+  height: 38px
+}
+
+.setup-policy-row {
+  margin-bottom: 10px;
+}
+
