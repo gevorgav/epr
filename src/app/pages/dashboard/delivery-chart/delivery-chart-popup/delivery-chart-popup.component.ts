@@ -84,9 +84,18 @@ export class DeliveryChartPopupComponent implements OnInit {
         )
       })
     } else {
-      this.form.markAsTouched()
+     this.markFormGroupTouched(this.form)
     }
 
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
   cancel() {

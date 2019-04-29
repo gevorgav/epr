@@ -2,7 +2,7 @@ import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {CategoryModel} from '../../../../shared/model/category.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ParseService} from '../../../../shared/services/parse.service';
+import {UploadService} from "../../../../shared/services/upload.service";
 
 @Component({
   selector: 'app-category-popup',
@@ -19,7 +19,7 @@ export class CategoryPopupComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<CategoryPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private parseService: ParseService) {
+              private uploadService: UploadService) {
     this.category = this.data.category;
   }
 
@@ -39,10 +39,19 @@ export class CategoryPopupComponent implements OnInit {
         }
       );
     } else {
-      this.form.markAsTouched()
+      this.markFormGroupTouched(this.form)
     }
+
   }
 
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
   cancel() {
     this.dialogRef.close(null);
   }
@@ -58,11 +67,13 @@ export class CategoryPopupComponent implements OnInit {
 
   onFileUpload(event){
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-        let parseFile = new this.parseService.parse.File(file.name, file);
-        parseFile.save().then((result) => {
-          this.form.get('imageUrl').setValue(result.url());
-        });
+      this.uploadService.uploadFile(event.target.files[0])
+        .subscribe(
+          res => {
+            this.form.get('imageUrl').setValue(res.fileName);
+          },
+          error => alert(error.message)
+        );
     }
   }
 

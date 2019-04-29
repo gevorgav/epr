@@ -74,7 +74,7 @@ export class DeliveryChartComponent implements OnInit {
     this.deliveryChartService.deleteDeliveryChart(id)
       .subscribe(
         res => {
-          console.log(res);
+          //
         },
         error => handleError(error)
       )

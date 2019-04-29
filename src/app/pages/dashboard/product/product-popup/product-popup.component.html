@@ -114,6 +114,16 @@
                 <button mat-raised-button color="primary" (click)="addSetupPolicy()">Add Setup Policy</button>
               </div>
             </div>
+            <div  *ngIf="form.hasError('setupPolicyUniqueKey')" class="row clearfix">
+              <div class="col col_full">
+                <div
+                  class="alert alert-danger">
+                  <div >
+                    Duplicate key of setup policy detected
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row clearfix" >
               <div class="col col_one_third">
                 <ng-container formArrayName="setupPolicyKeys"
@@ -175,11 +185,12 @@
           </div>
         </div>
 
-
-        <div class=" col col_one_third">
-          <label for="video">Video URL:</label>
-          <input formControlName="video" type="text" id="video" name="video" value=""
-                 class="form-control"/>
+        <div class="row clearfix">
+          <div class=" col col_full">
+            <label for="video">Video URL:</label>
+            <input formControlName="video" type="text" id="video" name="video" value=""
+                   class="form-control"/>
+          </div>
         </div>
 
         <div class="col_full nobottommargin">

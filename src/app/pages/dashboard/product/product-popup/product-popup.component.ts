@@ -1,11 +1,12 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ProductModel} from "../../../../shared/model/product.model";
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {ParseService} from "../../../../shared/services/parse.service";
 import {CategoryService} from '../../../../shared/services/category.service';
 import {CategoryModel} from '../../../../shared/model/category.model';
 import {handleError} from '../../../../shared/util/error-handler';
+import {UploadService} from "../../../../shared/services/upload.service";
 
 @Component({
   selector: 'app-product-popup',
@@ -31,6 +32,7 @@ export class ProductPopupComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ProductPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private parseService: ParseService,
+              private uploadService: UploadService,
               private categoryService: CategoryService) {
     this.product = this.data.product;
   }
@@ -65,8 +67,17 @@ export class ProductPopupComponent implements OnInit {
         oldCategoryId: this.categoryId
       });
     } else {
-      this.form.markAsTouched()
+      this.markFormGroupTouched(this.form);
     }
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
   close() {
@@ -84,14 +95,13 @@ export class ProductPopupComponent implements OnInit {
 
   onFileUpload(event){
     if (event.target.files.length > 0) {
-      const files = event.target.files;
-      for (let file of files) {
-        let parseFile = new this.parseService.parse.File(file.name, file);
-        parseFile.save().then((result) => {
-          console.log(result.url());
-          this.form.get('images').value.push(result.url());
-        });
-      }
+      this.uploadService.uploadFile(event.target.files[0])
+        .subscribe(
+          res => {
+            this.form.get('images').value.push(res.fileName);
+          },
+          error => handleError(error)
+        );
     }
   }
 
@@ -138,7 +148,7 @@ export class ProductPopupComponent implements OnInit {
       video: this.formBuilder.control(this.product.video, [
 
       ]),
-    })
+    }, {validators: setupPolicyUniqueKeyValidator})
   }
 
   private initSafetyRules() {
@@ -215,3 +225,16 @@ export class ProductPopupComponent implements OnInit {
     return f1 === f2;
   }
 }
+
+
+const setupPolicyUniqueKeyValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+  for (let i = 0; i < (control.get('setupPolicyKeys') as FormArray).controls.length; ++i) {
+    for (let j = 0; j < (control.get('setupPolicyKeys') as FormArray).controls.length; ++j) {
+      if (i == j) continue;
+      if ((control.get('setupPolicyKeys') as FormArray).controls[i].get('name').value == (control.get('setupPolicyKeys') as FormArray).controls[j].get('name').value) {
+        return { 'setupPolicyUniqueKey': true }
+      }
+    }
+  }
+  return null;
+};
