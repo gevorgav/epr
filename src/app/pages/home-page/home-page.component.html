@@ -46,7 +46,7 @@
           </div>
           <h3 class="t400">Rich Assortment </h3>
           <p>We present a large range of rentals you’ll need to have a great birthday party! Inflatables, party
-            decorations, interactive games and more to have fun with your kids.</p>
+            decorations, interactive games and more to have fun!</p>
         </div>
       </div>
 
@@ -154,7 +154,7 @@
         <ng-container *ngFor="let category of categories; let i = index">
           <div [ngClass]="getClass(i)">
             <a [routerLink]="['/rentals', category.id]"
-               [ngStyle]="{'background': 'url('+(category.imageUrl? category.imageUrl : category.items[0]?.images[0])+') no-repeat bottom center', 'background-size': 'cover'}" >
+               [ngStyle]="{'background': 'url('+(category.imageUrl? category.imageUrl : category.items[0]?.images[0])+') no-repeat bottom center', 'background-size': 'cover'}">
               <div class="vertical-middle dark center">
                 <div class="heading-block nomargin noborder">
                   <h3 class="capitalize t500">{{category.title}}</h3>
