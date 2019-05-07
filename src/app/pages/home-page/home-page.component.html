@@ -100,7 +100,7 @@
       <div class="clear"></div>
       <div class="line topmargin-sm bottommargin-lg"></div>
 
-      <div style="position: relative;" *ngIf="featuredRentalProducts.length > 0">
+      <div style="position: relative;" *ngIf="featuredRentalProducts?.length > 0">
         <div class="heading-block nobottomborder">
           <h3>Featured Rental Products</h3>
         </div>
@@ -118,15 +118,16 @@
                 <div class="badge badge-success" *ngIf="product.isHotDeal">Hot Deal</div>
                 <div class="badge badge-danger" *ngIf="product.isNew && !product.isHotDeal">New!</div>
                 <a [routerLink]="['/rental', product.pathParam]">
-                  <img src="{{product.images[0]}}" alt="{{product.title}}">
+                  <img style="height: 260px !important;" src="{{product.images[0]}}" alt="{{product.title}}">
                 </a>
                 <div class="real-estate-item-price">
-                  ${{product.price}}
+                  ${{product.price}} /per day
                 </div>
               </div>
 
               <div class="real-estate-item-desc">
-                <h3><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3>
+                <h3 style="white-space: nowrap;overflow: hidden;"><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
+                </h3>
 
                 <div class="line" style="margin-top: 15px; margin-bottom: 15px;"></div>
 

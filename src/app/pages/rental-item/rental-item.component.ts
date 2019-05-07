@@ -12,6 +12,8 @@ import {zip} from 'rxjs';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {NgxGalleryAnimation} from 'ngx-gallery';
+declare var SEMICOLON: any;
+declare var $: any;
 
 @Component({
   selector: 'app-rental-item',
@@ -81,6 +83,22 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
   
   ngAfterViewInit(): void {
+    setTimeout(() => {
+        SEMICOLON.documentOnReady.init();
+        setTimeout(() => {
+          SEMICOLON.documentOnLoad.init();
+          setTimeout(() => {
+            SEMICOLON.documentOnResize.init();
+            setTimeout(() => {
+              SEMICOLON.widget.init();
+              setTimeout(() => {
+                $('.css3-spinner').remove();
+              }, 10);
+            }, 10);
+          }, 10);
+        }, 10);
+      }
+      , 1500);
   }
   
   private getRouteParams() {

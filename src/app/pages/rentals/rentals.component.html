@@ -31,18 +31,21 @@
 
           <div *ngFor="let product of activeCategory?.items" class="product sf-tshirt clearfix">
             <div class="product-image">
-              <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img src="{{product.images[0]}}" alt="{{product.title}}"></a>
-              <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[1]"><img src="{{product.images[1]}}" alt="{{product.title}}"></a>
+              <a style="height: 230px !important;" [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img
+                src="{{product.images[0]}}" alt="{{product.title}}"></a>
+              <a style="height: 230px !important;" [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[1]"><img
+                src="{{product.images[1]}}" alt="{{product.title}}"></a>
               <div class="sale-flash" *ngIf="product.isHotDeal"> Hot Deal</div>
               <div class="sale-flash" *ngIf="product.isNew">New</div>
               <!--<div class="product-overlay">-->
-                <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
-                <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i-->
-                  <!--class="icon-zoom-in2"></i><span> Quick View</span></a>-->
+              <!--<a href="#" class="add-to-cart"><i class="icon-shopping-cart"></i><span> Add to Cart</span></a>-->
+              <!--<a href="include/ajax/shop-item.html" class="item-quick-view" data-lightbox="ajax"><i-->
+              <!--class="icon-zoom-in2"></i><span> Quick View</span></a>-->
               <!--</div>-->
             </div>
             <div class="product-desc center">
-              <div class="product-title"><h3><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3></div>
+              <div class="product-title"><h3 style="white-space: nowrap;overflow: hidden;">
+                <a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3></div>
               <div class="product-price">
                 <!--<del>$45.99</del>-->
                 <ins>${{product.price}}</ins>

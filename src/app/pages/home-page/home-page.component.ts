@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {ProductViewModel} from '../../shared/model/product-view.model';
-import {Observable} from 'rxjs';
 import {ProductService} from '../../shared/services/product.service';
 import {ProductModel} from '../../shared/model/product.model';
 
@@ -54,7 +53,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
           }, 10);
         }, 10);
       }
-      , 1000);
+      , 1500);
     $('#linked-to-gallery a').click(function () {
       var imageLink = $(this).attr('data-image');
       $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
