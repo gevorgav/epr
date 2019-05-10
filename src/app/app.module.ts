@@ -41,6 +41,9 @@ import { VerificationComponent } from './pages/verification/verification.compone
 import { CategoryComponent } from './pages/dashboard/category/category.component';
 import { CategoryPopupComponent } from './pages/dashboard/category/category-popup/category-popup.component';
 import { NgxGalleryModule } from 'ngx-gallery';
+import {UserService} from './shared/services/user.service';
+import {UserHttpService} from './shared/services/user-http.service';
+import { UserComponent } from './pages/dashboard/user/user.component';
 
 const appRoutes: Routes = [
   {
@@ -76,6 +79,7 @@ const appRoutes: Routes = [
       {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
       {path: 'product', component: ProductComponent},
       {path: 'category', component: CategoryComponent},
+      {path: 'user', component: UserComponent},
     ]
   },
   {
@@ -129,7 +133,8 @@ const appRoutes: Routes = [
     CartComponent,
     VerificationComponent,
     CategoryComponent,
-    CategoryPopupComponent
+    CategoryPopupComponent,
+    UserComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -155,6 +160,7 @@ const appRoutes: Routes = [
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
     {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},
+    {provide: UserService, useClass: UserHttpService},
   ],
   entryComponents: [
     ProductPopupComponent,

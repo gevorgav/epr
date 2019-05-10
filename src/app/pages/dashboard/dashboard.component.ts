@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
     {routerLink: 'product', name: 'Product', isActive: true},
     {routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false},
     {routerLink: 'category', name: 'Category', isActive: false},
+    {routerLink: 'user', name: 'User', isActive: false},
   ];
 
   searchValue: string;
