@@ -39,7 +39,7 @@
 
             <!-- Product Single - Price
                             ============================================= -->
-            <div class="product-price"> <ins>${{selectedProduct.price}}/per day</ins></div><!-- Product Single - Price End -->
+            <div class="product-price" *ngIf="isSpecified()"> <ins>${{getPrice(selectedProduct.nightPrice, selectedProduct.minPrice, selectedProduct.minTime, selectedProduct.price)}}</ins></div><!-- Product Single - Price End -->
             <!-- Product Single - Rating
                             ============================================= -->
             <div class="product-rating">
@@ -49,7 +49,7 @@
               <i class="icon-star3"></i>
               <i class="icon-star3"></i>
             </div><!-- Product Single - Rating End -->
-            <div class="line"></div>
+
             <div class="clear"></div>
 
             <ul class="tab-nav clearfix">
@@ -94,35 +94,35 @@
 
             <!-- Product Single - Share
                             ============================================= -->
-            <div class="si-share noborder clearfix">
-              <span>Share:</span>
-              <div>
-                <a href="#" class="social-icon si-borderless si-facebook">
-                  <i class="icon-facebook"></i>
-                  <i class="icon-facebook"></i>
-                </a>
-                <a href="#" class="social-icon si-borderless si-twitter">
-                  <i class="icon-twitter"></i>
-                  <i class="icon-twitter"></i>
-                </a>
-                <a href="#" class="social-icon si-borderless si-pinterest">
-                  <i class="icon-pinterest"></i>
-                  <i class="icon-pinterest"></i>
-                </a>
-                <a href="#" class="social-icon si-borderless si-gplus">
-                  <i class="icon-gplus"></i>
-                  <i class="icon-gplus"></i>
-                </a>
-                <a href="#" class="social-icon si-borderless si-rss">
-                  <i class="icon-rss"></i>
-                  <i class="icon-rss"></i>
-                </a>
-                <a href="#" class="social-icon si-borderless si-email3">
-                  <i class="icon-email3"></i>
-                  <i class="icon-email3"></i>
-                </a>
-              </div>
-            </div><!-- Product Single - Share End -->
+            <!--<div class="si-share noborder clearfix">-->
+              <!--<span>Share:</span>-->
+              <!--<div>-->
+                <!--<a href="#" class="social-icon si-borderless si-facebook">-->
+                  <!--<i class="icon-facebook"></i>-->
+                  <!--<i class="icon-facebook"></i>-->
+                <!--</a>-->
+                <!--<a href="#" class="social-icon si-borderless si-twitter">-->
+                  <!--<i class="icon-twitter"></i>-->
+                  <!--<i class="icon-twitter"></i>-->
+                <!--</a>-->
+                <!--<a href="#" class="social-icon si-borderless si-pinterest">-->
+                  <!--<i class="icon-pinterest"></i>-->
+                  <!--<i class="icon-pinterest"></i>-->
+                <!--</a>-->
+                <!--<a href="#" class="social-icon si-borderless si-gplus">-->
+                  <!--<i class="icon-gplus"></i>-->
+                  <!--<i class="icon-gplus"></i>-->
+                <!--</a>-->
+                <!--<a href="#" class="social-icon si-borderless si-rss">-->
+                  <!--<i class="icon-rss"></i>-->
+                  <!--<i class="icon-rss"></i>-->
+                <!--</a>-->
+                <!--<a href="#" class="social-icon si-borderless si-email3">-->
+                  <!--<i class="icon-email3"></i>-->
+                  <!--<i class="icon-email3"></i>-->
+                <!--</a>-->
+              <!--</div>-->
+            <!--</div>&lt;!&ndash; Product Single - Share End &ndash;&gt;-->
 
           </div>
 
@@ -134,7 +134,7 @@
                 <i class="icon-thumbs-up2"></i>
               </div>
               <h3>100% Original</h3>
-              <p class="notopmargin">We guarantee you the sale of Original Brands.</p>
+              <p class="notopmargin">We guarantee you the Original Brands.</p>
             </div>
 
             <div class="feature-box fbox-plain fbox-dark fbox-small">
@@ -150,16 +150,9 @@
                 <i class="icon-truck2"></i>
               </div>
               <h3>Free Shipping</h3>
-              <p class="notopmargin">Free Delivery to 100+ Locations on orders above $40.</p>
+              <p class="notopmargin">Free Delivery to 100+ Locations.</p>
             </div>
 
-            <div class="feature-box fbox-plain fbox-dark fbox-small">
-              <div class="fbox-icon">
-                <i class="icon-undo"></i>
-              </div>
-              <h3>30-Days Returns</h3>
-              <p class="notopmargin">Return or exchange items purchased within 30 days.</p>
-            </div>
 
           </div>
 
@@ -304,11 +297,11 @@
           <div class="oc-item" *ngFor="let product of relatedProducts">
             <div class="real-estate-item">
               <div class="real-estate-item-image">
-                <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isNew">New !</div>
-                <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isHotDeal">Hot Deal !</div>
+                <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isNew">New !</div>
+                <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isHotDeal">Hot Deal !</div>
                 <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img style="height: 260px !important;" src="{{product.images[0]}}" alt="{{product.title}}"></a>
-                <div class="real-estate-item-price">
-                  ${{product.price}}/per day
+                <div class="real-estate-item-price" *ngIf="isSpecified()">
+                  ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price)}}
                 </div>
               </div>
 

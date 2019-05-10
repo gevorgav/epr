@@ -61,7 +61,11 @@ export class ProductPopupComponent implements OnInit {
           this.getSetupPolicy(),
           this.form.get('instructions').value,
           this.form.get('video').value,
-          this.form.get('safetyRules').value
+          this.form.get('safetyRules').value,
+          this.form.get('minTime').value,
+          this.form.get('minPrice').value,
+          this.form.get('nightPrice').value,
+          this.form.get('count').value,
         ),
         newCategoryId: this.form.get('category').value,
         oldCategoryId: this.categoryId

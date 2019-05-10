@@ -129,4 +129,8 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   getSetupPolicy(){
     return Array.from( this.selectedProduct.setupPolicy.keys() );
   }
+  
+  getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
+    return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+  }
 }

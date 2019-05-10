@@ -7,7 +7,7 @@ import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {Observable} from "rxjs";
 
 export abstract class ProductService {
-  abstract getAllProducts(): Observable<ProductViewModel[]>;
+  abstract getAllProducts(): Observable<ProductModel[]>;
   abstract getProduct(id: string):  Observable<ProductModel>;
   abstract getProductByPatch(patch: string):  Observable<ProductModel>;
   abstract getProductByCategoryId(categoryId: number);

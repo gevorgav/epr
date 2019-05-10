@@ -16,15 +16,15 @@ import {ProductModel} from '../model/product.model';
 
 @Injectable()
 export class CategoryHttpService extends CategoryService {
-
+  
   static CATEGORY = 'Category';
-
+  
   private _categories: CategoryModel[] = [];
-
+  
   constructor(private parseService: ParseService) {
     super();
   }
-
+  
   get categories(): CategoryModel[] {
     if (this._categories.length === 0) {
       this.getCategories().subscribe(res => {
@@ -33,11 +33,11 @@ export class CategoryHttpService extends CategoryService {
     }
     return this._categories;
   }
-
+  
   getCategories(): Observable<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
-    let promise = query.find().then(res=>{
+    let promise = query.find().then(res => {
       let categories = [];
       for (let item of res) {
         categories.push(CategoryHttpService.convertToCategoryModel(item));
@@ -46,29 +46,29 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-
+  
   static convertToCategoryModel(item: any, products?: Observable<ProductViewModel[]>): CategoryModel {
     if (products) {
-      return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], products);
+      return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order'], products);
     }
-    return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl']);
+    return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order']);
   }
-
+  
   getCategoryItems(categoryId: string): Observable<Array<ProductViewModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
-    let promise = query.first().then(res =>{
-      return res.relation('products').query().find().then(res=>{
+    let promise = query.first().then(res => {
+      return res.relation('products').query().find().then(res => {
         return CategoryHttpService.forOne(res);
-      })
+      });
     });
     return from(promise);
   }
-
+  
   getCategoriesWithDependency(): Observable<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
-    let promise = query.find().then((res: any[])=>{
+    let promise = query.find().then((res: any[]) => {
       return res;
     });
     return from(promise).pipe(
@@ -78,9 +78,9 @@ export class CategoryHttpService extends CategoryService {
           let products$: Observable<ProductViewModel[]> = from(category.relation('products').query().find().then((product: any[]) => {
             return CategoryHttpService.forOne(product);
           }));
-          let deliveryLocation = CategoryHttpService.convertToCategoryModel(category, products$);
-
-          categories.push(deliveryLocation);
+          let categoryModel = CategoryHttpService.convertToCategoryModel(category, products$);
+          
+          categories.push(categoryModel);
         }
         return categories;
       }),
@@ -95,7 +95,7 @@ export class CategoryHttpService extends CategoryService {
         ))
       ));
   }
-
+  
   private static parseObjectToProductModel(parseObject: any): ProductModel {
     return new ProductModel(
       parseObject.id,
@@ -109,13 +109,17 @@ export class CategoryHttpService extends CategoryService {
       parseObject.attributes['description'],
       parseObject.attributes['rentalTerms'],
       parseObject.attributes['spaceRequired'],
-      parseObject.attributes['setupPolicy']?new Map(Object.entries(parseObject.attributes['setupPolicy'])):null,
+      parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null,
       parseObject.attributes['instructions'],
       parseObject.attributes['video'],
-      parseObject.attributes['safetyRules']
-    )
+      parseObject.attributes['safetyRules'],
+      parseObject.attributes['minTime'],
+      parseObject.attributes['minPrice'],
+      parseObject.attributes['nightPrice'],
+      parseObject.attributes['count'],
+    );
   }
-
+  
   private static forOne(parseObject: any[]): ProductViewModel[] {
     let items: ProductViewModel[] = [];
     for (let item of parseObject) {
@@ -123,12 +127,12 @@ export class CategoryHttpService extends CategoryService {
     }
     return items;
   }
-
+  
   getCategoryByProductId(productId: string): Observable<CategoryModel> {
-    let productQuery = new this.parseService.parse.Query("Product");
-    productQuery.contains("objectId", productId);
+    let productQuery = new this.parseService.parse.Query('Product');
+    productQuery.contains('objectId', productId);
     let categoryQuery = new this.parseService.parse.Query(CategoryHttpService.CATEGORY);
-    categoryQuery.matchesQuery("products", productQuery);
+    categoryQuery.matchesQuery('products', productQuery);
     let promise = categoryQuery.first().then(function (list) {
       return CategoryHttpService.convertToCategoryModel(list);
     }, function (error) {
@@ -136,20 +140,20 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-
+  
   deleteCategory(id: string): Observable<any> {
     const Product = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     const query = new this.parseService.parse.Query(Product);
-    query.equalTo("objectId", id);
-    const promise = query.first().then((result) =>{
+    query.equalTo('objectId', id);
+    const promise = query.first().then((result) => {
       result.relation('products').query().find().then(items => {
-        items.forEach(item => item.destroy())
+        items.forEach(item => item.destroy());
       });
       return result.destroy({});
     });
     return from(promise);
   }
-
+  
   saveCategory(model: CategoryModel): Observable<any> {
     let Category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let category = new Category();
@@ -157,24 +161,24 @@ export class CategoryHttpService extends CategoryService {
     let promise;
     if (model.id) {
       const query = new this.parseService.parse.Query(Category);
-      query.equalTo("objectId", model.id);
+      query.equalTo('objectId', model.id);
       promise = query.first().then(
         res => {
           this.setFields(res, model);
-          return res.save()
+          return res.save();
         }
       );
     } else {
       promise = category.save().then(category => {
-        return category.save()
+        return category.save();
       });
     }
     return from(promise);
   }
-
+  
   private setFields(category: any, model: CategoryModel) {
-      category.set('title', model.title);
-      category.set('description', model.description);
-      category.set('imageUrl', model.imageUrl);
+    category.set('title', model.title);
+    category.set('description', model.description);
+    category.set('imageUrl', model.imageUrl);
   }
 }

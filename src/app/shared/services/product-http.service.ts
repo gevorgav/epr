@@ -19,13 +19,13 @@ export class ProductHttpService extends ProductService {
     super();
   }
 
-  getAllProducts(): Observable<ProductViewModel[]> {
+  getAllProducts(): Observable<ProductModel[]> {
     let Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(Product);
     let promise = query.find().then(res => {
-      let products: ProductViewModel [] = [];
+      let products: ProductModel [] = [];
       for (let item of res) {
-        products.push(ProductHttpService.convertToProductViewModel(item))
+        products.push(ProductHttpService.convertToProductModel(item))
       }
       return products;
     });
@@ -148,7 +148,11 @@ export class ProductHttpService extends ProductService {
       item.attributes['setupPolicy']?new Map(Object.entries(item.attributes['setupPolicy'])):null,
       item.attributes['instructions'],
       item.attributes['video'],
-      item.attributes['safetyRules']
+      item.attributes['safetyRules'],
+      item.attributes['minTime'],
+      item.attributes['minPrice'],
+      item.attributes['nightPrice'],
+      item.attributes['count'],
     )
   }
 

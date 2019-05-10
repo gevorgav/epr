@@ -5,6 +5,8 @@ import {CategoryModel} from '../../shared/model/category.model';
 import {ProductViewModel} from '../../shared/model/product-view.model';
 import {ProductService} from '../../shared/services/product.service';
 import {ProductModel} from '../../shared/model/product.model';
+import {map} from 'rxjs/operators';
+import {LocationDateService} from '../../shared/services/location-date.service';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -16,14 +18,15 @@ declare var $: any;
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
+              private locationDateService: LocationDateService,
               private categoryService: CategoryService,
               private productService: ProductService) {
   }
-
+  
   public categories: CategoryModel[] = [];
-
-  public featuredRentalProducts: ProductViewModel[] = [];
-
+  
+  public featuredRentalProducts: ProductModel[] = [];
+  
   ngOnInit() {
     this.initCategories();
     this.initProducts();
@@ -33,7 +36,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     this.initGallery();
   }
   
-  locationDateSubmitted(){
+  locationDateSubmitted() {
     this.router.navigate(['rentals']);
   }
   
@@ -60,36 +63,49 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       return false;
     });
   }
-
+  
   private initCategories() {
-    this.categoryService.getCategoriesWithDependency().subscribe(res=>{
+    this.categoryService.getCategoriesWithDependency().pipe(
+      map((arr: CategoryModel[]) => arr.sort((a, b) => {
+        return a.order - b.order;
+      }))
+    ).subscribe(res => {
       this.categories = res;
-    })
+    });
   }
-
-  private initFeaturedRentalProducts(res:ProductModel[]){
-    res.forEach((product:ProductModel)=>{
-      if (product.isNew || product.isHotDeal){
+  
+  private initFeaturedRentalProducts(res: ProductModel[]) {
+    res.forEach((product: ProductModel) => {
+      if (product.isNew || product.isHotDeal) {
         this.featuredRentalProducts.push(product);
       }
     });
   }
-
-  public navigate(id: string, title: string){
-    this.router.navigate(['/rentals', title], { queryParams: { id: id }} );
+  
+  public navigate(id: string, title: string) {
+    this.router.navigate(['/rentals', title], {queryParams: {id: id}});
   }
-
+  
   getClass(index: number) {
     if (index === 0 || index === 1 || index === 11 || index === 12) {
-      return "col-lg-6";
+      return 'col-lg-6';
     }
-
-    return "col-lg-4";
+    
+    return 'col-lg-4';
   }
-
+  
   private initProducts() {
-    this.productService.getAllProducts().subscribe((res:ProductModel[])=>{
+    this.productService.getAllProducts().subscribe((res: ProductModel[]) => {
       this.initFeaturedRentalProducts(res);
-    })
+    });
   }
+  
+  public isSpecified(){
+    return this.locationDateService.isSpecified;
+  }
+  
+  getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
+    return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+  }
+  
 }

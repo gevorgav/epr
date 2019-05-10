@@ -9,16 +9,18 @@ export class CategoryModel {
   private _title: string;
   private _description: string;
   private _imageUrl: string;
+  private _order: number;
   private _items: ProductViewModel[];
   private _$items: Observable<ProductViewModel[]>;
 
-  constructor(id: string, title: string, description: string, imageUrl: string, $items?: Observable<ProductViewModel[]>, items?: ProductViewModel[]) {
+  constructor(id: string, title: string, description: string, imageUrl: string, order?: number, $items?: Observable<ProductViewModel[]>, items?: ProductViewModel[]) {
     this._id = id;
     this._title = title;
     this._description = description;
     this._imageUrl = imageUrl;
     this._items = items;
     this._$items = $items;
+    this._order = order;
   }
 
   get id(): string {
@@ -51,5 +53,9 @@ export class CategoryModel {
 
   get imageUrl(): string {
     return this._imageUrl;
+  }
+  
+  get order(): number {
+    return this._order;
   }
 }
