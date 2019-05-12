@@ -21,6 +21,13 @@
         </div>
 
         <div class="col col_full">
+          <div
+            *ngIf="fileMaxSizeErrorMessage"
+            class="alert alert-danger">
+            <div>
+              {{fileMaxSizeErrorMessage}}
+            </div>
+          </div>
           <div class=" col col_one_third">
             <input type="file" (change)="onFileUpload($event)" #input style="display: none;">
             <button color="primary" mat-raised-button (click)="triggerClick()"><i class="material-icons left">backup</i>Attach picture</button>

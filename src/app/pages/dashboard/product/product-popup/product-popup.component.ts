@@ -25,6 +25,7 @@ export class ProductPopupComponent implements OnInit {
 
   setupPolicyKeys: string[] = [];
   setupPolicyValues: string[] = [];
+  fileMaxSizeErrorMessage: string = '';
   get categoryId() {
     return this.data.category ? this.data.category.id : ''
   }
@@ -98,13 +99,18 @@ export class ProductPopupComponent implements OnInit {
   }
 
   onFileUpload(event){
+    this.fileMaxSizeErrorMessage = '';
     if (event.target.files.length > 0) {
       this.uploadService.uploadFile(event.target.files[0])
         .subscribe(
           res => {
             this.form.get('images').value.push(res.fileName);
           },
-          error => handleError(error)
+          error => {
+            if (error.fileMaxSize) {
+              this.fileMaxSizeErrorMessage = error.message
+            }
+          }
         );
     }
   }
@@ -150,6 +156,18 @@ export class ProductPopupComponent implements OnInit {
 
       ]),
       video: this.formBuilder.control(this.product.video, [
+
+      ]),
+      minTime: this.formBuilder.control(this.product.minTime, [
+
+      ]),
+      minPrice: this.formBuilder.control(this.product.minPrice, [
+
+      ]),
+      nightPrice: this.formBuilder.control(this.product.nightPrice, [
+
+      ]),
+      count: this.formBuilder.control(this.product.count, [
 
       ]),
     }, {validators: setupPolicyUniqueKeyValidator})

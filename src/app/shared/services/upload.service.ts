@@ -16,7 +16,7 @@ export class UploadService {
 
   uploadFile(file: any): Observable<any> {
     if (file.size < UploadService.FILE_MAX_SIZE) {
-      let parseFile = new this.parseService.parse.File(file.name, file);
+      let parseFile = new this.parseService.parse.File(this.genarateFileName(), file);
       return from( parseFile.save().then((result) => {
         return {
           fileName: UploadService.DOMAIN_NAME + result.url().substring(result.url().indexOf('parse')),
@@ -24,7 +24,7 @@ export class UploadService {
         }
       }));
     } else {
-      return throwError( new Error(`File size should be less that ${UploadService.FILE_MAX_SIZE_NAME}`));
+      return throwError({fileMaxSize: true, message: `File size should be less that ${UploadService.FILE_MAX_SIZE_NAME}`});
     }
   }
 
@@ -38,8 +38,12 @@ export class UploadService {
         }
       }));
     } else {
-      return throwError( new Error(`File size should be less that ${UploadService.FILE_MAX_SIZE_NAME}`));
+      return throwError({fileMaxSize: true, message: `File size should be less that ${UploadService.FILE_MAX_SIZE_NAME}`});
     }
+  }
+
+  private genarateFileName(): string{
+    return new Date().getTime() + Math.random().toString(36).substring(2, 15);
   }
 
 }

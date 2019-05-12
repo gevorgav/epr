@@ -14,6 +14,7 @@ export class CategoryPopupComponent implements OnInit {
   category: CategoryModel;
   formBuilder: FormBuilder = new FormBuilder();
   form: FormGroup;
+  fileMaxSizeErrorMessage: string;
 
   @ViewChild('input') inputRef: ElementRef;
 
@@ -66,13 +67,18 @@ export class CategoryPopupComponent implements OnInit {
   }
 
   onFileUpload(event){
+    this.fileMaxSizeErrorMessage = '';
     if (event.target.files.length > 0) {
       this.uploadService.uploadFile(event.target.files[0])
         .subscribe(
           res => {
             this.form.get('imageUrl').setValue(res.fileName);
           },
-          error => alert(error.message)
+          error => {
+            if (error.fileMaxSize) {
+              this.fileMaxSizeErrorMessage = error.message;
+            }
+          }
         );
     }
   }
