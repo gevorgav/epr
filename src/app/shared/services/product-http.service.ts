@@ -183,6 +183,10 @@ export class ProductHttpService extends ProductService {
       product.set('instructions', productToSave.instructions);
       product.set('video', productToSave.video);
       product.set('safetyRules', productToSave.safetyRules);
+      product.set('minTime', productToSave.minTime);
+      product.set('minPrice', productToSave.minPrice);
+      product.set('nightPrice', productToSave.nightPrice);
+      product.set('count', productToSave.count);
       product.set('pathParam', this.pathParamFromName(productToSave.title));
   }
 
