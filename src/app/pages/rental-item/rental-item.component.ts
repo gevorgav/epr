@@ -1,17 +1,14 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {ActivatedRoute, NavigationEnd, NavigationStart, ParamMap, Router} from '@angular/router';
-import {Observable} from 'rxjs/internal/Observable';
-import {map, switchMap} from 'rxjs/operators';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {RoutingService} from '../../shared/services/routing.service';
 import {ProductModel} from '../../shared/model/product.model';
 import {ProductService} from '../../shared/services/product.service';
-import {ZipCode} from '../../shared/model/delivery-chart.model';
-import {zip} from 'rxjs';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {NgxGalleryAnimation} from 'ngx-gallery';
+import {OwlOptions} from 'ngx-owl-carousel-o';
 declare var SEMICOLON: any;
 declare var $: any;
 
@@ -42,8 +39,34 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     {'breakpoint': 500, 'width': '300px', 'height': '300px', 'thumbnailsColumns': 3},
     {'breakpoint': 300, 'width': '100%', 'height': '200px', 'thumbnailsColumns': 2},
   ];
+  
+  public customOptions: OwlOptions = {
+    loop: true,
+    mouseDrag: false,
+    touchDrag: false,
+    pullDrag: false,
+    dots: false,
+    merge: true,
+    autoWidth: true,
+    margin:10,
+    navSpeed: 700,
+    navText: ['', ''],
+    responsive: {
+      400: {
+        items: 1
+      },
+      940: {
+        items: 2
+      },
+      1100: {
+        items: 3
+      }
+    },
+    nav: true
+  };
+  
   public galleryImages = [];
-  public reviewsCount: number = 4;
+  public reviewsCount: number = 0;
   public selectedProduct: ProductModel;
   public relatedProducts: ProductModel[] = [];
   public itemCategory: CategoryModel;
@@ -84,21 +107,8 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   
   ngAfterViewInit(): void {
     setTimeout(() => {
-        SEMICOLON.documentOnReady.init();
-        setTimeout(() => {
-          SEMICOLON.documentOnLoad.init();
-          setTimeout(() => {
-            SEMICOLON.documentOnResize.init();
-            setTimeout(() => {
-              SEMICOLON.widget.init();
-              setTimeout(() => {
-                $('.css3-spinner').remove();
-              }, 10);
-            }, 10);
-          }, 10);
-        }, 10);
-      }
-      , 1500);
+      $('.css3-spinner').remove();
+    } , 1500);
   }
   
   private getRouteParams() {
@@ -133,4 +143,5 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
     return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
   }
+  
 }

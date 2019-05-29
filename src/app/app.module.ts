@@ -44,6 +44,7 @@ import { NgxGalleryModule } from 'ngx-gallery';
 import {UserService} from './shared/services/user.service';
 import {UserHttpService} from './shared/services/user-http.service';
 import { UserComponent } from './pages/dashboard/user/user.component';
+import {CarouselModule} from 'ngx-owl-carousel-o';
 
 const appRoutes: Routes = [
   {
@@ -90,7 +91,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'rental/:title',
-    component: RentalItemComponent,
+    component: RentalItemComponent
   },
   {
     path: 'cart',
@@ -148,7 +149,8 @@ const appRoutes: Routes = [
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     MaterialModule,
-    NgxGalleryModule
+    NgxGalleryModule,
+    CarouselModule
   ],
   providers: [
     LocationDateService,

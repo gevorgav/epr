@@ -39,8 +39,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="styles.229b57e2fb9cf136967a.css"></head>
+<link rel="stylesheet" href="styles.a884ce4c3782d118eefc.css"></head>
 <body class="stretched side-push-panel device-xl quick-contact-form-ready">
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        xfbml            : true,
+        version          : 'v3.3'
+      });
+    };
+
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+  <!-- Your customer chat code -->
+  <div class="fb-customerchat"
+       attribution=setup_tool
+       page_id="351209225522037">
+  </div>
+
   <app-root></app-root>
   <!-- External JavaScripts
 	============================================= -->
@@ -86,5 +110,5 @@
     });
 
   </script>
-<script type="text/javascript" src="runtime.26209474bfa8dc87a77c.js"></script><script type="text/javascript" src="es2015-polyfills.1e04665e16f944715fd2.js" nomodule></script><script type="text/javascript" src="polyfills.cddac2eb5fd772ccb5d3.js"></script><script type="text/javascript" src="main.6d412b5cf44b8dd97e32.js"></script></body>
+<script type="text/javascript" src="runtime.26209474bfa8dc87a77c.js"></script><script type="text/javascript" src="es2015-polyfills.1e04665e16f944715fd2.js" nomodule></script><script type="text/javascript" src="polyfills.cddac2eb5fd772ccb5d3.js"></script><script type="text/javascript" src="main.da1d3008f127a4fb4c62.js"></script></body>
 </html>

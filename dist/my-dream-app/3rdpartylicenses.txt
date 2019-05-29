@@ -250,6 +250,9 @@ THE SOFTWARE.
 ngx-gallery
 MIT
 
+ngx-owl-carousel-o
+MIT
+
 parse
 BSD-3-Clause
 BSD License
