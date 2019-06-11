@@ -156,10 +156,10 @@
           <div [ngClass]="getClass(i)">
             <a [routerLink]="['/rentals', category.id]"
                [ngStyle]="{'background': 'url('+(category.imageUrl? category.imageUrl : category.items[0]?.images[0])+') no-repeat bottom center', 'background-size': 'cover'}">
-              <div class="vertical-middle dark center">
+              <div class="vertical-middle dark center" style="background-color: rgba(0, 0, 0, 0.6);">
                 <div class="heading-block nomargin noborder">
                   <h3 class="capitalize t500">{{category.title}}</h3>
-                  <span style="margin-top: 5px; font-size: 17px;">23 Properties</span>
+                  <span style="margin-top: 5px; font-size: 17px;">{{category.items.length}} Properties</span>
                 </div>
               </div>
             </a>

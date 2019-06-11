@@ -11285,7 +11285,7 @@ input[type=checkbox]:not(:checked) + label.error { display: block !important; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #333!important;
+  color: #333;
 }
 
 .emphasis-title h1,
@@ -11310,7 +11310,7 @@ input[type=checkbox]:not(:checked) + label.error { display: block !important; }
   display: block;
   margin-top: 10px;
   font-weight: 300;
-  color: #777!important;
+  color: #777;
 }
 
 .heading-block .before-heading { margin-bottom: 7px; }
