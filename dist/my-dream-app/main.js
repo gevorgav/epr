@@ -2549,7 +2549,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 parse__WEBPACK_IMPORTED_MODULE_5__["initialize"]('myAppId', 'javascriptkey'); // use your appID & your js key
-parse__WEBPACK_IMPORTED_MODULE_5__["serverURL"] = 'http://138.68.251.183:1337/parse'; // use your server url
+parse__WEBPACK_IMPORTED_MODULE_5__["serverURL"] = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var LoginPageComponent = /** @class */ (function () {
     function LoginPageComponent(parseService, router, activatedRoute) {
         this.parseService = parseService;
@@ -4202,7 +4202,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 parse__WEBPACK_IMPORTED_MODULE_2__["initialize"]('myAppId', 'javascriptkey'); // use your appID & your js key
-parse__WEBPACK_IMPORTED_MODULE_2__["serverURL"] = 'http://138.68.251.183:1337/parse'; // use your server url
+parse__WEBPACK_IMPORTED_MODULE_2__["serverURL"] = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var ParseService = /** @class */ (function () {
     function ParseService() {
         this.$loginSubject = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"](); // true - login, false - logout.

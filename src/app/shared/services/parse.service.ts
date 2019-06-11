@@ -3,7 +3,7 @@ import * as Parse from "parse";
 import {from, Observable, of, Subject} from 'rxjs';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
-(Parse as any).serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
+(Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 
 @Injectable({
   providedIn: 'root'
