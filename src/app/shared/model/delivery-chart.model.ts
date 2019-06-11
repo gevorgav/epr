@@ -52,10 +52,12 @@ export class DeliveryChartModel {
 export class ZipCode {
   private _id: string;
   private _zipCode: string;
+  private _location: string;
   
-  constructor(id: string, zipCode: string) {
+  constructor(id: string, zipCode: string, location?: string) {
     this._id = id;
     this._zipCode = zipCode;
+    this._location = location;
   }
   
   get id(): string {
@@ -64,5 +66,21 @@ export class ZipCode {
   
   get zipCode(): string {
     return this._zipCode;
+  }
+  
+  set id(value: string) {
+    this._id = value;
+  }
+  
+  set zipCode(value: string) {
+    this._zipCode = value;
+  }
+  
+  get location(): string {
+    return this._location;
+  }
+  
+  set location(value: string) {
+    this._location = value;
   }
 }

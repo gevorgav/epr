@@ -38,7 +38,9 @@ export class LoginPageComponent implements OnInit {
       this.parseService.login(this.userLoginForm.get('username').value,
         this.userLoginForm.get('password').value).subscribe(function (data) {
         that.parseService.$loginSubject.next(true);
-        that.router.navigate(["home"]);
+        that.router.navigate(["home"]).then(res=>{
+          location.reload()
+        });
       }, function (error) {
         that.loginErrorMessage = error.message;
       });

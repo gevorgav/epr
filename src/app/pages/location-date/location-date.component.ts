@@ -1,11 +1,12 @@
-import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {_filter, StateGroup} from '../delivery-chart/delivery-chart.component';
-import {DeliveryChartModel} from '../../shared/model/delivery-chart.model';
+import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.model';
 import {map, startWith} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
+import {start} from 'repl';
+import {OrderService} from '../../shared/services/order.service';
 
 @Component({
   selector: 'app-location-date',
@@ -13,24 +14,25 @@ import {DeliveryChartService} from '../../shared/services/delivery-chart.service
   styleUrls: ['./location-date.component.css']
 })
 export class LocationDateComponent implements OnInit {
-
+  
   public locationDateForm: FormGroup;
-
-  stateGroups: StateGroup[] = [];
-
-  stateGroupOptions: Observable<StateGroup[]>;
-
+  
+  stateGroups: string[] = [];
+  
+  stateGroupOptions: Observable<string[]>;
+  
   public allDeliveryCharts: DeliveryChartModel[] = [];
-
+  
   @Output() emitSubmit = new EventEmitter<boolean>();
-
+  
   constructor(private locationDateService: LocationDateService,
-              private deliveryChartService: DeliveryChartService) {
+              private deliveryChartService: DeliveryChartService,
+              private orderService: OrderService) {
   }
-
+  
   ngOnInit() {
     this.locationDateForm = new FormGroup({
-      'zipCode': new FormControl(this.locationDateService.locationDate.location, [
+      'zipCode': new FormControl(this.locationDateService.locationDate.getLocation(), [
         Validators.required
       ]),
       'startDate': new FormControl(this.locationDateService.locationDate.startDateTime, [
@@ -40,94 +42,94 @@ export class LocationDateComponent implements OnInit {
         Validators.required
       ]),
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
-
-     this.deliveryChartService.getDeliveryLocations().subscribe(res=>{
-       this.allDeliveryCharts = res;
-       this.initAutoCompleteOptions()
+    
+    this.deliveryChartService.getDeliveryLocations().subscribe(res => {
+      this.allDeliveryCharts = res;
+      this.initAutoCompleteOptions();
     });
-
+    
     this.stateGroupOptions = this.locationDateForm.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterGroup(value.zipCode))
-      );
+    .pipe(
+      startWith(''),
+      map(value => this._filterGroup(value.zipCode))
+    );
   }
-
-  private _filterGroup(value: string): StateGroup[] {
+  
+  private _filterGroup(value: string): string[] {
     if (value) {
-      return this.stateGroups
-        .map(group => ({letter: group.letter, names: _filter(group.names, value)}))
-        .filter(group => group.names.length > 0);
+      const filterValue = value.toLowerCase();
+      
+      return this.stateGroups.filter(option => option.toLowerCase().includes(filterValue));
     }
-
     return this.stateGroups;
   }
-
+  
   onSubmit() {
     if (this.locationDateForm.valid) {
       if (this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value)) {
-        this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.locationDateForm.get('zipCode').value);
-        this.locationDateService.isSpecified = true;
+        this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
+        this.orderService.setOrderDateLocation(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
+        this.locationDateService.setIsSpecified(true);
         this.emitSubmit.emit(true);
-      }else {
+      } else {
         //@ts-ignore
         this.locationDateForm.errors = {incorrectZipLocation: true};
       }
     }
   }
-
+  
   edit() {
-    this.locationDateService.isSpecified = false;
+    this.locationDateService.setIsSpecified(false);
   }
-
+  
   checkCityOrZipCode(value: string): boolean {
     let isCorrect: boolean = false;
-
+    
     for (let city of this.allDeliveryCharts) {
-      if (city.city.toLowerCase().indexOf(value.toLowerCase()) > -1) {
-        isCorrect = true;
-        break;
-      } else {
-        for (let zipCode of city.zipCodes) {
-          if (zipCode.zipCode.indexOf(value) > -1) {
-            isCorrect = true;
-            break;
-          }
+      for (let zipCode of city.zipCodes) {
+        if (value.indexOf(zipCode.zipCode) > -1) {
+          isCorrect = true;
+          break;
         }
       }
     }
-
+    
     return isCorrect;
   }
-
-  private initAutoCompleteOptions() {
-    let cityNames = [];
-    let zipCodeNames = [];
+  
+  getZipCode(value: string): ZipCode {
     for (let city of this.allDeliveryCharts) {
-      cityNames.push(city.city);
       for (let zipCode of city.zipCodes) {
-        zipCodeNames.push(zipCode.zipCode);
+        if (value.indexOf(zipCode.zipCode) > -1) {
+          zipCode.location = value;
+          return zipCode;
+        }
       }
     }
-    let cities: StateGroup = {letter: 'Cities', names: cityNames};
-    let zipCodes: StateGroup = {letter: 'Zip codes', names: zipCodeNames};
-    this.stateGroups.push(cities, zipCodes);
   }
-
-  isSpecified(){
+  
+  private initAutoCompleteOptions() {
+    let zipCodeNames: string [] = [];
+    for (let city of this.allDeliveryCharts) {
+      for (let zipCode of city.zipCodes) {
+        zipCodeNames.push(city.city + ' ' + zipCode.zipCode);
+      }
+    }
+    this.stateGroups.push(...zipCodeNames);
+  }
+  
+  isSpecified() {
     return this.locationDateService.isSpecified;
   }
-
 }
 
 export const identityRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
   const startDate = control.get('startDate');
   const endDate = control.get('endDate');
-
   return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? {'identityRevealed': true} : null;
 };
 
-export const identityTimeValidator : ValidatorFn = (control: FormGroup): ValidationErrors | null =>{
+export const identityTimeValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
   const startDate = control.get('startDate');
   let now = new Date();
   return startDate.value && (startDate.value.getTime() - now.getTime() < 54000000) ? {'identityTime': true} : null;

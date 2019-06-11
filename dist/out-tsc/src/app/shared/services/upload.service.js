@@ -9,7 +9,7 @@ var UploadService = /** @class */ (function () {
     UploadService_1 = UploadService;
     UploadService.prototype.uploadFile = function (file) {
         if (file.size < UploadService_1.FILE_MAX_SIZE) {
-            var parseFile = new this.parseService.parse.File(file.name, file);
+            var parseFile = new this.parseService.parse.File(this.genarateFileName(), file);
             return from(parseFile.save().then(function (result) {
                 return {
                     fileName: UploadService_1.DOMAIN_NAME + result.url().substring(result.url().indexOf('parse')),
@@ -18,7 +18,7 @@ var UploadService = /** @class */ (function () {
             }));
         }
         else {
-            return throwError(new Error("File size should be less that " + UploadService_1.FILE_MAX_SIZE_NAME));
+            return throwError({ fileMaxSize: true, message: "File size should be less that " + UploadService_1.FILE_MAX_SIZE_NAME });
         }
     };
     UploadService.prototype.uploadFileWithCustomName = function (name, file) {
@@ -32,8 +32,11 @@ var UploadService = /** @class */ (function () {
             }));
         }
         else {
-            return throwError(new Error("File size should be less that " + UploadService_1.FILE_MAX_SIZE_NAME));
+            return throwError({ fileMaxSize: true, message: "File size should be less that " + UploadService_1.FILE_MAX_SIZE_NAME });
         }
+    };
+    UploadService.prototype.genarateFileName = function () {
+        return new Date().getTime() + Math.random().toString(36).substring(2, 15);
     };
     var UploadService_1;
     UploadService.DOMAIN_NAME = 'https://entertainmentpartyrentals.com/';

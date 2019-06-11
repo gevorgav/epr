@@ -4,25 +4,32 @@ import * as Parse from 'parse';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ParseService } from './shared/services/parse.service';
-import { CategoryService } from './shared/services/category.service';
-import { DeliveryChartService } from './shared/services/delivery-chart.service';
+import { LocationDateService } from './shared/services/location-date.service';
+import { OrderService } from './shared/services/order.service';
+import { InitializerService } from './shared/services/initializer.service';
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, activatedRoute, titleService, parseService, categoryService, deliveryService) {
+    function AppComponent(router, activatedRoute, locationService, orderService, initializerService, titleService) {
         this.router = router;
         this.activatedRoute = activatedRoute;
+        this.locationService = locationService;
+        this.orderService = orderService;
+        this.initializerService = initializerService;
         this.titleService = titleService;
-        this.parseService = parseService;
-        this.categoryService = categoryService;
-        this.deliveryService = deliveryService;
         this.title = 'app';
         this.isReady = false;
     }
     AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.setTitles();
         this.init();
+        this.initializerService.initialize().subscribe(function (res) {
+            _this.isReady = res;
+        });
+        // this.deliveryService.syncDeliveryChart().subscribe(res=>{
+        //   console.log(res);
+        // })
     };
     AppComponent.prototype.ngAfterViewInit = function () {
         var script = document.createElement('script');
@@ -56,10 +63,10 @@ var AppComponent = /** @class */ (function () {
         }),
         tslib_1.__metadata("design:paramtypes", [Router,
             ActivatedRoute,
-            Title,
-            ParseService,
-            CategoryService,
-            DeliveryChartService])
+            LocationDateService,
+            OrderService,
+            InitializerService,
+            Title])
     ], AppComponent);
     return AppComponent;
 }());

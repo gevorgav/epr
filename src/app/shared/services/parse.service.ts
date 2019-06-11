@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as Parse from "parse";
 import {from, Observable, of, Subject} from 'rxjs';
+import User = Parse.User;
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
@@ -20,11 +21,11 @@ export class ParseService {
     return !!(this.parse.User.current() && this.parse.User.current().authenticated());
   }
   
-  getCurrentUser(){
+  getCurrentUser(): User | undefined{
     if (this.parse.User.current() && this.parse.User.current().authenticated()) {
       return this.parse.User.current();
     }
-    return null;
+    return undefined;
   }
   
   isAdmin(): Observable<boolean>{

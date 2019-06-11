@@ -45,11 +45,16 @@ var CategoryPopupComponent = /** @class */ (function () {
     };
     CategoryPopupComponent.prototype.onFileUpload = function (event) {
         var _this = this;
+        this.fileMaxSizeErrorMessage = '';
         if (event.target.files.length > 0) {
             this.uploadService.uploadFile(event.target.files[0])
                 .subscribe(function (res) {
                 _this.form.get('imageUrl').setValue(res.fileName);
-            }, function (error) { return alert(error.message); });
+            }, function (error) {
+                if (error.fileMaxSize) {
+                    _this.fileMaxSizeErrorMessage = error.message;
+                }
+            });
         }
     };
     CategoryPopupComponent.prototype.initForm = function () {

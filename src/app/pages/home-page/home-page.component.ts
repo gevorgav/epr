@@ -7,6 +7,7 @@ import {ProductService} from '../../shared/services/product.service';
 import {ProductModel} from '../../shared/model/product.model';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
+import {InitializerService} from '../../shared/services/initializer.service';
 
 declare var SEMICOLON: any;
 declare var $: any;

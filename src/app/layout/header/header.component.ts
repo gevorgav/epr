@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
+import {InitializerService} from '../../shared/services/initializer.service';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit , AfterViewInit{
   constructor(private route: ActivatedRoute,
               private router: Router,
               private parseService: ParseService,
+              private initializerService: InitializerService,
               private categoryService: CategoryService) { }
 
   ngOnInit() {
@@ -35,6 +37,14 @@ export class HeaderComponent implements OnInit , AfterViewInit{
       }
     })
   }
+  
+  getCartCount(){
+    return this.initializerService.orderModel.orderItems.length;
+  }
+  
+  showCart(){
+    return !!this.initializerService.orderModel.orderItems
+  }
 
   ngAfterViewInit(): void {}
   
@@ -48,7 +58,9 @@ export class HeaderComponent implements OnInit , AfterViewInit{
   
   logout(){
     this.parseService.logOut().subscribe(res=>{
-      this.router.navigate(["login"]);
+      this.router.navigate(["login"]).then(res=>{
+        location.reload()
+      });
     })
   }
 

@@ -1,27 +1,26 @@
 <div class="tab-container">
-        <form [formGroup]="locationDateForm" *ngIf="!isSpecified()" novalidate>
+        <form [formGroup]="locationDateForm" *ngIf="!(isSpecified() | async)" novalidate>
           <div class="tab-content clearfix" id="tab-rent">
             <div class="row">
               <div class="col-md-12 col-12">
                 <label for="zipCode" style="margin-bottom: 20px !important;">Event Location</label>
                 <mat-form-field style="width: 100%;" >
-                  <input type="text"  matInput placeholder="Enter Zip Code or City" required formControlName="zipCode" [matAutocomplete]="autoGroup"  id="zipCode">
+                  <input type="text" autocomplete="off"  matInput placeholder="Enter Zip Code or City" required formControlName="zipCode" [matAutocomplete]="autoGroup"  id="zipCode">
                   <mat-autocomplete #autoGroup="matAutocomplete">
-                    <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
-                      <mat-option *ngFor="let name of group.names" [value]="name">
-                        {{name}}
+                      <mat-option *ngFor="let zipCode of stateGroupOptions | async" [value]="zipCode">
+                        {{zipCode}}
                       </mat-option>
-                    </mat-optgroup>
                   </mat-autocomplete>
                 </mat-form-field>
                 <div *ngIf="locationDateForm.errors?.incorrectZipLocation && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
-                  Sorry, there is no branch that currently provides service for {{locationDateForm.get('zipCode')?.value}} .
+                  Sorry, there is no branch that currently provides service for {{locationDateForm.get('zipCode')?.value}}.
+                  For getting more information contact with the administration via messenger or call  +1 626 766 4440.
                 </div>
               </div>
               <div class="w-100"></div>
               <div class="col-md-6 col-12">
                 <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-                <input class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12" formControlName="startDate">
+                <input autocomplete="off" class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12" formControlName="startDate">
                 <div *ngIf="locationDateForm.controls['startDate'].invalid && (locationDateForm.controls['startDate'].dirty || locationDateForm.controls['startDate'].touched)" class="alert alert-danger">
                   <div *ngIf="locationDateForm.controls['startDate'].errors.required">
                     Start date is required.
@@ -32,7 +31,7 @@
               <div class="w-100 d-block d-md-none bottommargin-sm"></div>
               <div class="col-md-6 col-12">
                 <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
-                <input id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13" formControlName="endDate">
+                <input autocomplete="off" id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13" formControlName="endDate">
                 <div *ngIf="locationDateForm.controls['endDate'].invalid && (locationDateForm.controls['endDate'].dirty || locationDateForm.controls['endDate'].touched)" class="alert alert-danger">
                   <div *ngIf="locationDateForm.controls['endDate'].errors.required">
                     End date is required.
@@ -53,12 +52,12 @@
             </div>
           </div>
         </form>
-        <ng-container *ngIf="isSpecified()">
+        <ng-container *ngIf="isSpecified() | async">
           <div class="tab-content clearfix" id="tab-rent-view">
             <div class="row">
               <div class="col-md-12 col-12">
                 <label for="zipCodeView" style="margin-bottom: 20px !important;">Event Location</label>
-                <span class="required sm-form-control input-block-level not-dark" id="zipCodeView">{{locationDateService.locationDate.location}}</span>
+                <span class="required sm-form-control input-block-level not-dark" id="zipCodeView">{{locationDateService.locationDate.getLocation()}}</span>
               </div>
               <div class="w-100"></div>
               <div class="col-md-6 col-12">

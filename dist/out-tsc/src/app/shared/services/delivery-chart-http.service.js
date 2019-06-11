@@ -9,6 +9,7 @@ import { ParseService } from './parse.service';
 import { from } from 'rxjs/internal/observable/from';
 import { flatMap, map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 var DeliveryChartHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(DeliveryChartHttpService, _super);
     function DeliveryChartHttpService(parseService) {
@@ -21,8 +22,25 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
     DeliveryChartHttpService.prototype.getDeliveryLocationById = function (id) {
         return undefined;
     };
-    DeliveryChartHttpService.prototype.getDeliveryLocationByZipCode = function (zipCode) {
-        return undefined;
+    DeliveryChartHttpService.prototype.getDeliveryLocationByZipCode = function (zipCodeId) {
+        var _this_1 = this;
+        var zipCodeParse = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.ZIP_CODE);
+        var query = new this.parseService.parse.Query(zipCodeParse);
+        query.equalTo("objectId", zipCodeId);
+        var promise = query.first().then(function (res) {
+            return res;
+        }).then(function (res) {
+            var Delivery = _this_1.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
+            var delivery = new Delivery();
+            delivery.set('zipCode', res);
+            var query = new _this_1.parseService.parse.Query(delivery);
+            return query.first().then(function (delivery) {
+                var deliveryLocation = new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
+                console.log(deliveryLocation);
+                return deliveryLocation;
+            });
+        });
+        return from(promise);
     };
     DeliveryChartHttpService.prototype.getDeliveryLocationsFromCash = function () {
         return null;
@@ -37,10 +55,10 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
             var deliveryLocations = [];
             for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
                 var delivery_1 = res_1[_i];
-                var zip_1 = from(delivery_1.relation('zipCode').query().find().then(function (zip) {
+                var zip = from(delivery_1.relation('zipCode').query().find().then(function (zip) {
                     return DeliveryChartHttpService_1.forOne(zip);
                 }));
-                var deliveryLocation = new DeliveryChartModel(delivery_1['id'], delivery_1.attributes['city'], delivery_1.attributes['price'], zip_1);
+                var deliveryLocation = new DeliveryChartModel(delivery_1['id'], delivery_1.attributes['city'], delivery_1.attributes['price'], zip);
                 deliveryLocations.push(deliveryLocation);
             }
             return deliveryLocations;
@@ -51,20 +69,6 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
             }));
         })); }));
     };
-    //   let promise = delivery.relation('zipCode').query().find().then((zip: any[])=>{
-    //     return zip;
-    //   });
-    //   let $zips: Observable<any>[]= [];
-    //   $zips.push(from(promise));
-    //   for (let $zip of $zips) {
-    //   $zip.pipe()
-    // }
-    // from(promise).pipe(map((zips: any[])=>{
-    //   for (let zip of zips) {
-    //     deliveryLocation.zipCodes.push(...DeliveryChartHttpService.forOne(zip))
-    //   }
-    //   return deliveryLocations;
-    // }));
     DeliveryChartHttpService.prototype.getDeliveryLocationByCity = function (city) {
         return undefined;
     };
@@ -140,6 +144,33 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         }
         return res;
     };
+    DeliveryChartHttpService.prototype.syncDeliveryChart = function () {
+        var _this_1 = this;
+        var deliveries = [];
+        var cities = new Map();
+        for (var _i = 0, ss_1 = ss; _i < ss_1.length; _i++) {
+            var item = ss_1[_i];
+            if (!cities.has(item.City)) {
+                cities.set(item.City, item.price ? item.price : 0);
+            }
+        }
+        var citiesArray = Array.from(cities.keys());
+        for (var _a = 0, citiesArray_1 = citiesArray; _a < citiesArray_1.length; _a++) {
+            var city = citiesArray_1[_a];
+            var zipCodes = [];
+            for (var _b = 0, ss_2 = ss; _b < ss_2.length; _b++) {
+                var item = ss_2[_b];
+                if (item.City === city) {
+                    zipCodes.push(new ZipCode(null, item['ZIP Code'].toString()));
+                }
+            }
+            deliveries.push(new DeliveryChartModel(null, city, cities.get(city), null, zipCodes));
+        }
+        deliveries.forEach(function (res) {
+            _this_1.saveDeliveryChart(res);
+        });
+        return of(deliveries);
+    };
     var DeliveryChartHttpService_1;
     DeliveryChartHttpService.DELIVERY_CHART = "DeliveryChart";
     DeliveryChartHttpService.ZIP_CODE = "ZipCode";
@@ -150,4 +181,5 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
     return DeliveryChartHttpService;
 }(DeliveryChartService));
 export { DeliveryChartHttpService };
+var ss = [];
 //# sourceMappingURL=delivery-chart-http.service.js.map

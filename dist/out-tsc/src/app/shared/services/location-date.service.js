@@ -1,19 +1,24 @@
 import * as tslib_1 from "tslib";
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { DeliveryChartService } from './delivery-chart.service';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 var LocationDateService = /** @class */ (function () {
-    function LocationDateService() {
-        this._isSpecified = false;
+    function LocationDateService(deliveryService) {
+        this.deliveryService = deliveryService;
+        this._isSpecified = new BehaviorSubject(false);
         this._locationDate = new LocationDate(null, null, null);
     }
     LocationDateService.prototype.setLocationDate = function (start, end, location) {
-        if (start && end && location) {
+        var now = new Date();
+        if (start && end && location && !(start.getTime() - now.getTime() < 54000000)) {
             this._locationDate = new LocationDate(start, end, location);
-            this._isSpecified = true;
+            this.setIsSpecified(true);
         }
     };
     LocationDateService.prototype.reset = function () {
         this._locationDate = null;
-        this._isSpecified = false;
+        this.setIsSpecified(false);
     };
     Object.defineProperty(LocationDateService.prototype, "locationDate", {
         get: function () {
@@ -26,12 +31,21 @@ var LocationDateService = /** @class */ (function () {
         get: function () {
             return this._isSpecified;
         },
-        set: function (value) {
-            this._isSpecified = value;
-        },
         enumerable: true,
         configurable: true
     });
+    LocationDateService.prototype.setIsSpecified = function (value) {
+        this._isSpecified.next(value);
+    };
+    LocationDateService.prototype.getShippingPriceByZipCode = function (zipCode) {
+        return this.deliveryService.getDeliveryLocationByZipCode(zipCode).pipe(map(function (res) {
+            return res.price;
+        }));
+    };
+    LocationDateService.prototype.getShippingPrice = function () {
+        console.log(this._locationDate.location.zipCode);
+        return this.getShippingPriceByZipCode(this._locationDate.location.id);
+    };
     LocationDateService.prototype.getCalculation = function (nightPrice, minPrice, minTime, price) {
         var night = 0;
         var hours = 0;
@@ -88,9 +102,9 @@ var LocationDateService = /** @class */ (function () {
     };
     LocationDateService = tslib_1.__decorate([
         Injectable({
-            providedIn: 'root'
+            providedIn: "root"
         }),
-        tslib_1.__metadata("design:paramtypes", [])
+        tslib_1.__metadata("design:paramtypes", [DeliveryChartService])
     ], LocationDateService);
     return LocationDateService;
 }());
@@ -131,6 +145,9 @@ var LocationDate = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    LocationDate.prototype.getLocation = function () {
+        return this._location ? this._location.location : null;
+    };
     return LocationDate;
 }());
 export { LocationDate };

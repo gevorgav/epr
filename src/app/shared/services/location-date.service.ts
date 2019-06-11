@@ -1,66 +1,91 @@
 import {Injectable} from '@angular/core';
+import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs/internal/Observable';
+import {DeliveryChartService} from './delivery-chart.service';
+import {Subject} from 'rxjs/internal/Subject';
+import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class LocationDateService {
   private _locationDate: LocationDate;
 
-  private _isSpecified: boolean = false;
+  private _isSpecified = new BehaviorSubject<boolean>(false);
 
-  constructor() {
+  constructor(private deliveryService: DeliveryChartService) {
     this._locationDate = new LocationDate(null, null, null);
   }
 
-  public setLocationDate(start: Date, end: Date, location: string){
-    if (start && end && location){
+  public setLocationDate(start: Date, end: Date, location: ZipCode){
+    let now = new Date();
+    if (start && end && location && !(start.getTime() - now.getTime() < 54000000)){
       this._locationDate = new LocationDate(start, end, location);
-      this._isSpecified = true;
+      this.setIsSpecified(true);
     }
   }
 
   public reset(){
     this._locationDate = null;
-    this._isSpecified = false;
+    this.setIsSpecified(false);
   }
 
   get locationDate() {
     return this._locationDate;
   }
 
-  get isSpecified(): boolean {
+  get isSpecified(): Subject<boolean> {
     return this._isSpecified;
   }
 
-  set isSpecified(value: boolean) {
-    this._isSpecified = value;
+  setIsSpecified(value: boolean) {
+    this._isSpecified.next(value);
   }
   
-  getCalculation(nightPrice: number, minPrice: number, minTime: number, price: number): number{
-    let night: number = 0;
-    let hours: number = 0;
-    let calculatedPrice = 0;
-    
-    if (this.isSpecified) {
-      let days: Date[] = this.getDates();
-      for (let day of days){
-        if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length-1){
-          hours += this.getFutureHours(9).length;
-          night += 1;
-        } else if (days.indexOf(day) === 0) {
-          hours += this.getFutureHours(day.getHours()).length;
-        }else if (days.indexOf(day) === days.length - 1) {
-          hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
+  getShippingPriceByZipCode(zipCode: string): Observable<number>{
+    return this.deliveryService.getDeliveryLocationByZipCode(zipCode).pipe(
+      map((res: DeliveryChartModel)=>{
+        return res.price;
+      })
+    )
+  }
+  
+  getShippingPrice(): Observable<number>{
+    console.log(this._locationDate.location.zipCode);
+    return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
+  }
+  
+  getCalculation(nightPrice: number, minPrice: number, minTime: number, price: number): Observable<number>{
+    return this.isSpecified.pipe(map(res=>{
+      if (res) {
+        let night: number = 0;
+        let hours: number = 0;
+        let calculatedPrice = 0;
+  
+        let days: Date[] = this.getDates();
+        for (let day of days){
+          if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length-1){
+            hours += this.getFutureHours(9).length;
+            night += 1;
+          } else if (days.indexOf(day) === 0) {
+            hours += this.getFutureHours(day.getHours()).length;
+          }else if (days.indexOf(day) === days.length - 1) {
+            hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
+          }
         }
+  
+        if (hours > minTime) {
+          hours = hours - minTime;
+          calculatedPrice = nightPrice * night + price * hours + minPrice;
+    
+          return calculatedPrice;
+        }
+      }else {
+        return 0;
       }
-    }
-    if (hours > minTime) {
-      hours = hours - minTime;
-      calculatedPrice = nightPrice * night + price * hours + minPrice;
-      
-      return calculatedPrice;
-    }
-    return minPrice;
+    }));
+    
   }
   
   private getFutureHours(hour: number){
@@ -100,9 +125,9 @@ export class LocationDateService {
 export class LocationDate {
   private _startDateTime: Date;
   private _endDateTime: Date;
-  private _location: string;
+  private _location: ZipCode;
 
-  constructor(startDateTime: Date, endDateTime: Date, location: string) {
+  constructor(startDateTime: Date, endDateTime: Date, location: ZipCode) {
     this._startDateTime = startDateTime;
     this._endDateTime = endDateTime;
     this._location = location;
@@ -124,11 +149,15 @@ export class LocationDate {
     this._endDateTime = value;
   }
 
-  get location(): string {
+  get location(): ZipCode {
     return this._location;
   }
+  
+  getLocation(){
+    return this._location?this._location.location:null;
+  }
 
-  set location(value: string) {
+  set location(value: ZipCode) {
     this._location = value;
   }
 }

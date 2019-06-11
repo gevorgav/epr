@@ -17,6 +17,7 @@ var ProductPopupComponent = /** @class */ (function () {
         this.formBuilder = new FormBuilder();
         this.setupPolicyKeys = [];
         this.setupPolicyValues = [];
+        this.fileMaxSizeErrorMessage = '';
         this.compareFn = this.compare;
         this.product = this.data.product;
     }
@@ -64,11 +65,16 @@ var ProductPopupComponent = /** @class */ (function () {
     };
     ProductPopupComponent.prototype.onFileUpload = function (event) {
         var _this = this;
+        this.fileMaxSizeErrorMessage = '';
         if (event.target.files.length > 0) {
             this.uploadService.uploadFile(event.target.files[0])
                 .subscribe(function (res) {
                 _this.form.get('images').value.push(res.fileName);
-            }, function (error) { return handleError(error); });
+            }, function (error) {
+                if (error.fileMaxSize) {
+                    _this.fileMaxSizeErrorMessage = error.message;
+                }
+            });
         }
     };
     ProductPopupComponent.prototype.initForm = function () {
@@ -94,6 +100,10 @@ var ProductPopupComponent = /** @class */ (function () {
             safetyRules: this.formBuilder.control(this.product.safetyRules, []),
             images: this.formBuilder.control(this.product.images, []),
             video: this.formBuilder.control(this.product.video, []),
+            minTime: this.formBuilder.control(this.product.minTime, []),
+            minPrice: this.formBuilder.control(this.product.minPrice, []),
+            nightPrice: this.formBuilder.control(this.product.nightPrice, []),
+            count: this.formBuilder.control(this.product.count, []),
         }, { validators: setupPolicyUniqueKeyValidator });
     };
     ProductPopupComponent.prototype.initSafetyRules = function () {

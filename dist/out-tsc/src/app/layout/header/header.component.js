@@ -3,11 +3,13 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ParseService } from '../../shared/services/parse.service';
 import { CategoryService } from '../../shared/services/category.service';
+import { InitializerService } from '../../shared/services/initializer.service';
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent(route, router, parseService, categoryService) {
+    function HeaderComponent(route, router, parseService, initializerService, categoryService) {
         this.route = route;
         this.router = router;
         this.parseService = parseService;
+        this.initializerService = initializerService;
         this.categoryService = categoryService;
         this.isAdmin = false;
         this.categories = [];
@@ -28,6 +30,12 @@ var HeaderComponent = /** @class */ (function () {
                 });
             }
         });
+    };
+    HeaderComponent.prototype.getCartCount = function () {
+        return this.initializerService.orderModel.orderItems.length;
+    };
+    HeaderComponent.prototype.showCart = function () {
+        return !!this.initializerService.orderModel.orderItems;
     };
     HeaderComponent.prototype.ngAfterViewInit = function () { };
     HeaderComponent.prototype.isLogin = function () {
@@ -57,6 +65,7 @@ var HeaderComponent = /** @class */ (function () {
         tslib_1.__metadata("design:paramtypes", [ActivatedRoute,
             Router,
             ParseService,
+            InitializerService,
             CategoryService])
     ], HeaderComponent);
     return HeaderComponent;

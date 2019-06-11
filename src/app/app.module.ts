@@ -45,6 +45,9 @@ import {UserService} from './shared/services/user.service';
 import {UserHttpService} from './shared/services/user-http.service';
 import { UserComponent } from './pages/dashboard/user/user.component';
 import {CarouselModule} from 'ngx-owl-carousel-o';
+import {PaymentFormComponent} from './pages/payement-form/payment-form.component';
+import {OrderService} from './shared/services/order.service';
+import {InitializerService} from './shared/services/initializer.service';
 
 const appRoutes: Routes = [
   {
@@ -131,10 +134,10 @@ const appRoutes: Routes = [
     DashboardDeliveryChartComponent,
     ProductPopupComponent,
     DeliveryChartPopupComponent,
-    CartComponent,
     VerificationComponent,
     CategoryComponent,
     CategoryPopupComponent,
+    PaymentFormComponent,
     UserComponent
   ],
   imports: [
@@ -159,6 +162,8 @@ const appRoutes: Routes = [
     AuthGuardLoginService,
     AuthGuardVerificationService,
     RoutingService,
+    OrderService,
+    InitializerService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
     {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},

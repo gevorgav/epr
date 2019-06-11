@@ -7,8 +7,13 @@ import { RoutingService } from '../../shared/services/routing.service';
 import { ProductService } from '../../shared/services/product.service';
 import { CategoryService } from '../../shared/services/category.service';
 import { NgxGalleryAnimation } from 'ngx-gallery';
+import { OrderService } from '../../shared/services/order.service';
+import { OrderModel } from '../../shared/model/order.model';
+import { ParseService } from '../../shared/services/parse.service';
+import { OrderItemModel } from '../../shared/model/order-item.model';
+import { InitializerService } from '../../shared/services/initializer.service';
 var RentalItemComponent = /** @class */ (function () {
-    function RentalItemComponent(titleService, locationService, route, router, routingService, productService, categoryService) {
+    function RentalItemComponent(titleService, locationService, route, router, routingService, productService, categoryService, orderService, initializerService, parseService) {
         this.titleService = titleService;
         this.locationService = locationService;
         this.route = route;
@@ -16,6 +21,9 @@ var RentalItemComponent = /** @class */ (function () {
         this.routingService = routingService;
         this.productService = productService;
         this.categoryService = categoryService;
+        this.orderService = orderService;
+        this.initializerService = initializerService;
+        this.parseService = parseService;
         this.galleryOptions = [
             { 'imageSize': 'contain' },
             {
@@ -36,8 +44,32 @@ var RentalItemComponent = /** @class */ (function () {
             { 'breakpoint': 500, 'width': '300px', 'height': '300px', 'thumbnailsColumns': 3 },
             { 'breakpoint': 300, 'width': '100%', 'height': '200px', 'thumbnailsColumns': 2 },
         ];
+        this.customOptions = {
+            loop: true,
+            mouseDrag: false,
+            touchDrag: false,
+            pullDrag: false,
+            dots: false,
+            merge: true,
+            autoWidth: true,
+            margin: 10,
+            navSpeed: 700,
+            navText: ['', ''],
+            responsive: {
+                400: {
+                    items: 1
+                },
+                940: {
+                    items: 2
+                },
+                1100: {
+                    items: 3
+                }
+            },
+            nav: true
+        };
         this.galleryImages = [];
-        this.reviewsCount = 4;
+        this.reviewsCount = 0;
         this.relatedProducts = [];
         this.title$ = this.route.paramMap;
     }
@@ -66,19 +98,7 @@ var RentalItemComponent = /** @class */ (function () {
     };
     RentalItemComponent.prototype.ngAfterViewInit = function () {
         setTimeout(function () {
-            SEMICOLON.documentOnReady.init();
-            setTimeout(function () {
-                SEMICOLON.documentOnLoad.init();
-                setTimeout(function () {
-                    SEMICOLON.documentOnResize.init();
-                    setTimeout(function () {
-                        SEMICOLON.widget.init();
-                        setTimeout(function () {
-                            $('.css3-spinner').remove();
-                        }, 10);
-                    }, 10);
-                }, 10);
-            }, 10);
+            $('.css3-spinner').remove();
         }, 1500);
     };
     RentalItemComponent.prototype.getRouteParams = function () {
@@ -110,6 +130,39 @@ var RentalItemComponent = /** @class */ (function () {
     RentalItemComponent.prototype.getPrice = function (nightPrice, minPrice, minTime, price) {
         return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
     };
+    RentalItemComponent.prototype.getQuantities = function () {
+        var quantities = [];
+        if (this.selectedProduct && this.selectedProduct.count > 0) {
+            var i = 1;
+            while (i <= this.selectedProduct.count) {
+                quantities.push(i);
+                i++;
+            }
+        }
+        return quantities;
+    };
+    RentalItemComponent.prototype.addToCart = function () {
+        var orderItem = new OrderItemModel(this.selectedProduct.id, 1);
+        var items = [];
+        items.push(orderItem);
+        var order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.parseService.getCurrentUser().id, this.locationService.locationDate.location, items);
+        this.orderService.setOrder(order).subscribe(function (res) { return console.log(res); });
+    };
+    RentalItemComponent.prototype.productInCart = function () {
+        for (var _i = 0, _a = this.initializerService.orderModel.orderItems; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (this.selectedProduct.id === item.productId) {
+                return true;
+            }
+        }
+        return false;
+    };
+    RentalItemComponent.prototype.continueShopping = function () {
+        this.router.navigate(['/rentals']);
+    };
+    RentalItemComponent.prototype.goToCart = function () {
+        this.router.navigate(['/cart']);
+    };
     RentalItemComponent = tslib_1.__decorate([
         Component({
             selector: 'app-rental-item',
@@ -122,7 +175,10 @@ var RentalItemComponent = /** @class */ (function () {
             Router,
             RoutingService,
             ProductService,
-            CategoryService])
+            CategoryService,
+            OrderService,
+            InitializerService,
+            ParseService])
     ], RentalItemComponent);
     return RentalItemComponent;
 }());

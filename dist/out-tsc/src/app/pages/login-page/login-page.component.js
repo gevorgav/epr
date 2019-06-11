@@ -6,7 +6,7 @@ import { UserModel } from '../../shared/model/user.model';
 import * as Parse from "parse";
 import { ActivatedRoute, Router } from '@angular/router';
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
-Parse.serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
+Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var LoginPageComponent = /** @class */ (function () {
     function LoginPageComponent(parseService, router, activatedRoute) {
         this.parseService = parseService;

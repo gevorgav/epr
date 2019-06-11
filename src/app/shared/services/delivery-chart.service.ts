@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/internal/Observable';
 export abstract class DeliveryChartService {
   abstract getDeliveryLocations(): Observable<Array<DeliveryChartModel>>;
   abstract getDeliveryLocationById(id: number): DeliveryChartModel;
-  abstract getDeliveryLocationByZipCode(zipCode: number): DeliveryChartModel;
+  abstract getDeliveryLocationByZipCode(zipCodeId: string): Observable<DeliveryChartModel>;
   abstract getDeliveryLocationByCity(cirty: string): DeliveryChartModel;
   abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
   abstract saveDeliveryChart(model: DeliveryChartModel): Observable<any>;

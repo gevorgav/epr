@@ -41,6 +41,13 @@ import { VerificationComponent } from './pages/verification/verification.compone
 import { CategoryComponent } from './pages/dashboard/category/category.component';
 import { CategoryPopupComponent } from './pages/dashboard/category/category-popup/category-popup.component';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { UserService } from './shared/services/user.service';
+import { UserHttpService } from './shared/services/user-http.service';
+import { UserComponent } from './pages/dashboard/user/user.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { PaymentFormComponent } from './pages/payement-form/payment-form.component';
+import { OrderService } from './shared/services/order.service';
+import { InitializerService } from './shared/services/initializer.service';
 var appRoutes = [
     {
         path: '',
@@ -75,6 +82,7 @@ var appRoutes = [
             { path: 'delivery-chart', component: DashboardDeliveryChartComponent },
             { path: 'product', component: ProductComponent },
             { path: 'category', component: CategoryComponent },
+            { path: 'user', component: UserComponent },
         ]
     },
     {
@@ -85,7 +93,7 @@ var appRoutes = [
     },
     {
         path: 'rental/:title',
-        component: RentalItemComponent,
+        component: RentalItemComponent
     },
     {
         path: 'cart',
@@ -128,10 +136,11 @@ var AppModule = /** @class */ (function () {
                 DashboardDeliveryChartComponent,
                 ProductPopupComponent,
                 DeliveryChartPopupComponent,
-                CartComponent,
                 VerificationComponent,
                 CategoryComponent,
-                CategoryPopupComponent
+                CategoryPopupComponent,
+                PaymentFormComponent,
+                UserComponent
             ],
             imports: [
                 RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
@@ -143,7 +152,8 @@ var AppModule = /** @class */ (function () {
                 OwlDateTimeModule,
                 OwlNativeDateTimeModule,
                 MaterialModule,
-                NgxGalleryModule
+                NgxGalleryModule,
+                CarouselModule
             ],
             providers: [
                 LocationDateService,
@@ -152,9 +162,12 @@ var AppModule = /** @class */ (function () {
                 AuthGuardLoginService,
                 AuthGuardVerificationService,
                 RoutingService,
+                OrderService,
+                InitializerService,
                 { provide: DeliveryChartService, useClass: DeliveryChartHttpService },
                 { provide: CategoryService, useClass: CategoryHttpService },
                 { provide: ProductService, useClass: ProductHttpService },
+                { provide: UserService, useClass: UserHttpService },
             ],
             entryComponents: [
                 ProductPopupComponent,

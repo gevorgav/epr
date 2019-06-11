@@ -121,7 +121,8 @@ export class ProductPopupComponent implements OnInit {
         Validators.required
       ]),
       price: this.formBuilder.control(this.product.price, [
-        Validators.required
+        Validators.required,
+        Validators.min(1)
       ]),
       description: this.formBuilder.control(this.product.description, [
 
@@ -159,16 +160,20 @@ export class ProductPopupComponent implements OnInit {
 
       ]),
       minTime: this.formBuilder.control(this.product.minTime, [
-
+        Validators.required,
+        Validators.min(1)
       ]),
       minPrice: this.formBuilder.control(this.product.minPrice, [
-
+        Validators.required,
+        Validators.min(1)
       ]),
       nightPrice: this.formBuilder.control(this.product.nightPrice, [
-
+        Validators.required,
+        Validators.min(1)
       ]),
       count: this.formBuilder.control(this.product.count, [
-
+        Validators.required,
+        Validators.min(1)
       ]),
     }, {validators: setupPolicyUniqueKeyValidator})
   }

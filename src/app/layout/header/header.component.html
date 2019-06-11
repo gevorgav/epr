@@ -61,7 +61,7 @@
           </ul>
         </div>
         <div id="top-cart">
-          <a routerLink="" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span>5</span></a>
+          <a *ngIf="showCart()" routerLink="/cart" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span> {{getCartCount()}}</span></a>
           <!--<div class="top-cart-content">-->
             <!--<div class="top-cart-title">-->
               <!--<h4>Shopping Cart</h4>-->

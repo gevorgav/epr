@@ -10,6 +10,7 @@ import {from} from 'rxjs/internal/observable/from';
 import {flatMap, map} from 'rxjs/operators';
 import {forkJoin} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
+import {OrderService} from './order.service';
 
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
@@ -27,8 +28,18 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return undefined;
   }
 
-  getDeliveryLocationByZipCode(zipCode: number): DeliveryChartModel {
-    return undefined;
+  getDeliveryLocationByZipCode(zipCode: string): Observable<DeliveryChartModel> {
+    let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
+    zipCodeQuery.contains('zipCode', zipCode);
+    let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
+    deliveryQuery.matchesQuery('zipCode', zipCodeQuery);
+    let promise = deliveryQuery.first().then( (delivery) => {
+      return new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
+    }, (error) => {
+      console.log(error);
+    });
+    
+    return from(promise);
   }
 
   getDeliveryLocationsFromCash(): DeliveryChartModel[] {
@@ -65,22 +76,6 @@ export class DeliveryChartHttpService extends DeliveryChartService{
         ))
       ));
   }
-
-
-//   let promise = delivery.relation('zipCode').query().find().then((zip: any[])=>{
-//     return zip;
-//   });
-//   let $zips: Observable<any>[]= [];
-//   $zips.push(from(promise));
-//   for (let $zip of $zips) {
-//   $zip.pipe()
-// }
-// from(promise).pipe(map((zips: any[])=>{
-//   for (let zip of zips) {
-//     deliveryLocation.zipCodes.push(...DeliveryChartHttpService.forOne(zip))
-//   }
-//   return deliveryLocations;
-// }));
 
   getDeliveryLocationByCity(city: string): DeliveryChartModel {
     return undefined;
@@ -194,4 +189,4 @@ export class DeliveryChartHttpService extends DeliveryChartService{
 const ss:{'ZIP Code': number, 'City': string, 'price': any}[] =
   [
   
-  ]
+  ];

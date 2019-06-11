@@ -8,7 +8,7 @@
         <div class="row clearfix">
           <div class="col col_half">
             <label for="title">Title:</label>
-            <input formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
+            <input formControlName="title" matTooltip="Rental product title, must be unique." type="text" id="title" name="title" value="" class="form-control"/>
             <div
               *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
               class="alert alert-danger">
@@ -19,12 +19,15 @@
           </div>
           <div class="col col_half">
             <label for="price">Price:</label>
-            <input formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
+            <input matTooltip="Price-y minTime ancneluc heto jamavcharne" formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
             <div
               *ngIf="form.controls['price'].invalid && (form.controls['price'].dirty || form.controls['price'].touched)"
               class="alert alert-danger">
               <div *ngIf="form.controls['price'].errors.required">
                 Price is required.
+              </div>
+              <div *ngIf="form.controls['price'].errors.min">
+                Price must be higher than 0.
               </div>
             </div>
           </div>
@@ -43,6 +46,7 @@
 
           <div class=" col col_one_fourth">
             <mat-checkbox
+              matTooltip="Rental producti vra drvum e isNew grvacy."
               class=""
               [formControlName]="'isNew'"
               labelPosition="before">
@@ -53,6 +57,7 @@
           <div class=" col col_one_fourth">
             <mat-checkbox
               class=""
+              matTooltip="Rental producti vra drvum e isHotDeal grvacy."
               [formControlName]="'isHotDeal'"
               labelPosition="before">
               Hot deal:
@@ -71,7 +76,7 @@
         <div class="row clearfix">
           <div class=" col col_full">
             <label for="instructions">Instructions:</label>
-            <textarea formControlName="instructions" type="text" id="instructions" name="instructions" value=""
+            <textarea matTooltip="Rental producti informaciai mej avelanum e instruction." formControlName="instructions" type="text" id="instructions" name="instructions" value=""
                       class="form-control"></textarea>
           </div>
         </div>
@@ -79,13 +84,13 @@
         <div class="row clearfix">
           <div class=" col col_one_third">
             <label for="itemSize">Item size:</label>
-            <input formControlName="itemSize" type="text" id="itemSize" name="itemSize" value=""
+            <input matTooltip="Rental producti chapery." formControlName="itemSize" type="text" id="itemSize" name="itemSize" value=""
                    class="form-control"/>
           </div>
 
           <div class=" col col_one_third">
             <label for="spaceRequired">Space Required:</label>
-            <input formControlName="spaceRequired" type="text" id="spaceRequired" name="spaceRequired" value=""
+            <input matTooltip="Rental producti informaciai mej avelanum e taracqi texadrman hamar informacia." formControlName="spaceRequired" type="text" id="spaceRequired" name="spaceRequired" value=""
                    class="form-control"/>
           </div>
         </div>
@@ -94,12 +99,14 @@
           <div class=" col col_half">
             <label for="safetyRules">Safety rules:</label>
             <textarea formControlName="safetyRules" type="text" id="safetyRules" name="safetyRules" value=""
+                      matTooltip="Rental producti informaciai mej avelanum e ogtagorcman jamanak anvtangutyan masin informacia."
                       class="form-control"></textarea>
           </div>
 
           <div class=" col col_half">
             <label for="rentalTerms">Rental terms:</label>
             <textarea formControlName="rentalTerms" type="text" id="rentalTerms" name="rentalTerms" value=""
+                      matTooltip="Rental producti informaciai mej avelanum e vardzakalutyan masin informacia."
                       class="form-control"></textarea>
           </div>
         </div>
@@ -108,13 +115,35 @@
           <div class=" col col_half">
             <label for="count">Count:</label>
             <input formControlName="count" type="number" id="count" name="count" value=""
+                   matTooltip="Hani hat uneq ays Rental productic, vorov khashvarkvi 'Availability'."
                    class="form-control"/>
+            <div
+              *ngIf="form.controls['count'].invalid && (form.controls['count'].dirty || form.controls['count'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['count'].errors.required">
+                Count is required.
+              </div>
+              <div *ngIf="form.controls['count'].errors.min">
+                Count must be higher than 0.
+              </div>
+            </div>
           </div>
 
           <div class=" col col_half">
             <label for="nightPrice">Night price:</label>
             <input formControlName="nightPrice" type="number" id="nightPrice" name="nightPrice"
+                   matTooltip="Gisherva hamar vcharman giny."
                    class="form-control"/>
+            <div
+              *ngIf="form.controls['nightPrice'].invalid && (form.controls['nightPrice'].dirty || form.controls['nightPrice'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['nightPrice'].errors.required">
+                NightPrice is required.
+              </div>
+              <div *ngIf="form.controls['nightPrice'].errors.min">
+                NightPrice must be higher than 0.
+              </div>
+            </div>
           </div>
         </div>
 
@@ -122,13 +151,35 @@
           <div class=" col col_half">
             <label for="minTime">Min Time:</label>
             <input formControlName="minTime" type="number" id="minTime" name="minTime" value=""
+                   matTooltip="Ayn jamanaky voric heto ksksi gorcel jamavchary."
                    class="form-control"/>
+            <div
+              *ngIf="form.controls['minTime'].invalid && (form.controls['minTime'].dirty || form.controls['minTime'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['minTime'].errors.required">
+                MinTime is required.
+              </div>
+              <div *ngIf="form.controls['minTime'].errors.min">
+                MinTime must be higher than 0.
+              </div>
+            </div>
           </div>
 
           <div class=" col col_half">
             <label for="minPrice">Min price:</label>
             <input formControlName="minPrice" type="number" id="minPrice" name="minPrice"
+                   matTooltip="Minimum Price-ne, vorin gumarvum e 'MIN TIME'-y ancneluc heto jamavchary."
                    class="form-control"/>
+            <div
+              *ngIf="form.controls['minPrice'].invalid && (form.controls['minPrice'].dirty || form.controls['minPrice'].touched)"
+              class="alert alert-danger">
+              <div *ngIf="form.controls['minPrice'].errors.required">
+                MinPrice is required.
+              </div>
+              <div *ngIf="form.controls['minPrice'].errors.min">
+                MinPrice must be higher than 0.
+              </div>
+            </div>
           </div>
         </div>
 

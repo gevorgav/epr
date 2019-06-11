@@ -3,6 +3,9 @@ import * as Parse from 'parse';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
+import {LocationDateService} from './shared/services/location-date.service';
+import {OrderService} from './shared/services/order.service';
+import {InitializerService} from './shared/services/initializer.service';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
@@ -18,6 +21,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
+              private locationService: LocationDateService,
+              private orderService: OrderService,
+              private initializerService: InitializerService,
               private titleService: Title) {
   }
 
@@ -26,9 +32,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.setTitles();
     this.init();
+    this.initializerService.initialize().subscribe(res=>{
+      this.isReady = res;
+    });
     // this.deliveryService.syncDeliveryChart().subscribe(res=>{
     //   console.log(res);
     // })
+    
   }
   
   ngAfterViewInit() {

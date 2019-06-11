@@ -9,6 +9,12 @@ import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
 import {NgxGalleryAnimation} from 'ngx-gallery';
 import {OwlOptions} from 'ngx-owl-carousel-o';
+import {OrderService} from '../../shared/services/order.service';
+import {OrderModel} from '../../shared/model/order.model';
+import {ParseService} from '../../shared/services/parse.service';
+import {OrderItemModel} from '../../shared/model/order-item.model';
+import {InitializerService} from '../../shared/services/initializer.service';
+
 declare var SEMICOLON: any;
 declare var $: any;
 
@@ -48,7 +54,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     dots: false,
     merge: true,
     autoWidth: true,
-    margin:10,
+    margin: 10,
     navSpeed: 700,
     navText: ['', ''],
     responsive: {
@@ -70,6 +76,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public selectedProduct: ProductModel;
   public relatedProducts: ProductModel[] = [];
   public itemCategory: CategoryModel;
+  public quantity: number = 0;
   private title$ = this.route.paramMap;
   
   constructor(private titleService: Title,
@@ -78,7 +85,10 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private router: Router,
               private routingService: RoutingService,
               private productService: ProductService,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private orderService: OrderService,
+              private initializerService: InitializerService,
+              private parseService: ParseService) {
   }
   
   ngOnInit() {
@@ -108,7 +118,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       $('.css3-spinner').remove();
-    } , 1500);
+    }, 1500);
   }
   
   private getRouteParams() {
@@ -136,12 +146,53 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     return this.locationService.isSpecified;
   }
   
-  getSetupPolicy(){
-    return Array.from( this.selectedProduct.setupPolicy.keys() );
+  getSetupPolicy() {
+    return Array.from(this.selectedProduct.setupPolicy.keys());
   }
   
-  getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
+  getPrice(nightPrice: number, minPrice: number, minTime: number, price: number) {
     return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
   }
   
+  getQuantities(): number[] {
+    let quantities = [];
+    if (this.selectedProduct && this.selectedProduct.count > 0) {
+      let i = 1;
+      while (i <= this.selectedProduct.count) {
+        quantities.push(i);
+        i++;
+      }
+    }
+    return quantities;
+  }
+  
+  addToCart() {
+    let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity);
+    let items = [];
+    items.push(orderItem);
+    let order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime,
+      this.parseService.getCurrentUser()?this.parseService.getCurrentUser().id: null, this.locationService.locationDate.location, items);
+    this.orderService.setOrder(order).subscribe(res => {
+      this.initializerService.orderModel.orderItems.push(...order.orderItems);
+    });
+  }
+  
+  public productInCart(): boolean {
+    if (this.initializerService.orderModel.orderItems){
+      for (let item of this.initializerService.orderModel.orderItems) {
+        if (this.selectedProduct.id === item.productId) {
+          return true
+        }
+      }
+    }
+    return false;
+  }
+  
+  continueShopping() {
+    this.router.navigate(['/rentals']);
+  }
+  
+  goToCart() {
+    this.router.navigate(['/cart']);
+  }
 }

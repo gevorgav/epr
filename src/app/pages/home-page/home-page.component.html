@@ -120,8 +120,8 @@
                 <a [routerLink]="['/rental', product.pathParam]">
                   <img style="height: 260px !important;" src="{{product.images[0]}}" alt="{{product.title}}">
                 </a>
-                <div class="real-estate-item-price" *ngIf="isSpecified()">
-                  ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price)}}
+                <div class="real-estate-item-price" *ngIf="isSpecified() | async">
+                  ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
                 </div>
               </div>
 

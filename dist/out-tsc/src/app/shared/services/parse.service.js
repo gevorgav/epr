@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as Parse from "parse";
 import { from, of, Subject } from 'rxjs';
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
-Parse.serverURL = 'http://138.68.251.183:1337/parse'; // use your server url
+Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var ParseService = /** @class */ (function () {
     function ParseService() {
         this.$loginSubject = new Subject(); // true - login, false - logout.
@@ -16,7 +16,7 @@ var ParseService = /** @class */ (function () {
         if (this.parse.User.current() && this.parse.User.current().authenticated()) {
             return this.parse.User.current();
         }
-        return null;
+        return undefined;
     };
     ParseService.prototype.isAdmin = function () {
         if (Parse.User.current() && this.parse.User.current().authenticated()) {

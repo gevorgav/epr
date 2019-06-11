@@ -56,13 +56,17 @@ var DeliveryChartModel = /** @class */ (function () {
 }());
 export { DeliveryChartModel };
 var ZipCode = /** @class */ (function () {
-    function ZipCode(id, zipCode) {
+    function ZipCode(id, zipCode, location) {
         this._id = id;
         this._zipCode = zipCode;
+        this._location = location;
     }
     Object.defineProperty(ZipCode.prototype, "id", {
         get: function () {
             return this._id;
+        },
+        set: function (value) {
+            this._id = value;
         },
         enumerable: true,
         configurable: true
@@ -70,6 +74,19 @@ var ZipCode = /** @class */ (function () {
     Object.defineProperty(ZipCode.prototype, "zipCode", {
         get: function () {
             return this._zipCode;
+        },
+        set: function (value) {
+            this._zipCode = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ZipCode.prototype, "location", {
+        get: function () {
+            return this._location;
+        },
+        set: function (value) {
+            this._location = value;
         },
         enumerable: true,
         configurable: true

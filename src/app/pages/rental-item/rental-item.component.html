@@ -39,7 +39,7 @@
 
             <!-- Product Single - Price
                             ============================================= -->
-            <div class="product-price" *ngIf="isSpecified()"> <ins>${{getPrice(selectedProduct.nightPrice, selectedProduct.minPrice, selectedProduct.minTime, selectedProduct.price)}}</ins></div><!-- Product Single - Price End -->
+            <div class="product-price" *ngIf="isSpecified() | async"> <ins>${{getPrice(selectedProduct.nightPrice, selectedProduct.minPrice, selectedProduct.minTime, selectedProduct.price) | async}}</ins></div><!-- Product Single - Price End -->
             <!-- Product Single - Rating
                             ============================================= -->
             <div class="product-rating">
@@ -60,16 +60,25 @@
 
             <!-- Product Single - Quantity & Cart Button
 								============================================= -->
-            <form *ngIf="isSpecified()" class="cart nobottommargin clearfix" method="post" enctype='multipart/form-data'>
+            <form *ngIf="(isSpecified() | async) && getQuantities().length > 0 && !productInCart()" class="cart nobottommargin clearfix">
               <div class="line"></div>
-              <div class="quantity clearfix">
-                <input type="button" value="-" class="minus">
-                <input type="text" step="1" min="1"  name="quantity" value="1" title="Qty" class="qty" size="4" />
-                <input type="button" value="+" class="plus">
-              </div>
-              <button disabled type="submit" class="add-to-cart button nomargin">Add to cart</button>
+              <mat-form-field style="width:93px;margin-right: 20px;">
+                <mat-label>Quantity</mat-label>
+                <mat-select [(ngModel)]="quantity" name="quantity">
+                  <mat-option *ngFor="let item of getQuantities()" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button *ngIf="quantity > 0" type="button" class="add-to-cart button nomargin" (click)="addToCart()">Add to cart</button>
             </form><!-- Product Single - Quantity & Cart Button End -->
-
+            <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time quote.</h4>
+            <h4 style="margin-top: 15px" *ngIf="(isSpecified() | async) && getQuantities().length == 0">Product is unavailable for the event date and time selected.</h4>
+            <div *ngIf="productInCart()">
+              <h4 style="margin-top: 15px" >This product is in your cart!</h4>
+              <button type="button" class="button button-3d button-rounded button-yellow button-light" (click)="goToCart()">View cart</button>
+              <button type="button" class="button button-3d button-rounded button-green" (click)="continueShopping()">Continue shopping</button>
+            </div>
             <div class="clear"></div>
             <div class="line"></div>
 
@@ -81,48 +90,6 @@
               <li><i class="icon-caret-right"></i> Size : {{selectedProduct.itemSize}}</li>
               <li><i class="icon-caret-right"></i> Space Required : {{selectedProduct.spaceRequired}}</li>
             </ul><!-- Product Single - Short Description End -->
-
-            <!--&lt;!&ndash; Product Single - Meta-->
-                            <!--============================================= &ndash;&gt;-->
-            <!--<div class="card product-meta">-->
-              <!--<div class="card-body">-->
-                <!--<span itemprop="productID" class="sku_wrapper">SKU: <span class="sku">8465415</span></span>-->
-                <!--<span class="posted_in">Category: <a href="#" rel="tag">Dress</a>.</span>-->
-                <!--<span class="tagged_as">Tags: <a href="#" rel="tag">Pink</a>, <a href="#" rel="tag">Short</a>, <a href="#" rel="tag">Dress</a>, <a href="#" rel="tag">Printed</a>.</span>-->
-              <!--</div>-->
-            <!--</div>&lt;!&ndash; Product Single - Meta End &ndash;&gt;-->
-
-            <!-- Product Single - Share
-                            ============================================= -->
-            <!--<div class="si-share noborder clearfix">-->
-              <!--<span>Share:</span>-->
-              <!--<div>-->
-                <!--<a href="#" class="social-icon si-borderless si-facebook">-->
-                  <!--<i class="icon-facebook"></i>-->
-                  <!--<i class="icon-facebook"></i>-->
-                <!--</a>-->
-                <!--<a href="#" class="social-icon si-borderless si-twitter">-->
-                  <!--<i class="icon-twitter"></i>-->
-                  <!--<i class="icon-twitter"></i>-->
-                <!--</a>-->
-                <!--<a href="#" class="social-icon si-borderless si-pinterest">-->
-                  <!--<i class="icon-pinterest"></i>-->
-                  <!--<i class="icon-pinterest"></i>-->
-                <!--</a>-->
-                <!--<a href="#" class="social-icon si-borderless si-gplus">-->
-                  <!--<i class="icon-gplus"></i>-->
-                  <!--<i class="icon-gplus"></i>-->
-                <!--</a>-->
-                <!--<a href="#" class="social-icon si-borderless si-rss">-->
-                  <!--<i class="icon-rss"></i>-->
-                  <!--<i class="icon-rss"></i>-->
-                <!--</a>-->
-                <!--<a href="#" class="social-icon si-borderless si-email3">-->
-                  <!--<i class="icon-email3"></i>-->
-                  <!--<i class="icon-email3"></i>-->
-                <!--</a>-->
-              <!--</div>-->
-            <!--</div>&lt;!&ndash; Product Single - Share End &ndash;&gt;-->
 
           </div>
 
@@ -296,8 +263,8 @@
               <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isNew">New !</div>
               <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isHotDeal">Hot Deal !</div>
               <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title"></a>
-              <div class="real-estate-item-price" *ngIf="isSpecified()">
-              ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price)}}
+              <div class="real-estate-item-price" *ngIf="(isSpecified() | async)">
+              ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
               </div>
               <div class="real-estate-item-desc">
                 <h3 style="white-space: nowrap;overflow: hidden;"><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
