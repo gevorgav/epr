@@ -34,6 +34,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.setTitles();
     this.init();
+    // this.deliveryService.syncDeliveryChart().subscribe(res=>{
+    //   console.log(res);
+    // })
   }
   
   ngAfterViewInit() {

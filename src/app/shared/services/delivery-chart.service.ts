@@ -12,4 +12,5 @@ export abstract class DeliveryChartService {
   abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
   abstract saveDeliveryChart(model: DeliveryChartModel): Observable<any>;
   abstract deleteDeliveryChart(id: string): Observable<any>;
+  abstract syncDeliveryChart(): Observable<any>;
 }

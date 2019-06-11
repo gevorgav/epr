@@ -5,12 +5,12 @@ import {DeliveryChartService} from './delivery-chart.service';
 import {Injectable} from '@angular/core';
 import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
 import {ParseService} from './parse.service';
-import * as Parse from "parse";
-import {Observer} from 'rxjs/internal/types';
 import {Observable} from 'rxjs/internal/Observable';
 import {from} from 'rxjs/internal/observable/from';
-import {concatAll, concatMap, delay, flatMap, map, mergeMap, reduce, tap} from 'rxjs/operators';
-import {forkJoin, of, zip} from 'rxjs';
+import {flatMap, map} from 'rxjs/operators';
+import {forkJoin} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {of} from 'rxjs/internal/observable/of';
 
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
@@ -20,7 +20,8 @@ export class DeliveryChartHttpService extends DeliveryChartService{
 
   private _deliveryLocations : DeliveryChartModel[] = [];
 
-  constructor(private parseService: ParseService) {
+  constructor(private parseService: ParseService,
+              private http: HttpClient) {
     super();
   }
 
@@ -164,5 +165,35 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     }
     return res;
   }
+  
+  syncDeliveryChart(): Observable<any> {
+    let deliveries:DeliveryChartModel[] = [];
+    let cities = new Map<string, number>();
+    for (let item of ss){
+      if (!cities.has(item.City)){
+        cities.set(item.City, item.price? item.price: 0);
+      }
+    }
+    let citiesArray = Array.from(cities.keys());
+    for (let city of citiesArray) {
+      let zipCodes: ZipCode[] = [];
+      for (let item of ss) {
+        if (item.City === city) {
+          zipCodes.push(new ZipCode(null, item['ZIP Code'].toString()));
+        }
+      }
+      deliveries.push(new DeliveryChartModel(null, city, cities.get(city), null, zipCodes))
+    }
+    deliveries.forEach(res=>{
+      this.saveDeliveryChart(res);
+    });
+    
+    return of(deliveries);
+  }
 
 }
+
+const ss:{'ZIP Code': number, 'City': string, 'price': any}[] =
+  [
+  
+  ]

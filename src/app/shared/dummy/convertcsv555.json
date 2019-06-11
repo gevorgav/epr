@@ -1,0 +1,732 @@
+[
+ {
+   "ZIP Code": 90620,
+   "City": "Buena Park",
+   "price": null
+ },
+ {
+   "ZIP Code": 90621,
+   "City": "Buena Park",
+   "price": null
+ },
+ {
+   "ZIP Code": 90622,
+   "City": "Buena Park",
+   "price": null
+ },
+ {
+   "ZIP Code": 90623,
+   "City": "La Palma",
+   "price": null
+ },
+ {
+   "ZIP Code": 90624,
+   "City": "Buena Park",
+   "price": null
+ },
+ {
+   "ZIP Code": 90630,
+   "City": "Cypress",
+   "price": null
+ },
+ {
+   "ZIP Code": 90631,
+   "City": "La Habra",
+   "price": null
+ },
+ {
+   "ZIP Code": 90632,
+   "City": "La Habra",
+   "price": null
+ },
+ {
+   "ZIP Code": 90633,
+   "City": "La Habra",
+   "price": null
+ },
+ {
+   "ZIP Code": 90680,
+   "City": "Stanton",
+   "price": null
+ },
+ {
+   "ZIP Code": 90720,
+   "City": "Los Alamitos",
+   "price": null
+ },
+ {
+   "ZIP Code": 90721,
+   "City": "Los Alamitos",
+   "price": null
+ },
+ {
+   "ZIP Code": 90740,
+   "City": "Seal Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 90742,
+   "City": "Sunset Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 90743,
+   "City": "Surfside",
+   "price": null
+ },
+ {
+   "ZIP Code": 92602,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92603,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92604,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92605,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92606,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92607,
+   "City": "Laguna Niguel",
+   "price": 70
+ },
+ {
+   "ZIP Code": 92609,
+   "City": "El Toro",
+   "price": 40
+ },
+ {
+   "ZIP Code": 92610,
+   "City": "Foothill Ranch",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92612,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92614,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92615,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92616,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92617,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92618,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92619,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92620,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92623,
+   "City": "Irvine",
+   "price": null
+ },
+ {
+   "ZIP Code": 92624,
+   "City": "Capistrano Beach",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92625,
+   "City": "Corona Del Mar",
+   "price": 40
+ },
+ {
+   "ZIP Code": 92626,
+   "City": "Costa Mesa",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92627,
+   "City": "Costa Mesa",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92628,
+   "City": "Costa Mesa",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92629,
+   "City": "Dana Point",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92630,
+   "City": "Lake Forest",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92637,
+   "City": "Laguna Woods",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92646,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92647,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92648,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92649,
+   "City": "Huntington Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92650,
+   "City": "East Irvine",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92651,
+   "City": "Laguna Beach",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92652,
+   "City": "Laguna Beach",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92653,
+   "City": "Laguna Hills",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92654,
+   "City": "Laguna Hills",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92655,
+   "City": "Midway City",
+   "price": null
+ },
+ {
+   "ZIP Code": 92656,
+   "City": "Aliso Viejo",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92657,
+   "City": "Newport Coast",
+   "price": null
+ },
+ {
+   "ZIP Code": 92658,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92659,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92660,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92661,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92662,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92663,
+   "City": "Newport Beach",
+   "price": null
+ },
+ {
+   "ZIP Code": 92672,
+   "City": "San Clemente",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92673,
+   "City": "San Clemente",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92674,
+   "City": "San Clemente",
+   "price": 60
+ },
+ {
+   "ZIP Code": 92675,
+   "City": "San Juan Capistrano",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92676,
+   "City": "Silverado",
+   "price": 40
+ },
+ {
+   "ZIP Code": 92677,
+   "City": "Laguna Niguel",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92678,
+   "City": "Trabuco Canyon",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92679,
+   "City": "Trabuco Canyon",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92683,
+   "City": "Westminster",
+   "price": null
+ },
+ {
+   "ZIP Code": 92684,
+   "City": "Westminster",
+   "price": null
+ },
+ {
+   "ZIP Code": 92685,
+   "City": "Westminster",
+   "price": null
+ },
+ {
+   "ZIP Code": 92688,
+   "City": "Rancho Santa Margarita",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92690,
+   "City": "Mission Viejo",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92691,
+   "City": "Mission Viejo",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92692,
+   "City": "Mission Viejo",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92693,
+   "City": "San Juan Capistrano",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92694,
+   "City": "Ladera Ranch",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92697,
+   "City": "Irvine",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92698,
+   "City": "Aliso Viejo",
+   "price": 50
+ },
+ {
+   "ZIP Code": 92701,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92702,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92703,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92704,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92705,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92706,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92707,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92708,
+   "City": "Fountain Valley",
+   "price": null
+ },
+ {
+   "ZIP Code": 92711,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92712,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92728,
+   "City": "Fountain Valley",
+   "price": null
+ },
+ {
+   "ZIP Code": 92735,
+   "City": "Santa Ana",
+   "price": null
+ },
+ {
+   "ZIP Code": 92780,
+   "City": "Tustin",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92781,
+   "City": "Tustin",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92782,
+   "City": "Tustin",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92799,
+   "City": "Santa Ana",
+   "price": 30
+ },
+ {
+   "ZIP Code": 92801,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92802,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92803,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92804,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92805,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92806,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92807,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92808,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92809,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92811,
+   "City": "Atwood",
+   "price": null
+ },
+ {
+   "ZIP Code": 92812,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92814,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92815,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92816,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92817,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92821,
+   "City": "Brea",
+   "price": null
+ },
+ {
+   "ZIP Code": 92822,
+   "City": "Brea",
+   "price": null
+ },
+ {
+   "ZIP Code": 92823,
+   "City": "Brea",
+   "price": null
+ },
+ {
+   "ZIP Code": 92825,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92831,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92832,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92833,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92834,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92835,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92836,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92837,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92838,
+   "City": "Fullerton",
+   "price": null
+ },
+ {
+   "ZIP Code": 92840,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92841,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92842,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92843,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92844,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92845,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92846,
+   "City": "Garden Grove",
+   "price": null
+ },
+ {
+   "ZIP Code": 92850,
+   "City": "Anaheim",
+   "price": null
+ },
+ {
+   "ZIP Code": 92856,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92857,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92859,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92861,
+   "City": "Villa Park",
+   "price": null
+ },
+ {
+   "ZIP Code": 92862,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92863,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92864,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92865,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92866,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92867,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92868,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92869,
+   "City": "Orange",
+   "price": null
+ },
+ {
+   "ZIP Code": 92870,
+   "City": "Placentia",
+   "price": null
+ },
+ {
+   "ZIP Code": 92871,
+   "City": "Placentia",
+   "price": null
+ },
+ {
+   "ZIP Code": 92885,
+   "City": "Yorba Linda",
+   "price": null
+ },
+ {
+   "ZIP Code": 92886,
+   "City": "Yorba Linda",
+   "price": null
+ },
+ {
+   "ZIP Code": 92887,
+   "City": "Yorba Linda",
+   "price": null
+ },
+ {
+   "ZIP Code": 92899,
+   "City": "Anaheim",
+   "price": null
+ }
+]

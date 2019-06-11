@@ -5678,17 +5678,6 @@ body:not(.device-touch) .entry-link {
 #respond .col_one_third,
 #respond .col_full { margin-bottom: 20px; }
 
-.fb-comments,
-.fb_iframe_widget,
-.fb-comments > span,
-.fb_iframe_widget > span,
-.fb-comments > span > iframe,
-.fb_iframe_widget > span > iframe {
-  display: block !important;
-  width: 100% !important;
-  margin: 0;
-}
-
 
 /* Post Elements
 -----------------------------------------------------------------*/
@@ -11296,7 +11285,7 @@ input[type=checkbox]:not(:checked) + label.error { display: block !important; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #333;
+  color: #333!important;
 }
 
 .emphasis-title h1,
@@ -11321,7 +11310,7 @@ input[type=checkbox]:not(:checked) + label.error { display: block !important; }
   display: block;
   margin-top: 10px;
   font-weight: 300;
-  color: #777;
+  color: #777!important;
 }
 
 .heading-block .before-heading { margin-bottom: 7px; }
