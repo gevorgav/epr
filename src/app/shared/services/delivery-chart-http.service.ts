@@ -9,7 +9,6 @@ import {Observable} from 'rxjs/internal/Observable';
 import {from} from 'rxjs/internal/observable/from';
 import {flatMap, map} from 'rxjs/operators';
 import {forkJoin} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {of} from 'rxjs/internal/observable/of';
 
 @Injectable()
@@ -20,8 +19,7 @@ export class DeliveryChartHttpService extends DeliveryChartService{
 
   private _deliveryLocations : DeliveryChartModel[] = [];
 
-  constructor(private parseService: ParseService,
-              private http: HttpClient) {
+  constructor(private parseService: ParseService) {
     super();
   }
 

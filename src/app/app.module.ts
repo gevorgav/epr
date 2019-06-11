@@ -45,7 +45,6 @@ import {UserService} from './shared/services/user.service';
 import {UserHttpService} from './shared/services/user-http.service';
 import { UserComponent } from './pages/dashboard/user/user.component';
 import {CarouselModule} from 'ngx-owl-carousel-o';
-import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {
@@ -145,7 +144,6 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     OwlDateTimeModule,

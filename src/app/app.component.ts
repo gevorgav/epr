@@ -3,11 +3,6 @@ import * as Parse from 'parse';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import User = Parse.User;
-import {ParseService} from './shared/services/parse.service';
-import {CategoryService} from './shared/services/category.service';
-import {DeliveryChartService} from './shared/services/delivery-chart.service';
-import { zip} from 'rxjs';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
@@ -23,10 +18,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private titleService: Title,
-              private parseService: ParseService,
-              private categoryService: CategoryService,
-              private deliveryService: DeliveryChartService) {
+              private titleService: Title) {
   }
 
   public isReady: boolean = false;

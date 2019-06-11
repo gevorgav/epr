@@ -62,12 +62,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _shared_services_parse_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./shared/services/parse.service */ "./src/app/shared/services/parse.service.ts");
-/* harmony import */ var _shared_services_category_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./shared/services/category.service */ "./src/app/shared/services/category.service.ts");
-/* harmony import */ var _shared_services_delivery_chart_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./shared/services/delivery-chart.service */ "./src/app/shared/services/delivery-chart.service.ts");
-
-
-
 
 
 
@@ -77,13 +71,10 @@ __webpack_require__.r(__webpack_exports__);
 parse__WEBPACK_IMPORTED_MODULE_2__["initialize"]('myAppId', 'javascriptkey'); // use your appID & your js key
 parse__WEBPACK_IMPORTED_MODULE_2__["serverURL"] = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, activatedRoute, titleService, parseService, categoryService, deliveryService) {
+    function AppComponent(router, activatedRoute, titleService) {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.titleService = titleService;
-        this.parseService = parseService;
-        this.categoryService = categoryService;
-        this.deliveryService = deliveryService;
         this.title = 'app';
         this.isReady = false;
     }
@@ -126,10 +117,7 @@ var AppComponent = /** @class */ (function () {
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"],
-            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["Title"],
-            _shared_services_parse_service__WEBPACK_IMPORTED_MODULE_6__["ParseService"],
-            _shared_services_category_service__WEBPACK_IMPORTED_MODULE_7__["CategoryService"],
-            _shared_services_delivery_chart_service__WEBPACK_IMPORTED_MODULE_8__["DeliveryChartService"]])
+            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["Title"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -196,8 +184,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_services_user_http_service__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./shared/services/user-http.service */ "./src/app/shared/services/user-http.service.ts");
 /* harmony import */ var _pages_dashboard_user_user_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./pages/dashboard/user/user.component */ "./src/app/pages/dashboard/user/user.component.ts");
 /* harmony import */ var ngx_owl_carousel_o__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ngx-owl-carousel-o */ "./node_modules/ngx-owl-carousel-o/fesm5/ngx-owl-carousel-o.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-
 
 
 
@@ -344,7 +330,6 @@ var AppModule = /** @class */ (function () {
                 ),
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_14__["FormsModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_47__["HttpClientModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_14__["ReactiveFormsModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_16__["BrowserAnimationsModule"],
                 ng_pick_datetime__WEBPACK_IMPORTED_MODULE_15__["OwlDateTimeModule"],
@@ -3837,9 +3822,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_internal_observable_from__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(rxjs_internal_observable_from__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/internal/observable/of */ "./node_modules/rxjs/internal/observable/of.js");
-/* harmony import */ var rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/internal/observable/of */ "./node_modules/rxjs/internal/observable/of.js");
+/* harmony import */ var rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_8__);
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -3852,13 +3836,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 var DeliveryChartHttpService = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](DeliveryChartHttpService, _super);
-    function DeliveryChartHttpService(parseService, http) {
+    function DeliveryChartHttpService(parseService) {
         var _this_1 = _super.call(this) || this;
         _this_1.parseService = parseService;
-        _this_1.http = http;
         _this_1._deliveryLocations = [];
         return _this_1;
     }
@@ -4010,15 +3992,14 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         deliveries.forEach(function (res) {
             _this_1.saveDeliveryChart(res);
         });
-        return Object(rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_9__["of"])(deliveries);
+        return Object(rxjs_internal_observable_of__WEBPACK_IMPORTED_MODULE_8__["of"])(deliveries);
     };
     var DeliveryChartHttpService_1;
     DeliveryChartHttpService.DELIVERY_CHART = "DeliveryChart";
     DeliveryChartHttpService.ZIP_CODE = "ZipCode";
     DeliveryChartHttpService = DeliveryChartHttpService_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_parse_service__WEBPACK_IMPORTED_MODULE_4__["ParseService"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_8__["HttpClient"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_parse_service__WEBPACK_IMPORTED_MODULE_4__["ParseService"]])
     ], DeliveryChartHttpService);
     return DeliveryChartHttpService;
 }(_delivery_chart_service__WEBPACK_IMPORTED_MODULE_1__["DeliveryChartService"]));
