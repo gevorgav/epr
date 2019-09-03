@@ -17,7 +17,7 @@ export class CheckoutComponent implements OnInit {
   
   sendPaymentDataToAnet(){
     let authData = {};
-    authData['clientKey'] = "6863WfT8w92CaANw";
+    authData['clientKey'] = "9dQyqK5G2xP62erW9teH8hyjX5wq8jYjC7P7Z5d4dw9hyP76M4J2kWGRuQ5MFfSb";
     authData['apiLoginID'] = "6w38LfZ8v";
     let cardData = {};
     cardData['cardNumber'] = "5424000000000015";
