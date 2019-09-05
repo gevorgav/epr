@@ -6,7 +6,7 @@ import {CheckoutService} from '../../shared/services/checkout.service';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit, AfterViewInit {
+export class CheckoutComponent implements OnInit {
 
   constructor(private checkoutService: CheckoutService) { }
   
@@ -22,10 +22,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
     })
   }
   
-  ngAfterViewInit(): void {
-    let my_awesome_script = document.createElement('script');
-    my_awesome_script.setAttribute('src','https://jstest.authorize.net/v3/AcceptUI.js');
-    my_awesome_script.setAttribute('charset','utf-8');
-    document.head.appendChild(my_awesome_script);
+  public redirect(){
+    document.getElementById("payTok")['value'] = this.token;
+    document.getElementById("btnContinue").click();
   }
 }
