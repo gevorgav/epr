@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-declare const Accept: any;
+import {CheckoutService} from '../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-checkout',
@@ -8,37 +8,17 @@ declare const Accept: any;
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private checkoutService: CheckoutService) { }
+  
+  public token = '';
 
   ngOnInit() {
-    this.sendPaymentDataToAnet();
-    console.log('ssssss')
+    this.getToken();
   }
   
-  sendPaymentDataToAnet(){
-    // let authData = {};
-    // authData['clientKey'] = "9dQyqK5G2xP62erW9teH8hyjX5wq8jYjC7P7Z5d4dw9hyP76M4J2kWGRuQ5MFfSb";
-    // authData['apiLoginID'] = "6w38LfZ8v";
-    // let cardData = {};
-    // cardData['cardNumber'] = "5424000000000015";
-    // cardData['month'] = "12";
-    // cardData['year'] = "2020";
-    // cardData['cardCode'] = "999";
-    //
-    //
-    // let secureData = {};
-    // secureData['authData'] = authData;
-    // secureData['cardData'] = cardData;
-    //
-    // Accept.dispatchData(secureData,f);
+  private getToken() {
+    this.checkoutService.getToken().subscribe(res=>{
+      this.token = res;
+    })
   }
-  
-  responseHandler(){
-    // console.log('done');
-  }
-
-}
-
-function f(e) {
-  console.log(e);
 }

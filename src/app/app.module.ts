@@ -48,6 +48,8 @@ import {CarouselModule} from 'ngx-owl-carousel-o';
 import {PaymentFormComponent} from './pages/payement-form/payment-form.component';
 import {OrderService} from './shared/services/order.service';
 import {InitializerService} from './shared/services/initializer.service';
+import {HttpClientModule} from '@angular/common/http';
+import {CheckoutService} from './shared/services/checkout.service';
 
 const appRoutes: Routes = [
   {
@@ -148,6 +150,7 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
@@ -164,6 +167,7 @@ const appRoutes: Routes = [
     RoutingService,
     OrderService,
     InitializerService,
+    CheckoutService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
     {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},
