@@ -63,16 +63,16 @@ export class CheckoutService {
           settingValue: "{\"captcha\": false}"
         }, {
           settingName: "hostedPaymentShippingAddressOptions",
-          settingValue: "{\"show\": false, \"required\": false}"
+          settingValue: "{\"show\": false, \"required\": true}"
         }, {
           settingName: "hostedPaymentBillingAddressOptions",
-          settingValue: "{\"show\": true, \"required\": false}"
+          settingValue: "{\"show\": true, \"required\": true}"
         }, {
           settingName: "hostedPaymentCustomerOptions",
           settingValue: "{\"showEmail\": false, \"requiredEmail\": false, \"addPaymentProfile\": true}"
         }, {
           settingName: "hostedPaymentOrderOptions",
-          settingValue: "{\"show\": true, \"merchantName\": \"G and S Questions Inc.\"}"
+          settingValue: "{\"show\": true, \"merchantName\": \"Entertainment Party Rentals Inc.\"}"
         }, {
           settingName: "hostedPaymentIFrameCommunicatorUrl",
           settingValue: "{\"url\": \"https://entertainmentpartyrentals.com/cart\"}"
