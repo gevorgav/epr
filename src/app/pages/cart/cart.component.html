@@ -115,8 +115,7 @@
             </table>
           </div>
           <button type="button" class="button button-3d button-rounded button-green" (click)="continueShopping()">Continue shopping</button>
-          <app-checkout></app-checkout>
-
+          <app-checkout *ngIf="isSpecified() && getTotalPrice() > 0"></app-checkout>
         </div>
       </div>
 

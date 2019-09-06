@@ -9,21 +9,14 @@ import {CheckoutService} from '../../shared/services/checkout.service';
 export class CheckoutComponent implements OnInit {
 
   constructor(private checkoutService: CheckoutService) { }
-  
-  public token = '';
 
   ngOnInit() {
-    this.getToken();
-  }
-  
-  private getToken() {
-    this.checkoutService.getToken().subscribe(res=>{
-      this.token = res;
-    })
   }
   
   public redirect(){
-    document.getElementById("payTok")['value'] = this.token;
-    document.getElementById("btnContinue").click();
+    this.checkoutService.getToken().subscribe(res=>{
+      document.getElementById("payTok")['value'] = res;
+      document.getElementById("btnContinue").click();
+    })
   }
 }

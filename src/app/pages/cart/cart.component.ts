@@ -9,6 +9,7 @@ import {OrderItemModel} from '../../shared/model/order-item.model';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
+import {CheckoutService} from '../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-cart',
@@ -103,11 +104,13 @@ export class CartComponent implements OnInit {
   private getShippingPrice() {
     this.locationService.getShippingPrice().subscribe(res=>{
       this.shippingPrice = res;
+      this.setNewPrices();
     })
   }
   
   countChange(value: number, productId: string) {
     this.getSubtotalPrice();
+    this.setNewPrices();
     if (this.parseService.isAuth()){
       this.orderService.saveCount(value, productId);
     }
@@ -138,6 +141,10 @@ export class CartComponent implements OnInit {
     this.router.navigate(['/rentals']);
   }
   
+  private setNewPrices() {
+    CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
+    CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+  }
 }
 
 export interface ProductInCartCalculation {

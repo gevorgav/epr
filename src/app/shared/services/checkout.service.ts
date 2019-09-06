@@ -10,7 +10,7 @@ export class CheckoutService {
   }
   
   public getToken(): Observable<string>{
-    return this.httpClient.post(this.URL, this.PAYMENT_OBJ).pipe(
+    return this.httpClient.post(this.URL, CheckoutService.PAYMENT_OBJ).pipe(
       map(res=>{
         if (res['messages']['resultCode'] === "Ok") {
           return res['token'];
@@ -22,7 +22,7 @@ export class CheckoutService {
   }
   
   private URL = 'https://apitest.authorize.net/xml/v1/request.api';
-  private PAYMENT_OBJ = {
+  public static PAYMENT_OBJ = {
     getHostedPaymentPageRequest: {
       merchantAuthentication: {
         name: "5KP3u95bQpv",
@@ -31,20 +31,17 @@ export class CheckoutService {
       transactionRequest: {
         transactionType: "authCaptureTransaction",
         amount: "20.00",
-        profile: {
-          customerProfileId: "123456789"
-        },
         customer: {
           email: "ellen@mail.com"
         },
         billTo: {
-          firstName: "Ellen",
-          lastName: "Johnson",
-          company: "Souveniropolis",
-          address: "14 Main Street",
-          city: "Pecan Springs",
-          state: "TX",
-          zip: "44628",
+          firstName: "",
+          lastName: "",
+          company: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
           country: "USA"
         }
       },
