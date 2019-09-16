@@ -173,6 +173,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     let order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime,
       this.parseService.getCurrentUser()?this.parseService.getCurrentUser().id: null, this.locationService.locationDate.location, items);
     this.orderService.setOrder(order).subscribe(res => {
+      if (!this.initializerService.orderModel.orderItems) {
+        this.initializerService.orderModel.orderItems = [];
+      }
       this.initializerService.orderModel.orderItems.push(...order.orderItems);
     });
   }
