@@ -47,7 +47,9 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.logout = function () {
         var _this = this;
         this.parseService.logOut().subscribe(function (res) {
-            _this.router.navigate(["login"]);
+            _this.router.navigate(["login"]).then(function (res) {
+                location.reload();
+            });
         });
     };
     HeaderComponent.prototype.initCategories = function () {

@@ -72,9 +72,60 @@
 
       <div class="row clearfix">
         <div class="col-lg-6 clearfix">
-          <h4>Rental Date & Time</h4>
-          <app-location-date></app-location-date>
-          <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time quote.</h4>
+          <h4>Shipping Information</h4>
+          <form id="shipping-form" [formGroup]="shippingInformationForm" (ngSubmit)="onSubmitShippingForm()">
+
+            <div class="col_full">
+              <label for="shipping-form-name">* Name / Company name:</label>
+              <input formControlName="name" type="text" id="shipping-form-name" name="shipping-form-name" value="" class="form-control" />
+              <div
+                *ngIf="shippingInformationForm.controls['name'].invalid && (shippingInformationForm.controls['name'].dirty || shippingInformationForm.controls['name'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="shippingInformationForm.controls['name'].errors.required">
+                  Name is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col_full">
+              <label for="shipping-form-address">* Street Address:</label>
+              <input formControlName="address" type="text" id="shipping-form-address" name="shipping-form-address" value="" class="form-control" />
+              <div
+                *ngIf="shippingInformationForm.controls['address'].invalid && (shippingInformationForm.controls['address'].dirty || shippingInformationForm.controls['address'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="shippingInformationForm.controls['address'].errors.required">
+                  Street Address is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col_full">
+              <label for="shipping-form-phone">* Phone:</label>
+              <input formControlName="phone" type="text" id="shipping-form-phone" name="shipping-form-phone" value="" class="form-control" />
+              <div
+                *ngIf="shippingInformationForm.controls['phone'].invalid && (shippingInformationForm.controls['phone'].dirty || shippingInformationForm.controls['phone'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="shippingInformationForm.controls['phone'].errors.required">
+                  phone is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col_full">
+              <label for="shipping-form-instruction">* Special Instruction:</label>
+              <input formControlName="instruction" type="text" id="shipping-form-instruction" name="shipping-form-instruction" value="" class="form-control" />
+              <div
+                *ngIf="shippingInformationForm.controls['instruction'].invalid && (shippingInformationForm.controls['instruction'].dirty || shippingInformationForm.controls['instruction'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="shippingInformationForm.controls['instruction'].errors.required">
+                  Special Instruction is required.
+                </div>
+              </div>
+            </div>
+
+            <button class="button button-3d button-black nomargin" id="shipping-submit" name="shipping-form-submit" value="" type="submit" style="display: none"></button>
+
+          </form>
         </div>
 
         <div class="col-lg-6 clearfix">
@@ -115,8 +166,15 @@
             </table>
           </div>
           <button type="button" class="button button-3d button-rounded button-green" (click)="continueShopping()">Continue shopping</button>
-          <app-checkout *ngIf="isSpecified() && getTotalPrice() > 0"></app-checkout>
+          <button *ngIf="isSpecified() && getTotalPrice() > 0" id="btnContinue1" type="button" (click)="checkout()" class="button button-3d button-rounded"> Checkout </button>
         </div>
+
+        <div class="col-lg-6 clearfix">
+          <h4>Rental Date & Time</h4>
+          <app-location-date></app-location-date>
+          <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time quote.</h4>
+        </div>
+
       </div>
 
     </div>

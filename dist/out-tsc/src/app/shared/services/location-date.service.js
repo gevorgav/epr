@@ -44,34 +44,39 @@ var LocationDateService = /** @class */ (function () {
     };
     LocationDateService.prototype.getShippingPrice = function () {
         console.log(this._locationDate.location.zipCode);
-        return this.getShippingPriceByZipCode(this._locationDate.location.id);
+        return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
     };
     LocationDateService.prototype.getCalculation = function (nightPrice, minPrice, minTime, price) {
-        var night = 0;
-        var hours = 0;
-        var calculatedPrice = 0;
-        if (this.isSpecified) {
-            var days = this.getDates();
-            for (var _i = 0, days_1 = days; _i < days_1.length; _i++) {
-                var day = days_1[_i];
-                if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length - 1) {
-                    hours += this.getFutureHours(9).length;
-                    night += 1;
+        var _this = this;
+        return this.isSpecified.pipe(map(function (res) {
+            if (res) {
+                var night = 0;
+                var hours = 0;
+                var calculatedPrice = 0;
+                var days = _this.getDates();
+                for (var _i = 0, days_1 = days; _i < days_1.length; _i++) {
+                    var day = days_1[_i];
+                    if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length - 1) {
+                        hours += _this.getFutureHours(9).length;
+                        night += 1;
+                    }
+                    else if (days.indexOf(day) === 0) {
+                        hours += _this.getFutureHours(day.getHours()).length;
+                    }
+                    else if (days.indexOf(day) === days.length - 1) {
+                        hours += _this.getLastDayHours(_this._locationDate.endDateTime.getHours()).length;
+                    }
                 }
-                else if (days.indexOf(day) === 0) {
-                    hours += this.getFutureHours(day.getHours()).length;
-                }
-                else if (days.indexOf(day) === days.length - 1) {
-                    hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
+                if (hours > minTime) {
+                    hours = hours - minTime;
+                    calculatedPrice = nightPrice * night + price * hours + minPrice;
+                    return calculatedPrice;
                 }
             }
-        }
-        if (hours > minTime) {
-            hours = hours - minTime;
-            calculatedPrice = nightPrice * night + price * hours + minPrice;
-            return calculatedPrice;
-        }
-        return minPrice;
+            else {
+                return 0;
+            }
+        }));
     };
     LocationDateService.prototype.getFutureHours = function (hour) {
         var futureHours = [];

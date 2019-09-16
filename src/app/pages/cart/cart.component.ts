@@ -10,6 +10,9 @@ import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
 import {CheckoutService} from '../../shared/services/checkout.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
+import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 
 @Component({
   selector: 'app-cart',
@@ -24,16 +27,21 @@ export class CartComponent implements OnInit {
   
   public orderData = new Map<string, ProductInCartCalculation>();
   
+  public shippingInformationForm: FormGroup;
+  
   constructor(private orderService: OrderService,
               private locationService: LocationDateService,
               private productService: ProductService,
               private route: ActivatedRoute,
               private router: Router,
               private parseService: ParseService,
+              private checkoutService: CheckoutService,
+              private shippingService: ShippingHttpService,
               private initializerService: InitializerService) { }
 
   ngOnInit() {
     this.initOrderDataSelectedProducts();
+    this.initShippingForm();
     this.locationService.isSpecified.subscribe(res=>{
       if (res) {
         this.getShippingPrice();
@@ -141,9 +149,67 @@ export class CartComponent implements OnInit {
     this.router.navigate(['/rentals']);
   }
   
+  checkout() {
+    document.getElementById("shipping-submit").click();
+  }
+  
+  public redirect(){
+    this.checkoutService.getToken().subscribe(res=>{
+      document.getElementById("payTok")['value'] = res;
+      document.getElementById("btnContinue").click();
+    })
+  }
+  
   private setNewPrices() {
     CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
     CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+  }
+  
+  onSubmitShippingForm() {
+    if (this.shippingInformationForm.valid){
+      let shippingModel = new ShippingInfoModel(null,this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value,
+        this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id,
+        this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth()? this.parseService.getCurrentUser(): null,
+        null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
+      this.shippingService.saveShipping(shippingModel).subscribe(res=>{
+        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
+          "{\"showReceipt\": true, \"url\": \"http://localhost:4200/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
+        this.redirect();
+      });
+    }
+  }
+  
+  private initShippingForm() {
+    this.shippingInformationForm = new FormGroup({
+      'name': new FormControl('',[
+        Validators.required
+      ]),
+      'address': new FormControl('',[
+        Validators.required
+      ]),
+      'phone': new FormControl('',[
+        Validators.required
+      ]),
+      'instruction': new FormControl('',[
+        Validators.required
+      ])
+    })
+  }
+  
+  private getProductsIds(productsInCart: ProductModel[]): ProductIdName[] {
+    let ids = [];
+    productsInCart.forEach(value=>{
+      ids.push({id: value.id, title: value.title })
+    });
+    return ids;
+  }
+  
+  private getProductCount(): ProductCount[] {
+    let productCount: ProductCount[] = [];
+    this.orderData.forEach((value: ProductInCartCalculation, key: string)=>{
+      productCount.push({productId: key, count: value.count})
+    });
+    return productCount;
   }
 }
 
@@ -151,4 +217,9 @@ export interface ProductInCartCalculation {
   available: number[];
   count: number;
   price: number;
+}
+
+export interface ProductCount {
+  productId: string;
+  count: number;
 }

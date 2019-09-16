@@ -5,11 +5,22 @@ import { OrderService } from '../../shared/services/order.service';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { ProductService } from '../../shared/services/product.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ParseService } from '../../shared/services/parse.service';
+import { CheckoutService } from '../../shared/services/checkout.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ShippingInfoModel } from '../../shared/model/shipping-info.model';
+import { ShippingHttpService } from '../../shared/services/shipping-http.service';
 var CartComponent = /** @class */ (function () {
-    function CartComponent(orderService, locationService, productService, initializerService) {
+    function CartComponent(orderService, locationService, productService, route, router, parseService, checkoutService, shippingService, initializerService) {
         this.orderService = orderService;
         this.locationService = locationService;
         this.productService = productService;
+        this.route = route;
+        this.router = router;
+        this.parseService = parseService;
+        this.checkoutService = checkoutService;
+        this.shippingService = shippingService;
         this.initializerService = initializerService;
         this._productsInCart = [];
         this.orderData = new Map();
@@ -17,6 +28,7 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.initOrderDataSelectedProducts();
+        this.initShippingForm();
         this.locationService.isSpecified.subscribe(function (res) {
             if (res) {
                 _this.getShippingPrice();
@@ -58,13 +70,20 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.isSpecified = function () {
         return this.locationService.isSpecified;
     };
-    CartComponent.prototype.getPrice = function (nightPrice, minPrice, minTime, price) {
-        return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+    CartComponent.prototype.getPrice = function (product) {
+        return this.locationService.getCalculation(product.nightPrice, product.minPrice, product.minTime, product.price);
     };
     CartComponent.prototype.initOrderData = function () {
         var _this = this;
         this.initializerService.orderModel.orderItems.forEach(function (value) {
-            _this.orderData.set(value.productId, { count: value.count, available: _this.getQuantities(_this.getProductById(value.productId)) });
+            var product = _this.getProductById(value.productId);
+            _this.orderData.set(value.productId, { count: value.count,
+                available: _this.getQuantities(product),
+                price: 0
+            });
+            _this.getPrice(product).subscribe(function (res) {
+                _this.orderData.get(value.productId).price = res;
+            });
         });
     };
     CartComponent.prototype.getProductById = function (id) {
@@ -78,9 +97,92 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.getShippingPrice = function () {
         var _this = this;
         this.locationService.getShippingPrice().subscribe(function (res) {
-            console.log(res);
             _this.shippingPrice = res;
+            _this.setNewPrices();
         });
+    };
+    CartComponent.prototype.countChange = function (value, productId) {
+        this.getSubtotalPrice();
+        this.setNewPrices();
+        if (this.parseService.isAuth()) {
+            this.orderService.saveCount(value, productId);
+        }
+    };
+    CartComponent.prototype.getTotalPrice = function () {
+        return this.getSubtotalPrice() + this.shippingPrice;
+    };
+    CartComponent.prototype.getSubtotalPrice = function () {
+        var subtotal = 0;
+        this.orderData.forEach(function (value, key) {
+            subtotal += value.price * value.count;
+        });
+        return subtotal;
+    };
+    CartComponent.prototype.removeOrderItem = function (productId) {
+        var _this = this;
+        this.orderService.removeOrderItem(productId).subscribe(function (res) {
+            if (res) {
+                _this.productsInCart = _this.productsInCart.filter(function (value) { return value.id !== productId; });
+                _this.initializerService.orderModel.orderItems = _this.initializerService.orderModel.orderItems.filter(function (value) { return value.productId !== productId; });
+            }
+        });
+    };
+    CartComponent.prototype.continueShopping = function () {
+        this.router.navigate(['/rentals']);
+    };
+    CartComponent.prototype.checkout = function () {
+        document.getElementById("shipping-submit").click();
+    };
+    CartComponent.prototype.redirect = function () {
+        this.checkoutService.getToken().subscribe(function (res) {
+            document.getElementById("payTok")['value'] = res;
+            document.getElementById("btnContinue").click();
+        });
+    };
+    CartComponent.prototype.setNewPrices = function () {
+        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
+        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+    };
+    CartComponent.prototype.onSubmitShippingForm = function () {
+        var _this = this;
+        if (this.shippingInformationForm.valid) {
+            var shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
+            this.shippingService.saveShipping(shippingModel).subscribe(function (res) {
+                CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
+                    "{\"showReceipt\": true, \"url\": \"http://localhost:4200/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
+                _this.redirect();
+            });
+        }
+    };
+    CartComponent.prototype.initShippingForm = function () {
+        this.shippingInformationForm = new FormGroup({
+            'name': new FormControl('', [
+                Validators.required
+            ]),
+            'address': new FormControl('', [
+                Validators.required
+            ]),
+            'phone': new FormControl('', [
+                Validators.required
+            ]),
+            'instruction': new FormControl('', [
+                Validators.required
+            ])
+        });
+    };
+    CartComponent.prototype.getProductsIds = function (productsInCart) {
+        var ids = [];
+        productsInCart.forEach(function (value) {
+            ids.push({ id: value.id, title: value.title });
+        });
+        return ids;
+    };
+    CartComponent.prototype.getProductCount = function () {
+        var productCount = [];
+        this.orderData.forEach(function (value, key) {
+            productCount.push({ productId: key, count: value.count });
+        });
+        return productCount;
     };
     CartComponent = tslib_1.__decorate([
         Component({
@@ -91,6 +193,11 @@ var CartComponent = /** @class */ (function () {
         tslib_1.__metadata("design:paramtypes", [OrderService,
             LocationDateService,
             ProductService,
+            ActivatedRoute,
+            Router,
+            ParseService,
+            CheckoutService,
+            ShippingHttpService,
             InitializerService])
     ], CartComponent);
     return CartComponent;

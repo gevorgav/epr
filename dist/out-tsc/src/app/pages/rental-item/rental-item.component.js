@@ -71,6 +71,7 @@ var RentalItemComponent = /** @class */ (function () {
         this.galleryImages = [];
         this.reviewsCount = 0;
         this.relatedProducts = [];
+        this.quantity = 0;
         this.title$ = this.route.paramMap;
     }
     RentalItemComponent.prototype.ngOnInit = function () {
@@ -142,17 +143,23 @@ var RentalItemComponent = /** @class */ (function () {
         return quantities;
     };
     RentalItemComponent.prototype.addToCart = function () {
-        var orderItem = new OrderItemModel(this.selectedProduct.id, 1);
+        var _this = this;
+        var orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity);
         var items = [];
         items.push(orderItem);
-        var order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.parseService.getCurrentUser().id, this.locationService.locationDate.location, items);
-        this.orderService.setOrder(order).subscribe(function (res) { return console.log(res); });
+        var order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.parseService.getCurrentUser() ? this.parseService.getCurrentUser().id : null, this.locationService.locationDate.location, items);
+        this.orderService.setOrder(order).subscribe(function (res) {
+            var _a;
+            (_a = _this.initializerService.orderModel.orderItems).push.apply(_a, order.orderItems);
+        });
     };
     RentalItemComponent.prototype.productInCart = function () {
-        for (var _i = 0, _a = this.initializerService.orderModel.orderItems; _i < _a.length; _i++) {
-            var item = _a[_i];
-            if (this.selectedProduct.id === item.productId) {
-                return true;
+        if (this.initializerService.orderModel.orderItems) {
+            for (var _i = 0, _a = this.initializerService.orderModel.orderItems; _i < _a.length; _i++) {
+                var item = _a[_i];
+                if (this.selectedProduct.id === item.productId) {
+                    return true;
+                }
             }
         }
         return false;

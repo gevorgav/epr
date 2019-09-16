@@ -7,16 +7,18 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { LocationDateService } from './shared/services/location-date.service';
 import { OrderService } from './shared/services/order.service';
 import { InitializerService } from './shared/services/initializer.service';
+import { ShippingHttpService } from './shared/services/shipping-http.service';
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, activatedRoute, locationService, orderService, initializerService, titleService) {
+    function AppComponent(router, activatedRoute, locationService, orderService, initializerService, titleService, shippingService) {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.locationService = locationService;
         this.orderService = orderService;
         this.initializerService = initializerService;
         this.titleService = titleService;
+        this.shippingService = shippingService;
         this.title = 'app';
         this.isReady = false;
     }
@@ -27,6 +29,9 @@ var AppComponent = /** @class */ (function () {
         this.initializerService.initialize().subscribe(function (res) {
             _this.isReady = res;
         });
+        // this.shippingService.loadShippings().subscribe(res=>{
+        //   console.log(res);
+        // })
         // this.deliveryService.syncDeliveryChart().subscribe(res=>{
         //   console.log(res);
         // })
@@ -66,7 +71,8 @@ var AppComponent = /** @class */ (function () {
             LocationDateService,
             OrderService,
             InitializerService,
-            Title])
+            Title,
+            ShippingHttpService])
     ], AppComponent);
     return AppComponent;
 }());

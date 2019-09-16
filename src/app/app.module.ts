@@ -50,6 +50,9 @@ import {OrderService} from './shared/services/order.service';
 import {InitializerService} from './shared/services/initializer.service';
 import {HttpClientModule} from '@angular/common/http';
 import {CheckoutService} from './shared/services/checkout.service';
+import {ShippingHttpService} from './shared/services/shipping-http.service';
+import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
+import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
 
 const appRoutes: Routes = [
   {
@@ -82,6 +85,8 @@ const appRoutes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
     children: [
+      {path: 'shipped', component: ShippedRentalsComponent},
+      {path: 'shipping', component: ShippingComponent},
       {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
       {path: 'product', component: ProductComponent},
       {path: 'category', component: CategoryComponent},
@@ -97,6 +102,10 @@ const appRoutes: Routes = [
   {
     path: 'rental/:title',
     component: RentalItemComponent
+  },
+  {
+    path: 'profile/:id',
+    component: CheckoutComponent
   },
   {
     path: 'cart',
@@ -140,7 +149,9 @@ const appRoutes: Routes = [
     CategoryComponent,
     CategoryPopupComponent,
     PaymentFormComponent,
-    UserComponent
+    UserComponent,
+    ShippingComponent,
+    ShippedRentalsComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -168,6 +179,7 @@ const appRoutes: Routes = [
     OrderService,
     InitializerService,
     CheckoutService,
+    ShippingHttpService,
     {provide: DeliveryChartService, useClass: DeliveryChartHttpService},
     {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},

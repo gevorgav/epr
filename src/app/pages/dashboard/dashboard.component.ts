@@ -9,7 +9,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class DashboardComponent implements OnInit {
 
   items: DashboardItem[] = [
-    {routerLink: 'product', name: 'Product', isActive: true},
+    {routerLink: 'shipping', name: 'Rental requests', isActive: true},
+    {routerLink: 'shipped', name: 'Shipped Rentals', isActive: false},
+    {routerLink: 'product', name: 'Product', isActive: false},
     {routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false},
     {routerLink: 'category', name: 'Category', isActive: false},
     {routerLink: 'user', name: 'User', isActive: false},

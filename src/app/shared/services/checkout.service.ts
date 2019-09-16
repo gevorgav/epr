@@ -48,34 +48,7 @@ export class CheckoutService {
       hostedPaymentSettings: {
         setting: [{
           settingName: "hostedPaymentReturnOptions",
-          settingValue: "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/cart\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/\", \"cancelUrlText\": \"Cancel\"}"
-        }, {
-          settingName: "hostedPaymentButtonOptions",
-          settingValue: "{\"text\": \"Pay\"}"
-        }, {
-          settingName: "hostedPaymentStyleOptions",
-          settingValue: "{\"bgColor\": \"blue\"}"
-        }, {
-          settingName: "hostedPaymentPaymentOptions",
-          settingValue: "{\"cardCodeRequired\": false, \"showCreditCard\": true, \"showBankAccount\": true}"
-        }, {
-          settingName: "hostedPaymentSecurityOptions",
-          settingValue: "{\"captcha\": false}"
-        }, {
-          settingName: "hostedPaymentShippingAddressOptions",
-          settingValue: "{\"show\": false, \"required\": true}"
-        }, {
-          settingName: "hostedPaymentBillingAddressOptions",
-          settingValue: "{\"show\": true, \"required\": true}"
-        }, {
-          settingName: "hostedPaymentCustomerOptions",
-          settingValue: "{\"showEmail\": false, \"requiredEmail\": false, \"addPaymentProfile\": true}"
-        }, {
-          settingName: "hostedPaymentOrderOptions",
-          settingValue: "{\"show\": true, \"merchantName\": \"Entertainment Party Rentals Inc.\"}"
-        }, {
-          settingName: "hostedPaymentIFrameCommunicatorUrl",
-          settingValue: "{\"url\": \"https://entertainmentpartyrentals.com/cart\"}"
+          settingValue: "{\"showReceipt\": true, \"url\": \"bebebe\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}"
         }]
       }
     }

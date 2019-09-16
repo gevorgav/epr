@@ -8,6 +8,7 @@ import { ProductHttpService } from './product-http.service';
 import { Error } from 'tslint/lib/error';
 import { from } from 'rxjs/internal/observable/from';
 import { Promise } from 'q';
+import { of } from 'rxjs/internal/observable/of';
 var OrderService = /** @class */ (function () {
     function OrderService(parseService) {
         this.parseService = parseService;
@@ -46,7 +47,7 @@ var OrderService = /** @class */ (function () {
     };
     OrderService.prototype.initOrderedData = function () {
         var _this = this;
-        var orderModel = new OrderModel(null, null, null, null, null);
+        var orderModel = new OrderModel(null, null, null, null, []);
         var orderItems = [];
         var promise;
         if (this.parseService.isAuth()) {
@@ -55,6 +56,9 @@ var OrderService = /** @class */ (function () {
             order.set('user', this.parseService.getCurrentUser());
             var query = new this.parseService.parse.Query(order);
             promise = query.equalTo('user', this.parseService.getCurrentUser()).first().then(function (orderParse) {
+                if (!orderParse) {
+                    throw new TypeError();
+                }
                 orderModel.startDate = orderParse.attributes['startDate'];
                 orderModel.endDate = orderParse.attributes['endDate'];
                 orderModel.id = orderParse.id;
@@ -78,10 +82,12 @@ var OrderService = /** @class */ (function () {
                         return orderModel;
                     });
                 });
+            }).catch(function (reason) {
+                return Promise(function (resolver, reject) { resolver({}); });
             });
         }
         else {
-            promise = Promise(function (resolver, reject) { resolver({}); });
+            promise = Promise(function (resolver, reject) { resolver(orderModel); });
         }
         return from(promise);
     };
@@ -92,8 +98,8 @@ var OrderService = /** @class */ (function () {
             var order = new Order();
             order.set('user', this.parseService.getCurrentUser());
             var query = new this.parseService.parse.Query(order);
-            var promise = query.equalTo('user', this.parseService.getCurrentUser());
-            promise.first().catch(function (res) {
+            var promise = query.equalTo('user', this.parseService.getCurrentUser())
+                .first().catch(function (res) {
                 console.log(res);
             }).then(function (res) {
                 if (res) {
@@ -104,9 +110,10 @@ var OrderService = /** @class */ (function () {
                 }
                 throw new Error('Something went wrong, Try again.');
             });
+            return from(promise);
         }
         else {
-            return null;
+            return of(true);
         }
     };
     OrderService.prototype.setOrderFields = function (order, model) {
@@ -149,6 +156,44 @@ var OrderService = /** @class */ (function () {
         }, function (error) {
             console.log(error);
         });
+    };
+    OrderService.prototype.saveCount = function (value, productId) {
+        var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+        var order = new Order();
+        order.set('user', this.parseService.getCurrentUser());
+        var query = new this.parseService.parse.Query(order);
+        var promise = query.equalTo('user', this.parseService.getCurrentUser())
+            .first().then(function (res) {
+            return res.relation('orderItems').query().find().then(function (orderItemsParse) {
+                orderItemsParse.forEach(function (item) {
+                    if (item.attributes.product.id === productId) {
+                        item.set('count', value);
+                        return item.save();
+                    }
+                });
+            });
+        });
+        return from(promise);
+    };
+    OrderService.prototype.removeOrderItem = function (productId) {
+        var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+        var order = new Order();
+        order.set('user', this.parseService.getCurrentUser());
+        var OrderItem = this.parseService.parse.Object.extend(OrderService_1.ORDER_ITEM);
+        var queryOrderItem = new this.parseService.parse.Query(OrderItem);
+        var query = new this.parseService.parse.Query(order);
+        var promise = query.equalTo('user', this.parseService.getCurrentUser())
+            .first().then(function (res) {
+            return res.relation('orderItems').query().find().then(function (orderItemsParse) {
+                for (var _i = 0, orderItemsParse_1 = orderItemsParse; _i < orderItemsParse_1.length; _i++) {
+                    var orderItemParse = orderItemsParse_1[_i];
+                    if (orderItemParse.attributes.product.id === productId) {
+                        return orderItemParse.destroy();
+                    }
+                }
+            });
+        });
+        return from(promise);
     };
     var OrderService_1;
     OrderService.ORDER = 'order';

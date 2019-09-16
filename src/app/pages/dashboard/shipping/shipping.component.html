@@ -1,0 +1,53 @@
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="endDate">
+    <th mat-header-cell *matHeaderCellDef> Created at</th>
+    <td mat-cell *matCellDef="let element">{{element.createdAt.toLocaleString()}} </td>
+  </ng-container>
+  <ng-container matColumnDef="startDate">
+    <th mat-header-cell *matHeaderCellDef> Start Date - End Date</th>
+    <td mat-cell *matCellDef="let element"> {{element.startDate.toLocaleString()}} - {{element.endDate.toLocaleString()}}</td>
+  </ng-container>
+  <ng-container matColumnDef="zipCode">
+    <th mat-header-cell *matHeaderCellDef> Zip Code</th>
+    <td mat-cell *matCellDef="let element">{{element.zipCode}}</td>
+  </ng-container>
+  <ng-container matColumnDef="address/street">
+    <th mat-header-cell *matHeaderCellDef> Address/Street</th>
+    <td mat-cell *matCellDef="let element">{{element.street}}</td>
+  </ng-container>
+  <ng-container matColumnDef="paid">
+    <th mat-header-cell *matHeaderCellDef> Paid</th>
+    <td mat-cell *matCellDef="let element">{{element.payed}}</td>
+  </ng-container>
+  <ng-container matColumnDef="details">
+    <th mat-header-cell *matHeaderCellDef>Details </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <!--<mat-panel-title>-->
+              <!--Self aware panel-->
+            <!--</mat-panel-title>-->
+            <mat-panel-description>
+              User & Rental Products Information
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p *ngFor="let product of element.products">{{getProductWithCount(element, product)}}</p>
+          <p>Name: {{element.name}}</p>
+          <p>Phone: {{element.phone}}</p>
+          <p>SpecialInstructions: {{element.specialInstructions}}</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="ship off">
+    <th mat-header-cell *matHeaderCellDef>Ship off </th>
+    <td mat-cell *matCellDef="let element"><mat-icon aria-label="Delete"
+                                                     (click)="setShipped(element.id)">local_shipping</mat-icon></td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+

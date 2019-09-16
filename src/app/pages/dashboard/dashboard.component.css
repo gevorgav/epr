@@ -1,3 +1,9 @@
 mat-list-item.is-active {
   background-color: #CCCCCC;
 }
+.mat-list-base {
+  padding-top: 40px;
+  margin-left: 18px;
+  min-height: 600px;
+  min-width: 180px;
+}

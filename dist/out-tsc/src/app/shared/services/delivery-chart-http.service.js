@@ -10,6 +10,7 @@ import { from } from 'rxjs/internal/observable/from';
 import { flatMap, map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
+import { OrderService } from './order.service';
 var DeliveryChartHttpService = /** @class */ (function (_super) {
     tslib_1.__extends(DeliveryChartHttpService, _super);
     function DeliveryChartHttpService(parseService) {
@@ -22,23 +23,15 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
     DeliveryChartHttpService.prototype.getDeliveryLocationById = function (id) {
         return undefined;
     };
-    DeliveryChartHttpService.prototype.getDeliveryLocationByZipCode = function (zipCodeId) {
-        var _this_1 = this;
-        var zipCodeParse = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.ZIP_CODE);
-        var query = new this.parseService.parse.Query(zipCodeParse);
-        query.equalTo("objectId", zipCodeId);
-        var promise = query.first().then(function (res) {
-            return res;
-        }).then(function (res) {
-            var Delivery = _this_1.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
-            var delivery = new Delivery();
-            delivery.set('zipCode', res);
-            var query = new _this_1.parseService.parse.Query(delivery);
-            return query.first().then(function (delivery) {
-                var deliveryLocation = new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
-                console.log(deliveryLocation);
-                return deliveryLocation;
-            });
+    DeliveryChartHttpService.prototype.getDeliveryLocationByZipCode = function (zipCode) {
+        var zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
+        zipCodeQuery.contains('zipCode', zipCode);
+        var deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
+        deliveryQuery.matchesQuery('zipCode', zipCodeQuery);
+        var promise = deliveryQuery.first().then(function (delivery) {
+            return new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
+        }, function (error) {
+            console.log(error);
         });
         return from(promise);
     };

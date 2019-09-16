@@ -48,6 +48,10 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { PaymentFormComponent } from './pages/payement-form/payment-form.component';
 import { OrderService } from './shared/services/order.service';
 import { InitializerService } from './shared/services/initializer.service';
+import { HttpClientModule } from '@angular/common/http';
+import { CheckoutService } from './shared/services/checkout.service';
+import { ShippingHttpService } from './shared/services/shipping-http.service';
+import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
 var appRoutes = [
     {
         path: '',
@@ -79,6 +83,7 @@ var appRoutes = [
         component: DashboardComponent,
         canActivate: [AuthGuard],
         children: [
+            { path: 'shipping', component: ShippingComponent },
             { path: 'delivery-chart', component: DashboardDeliveryChartComponent },
             { path: 'product', component: ProductComponent },
             { path: 'category', component: CategoryComponent },
@@ -94,6 +99,10 @@ var appRoutes = [
     {
         path: 'rental/:title',
         component: RentalItemComponent
+    },
+    {
+        path: 'profile/:id',
+        component: CheckoutComponent
     },
     {
         path: 'cart',
@@ -140,7 +149,8 @@ var AppModule = /** @class */ (function () {
                 CategoryComponent,
                 CategoryPopupComponent,
                 PaymentFormComponent,
-                UserComponent
+                UserComponent,
+                ShippingComponent
             ],
             imports: [
                 RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
@@ -148,6 +158,7 @@ var AppModule = /** @class */ (function () {
                 BrowserModule,
                 FormsModule,
                 ReactiveFormsModule,
+                HttpClientModule,
                 BrowserAnimationsModule,
                 OwlDateTimeModule,
                 OwlNativeDateTimeModule,
@@ -164,6 +175,8 @@ var AppModule = /** @class */ (function () {
                 RoutingService,
                 OrderService,
                 InitializerService,
+                CheckoutService,
+                ShippingHttpService,
                 { provide: DeliveryChartService, useClass: DeliveryChartHttpService },
                 { provide: CategoryService, useClass: CategoryHttpService },
                 { provide: ProductService, useClass: ProductHttpService },

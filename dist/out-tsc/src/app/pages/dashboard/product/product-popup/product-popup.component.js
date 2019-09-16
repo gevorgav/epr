@@ -83,7 +83,8 @@ var ProductPopupComponent = /** @class */ (function () {
                 Validators.required
             ]),
             price: this.formBuilder.control(this.product.price, [
-                Validators.required
+                Validators.required,
+                Validators.min(1)
             ]),
             description: this.formBuilder.control(this.product.description, []),
             category: this.formBuilder.control(this.categoryId, [
@@ -100,10 +101,22 @@ var ProductPopupComponent = /** @class */ (function () {
             safetyRules: this.formBuilder.control(this.product.safetyRules, []),
             images: this.formBuilder.control(this.product.images, []),
             video: this.formBuilder.control(this.product.video, []),
-            minTime: this.formBuilder.control(this.product.minTime, []),
-            minPrice: this.formBuilder.control(this.product.minPrice, []),
-            nightPrice: this.formBuilder.control(this.product.nightPrice, []),
-            count: this.formBuilder.control(this.product.count, []),
+            minTime: this.formBuilder.control(this.product.minTime, [
+                Validators.required,
+                Validators.min(1)
+            ]),
+            minPrice: this.formBuilder.control(this.product.minPrice, [
+                Validators.required,
+                Validators.min(1)
+            ]),
+            nightPrice: this.formBuilder.control(this.product.nightPrice, [
+                Validators.required,
+                Validators.min(1)
+            ]),
+            count: this.formBuilder.control(this.product.count, [
+                Validators.required,
+                Validators.min(1)
+            ]),
         }, { validators: setupPolicyUniqueKeyValidator });
     };
     ProductPopupComponent.prototype.initSafetyRules = function () {

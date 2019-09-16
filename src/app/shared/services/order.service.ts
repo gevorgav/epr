@@ -9,6 +9,7 @@ import {Error} from 'tslint/lib/error';
 import {from} from 'rxjs/internal/observable/from';
 import {Promise} from 'q';
 import {of} from 'rxjs/internal/observable/of';
+import {DeliveryChartHttpService} from './delivery-chart-http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -192,6 +193,10 @@ export class OrderService {
     let order = new Order();
     order.set('user', this.parseService.getCurrentUser());
   
+    const OrderItem = this.parseService.parse.Object.extend(OrderService.ORDER_ITEM);
+    const queryOrderItem = new this.parseService.parse.Query(OrderItem);
+    
+  
     const query = new this.parseService.parse.Query(order);
     let promise = query.equalTo('user', this.parseService.getCurrentUser())
     .first().then(res=>{
@@ -203,6 +208,19 @@ export class OrderService {
         }
       })
     });
+    return from(promise);
+  }
+  
+  public destroyOrder(): Observable<any>{
+    const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
+    let order = new Order();
+    order.set('user', this.parseService.getCurrentUser());
+    const query = new this.parseService.parse.Query(order);
+    let promise = query.equalTo('user', this.parseService.getCurrentUser())
+      .first().then(orderParse=>{
+      return orderParse.destroy()
+    });
+    
     return from(promise);
   }
   

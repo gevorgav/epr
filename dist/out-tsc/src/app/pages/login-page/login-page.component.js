@@ -24,7 +24,9 @@ var LoginPageComponent = /** @class */ (function () {
         if (this.userLoginForm.valid) {
             this.parseService.login(this.userLoginForm.get('username').value, this.userLoginForm.get('password').value).subscribe(function (data) {
                 that.parseService.$loginSubject.next(true);
-                that.router.navigate(["home"]);
+                that.router.navigate(["home"]).then(function (res) {
+                    location.reload();
+                });
             }, function (error) {
                 that.loginErrorMessage = error.message;
             });

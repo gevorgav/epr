@@ -23,11 +23,13 @@ var InitializerService = /** @class */ (function () {
     InitializerService.prototype.initialize = function () {
         var _this = this;
         return this.orderService.initOrderedData().pipe(map(function (res) {
-            var now = new Date();
-            if (res.startDate && res.endDate && location && !(res.startDate.getTime() - now.getTime() < 54000000)) {
-                _this.locationService.setLocationDate(res.startDate, res.endDate, res.zipCode);
+            if (res) {
+                var now = new Date();
+                if (res.startDate && res.endDate && location && !(res.startDate.getTime() - now.getTime() < 54000000)) {
+                    _this.locationService.setLocationDate(res.startDate, res.endDate, res.zipCode);
+                }
+                _this.orderModel = res;
             }
-            _this.orderModel = res;
             return true;
         }));
     };
