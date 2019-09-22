@@ -21,12 +21,12 @@ export class CheckoutService {
     )
   }
   
-  private URL = 'https://apitest.authorize.net/xml/v1/request.api';
+  private URL = 'https://api.authorize.net/xml/v1/request.api';
   public static PAYMENT_OBJ = {
     getHostedPaymentPageRequest: {
       merchantAuthentication: {
-        name: "5KP3u95bQpv",
-        transactionKey: "346HZ32z3fP4hTG2"
+        name: "3Vpb69UJ6",
+        transactionKey: "9Ut347QY48FJ9bs9"
       },
       transactionRequest: {
         transactionType: "authCaptureTransaction",
