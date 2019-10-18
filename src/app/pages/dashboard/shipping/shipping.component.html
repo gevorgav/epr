@@ -3,11 +3,11 @@
 
   <ng-container matColumnDef="endDate">
     <th mat-header-cell *matHeaderCellDef> Created at</th>
-    <td mat-cell *matCellDef="let element">{{element.createdAt.toLocaleString()}} </td>
+    <td mat-cell *matCellDef="let element">{{element.createdAt.toLocaleString("en-US")}} </td>
   </ng-container>
   <ng-container matColumnDef="startDate">
     <th mat-header-cell *matHeaderCellDef> Start Date - End Date</th>
-    <td mat-cell *matCellDef="let element"> {{element.startDate.toLocaleString()}} - {{element.endDate.toLocaleString()}}</td>
+    <td mat-cell *matCellDef="let element"> {{element.startDate.toLocaleString("en-US")}} - {{element.endDate.toLocaleString("en-US")}}</td>
   </ng-container>
   <ng-container matColumnDef="zipCode">
     <th mat-header-cell *matHeaderCellDef> Zip Code</th>

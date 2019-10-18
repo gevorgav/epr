@@ -81,6 +81,10 @@ export class RentalsComponent implements OnInit, AfterViewInit {
     });
   }
   
+  getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
+    return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+  }
+  
   public isSpecified(){
     return this.locationDateService.isSpecified;
   }

@@ -47,14 +47,14 @@ export class CategoryHttpService extends CategoryService {
     return from(promise);
   }
   
-  static convertToCategoryModel(item: any, products?: Observable<ProductViewModel[]>): CategoryModel {
+  static convertToCategoryModel(item: any, products?: Observable<ProductModel[]>): CategoryModel {
     if (products) {
       return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order'], products);
     }
     return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order']);
   }
   
-  getCategoryItems(categoryId: string): Observable<Array<ProductViewModel>> {
+  getCategoryItems(categoryId: string): Observable<Array<ProductModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
     let promise = query.first().then(res => {
@@ -75,7 +75,7 @@ export class CategoryHttpService extends CategoryService {
       map((res: any[]) => {
         let categories: Array<CategoryModel> = [];
         for (let category of res) {
-          let products$: Observable<ProductViewModel[]> = from(category.relation('products').query().find().then((product: any[]) => {
+          let products$: Observable<ProductModel[]> = from(category.relation('products').query().find().then((product: any[]) => {
             return CategoryHttpService.forOne(product);
           }));
           let categoryModel = CategoryHttpService.convertToCategoryModel(category, products$);
@@ -87,7 +87,7 @@ export class CategoryHttpService extends CategoryService {
       flatMap(
         (categories: CategoryModel[]) => forkJoin(categories.map(
           (categoryFork: CategoryModel) => {
-            return forkJoin(categoryFork.$items).pipe(map((products: ProductViewModel[][]) => {
+            return forkJoin(categoryFork.$items).pipe(map((products: ProductModel[][]) => {
               categoryFork.items = products[0];
               return categoryFork;
             }));
@@ -120,8 +120,8 @@ export class CategoryHttpService extends CategoryService {
     );
   }
   
-  private static forOne(parseObject: any[]): ProductViewModel[] {
-    let items: ProductViewModel[] = [];
+  private static forOne(parseObject: any[]): ProductModel[] {
+    let items: ProductModel[] = [];
     for (let item of parseObject) {
       items.push(CategoryHttpService.parseObjectToProductModel(item));
     }

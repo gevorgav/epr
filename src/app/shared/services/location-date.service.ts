@@ -81,6 +81,8 @@ export class LocationDateService {
     
           return calculatedPrice;
         }
+        
+        return minPrice;
       }else {
         return 0;
       }
