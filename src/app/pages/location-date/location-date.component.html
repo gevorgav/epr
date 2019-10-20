@@ -26,7 +26,7 @@
                     Start date is required.
                   </div>
                 </div>
-                <owl-date-time #dt12></owl-date-time>
+                <owl-date-time [hour12Timer]="true" [stepMinute]="30" #dt12></owl-date-time>
               </div>
               <div class="w-100 d-block d-md-none bottommargin-sm"></div>
               <div class="col-md-6 col-12">
@@ -37,7 +37,7 @@
                     End date is required.
                   </div>
                 </div>
-                <owl-date-time #dt13></owl-date-time>
+                <owl-date-time [hour12Timer]="true" [stepMinute]="30" #dt13></owl-date-time>
               </div>
               <div class="col-md-12 clearfix">
                 <div *ngIf="locationDateForm.errors?.identityRevealed && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">
@@ -62,12 +62,12 @@
               <div class="w-100"></div>
               <div class="col-md-6 col-12">
                 <label for="startDateView" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-                <span class="required sm-form-control input-block-level not-dark" id="startDateView">{{locationDateService.locationDate.startDateTime.toLocaleString()}}</span>
+                <span class="required sm-form-control input-block-level not-dark" id="startDateView">{{locationDateService.locationDate.startDateTime.toLocaleString("en-US")}}</span>
               </div>
               <div class="w-100 d-block d-md-none bottommargin-sm"></div>
               <div class="col-md-6 col-12">
                 <label for="endDateView" style="margin-bottom: 20px !important;">Date Time Range To:</label>
-                <span class="required sm-form-control input-block-level not-dark" id="endDateView">{{locationDateService.locationDate.endDateTime.toLocaleString()}}</span>
+                <span class="required sm-form-control input-block-level not-dark" id="endDateView">{{locationDateService.locationDate.endDateTime.toLocaleString("en-US")}}</span>
               </div>
               <div class="col-md-12 clearfix">
                 <button class="button button-3d button-rounded btn-block button-white button-light nomargin" (click)="edit()" style="margin-top: 35px !important;">Change</button>

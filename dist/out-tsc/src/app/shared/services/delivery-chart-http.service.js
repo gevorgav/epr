@@ -7,8 +7,6 @@ import { Injectable } from '@angular/core';
 import { DeliveryChartModel, ZipCode } from '../model/delivery-chart.model';
 import { ParseService } from './parse.service';
 import { from } from 'rxjs/internal/observable/from';
-import { flatMap, map } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { OrderService } from './order.service';
 var DeliveryChartHttpService = /** @class */ (function (_super) {
@@ -41,26 +39,15 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
     DeliveryChartHttpService.prototype.getDeliveryLocations = function () {
         var delivery = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
         var query = new this.parseService.parse.Query(delivery);
-        var promise = query.find().then(function (res) {
-            return res;
-        });
-        return from(promise).pipe(map(function (res) {
-            var deliveryLocations = [];
-            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
-                var delivery_1 = res_1[_i];
-                var zip = from(delivery_1.relation('zipCode').query().find().then(function (zip) {
-                    return DeliveryChartHttpService_1.forOne(zip);
-                }));
-                var deliveryLocation = new DeliveryChartModel(delivery_1['id'], delivery_1.attributes['city'], delivery_1.attributes['price'], zip);
-                deliveryLocations.push(deliveryLocation);
-            }
-            return deliveryLocations;
-        }), flatMap(function (deliveries) { return forkJoin(deliveries.map(function (deliveryFork) {
-            return forkJoin(deliveryFork.$zipCodes).pipe(map(function (zipCodes) {
-                deliveryFork.zipCodes = zipCodes[0];
-                return deliveryFork;
-            }));
-        })); }));
+        var deliveryCharts = [];
+        var promise1 = query.each(function (item) {
+            var zipCodes = [];
+            item.relation('zipCode').query().each(function (zip) {
+                zipCodes.push(DeliveryChartHttpService_1.parseObjectToZipCode(zip));
+            });
+            deliveryCharts.push(new DeliveryChartModel(item['id'], item.attributes['city'], item.attributes['price'], null, zipCodes));
+        }).then(function () { return deliveryCharts; });
+        return from(promise1);
     };
     DeliveryChartHttpService.prototype.getDeliveryLocationByCity = function (city) {
         return undefined;

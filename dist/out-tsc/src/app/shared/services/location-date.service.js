@@ -72,6 +72,7 @@ var LocationDateService = /** @class */ (function () {
                     calculatedPrice = nightPrice * night + price * hours + minPrice;
                     return calculatedPrice;
                 }
+                return minPrice;
             }
             else {
                 return 0;

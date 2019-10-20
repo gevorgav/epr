@@ -2,10 +2,12 @@ import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShippingHttpService } from '../../shared/services/shipping-http.service';
+import { OrderService } from '../../shared/services/order.service';
 var CheckoutComponent = /** @class */ (function () {
-    function CheckoutComponent(route, router, shippingService) {
+    function CheckoutComponent(route, router, orderService, shippingService) {
         this.route = route;
         this.router = router;
+        this.orderService = orderService;
         this.shippingService = shippingService;
         this.id$ = this.route.paramMap;
     }
@@ -16,8 +18,11 @@ var CheckoutComponent = /** @class */ (function () {
             if (id) {
                 _this.setShippedTrue(params.get('id')).subscribe(function (res) {
                     if (res) {
-                        _this.removeProductsFromOrder();
-                        _this.router.navigateByUrl('/rentals');
+                        _this.removeProductsFromOrder().subscribe(function (res) {
+                            _this.router.navigateByUrl('/rentals').then(function (res) {
+                                location.reload();
+                            });
+                        });
                     }
                 });
             }
@@ -30,7 +35,7 @@ var CheckoutComponent = /** @class */ (function () {
         return this.shippingService.setPayed(id);
     };
     CheckoutComponent.prototype.removeProductsFromOrder = function () {
-        //TODO
+        return this.orderService.destroyOrder();
     };
     CheckoutComponent = tslib_1.__decorate([
         Component({
@@ -40,6 +45,7 @@ var CheckoutComponent = /** @class */ (function () {
         }),
         tslib_1.__metadata("design:paramtypes", [ActivatedRoute,
             Router,
+            OrderService,
             ShippingHttpService])
     ], CheckoutComponent);
     return CheckoutComponent;

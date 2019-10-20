@@ -64,17 +64,24 @@ export class LocationDateService {
         let calculatedPrice = 0;
   
         let days: Date[] = this.getDates();
-        for (let day of days){
-          if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length-1){
-            hours += this.getFutureHours(9).length;
-            night += 1;
-          } else if (days.indexOf(day) === 0) {
-            hours += this.getFutureHours(day.getHours()).length;
-          }else if (days.indexOf(day) === days.length - 1) {
-            hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
+        if (days.length === 1){
+          hours = this.locationDate.endDateTime.getHours() - this.locationDate.startDateTime.getHours();
+        } else {
+          for (let day of days){
+            if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length-1){
+              hours += this.getFutureHours(9).length;
+              night += 1;
+            } else if (days.indexOf(day) === 0) {
+              hours += this.getFutureHours(day.getHours()).length;
+              if (days.length > 1) {
+                night += 1;
+              }
+            }else if (days.indexOf(day) === days.length - 1) {
+              hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
+            }
           }
         }
-  
+        
         if (hours > minTime) {
           hours = hours - minTime;
           calculatedPrice = nightPrice * night + price * hours + minPrice;

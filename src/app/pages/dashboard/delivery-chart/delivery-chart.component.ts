@@ -29,7 +29,7 @@ export class DeliveryChartComponent implements OnInit {
         deliveryChart: new DeliveryChartModel(null, '', null, null, null, null)
       },
       width: '50%',
-      // height: '95%'
+      maxHeight: 600
     });
     dialogRef.afterClosed().subscribe(
       data => {
@@ -52,7 +52,7 @@ export class DeliveryChartComponent implements OnInit {
         deliveryChart: element
       },
       width: '50%',
-      // height: '95%'
+      maxHeight: 600
     });
     dialogRef.afterClosed().subscribe(
       data => {

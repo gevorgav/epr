@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 var CheckoutService = /** @class */ (function () {
     function CheckoutService(httpClient) {
         this.httpClient = httpClient;
-        this.URL = 'https://apitest.authorize.net/xml/v1/request.api';
+        this.URL = 'https://api.authorize.net/xml/v1/request.api';
     }
     CheckoutService_1 = CheckoutService;
     CheckoutService.prototype.getToken = function () {
@@ -22,8 +22,8 @@ var CheckoutService = /** @class */ (function () {
     CheckoutService.PAYMENT_OBJ = {
         getHostedPaymentPageRequest: {
             merchantAuthentication: {
-                name: "5KP3u95bQpv",
-                transactionKey: "346HZ32z3fP4hTG2"
+                name: "3Vpb69UJ6",
+                transactionKey: "9Ut347QY48FJ9bs9"
             },
             transactionRequest: {
                 transactionType: "authCaptureTransaction",

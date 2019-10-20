@@ -195,6 +195,17 @@ var OrderService = /** @class */ (function () {
         });
         return from(promise);
     };
+    OrderService.prototype.destroyOrder = function () {
+        var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+        var order = new Order();
+        order.set('user', this.parseService.getCurrentUser());
+        var query = new this.parseService.parse.Query(order);
+        var promise = query.equalTo('user', this.parseService.getCurrentUser())
+            .first().then(function (orderParse) {
+            return orderParse.destroy();
+        });
+        return from(promise);
+    };
     var OrderService_1;
     OrderService.ORDER = 'order';
     OrderService.ZIP_CODE = 'ZipCode';

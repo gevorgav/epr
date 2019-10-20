@@ -70,7 +70,13 @@ var ShippingHttpService = /** @class */ (function () {
         var ZipCodeParse = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
         var shippings = [];
         var query = new this.parseService.parse.Query(ShippingInfo);
-        var promise = query.equalTo(option.columnName, option.value).each(function (item) {
+        if (option.columnName === 'isPayed') {
+            query = query.equalTo(option.columnName, option.value).equalTo('isShipped', false);
+        }
+        else {
+            query = query.equalTo(option.columnName, option.value);
+        }
+        var promise = query.each(function (item) {
             var shippingModel = ShippingHttpService_1.convertToShippingInfoModel(item);
             return _this.loadProductRelation(item).then(function (res1) {
                 var _a;
@@ -116,7 +122,7 @@ var ShippingHttpService = /** @class */ (function () {
         var names = [];
         for (var _i = 0, prodList_1 = prodList; _i < prodList_1.length; _i++) {
             var product = prodList_1[_i];
-            names.push(product.attributes['title']);
+            names.push({ id: product.id, name: product.attributes['title'] });
         }
         return names;
     };

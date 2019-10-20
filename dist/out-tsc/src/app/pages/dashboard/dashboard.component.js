@@ -7,6 +7,7 @@ var DashboardComponent = /** @class */ (function () {
         this.activatedRoute = activatedRoute;
         this.items = [
             { routerLink: 'shipping', name: 'Rental requests', isActive: true },
+            { routerLink: 'shipped', name: 'Shipped Rentals', isActive: false },
             { routerLink: 'product', name: 'Product', isActive: false },
             { routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false },
             { routerLink: 'category', name: 'Category', isActive: false },

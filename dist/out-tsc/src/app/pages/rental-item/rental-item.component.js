@@ -150,6 +150,9 @@ var RentalItemComponent = /** @class */ (function () {
         var order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.parseService.getCurrentUser() ? this.parseService.getCurrentUser().id : null, this.locationService.locationDate.location, items);
         this.orderService.setOrder(order).subscribe(function (res) {
             var _a;
+            if (!_this.initializerService.orderModel.orderItems) {
+                _this.initializerService.orderModel.orderItems = [];
+            }
             (_a = _this.initializerService.orderModel.orderItems).push.apply(_a, order.orderItems);
         });
     };

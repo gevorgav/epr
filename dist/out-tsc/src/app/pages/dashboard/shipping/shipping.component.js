@@ -19,6 +19,22 @@ var ShippingComponent = /** @class */ (function () {
             _this.dataSource = new MatTableDataSource(_this.shippingModels);
         });
     };
+    ShippingComponent.prototype.setShipped = function (id) {
+        var _this = this;
+        this._shippingService.setShipped(id, true).subscribe(function (res) {
+            _this.initShipping();
+        });
+    };
+    ShippingComponent.prototype.getProductWithCount = function (element, product) {
+        var text = '';
+        for (var _i = 0, _a = element.productCount; _i < _a.length; _i++) {
+            var prodCount = _a[_i];
+            if (prodCount.productId === product.id) {
+                text = product.name + ' -_-    how many: ' + prodCount.count;
+            }
+        }
+        return text;
+    };
     ShippingComponent = tslib_1.__decorate([
         Component({
             selector: 'app-shipping',

@@ -57,6 +57,9 @@ var RentalsComponent = /** @class */ (function () {
             }
         });
     };
+    RentalsComponent.prototype.getPrice = function (nightPrice, minPrice, minTime, price) {
+        return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+    };
     RentalsComponent.prototype.isSpecified = function () {
         return this.locationDateService.isSpecified;
     };

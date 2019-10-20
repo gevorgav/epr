@@ -52,6 +52,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CheckoutService } from './shared/services/checkout.service';
 import { ShippingHttpService } from './shared/services/shipping-http.service';
 import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
+import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
 var appRoutes = [
     {
         path: '',
@@ -83,6 +84,7 @@ var appRoutes = [
         component: DashboardComponent,
         canActivate: [AuthGuard],
         children: [
+            { path: 'shipped', component: ShippedRentalsComponent },
             { path: 'shipping', component: ShippingComponent },
             { path: 'delivery-chart', component: DashboardDeliveryChartComponent },
             { path: 'product', component: ProductComponent },
@@ -150,7 +152,8 @@ var AppModule = /** @class */ (function () {
                 CategoryPopupComponent,
                 PaymentFormComponent,
                 UserComponent,
-                ShippingComponent
+                ShippingComponent,
+                ShippedRentalsComponent
             ],
             imports: [
                 RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
