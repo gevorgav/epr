@@ -26,7 +26,7 @@
                     Start date is required.
                   </div>
                 </div>
-                <owl-date-time [hour12Timer]="true" [stepMinute]="30" #dt12></owl-date-time>
+                <owl-date-time [startAt]="startAt" [hour12Timer]="true" [stepMinute]="30" #dt12></owl-date-time>
               </div>
               <div class="w-100 d-block d-md-none bottommargin-sm"></div>
               <div class="col-md-6 col-12">
@@ -37,7 +37,7 @@
                     End date is required.
                   </div>
                 </div>
-                <owl-date-time [hour12Timer]="true" [stepMinute]="30" #dt13></owl-date-time>
+                <owl-date-time [startAt]="startAt" [hour12Timer]="true" [stepMinute]="30" #dt13></owl-date-time>
               </div>
               <div class="col-md-12 clearfix">
                 <div *ngIf="locationDateForm.errors?.identityRevealed && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">

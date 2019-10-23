@@ -23,6 +23,8 @@ export class LocationDateComponent implements OnInit {
   
   public allDeliveryCharts: DeliveryChartModel[] = [];
   
+  public startAt;
+  
   @Output() emitSubmit = new EventEmitter<boolean>();
   
   constructor(private locationDateService: LocationDateService,
@@ -31,14 +33,19 @@ export class LocationDateComponent implements OnInit {
   }
   
   ngOnInit() {
+    let defaultDate = new Date();
+    defaultDate.setMinutes(0);
+    this.startAt = defaultDate;
     this.locationDateForm = new FormGroup({
       'zipCode': new FormControl(this.locationDateService.locationDate.getLocation(), [
         Validators.required
       ]),
-      'startDate': new FormControl(this.locationDateService.locationDate.startDateTime, [
+      'startDate': new FormControl(
+        this.locationDateService.locationDate.startDateTime, [
         Validators.required
       ]),
-      'endDate': new FormControl(this.locationDateService.locationDate.endDateTime, [
+      'endDate': new FormControl(
+        this.locationDateService.locationDate.endDateTime, [
         Validators.required
       ]),
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
