@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as Parse from "parse";
 import {ParseService} from '../../shared/services/parse.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
@@ -15,8 +16,10 @@ export class ResetPasswordComponent implements OnInit {
   public email :string = "";
 
   public message: string = "";
+  public disableResetButton: boolean = false;
 
-  constructor(private parseService: ParseService) { }
+  constructor(private parseService: ParseService,
+              private router: Router) { }
 
   ngOnInit() {
     this.initResetForm();
@@ -43,9 +46,17 @@ export class ResetPasswordComponent implements OnInit {
   onSubmitResetPassword() {
     this.parseService.parse.User.requestPasswordReset(this.userResetForm.get('email').value)
       .then(() => {
-        this.message =  "Password reset request was sent successfully, please check your email."
+        this.message =  "Password reset request was sent successfully, please check your email.";
+        this.redirect();
       }).catch((error) => {
         this.message = error.message;
     });
+  }
+  
+  private redirect() {
+    this.disableResetButton = true;
+    setTimeout(()=>{
+      this.router.navigate(["login"]);
+    }, 3000)
   }
 }
