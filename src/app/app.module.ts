@@ -13,7 +13,7 @@ import {HeaderComponent} from './layout/header/header.component';
 import {RouterModule, Routes} from '@angular/router';
 import {RentalsComponent} from './pages/rentals/rentals.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import { OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RentalItemComponent} from './pages/rental-item/rental-item.component';
 import {CheckoutComponent} from './pages/checkout/checkout.component';
@@ -53,6 +53,7 @@ import {CheckoutService} from './shared/services/checkout.service';
 import {ShippingHttpService} from './shared/services/shipping-http.service';
 import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
 import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 const appRoutes: Routes = [
   {
@@ -92,6 +93,11 @@ const appRoutes: Routes = [
       {path: 'category', component: CategoryComponent},
       {path: 'user', component: UserComponent},
     ]
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    canActivate: [AuthGuardLoginService]
   },
   {
     path: 'login',
@@ -151,7 +157,8 @@ const appRoutes: Routes = [
     PaymentFormComponent,
     UserComponent,
     ShippingComponent,
-    ShippedRentalsComponent
+    ShippedRentalsComponent,
+    ResetPasswordComponent
   ],
   imports: [
     RouterModule.forRoot(
