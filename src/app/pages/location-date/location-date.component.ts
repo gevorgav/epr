@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.model';
 import {map, startWith} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
-import {start} from 'repl';
 import {OrderService} from '../../shared/services/order.service';
 
 @Component({
@@ -14,24 +13,24 @@ import {OrderService} from '../../shared/services/order.service';
   styleUrls: ['./location-date.component.css']
 })
 export class LocationDateComponent implements OnInit {
-  
+
   public locationDateForm: FormGroup;
-  
+
   stateGroups: string[] = [];
-  
+
   stateGroupOptions: Observable<string[]>;
-  
+
   public allDeliveryCharts: DeliveryChartModel[] = [];
-  
+
   public startAt;
-  
+
   @Output() emitSubmit = new EventEmitter<boolean>();
-  
+
   constructor(private locationDateService: LocationDateService,
               private deliveryChartService: DeliveryChartService,
               private orderService: OrderService) {
   }
-  
+
   ngOnInit() {
     let defaultDate = new Date();
     defaultDate.setMinutes(0);
@@ -49,28 +48,28 @@ export class LocationDateComponent implements OnInit {
         Validators.required
       ]),
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
-    
+
     this.deliveryChartService.getDeliveryLocations().subscribe(res => {
       this.allDeliveryCharts = res;
       this.initAutoCompleteOptions();
     });
-    
+
     this.stateGroupOptions = this.locationDateForm.valueChanges
     .pipe(
       startWith(''),
       map(value => this._filterGroup(value.zipCode))
     );
   }
-  
+
   private _filterGroup(value: string): string[] {
     if (value) {
       const filterValue = value.toLowerCase();
-      
+
       return this.stateGroups.filter(option => option.toLowerCase().includes(filterValue));
     }
     return this.stateGroups;
   }
-  
+
   onSubmit() {
     if (this.locationDateForm.valid) {
       if (this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value)) {
@@ -84,14 +83,14 @@ export class LocationDateComponent implements OnInit {
       }
     }
   }
-  
+
   edit() {
     this.locationDateService.setIsSpecified(false);
   }
-  
+
   checkCityOrZipCode(value: string): boolean {
     let isCorrect: boolean = false;
-    
+
     for (let city of this.allDeliveryCharts) {
       for (let zipCode of city.zipCodes) {
         if (value.indexOf(zipCode.zipCode) > -1) {
@@ -100,10 +99,10 @@ export class LocationDateComponent implements OnInit {
         }
       }
     }
-    
+
     return isCorrect;
   }
-  
+
   getZipCode(value: string): ZipCode {
     for (let city of this.allDeliveryCharts) {
       for (let zipCode of city.zipCodes) {
@@ -114,7 +113,7 @@ export class LocationDateComponent implements OnInit {
       }
     }
   }
-  
+
   private initAutoCompleteOptions() {
     let zipCodeNames: string [] = [];
     for (let city of this.allDeliveryCharts) {
@@ -124,7 +123,7 @@ export class LocationDateComponent implements OnInit {
     }
     this.stateGroups.push(...zipCodeNames);
   }
-  
+
   isSpecified() {
     return this.locationDateService.isSpecified;
   }

@@ -2,12 +2,10 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
-import {ProductViewModel} from '../../shared/model/product-view.model';
 import {ProductService} from '../../shared/services/product.service';
 import {ProductModel} from '../../shared/model/product.model';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
-import {InitializerService} from '../../shared/services/initializer.service';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -23,24 +21,24 @@ export class HomePageComponent implements OnInit, AfterViewInit {
               private categoryService: CategoryService,
               private productService: ProductService) {
   }
-  
+
   public categories: CategoryModel[] = [];
-  
+
   public featuredRentalProducts: ProductModel[] = [];
-  
+
   ngOnInit() {
     this.initCategories();
     this.initProducts();
   }
-  
+
   ngAfterViewInit(): void {
     this.initGallery();
   }
-  
+
   locationDateSubmitted() {
     this.router.navigate(['rentals']);
   }
-  
+
   private initGallery() {
     setTimeout(() => {
         SEMICOLON.documentOnReady.init();
@@ -64,7 +62,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       return false;
     });
   }
-  
+
   private initCategories() {
     this.categoryService.getCategoriesWithDependency().pipe(
       map((arr: CategoryModel[]) => arr.sort((a, b) => {
@@ -74,7 +72,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       this.categories = res;
     });
   }
-  
+
   private initFeaturedRentalProducts(res: ProductModel[]) {
     res.forEach((product: ProductModel) => {
       if (product.isNew || product.isHotDeal) {
@@ -82,31 +80,32 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+
   public navigate(id: string, title: string) {
     this.router.navigate(['/rentals', title], {queryParams: {id: id}});
   }
-  
+
   getClass(index: number) {
-    if (index === 0 || index === 1 || index === 11 || index === 12) {
+    if ((index === 0 || index === 1 || index === 11 || index === 12)
+      && this.categories.length % 3 !== 0) {
       return 'col-lg-6';
     }
-    
+
     return 'col-lg-4';
   }
-  
+
   private initProducts() {
     this.productService.getAllProducts().subscribe((res: ProductModel[]) => {
       this.initFeaturedRentalProducts(res);
     });
   }
-  
+
   public isSpecified(){
     return this.locationDateService.isSpecified;
   }
-  
+
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
     return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
   }
-  
+
 }

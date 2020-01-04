@@ -165,7 +165,7 @@ const appRoutes: Routes = [
       appRoutes,
       {enableTracing: false} // <-- debugging purposes only
     ),
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
