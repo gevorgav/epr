@@ -12702,7 +12702,9 @@ var LocationDateComponent = /** @class */ (function () {
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required
             ]),
         }, { validators: [identityRevealedValidator, identityTimeValidator] });
-        this.deliveryChartService.getDeliveryLocations().subscribe(function (res) {
+        this.deliveryChartService.getDeliveryLocations()
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["debounceTime"])(300))
+            .subscribe(function (res) {
             _this.allDeliveryCharts = res;
             _this.initAutoCompleteOptions();
         });

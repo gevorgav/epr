@@ -3,7 +3,7 @@ import {LocationDateService} from '../../shared/services/location-date.service';
 import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.model';
-import {map, startWith} from 'rxjs/operators';
+import {debounceTime, map, startWith} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {OrderService} from '../../shared/services/order.service';
 
@@ -49,10 +49,12 @@ export class LocationDateComponent implements OnInit {
       ]),
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
 
-    this.deliveryChartService.getDeliveryLocations().subscribe(res => {
-      this.allDeliveryCharts = res;
-      this.initAutoCompleteOptions();
-    });
+    this.deliveryChartService.getDeliveryLocations()
+      .pipe(debounceTime(300))
+      .subscribe(res => {
+        this.allDeliveryCharts = res;
+        this.initAutoCompleteOptions();
+      });
 
     this.stateGroupOptions = this.locationDateForm.valueChanges
     .pipe(
