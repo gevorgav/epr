@@ -50,7 +50,7 @@ export class LocationDateComponent implements OnInit {
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
 
     this.deliveryChartService.getDeliveryLocations()
-      .pipe(debounceTime(300))
+      // .pipe(debounceTime(300))
       .subscribe(res => {
         this.allDeliveryCharts = res;
         this.initAutoCompleteOptions();
