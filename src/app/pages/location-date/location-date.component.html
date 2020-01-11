@@ -7,9 +7,14 @@
                 <mat-form-field style="width: 100%;" >
                   <input type="text" autocomplete="off"  matInput placeholder="Enter Zip Code or City" required formControlName="zipCode" [matAutocomplete]="autoGroup"  id="zipCode">
                   <mat-autocomplete #autoGroup="matAutocomplete">
+                    <mat-option *ngIf="isLoading" class="is-loading">
+                      <mat-spinner diameter="50"></mat-spinner>
+                    </mat-option>
+                    <ng-container>
                       <mat-option *ngFor="let zipCode of stateGroupOptions | async" [value]="zipCode">
                         {{zipCode}}
                       </mat-option>
+                    </ng-container>
                   </mat-autocomplete>
                 </mat-form-field>
                 <div *ngIf="locationDateForm.errors?.incorrectZipLocation && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">

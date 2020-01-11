@@ -86,7 +86,9 @@ export class DeliveryChartComponent implements OnInit {
       .subscribe(
         res => {
           this.deliveryCharts = res;
-          this.dataSource = new MatTableDataSource(this.deliveryCharts);
+          this.dataSource = new MatTableDataSource(this.deliveryCharts.sort((a, b) => {
+            return a.city.localeCompare(b.city);
+          }));
         },
         error => handleError(error)
       )

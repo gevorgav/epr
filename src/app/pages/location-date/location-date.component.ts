@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.model';
-import {debounceTime, map, startWith} from 'rxjs/operators';
+import {debounceTime, finalize, flatMap, map, startWith, switchMap, tap} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {OrderService} from '../../shared/services/order.service';
 
@@ -18,11 +18,13 @@ export class LocationDateComponent implements OnInit {
 
   stateGroups: string[] = [];
 
-  stateGroupOptions: Observable<string[]>;
+  stateGroupOptions: Observable<string[]> = of([]);
 
   public allDeliveryCharts: DeliveryChartModel[] = [];
 
   public startAt;
+
+  public isLoading: boolean = false;
 
   @Output() emitSubmit = new EventEmitter<boolean>();
 
@@ -41,35 +43,37 @@ export class LocationDateComponent implements OnInit {
       ]),
       'startDate': new FormControl(
         this.locationDateService.locationDate.startDateTime, [
-        Validators.required
-      ]),
+          Validators.required
+        ]),
       'endDate': new FormControl(
         this.locationDateService.locationDate.endDateTime, [
-        Validators.required
-      ]),
+          Validators.required
+        ]),
     }, {validators: [identityRevealedValidator, identityTimeValidator]});
 
-    this.deliveryChartService.getDeliveryLocations()
-      .pipe(debounceTime(300))
-      .subscribe(res => {
-        this.allDeliveryCharts = res;
-        this.initAutoCompleteOptions();
-      });
-
-    this.stateGroupOptions = this.locationDateForm.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterGroup(value.zipCode))
-    );
+    this.stateGroupOptions = this.locationDateForm.get('zipCode').valueChanges
+      .pipe(
+        debounceTime(300),
+        startWith(''),
+        tap(() => this.isLoading = true),
+        flatMap(value => this._filterGroup(value)
+          .pipe(finalize(() => this.isLoading = false))
+        )
+      );
   }
 
-  private _filterGroup(value: string): string[] {
+  private _filterGroup(value: string): Observable<string[]> {
     if (value) {
-      const filterValue = value.toLowerCase();
-
-      return this.stateGroups.filter(option => option.toLowerCase().includes(filterValue));
+      let city: string[] = value.match(/[a-zA-Z]+/g);
+      let zipCode: string[] = value.match(/\d+/g);
+      let list: Observable<string[]>;
+      if (city && !zipCode) {
+        return this.getByCity(city[0].charAt(0).toUpperCase() + city[0].slice(1));
+      } else if (zipCode && zipCode[0].length > 2) {
+        return this.getByZipCodeAndCity(zipCode, city ? city[0].charAt(0).toUpperCase() + city[0].slice(1) : null);
+      }
     }
-    return this.stateGroups;
+    return of([]);
   }
 
   onSubmit() {
@@ -116,18 +120,39 @@ export class LocationDateComponent implements OnInit {
     }
   }
 
-  private initAutoCompleteOptions() {
+  private getAutoCompleteOptions(): string[] {
     let zipCodeNames: string [] = [];
     for (let city of this.allDeliveryCharts) {
       for (let zipCode of city.zipCodes) {
         zipCodeNames.push(city.city + ' ' + zipCode.zipCode);
       }
     }
-    this.stateGroups.push(...zipCodeNames);
+    return zipCodeNames;
   }
 
   isSpecified() {
     return this.locationDateService.isSpecified;
+  }
+
+  private getByCity(city: string): Observable<string[]> {
+    return this.deliveryChartService.getDeliveryLocationByCity(city).pipe(
+      map(res => {
+        return this.initDeliveryList(res);
+      })
+    );
+  }
+
+  private initDeliveryList(res: Array<DeliveryChartModel>) {
+    this.allDeliveryCharts = res;
+    return this.getAutoCompleteOptions();
+  }
+
+  private getByZipCodeAndCity(zipCode: string[], city: string): Observable<string[]> {
+    return this.deliveryChartService.getDeliveryLocationsByZipCodeSearch(zipCode[0], city).pipe(
+      map(res => {
+        return this.initDeliveryList(res);
+      })
+    );
   }
 }
 

@@ -15,14 +15,14 @@ import {DeliveryChartHttpService} from './delivery-chart-http.service';
   providedIn: 'root'
 })
 export class OrderService {
-  
+
   static ORDER = 'order';
   static ZIP_CODE = 'ZipCode';
   static ORDER_ITEM = 'orderItem';
-  
+
   constructor(private parseService: ParseService) {
   }
-  
+
   setOrderDateLocation(startDate: Date, endDate: Date, zipCode: ZipCode): Observable<any> {
     if (this.parseService.isAuth()) {
       const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
@@ -32,7 +32,7 @@ export class OrderService {
       order.set('endDate', endDate);
       order.set('user', this.parseService.getCurrentUser());
       order.set('zipCode', new parseZipCode({id: zipCode.id}));
-      
+
       const query = new this.parseService.parse.Query(order);
       let promise = query.equalTo('user', this.parseService.getCurrentUser());
       promise.first().catch(res => {
@@ -53,7 +53,7 @@ export class OrderService {
       return null;
     }
   }
-  
+
   initOrderedData(): Observable<OrderModel>{
     let orderModel = new OrderModel(null,null,null,null,[]);
     let orderItems: OrderItemModel[] = [];
@@ -91,20 +91,23 @@ export class OrderService {
           });
         });
       }).catch(reason=>{
-        return Promise((resolver, reject)=>{resolver({})})
+        if (reason.code == 209){
+          this.parseService.logOut();
+        }
+        return Promise((resolver, reject)=>{resolver({})});
       });
     }else {
       promise = Promise((resolver, reject)=>{resolver(orderModel)})
     }
     return from(promise);
   }
-  
+
   setOrder(model: OrderModel): Observable<any> {
     if (this.parseService.isAuth()) {
       const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
       let order = new Order();
       order.set('user', this.parseService.getCurrentUser());
-      
+
       const query = new this.parseService.parse.Query(order);
       let promise = query.equalTo('user', this.parseService.getCurrentUser())
         .first().catch(res => {
@@ -123,7 +126,7 @@ export class OrderService {
       return of(true);
     }
   }
-  
+
   private setOrderFields(order: any, model: OrderModel) {
     order.set('id', model.id);
     order.set('startDate', model.startDate);
@@ -131,7 +134,7 @@ export class OrderService {
     order.set('userId', this.parseService.getCurrentUser().id);
     order.set('zipCode', model.zipCode.id);
   }
-  
+
   private saveAndGetOrderItems(orderItems: OrderItemModel[]): Promise<any[]> {
     const OrderItem = this.parseService.parse.Object.extend(OrderService.ORDER_ITEM);
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
@@ -149,13 +152,13 @@ export class OrderService {
       }
     });
   }
-  
+
   private getZipCode(id: any): Promise<any> {
     const ParseZipCode = this.parseService.parse.Object.extend(OrderService.ZIP_CODE);
     let queryZip = new this.parseService.parse.Query(ParseZipCode);
     return queryZip.equalTo("objectId", id).first().then(res=>{return res})
   }
-  
+
   getDeliveryByZipCodeId(zipCodeId: string): Promise<any> {
     let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
     zipCodeQuery.contains('objectId', zipCodeId);
@@ -167,12 +170,12 @@ export class OrderService {
       console.log(error);
     });
   }
-  
+
   saveCount(value: number, productId: string): Observable<boolean> {
     const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
     let order = new Order();
     order.set('user', this.parseService.getCurrentUser());
-  
+
     const query = new this.parseService.parse.Query(order);
     let promise = query.equalTo('user', this.parseService.getCurrentUser())
       .first().then(res=>{
@@ -187,16 +190,16 @@ export class OrderService {
       });
     return from(promise);
   }
-  
+
   removeOrderItem(productId: string): Observable<boolean>{
     const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
     let order = new Order();
     order.set('user', this.parseService.getCurrentUser());
-  
+
     const OrderItem = this.parseService.parse.Object.extend(OrderService.ORDER_ITEM);
     const queryOrderItem = new this.parseService.parse.Query(OrderItem);
-    
-  
+
+
     const query = new this.parseService.parse.Query(order);
     let promise = query.equalTo('user', this.parseService.getCurrentUser())
     .first().then(res=>{
@@ -210,7 +213,7 @@ export class OrderService {
     });
     return from(promise);
   }
-  
+
   public destroyOrder(): Observable<any>{
     const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
     let order = new Order();
@@ -220,8 +223,8 @@ export class OrderService {
       .first().then(orderParse=>{
       return orderParse.destroy()
     });
-    
+
     return from(promise);
   }
-  
+
 }
