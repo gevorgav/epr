@@ -14291,3 +14291,12 @@ body.side-panel-open #side-panel {
 .color-2 { color: #F0AD4E !important; }
 .bgcolor-2 { background-color: #F0AD4E !important; }
 
+.timepicker-backdrop-overlay {
+  z-index: 1000!important;
+}
+.timepicker-overlay {
+  z-index: 1000!important;
+}
+.timepicker {
+  z-index: 1000!important;
+}

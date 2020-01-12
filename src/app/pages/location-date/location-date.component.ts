@@ -3,7 +3,7 @@ import {LocationDateService} from '../../shared/services/location-date.service';
 import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.model';
-import {debounceTime, finalize, flatMap, map, startWith, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, finalize, flatMap, map, startWith, tap} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {OrderService} from '../../shared/services/order.service';
 
@@ -16,13 +16,9 @@ export class LocationDateComponent implements OnInit {
 
   public locationDateForm: FormGroup;
 
-  stateGroups: string[] = [];
-
   stateGroupOptions: Observable<string[]> = of([]);
 
   public allDeliveryCharts: DeliveryChartModel[] = [];
-
-  public startAt;
 
   public isLoading: boolean = false;
 
@@ -34,23 +30,7 @@ export class LocationDateComponent implements OnInit {
   }
 
   ngOnInit() {
-    let defaultDate = new Date();
-    defaultDate.setMinutes(0);
-    this.startAt = defaultDate;
-    this.locationDateForm = new FormGroup({
-      'zipCode': new FormControl(this.locationDateService.locationDate.getLocation(), [
-        Validators.required
-      ]),
-      'startDate': new FormControl(
-        this.locationDateService.locationDate.startDateTime, [
-          Validators.required
-        ]),
-      'endDate': new FormControl(
-        this.locationDateService.locationDate.endDateTime, [
-          Validators.required
-        ]),
-    }, {validators: [identityRevealedValidator, identityTimeValidator]});
-
+    this.initForm();
     this.stateGroupOptions = this.locationDateForm.get('zipCode').valueChanges
       .pipe(
         debounceTime(300),
@@ -66,7 +46,6 @@ export class LocationDateComponent implements OnInit {
     if (value) {
       let city: string[] = value.match(/[a-zA-Z]+/g);
       let zipCode: string[] = value.match(/\d+/g);
-      let list: Observable<string[]>;
       if (city && !zipCode) {
         return this.getByCity(city[0].charAt(0).toUpperCase() + city[0].slice(1));
       } else if (zipCode && zipCode[0].length > 2) {
@@ -78,15 +57,23 @@ export class LocationDateComponent implements OnInit {
 
   onSubmit() {
     if (this.locationDateForm.valid) {
-      if (this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value)) {
-        this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
-        this.orderService.setOrderDateLocation(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
-        this.locationDateService.setIsSpecified(true);
-        this.emitSubmit.emit(true);
-      } else {
-        //@ts-ignore
-        this.locationDateForm.errors = {incorrectZipLocation: true};
-      }
+      this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value).subscribe(res=>{
+        if (res) {
+          let finalStartDate = LocationDateComponent.getTimeWithDateTime(this.locationDateForm.get('startDate').value,
+            this.locationDateForm.get('startDateTime').value);
+          let finalEndDate = LocationDateComponent.getTimeWithDateTime(this.locationDateForm.get('endDate').value,
+            this.locationDateForm.get('endDateTime').value);
+          this.getZipCode(this.locationDateForm.get('zipCode').value).subscribe((zipCode: ZipCode) => {
+            this.locationDateService.setLocationDate(finalStartDate, finalEndDate, zipCode);
+            this.orderService.setOrderDateLocation(finalStartDate, finalEndDate, zipCode);
+            this.locationDateService.setIsSpecified(true);
+            this.emitSubmit.emit(true);
+          });
+        } else {
+          this.locationDateForm.setErrors({incorrectZipLocation: true}) ;
+        }
+      })
+
     }
   }
 
@@ -94,30 +81,21 @@ export class LocationDateComponent implements OnInit {
     this.locationDateService.setIsSpecified(false);
   }
 
-  checkCityOrZipCode(value: string): boolean {
-    let isCorrect: boolean = false;
-
-    for (let city of this.allDeliveryCharts) {
-      for (let zipCode of city.zipCodes) {
-        if (value.indexOf(zipCode.zipCode) > -1) {
-          isCorrect = true;
-          break;
-        }
-      }
-    }
-
-    return isCorrect;
+  checkCityOrZipCode(value: string): Observable<boolean> {
+    let city: string[] = value.match(/[a-zA-Z]+/g);
+    let zipCode: string[] = value.match(/\d+/g);
+    return this.deliveryChartService.getDeliveryLocationByZipCode(zipCode[0]).pipe(
+      map(res=> city.join(' ') === res.city)
+    );
   }
 
-  getZipCode(value: string): ZipCode {
-    for (let city of this.allDeliveryCharts) {
-      for (let zipCode of city.zipCodes) {
-        if (value.indexOf(zipCode.zipCode) > -1) {
-          zipCode.location = value;
-          return zipCode;
-        }
-      }
-    }
+  getZipCode(value: string): Observable<ZipCode> {
+    let zipCode: string[] = value.match(/\d+/g);
+    let city: string = value.match(/[a-zA-Z]+/g).join(" ");
+    return this.deliveryChartService.getZipCodeModelByZipCode(zipCode[0]).pipe(map(res=>{
+      res.location = city + " " + res.zipCode;
+      return res;
+    }));
   }
 
   private getAutoCompleteOptions(): string[] {
@@ -154,16 +132,59 @@ export class LocationDateComponent implements OnInit {
       })
     );
   }
+
+  static getTimeWithDateTime(date: string, time: string): Date {
+    let dateObj: Date = new Date(date);
+    return new Date(dateObj.toLocaleDateString()+", " + time);
+  }
+
+  private initForm() {
+    this.locationDateForm = new FormGroup({
+      'zipCode': new FormControl(this.locationDateService.locationDate.getLocation(), [
+        Validators.required
+      ]),
+      'startDate': new FormControl(
+        this.locationDateService.locationDate.startDateTime, [
+          Validators.required
+        ]),
+      'startDateTime': new FormControl(
+        this.locationDateService.locationDate.startDateTime?
+          this.locationDateService.locationDate.startDateTime.toLocaleTimeString():null,
+        [
+          Validators.required
+        ]),
+      'endDateTime': new FormControl(
+        this.locationDateService.locationDate.endDateTime?
+          this.locationDateService.locationDate.endDateTime.toLocaleTimeString(): null,
+        [
+          Validators.required
+        ]),
+      'endDate': new FormControl(
+        this.locationDateService.locationDate.endDateTime, [
+          Validators.required
+        ]),
+    }, {validators: [identityRevealedValidator, identityTimeValidator]});
+  }
 }
 
 export const identityRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-  const startDate = control.get('startDate');
-  const endDate = control.get('endDate');
-  return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? {'identityRevealed': true} : null;
+  if (!control.get('startDate').value || !control.get('startDateTime').value ||
+    !control.get('endDate').value || !control.get('endDateTime').value){
+    return null;
+  }
+  const finalStartDate = LocationDateComponent.getTimeWithDateTime(control.get('startDate').value,
+    control.get('startDateTime').value);
+  const finalEndDate = LocationDateComponent.getTimeWithDateTime(control.get('endDate').value,
+    control.get('endDateTime').value);
+  return (finalEndDate.getTime() - finalStartDate.getTime() < 0) ? {'identityRevealed': true} : null;
 };
 
 export const identityTimeValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-  const startDate = control.get('startDate');
+  if (!control.get('startDate').value || !control.get('startDateTime').value){
+    return null;
+  }
+  const finalStartDate = LocationDateComponent.getTimeWithDateTime(control.get('startDate').value,
+    control.get('startDateTime').value);
   let now = new Date();
-  return startDate.value && (startDate.value.getTime() - now.getTime() < 54000000) ? {'identityTime': true} : null;
+  return (finalStartDate.getTime() - now.getTime() < 54000000) ? {'identityTime': true} : null;
 };

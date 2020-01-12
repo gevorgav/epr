@@ -54,6 +54,8 @@ import {ShippingHttpService} from './shared/services/shipping-http.service';
 import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
 import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {MatDatepickerModule} from '@angular/material';
 
 const appRoutes: Routes = [
   {
@@ -174,6 +176,8 @@ const appRoutes: Routes = [
     OwlNativeDateTimeModule,
     MaterialModule,
     NgxGalleryModule,
+    NgxMaterialTimepickerModule,
+    MatDatepickerModule,
     CarouselModule
   ],
   providers: [

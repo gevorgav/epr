@@ -1,7 +1,7 @@
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
-import {DeliveryChartModel} from '../model/delivery-chart.model';
+import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
 import {Observable} from 'rxjs/internal/Observable';
 
 export abstract class DeliveryChartService {
@@ -14,6 +14,8 @@ export abstract class DeliveryChartService {
   abstract getDeliveryLocationByCity(city: string): Observable<Array<DeliveryChartModel>>;
 
   abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
+
+  abstract getZipCodeModelByZipCode(zipCode: string): Observable<ZipCode>
 
   abstract saveDeliveryChart(model: DeliveryChartModel): Observable<any>;
 

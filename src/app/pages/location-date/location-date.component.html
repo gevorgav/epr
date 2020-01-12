@@ -3,7 +3,6 @@
           <div class="tab-content clearfix" id="tab-rent">
             <div class="row">
               <div class="col-md-12 col-12">
-                <label for="zipCode" style="margin-bottom: 20px !important;">Event Location</label>
                 <mat-form-field style="width: 100%;" >
                   <input type="text" autocomplete="off"  matInput placeholder="Enter Zip Code or City" required formControlName="zipCode" [matAutocomplete]="autoGroup"  id="zipCode">
                   <mat-autocomplete #autoGroup="matAutocomplete">
@@ -24,25 +23,53 @@
               </div>
               <div class="w-100"></div>
               <div class="col-md-6 col-12">
-                <label for="start" style="margin-bottom: 20px !important;">Date Time Range From:</label>
-                <input autocomplete="off" class="required sm-form-control input-block-level not-dark" id="start" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12" formControlName="startDate">
+                <mat-form-field>
+                  <input readonly matInput [matDatepicker]="start" (click)="start.open()"
+                         placeholder="Delivery date" formControlName="startDate">
+                  <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                  <mat-datepicker #start></mat-datepicker>
+                </mat-form-field>
                 <div *ngIf="locationDateForm.controls['startDate'].invalid && (locationDateForm.controls['startDate'].dirty || locationDateForm.controls['startDate'].touched)" class="alert alert-danger">
                   <div *ngIf="locationDateForm.controls['startDate'].errors.required">
-                    Start date is required.
+                    Delivery date is required.
                   </div>
                 </div>
-                <owl-date-time [startAt]="startAt" [hour12Timer]="true" [stepMinute]="30" #dt12></owl-date-time>
+              </div>
+              <div class="col-md-6 col-12">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Time" [ngxTimepicker]="startTime" readonly formControlName="startDateTime">
+                  <ngx-material-timepicker #startTime [minutesGap]="30"></ngx-material-timepicker>
+                </mat-form-field>
+                <div *ngIf="locationDateForm.controls['startDateTime'].invalid && (locationDateForm.controls['startDateTime'].dirty || locationDateForm.controls['startDateTime'].touched)" class="alert alert-danger">
+                  <div *ngIf="locationDateForm.controls['startDateTime'].errors.required">
+                    Time is required.
+                  </div>
+                </div>
               </div>
               <div class="w-100 d-block d-md-none bottommargin-sm"></div>
               <div class="col-md-6 col-12">
-                <label for="end" style="margin-bottom: 20px !important;"> Date Time Range To:</label>
-                <input autocomplete="off" id="end" class="required sm-form-control input-block-level not-dark"  [owlDateTimeTrigger]="dt13" [owlDateTime]="dt13" formControlName="endDate">
+                <mat-form-field>
+                  <input readonly matInput [matDatepicker]="end" (click)="end.open()"
+                         placeholder="Pick up date" formControlName="endDate">
+                  <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+                  <mat-datepicker #end></mat-datepicker>
+                </mat-form-field>
                 <div *ngIf="locationDateForm.controls['endDate'].invalid && (locationDateForm.controls['endDate'].dirty || locationDateForm.controls['endDate'].touched)" class="alert alert-danger">
                   <div *ngIf="locationDateForm.controls['endDate'].errors.required">
-                    End date is required.
+                    Pick up date is required.
                   </div>
                 </div>
-                <owl-date-time [startAt]="startAt" [hour12Timer]="true" [stepMinute]="30" #dt13></owl-date-time>
+              </div>
+              <div class="col-md-6 col-12">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Time" [ngxTimepicker]="endTime" readonly formControlName="endDateTime">
+                  <ngx-material-timepicker #endTime [minutesGap]="30"></ngx-material-timepicker>
+                </mat-form-field>
+                <div *ngIf="locationDateForm.controls['endDateTime'].invalid && (locationDateForm.controls['endDateTime'].dirty || locationDateForm.controls['endDateTime'].touched)" class="alert alert-danger">
+                  <div *ngIf="locationDateForm.controls['endDateTime'].errors.required">
+                    Time is required.
+                  </div>
+                </div>
               </div>
               <div class="col-md-12 clearfix">
                 <div *ngIf="locationDateForm.errors?.identityRevealed && (locationDateForm.touched || locationDateForm.dirty)" class="cross-validation-error-message alert alert-danger">

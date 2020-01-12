@@ -8,22 +8,23 @@ import {from} from 'rxjs/internal/observable/from';
   providedIn: 'root'
 })
 export class ShippingHttpService {
-  
+
   static PRODUCT = 'Product';
   static ZIP_CODE = 'ZipCode';
   static SHIPPING_INFO = 'ShippingInfo';
-  
+
   constructor(private parseService: ParseService) {
   }
 
   public saveShipping(shipping: ShippingInfoModel): Observable<any> {
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     const ZipCode = this.parseService.parse.Object.extend(ShippingHttpService.ZIP_CODE);
-    
+
     let parseShippingInfo = new ShippingInfo();
     parseShippingInfo.set('name', shipping.name);
     parseShippingInfo.set('streetAddress', shipping.street);
     parseShippingInfo.set('phone', shipping.phone);
+    parseShippingInfo.set('email', shipping.email);
     parseShippingInfo.set('specialInstructions', shipping.specialInstructions);
     if (shipping.user){
       parseShippingInfo.set('user', shipping.user);
@@ -36,14 +37,14 @@ export class ShippingHttpService {
     parseShippingInfo.set('productCount', shipping.productCount);
     parseShippingInfo.set('payed', shipping.payed);
     parseShippingInfo.relation('products').add(this.getProductParseObjects(shipping.products));
-  
+
     let promise = parseShippingInfo.save().then(res=>{
       return res;
     });
-    
+
     return from(promise);
   }
-  
+
   public setPayed(id: string): Observable<any>{
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     let shippingInfo = new ShippingInfo();
@@ -55,10 +56,10 @@ export class ShippingHttpService {
        res.set('isPayed', true);
       return res.save().then(res => true)
     });
-    
+
     return from(promise);
   }
-  
+
   public setShipped(id: string, shipped: boolean): Observable<any> {
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     let shippingInfo = new ShippingInfo();
@@ -70,18 +71,18 @@ export class ShippingHttpService {
       res.set('isShipped', shipped);
       return res.save().then(res => true)
     });
-  
+
     return from(promise);
   }
-  
+
   loadShipped(): Observable<ShippingInfoModel[]>{
     return this.loadShippings({columnName: 'isShipped', value: true});
   }
-  
+
   loadPayed(): Observable<ShippingInfoModel[]>{
     return this.loadShippings({columnName: 'isPayed', value: true});
   }
-  
+
   private loadShippings(option: Option): Observable<ShippingInfoModel[]>{
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     const ZipCodeParse = this.parseService.parse.Object.extend(ShippingHttpService.ZIP_CODE);
@@ -110,13 +111,14 @@ export class ShippingHttpService {
     });
     return from(promise);
   }
-  
+
   static convertToShippingInfoModel(item: any): ShippingInfoModel {
     return new ShippingInfoModel(
       item.id,
       item.attributes['name'],
       item.attributes['streetAddress'],
       item.attributes['phone'],
+      item.attributes['email'],
       item.attributes['specialInstructions'],
       '',
       [],
@@ -130,11 +132,11 @@ export class ShippingHttpService {
       item.attributes['productCount']
     );
   }
-  
+
   public deleteShippingInformation(id: string): Observable<any> {
     return null;
   }
-  
+
   private getProductParseObjects(products: ProductIdName[]): any {
     const ProductParse = this.parseService.parse.Object.extend(ShippingHttpService.PRODUCT);
     let productsParse = [];
@@ -143,7 +145,7 @@ export class ShippingHttpService {
     });
     return productsParse;
   }
-  
+
   private loadProductRelation(res: any): Promise<ProductIdName[]> {
     let prodList = [];
     return res.relation('products').query().each(resProd=>{
@@ -152,7 +154,7 @@ export class ShippingHttpService {
       return this.getProductsName(prodList);
     })
   }
-  
+
   private getProductsName(prodList: any[]) {
     let names = [];
     for (let product of prodList){

@@ -106,21 +106,26 @@
                 *ngIf="shippingInformationForm.controls['phone'].invalid && (shippingInformationForm.controls['phone'].dirty || shippingInformationForm.controls['phone'].touched)"
                 class="alert alert-danger">
                 <div *ngIf="shippingInformationForm.controls['phone'].errors.required">
-                  phone is required.
+                  Phone is required.
                 </div>
               </div>
             </div>
 
             <div class="col_full">
-              <label for="shipping-form-instruction">* Special Instruction:</label>
-              <input formControlName="instruction" type="text" id="shipping-form-instruction" name="shipping-form-instruction" value="" class="form-control" />
+              <label for="shipping-form-phone">* Email:</label>
+              <input formControlName="email" type="text" id="shipping-form-email" name="shipping-form-email" value="" class="form-control" />
               <div
-                *ngIf="shippingInformationForm.controls['instruction'].invalid && (shippingInformationForm.controls['instruction'].dirty || shippingInformationForm.controls['instruction'].touched)"
+                *ngIf="shippingInformationForm.controls['email'].invalid && (shippingInformationForm.controls['email'].dirty || shippingInformationForm.controls['email'].touched)"
                 class="alert alert-danger">
-                <div *ngIf="shippingInformationForm.controls['instruction'].errors.required">
-                  Special Instruction is required.
+                <div *ngIf="shippingInformationForm.controls['email'].errors.required">
+                  Email is required.
                 </div>
               </div>
+            </div>
+
+            <div class="col_full">
+              <label for="shipping-form-instruction">Special Instruction:</label>
+              <input formControlName="instruction" type="text" id="shipping-form-instruction" name="shipping-form-instruction" value="" class="form-control" />
             </div>
 
             <button class="button button-3d button-black nomargin" id="shipping-submit" name="shipping-form-submit" value="" type="submit" style="display: none"></button>

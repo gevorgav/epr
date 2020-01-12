@@ -207,6 +207,13 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return from(promise);
   }
 
+  getZipCodeModelByZipCode(zipCode: string): Observable<ZipCode> {
+    let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
+    zipCodeQuery.equalTo('zipCode', zipCode);
+    let promise = zipCodeQuery.first().then(res=> DeliveryChartHttpService.parseObjectToZipCode(res));
+    return from(promise);
+  }
+
 }
 
 const ss:{'ZIP Code': number, 'City': string, 'price': any}[] =

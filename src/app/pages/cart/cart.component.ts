@@ -22,13 +22,13 @@ import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 export class CartComponent implements OnInit {
 
   private _productsInCart : ProductModel[] = [];
-  
+
   public shippingPrice: number;
-  
+
   public orderData = new Map<string, ProductInCartCalculation>();
-  
+
   public shippingInformationForm: FormGroup;
-  
+
   constructor(private orderService: OrderService,
               private locationService: LocationDateService,
               private productService: ProductService,
@@ -48,15 +48,15 @@ export class CartComponent implements OnInit {
       }
     })
   }
-  
+
   get productsInCart(): ProductModel[] {
     return this._productsInCart;
   }
-  
+
   set productsInCart(value: ProductModel[]) {
     this._productsInCart = value;
   }
-  
+
   private initOrderDataSelectedProducts() {
     let products$: Observable<ProductModel>[] = [];
     this.initializerService.orderModel.orderItems.forEach((item: OrderItemModel)=>{
@@ -67,7 +67,7 @@ export class CartComponent implements OnInit {
       this.initOrderData();
     });
   }
-  
+
   getQuantities(product: ProductModel): number[] {
     let quantities = [];
     if (product && product.count > 0) {
@@ -79,15 +79,15 @@ export class CartComponent implements OnInit {
     }
     return quantities;
   }
-  
+
   isSpecified() {
     return this.locationService.isSpecified;
   }
-  
+
   getPrice(product: ProductModel) {
     return this.locationService.getCalculation(product.nightPrice, product.minPrice, product.minTime, product.price);
   }
-  
+
   private initOrderData() {
     this.initializerService.orderModel.orderItems.forEach((value: OrderItemModel)=>{
       let product: ProductModel = this.getProductById(value.productId);
@@ -100,7 +100,7 @@ export class CartComponent implements OnInit {
       })
     });
   }
-  
+
   getProductById(id: string): ProductModel{
     for (let product of this.productsInCart){
       if (product.id === id) {
@@ -108,14 +108,14 @@ export class CartComponent implements OnInit {
       }
     }
   }
-  
+
   private getShippingPrice() {
     this.locationService.getShippingPrice().subscribe(res=>{
       this.shippingPrice = res;
       this.setNewPrices();
     })
   }
-  
+
   countChange(value: number, productId: string) {
     this.getSubtotalPrice();
     this.setNewPrices();
@@ -123,11 +123,11 @@ export class CartComponent implements OnInit {
       this.orderService.saveCount(value, productId);
     }
   }
-  
+
   getTotalPrice() {
     return this.getSubtotalPrice() + this.shippingPrice;
   }
-  
+
   getSubtotalPrice() {
     let subtotal: number = 0;
     this.orderData.forEach((value: ProductInCartCalculation, key: string) => {
@@ -135,7 +135,7 @@ export class CartComponent implements OnInit {
     });
     return subtotal;
   }
-  
+
   removeOrderItem(productId: string) {
     this.orderService.removeOrderItem(productId).subscribe(res=>{
       if (res){
@@ -144,33 +144,34 @@ export class CartComponent implements OnInit {
       }
     })
   }
-  
+
   continueShopping() {
     this.router.navigate(['/rentals']);
   }
-  
+
   checkout() {
     document.getElementById("shipping-submit").click();
   }
-  
+
   public redirect(){
     this.checkoutService.getToken().subscribe(res=>{
       document.getElementById("payTok")['value'] = res;
       document.getElementById("btnContinue").click();
     })
   }
-  
+
   private setNewPrices() {
     CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
     CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
   }
-  
+
   onSubmitShippingForm() {
     if (this.shippingInformationForm.valid){
       let shippingModel = new ShippingInfoModel(null,this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value,
-        this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id,
-        this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth()? this.parseService.getCurrentUser(): null,
-        null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
+        this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value,
+        this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
+        this.parseService.isAuth()? this.parseService.getCurrentUser(): null, null,
+        this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
       this.shippingService.saveShipping(shippingModel).subscribe(res=>{
         CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
           "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
@@ -178,7 +179,7 @@ export class CartComponent implements OnInit {
       });
     }
   }
-  
+
   private initShippingForm() {
     this.shippingInformationForm = new FormGroup({
       'name': new FormControl('',[
@@ -190,12 +191,15 @@ export class CartComponent implements OnInit {
       'phone': new FormControl('',[
         Validators.required
       ]),
-      'instruction': new FormControl('',[
+      'email': new FormControl('',[
         Validators.required
+      ]),
+      'instruction': new FormControl('',[
+
       ])
     })
   }
-  
+
   private getProductsIds(productsInCart: ProductModel[]): ProductIdName[] {
     let ids = [];
     productsInCart.forEach(value=>{
@@ -203,7 +207,7 @@ export class CartComponent implements OnInit {
     });
     return ids;
   }
-  
+
   private getProductCount(): ProductCount[] {
     let productCount: ProductCount[] = [];
     this.orderData.forEach((value: ProductInCartCalculation, key: string)=>{
