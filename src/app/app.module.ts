@@ -13,7 +13,6 @@ import {HeaderComponent} from './layout/header/header.component';
 import {RouterModule, Routes} from '@angular/router';
 import {RentalsComponent} from './pages/rentals/rentals.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RentalItemComponent} from './pages/rental-item/rental-item.component';
 import {CheckoutComponent} from './pages/checkout/checkout.component';
@@ -172,8 +171,6 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     MaterialModule,
     NgxGalleryModule,
     NgxMaterialTimepickerModule,
