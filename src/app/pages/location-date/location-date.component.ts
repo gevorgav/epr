@@ -6,6 +6,7 @@ import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.mod
 import {debounceTime, finalize, flatMap, map, startWith, tap} from 'rxjs/operators';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {OrderService} from '../../shared/services/order.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-location-date',
@@ -133,9 +134,12 @@ export class LocationDateComponent implements OnInit {
     );
   }
 
-  static getTimeWithDateTime(date: string, time: string): Date {
-    let dateObj: Date = new Date(date);
-    return new Date(dateObj.toLocaleDateString()+", " + time);
+  static getTimeWithDateTime(date: Date, time: string): Date {
+    if (date.toLocaleDateString().indexOf('.') >= 0){
+      let replaceDate = date.toLocaleDateString().split(".").join("-");
+      return moment(replaceDate +" " + time, 'DD-MM-YYYY hh:mm A').toDate();
+    }
+    return moment(date.toLocaleDateString() +" " + time, 'MM-DD-YYYY hh:mm A').toDate();
   }
 
   private initForm() {

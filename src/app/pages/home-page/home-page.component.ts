@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
@@ -6,9 +6,10 @@ import {ProductService} from '../../shared/services/product.service';
 import {ProductModel} from '../../shared/model/product.model';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
-
-declare var SEMICOLON: any;
-declare var $: any;
+import {OwlOptions} from 'ngx-owl-carousel-o';
+//
+// declare var SEMICOLON: any;
+// declare var $: any;
 
 @Component({
   selector: 'app-home-page',
@@ -20,9 +21,38 @@ export class HomePageComponent implements OnInit, AfterViewInit {
               private locationDateService: LocationDateService,
               private categoryService: CategoryService,
               private productService: ProductService) {
+    this.onResize();
   }
 
+  public customOptions: OwlOptions = {
+    loop: false,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    dots: false,
+    merge: true,
+    lazyLoad: true,
+    autoWidth: true,
+    margin: 5,
+    navSpeed: 700,
+    navText: ['<', '>'],
+    responsive: {
+      400: {
+        items: 1
+      },
+      940: {
+        items: 2
+      },
+      1100: {
+        items: 4
+      }
+    },
+    nav: true
+  };
+
   public categories: CategoryModel[] = [];
+
+  public screenHeight: number;
 
   public featuredRentalProducts: ProductModel[] = [];
 
@@ -32,35 +62,15 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initGallery();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.screenHeight = window.innerHeight;
   }
 
   locationDateSubmitted() {
     this.router.navigate(['rentals']);
-  }
-
-  private initGallery() {
-    setTimeout(() => {
-        SEMICOLON.documentOnReady.init();
-        setTimeout(() => {
-          SEMICOLON.documentOnLoad.init();
-          setTimeout(() => {
-            SEMICOLON.documentOnResize.init();
-            setTimeout(() => {
-              SEMICOLON.widget.init();
-              setTimeout(() => {
-                $('.css3-spinner').remove();
-              }, 10);
-            }, 10);
-          }, 10);
-        }, 10);
-      }
-      , 1500);
-    $('#linked-to-gallery a').click(function () {
-      var imageLink = $(this).attr('data-image');
-      $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
-      return false;
-    });
   }
 
   private initCategories() {
@@ -108,4 +118,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
   }
 
+  public getScreenHeight() {
+    return this.screenHeight - 80;
+  }
 }

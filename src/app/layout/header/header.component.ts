@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
 import {CategoryService} from '../../shared/services/category.service';
@@ -15,6 +15,10 @@ export class HeaderComponent implements OnInit , AfterViewInit{
   public isAdmin: boolean = false;
 
   public categories : CategoryModel[] = [];
+
+  @Input() fixHeader: boolean = false;
+
+  @Input() top: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -37,25 +41,25 @@ export class HeaderComponent implements OnInit , AfterViewInit{
       }
     })
   }
-  
+
   getCartCount(){
     return this.initializerService.orderModel.orderItems.length;
   }
-  
+
   showCart(){
     return !!this.initializerService.orderModel.orderItems
   }
 
   ngAfterViewInit(): void {}
-  
+
   isLogin(): boolean{
     return this.parseService.isAuth();
   }
-  
+
   getCurrentUser(){
     return this.parseService.getCurrentUser().getUsername();
   }
-  
+
   logout(){
     this.parseService.logOut().subscribe(res=>{
       this.router.navigate(["login"]).then(res=>{
@@ -68,5 +72,9 @@ export class HeaderComponent implements OnInit , AfterViewInit{
     this.categoryService.getCategories().subscribe(res=>{
       this.categories = res;
     })
+  }
+
+  getHeaderClass() {
+    return this.fixHeader? ["full-header", "sticky-header"]: ["full-header"];
   }
 }

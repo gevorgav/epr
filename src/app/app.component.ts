@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
 import * as Parse from 'parse';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
@@ -18,8 +18,8 @@ Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'app';
-  
-  
+
+
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private locationService: LocationDateService,
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   public isReady: boolean = false;
-  
+
   ngOnInit(): void {
     this.setTitles();
     this.init();
@@ -43,16 +43,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     // this.deliveryService.syncDeliveryChart().subscribe(res=>{
     //   console.log(res);
     // })
-    
-  }
-  
-  ngAfterViewInit() {
-    const script = document.createElement('script');
-    script.src = 'assets/js/functions.js';
-    document.body.appendChild(script);
 
   }
-  
+
+  ngAfterViewInit() {
+    // const script = document.createElement('script');
+    // script.src = 'assets/js/functions.js';
+    // document.body.appendChild(script);
+
+  }
+
   private setTitles() {
     this.router.events
     .pipe(

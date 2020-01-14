@@ -1,8 +1,8 @@
 <!-- Slider
 		============================================= -->
-<section id="slider" class="slider-element full-screen clearfix"
-         style="background: url(../../../assets/images/party-at-home-new.jpg) top right no-repeat; background-size: cover;"
-         data-height-md="550">
+<section class="slider-element full-screen clearfix" id="slider"
+         style="background: url(../../../assets/images/party-at-home-new.jpg) top right no-repeat; background-size: cover;
+    position: relative;" [ngStyle]="{'height': getScreenHeight()+'px'}">
 
   <div class="full-screen">
     <div class="real-estate-tabs-slider">
@@ -108,23 +108,16 @@
         <!--<a routerLink="#" class="button button-small button-rounded button-border button-border-thin t500 nomargin"-->
         <!--style="position: absolute; top: 7px; right: 0;">Check All</a>-->
 
-        <div class="real-estate owl-carousel image-carousel carousel-widget bottommargin-lg" data-margin="10"
-             data-nav="true" data-loop="true" data-pagi="false" data-items-xs="1" data-items-sm="1" data-items-md="2"
-             data-items-lg="3" data-items-xl="3">
+        <owl-carousel-o [options]="customOptions">
 
-          <div class="oc-item" *ngFor="let product of featuredRentalProducts">
-            <div class="real-estate-item">
-              <div class="real-estate-item-image">
-                <div class="badge badge-success" *ngIf="product.isHotDeal">Hot Deal</div>
-                <div class="badge badge-danger" *ngIf="product.isNew && !product.isHotDeal">New!</div>
-                <a [routerLink]="['/rental', product.pathParam]">
-                  <img style="height: 260px !important;" src="{{product.images[0]}}" alt="{{product.title}}">
-                </a>
-                <div class="real-estate-item-price" *ngIf="isSpecified() | async">
-                  ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
-                </div>
+          <ng-container *ngFor="let product of featuredRentalProducts">
+            <ng-template carouselSlide  [width]="300" [id]="product.id">
+              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isNew">New !</div>
+              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isHotDeal">Hot Deal !</div>
+              <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title" style="height: 260px !important;"></a>
+              <div class="real-estate-item-price" *ngIf="(isSpecified() | async)">
+                ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
               </div>
-
               <div class="real-estate-item-desc">
                 <h3 style="white-space: nowrap;overflow: hidden;"><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
                 </h3>
@@ -132,10 +125,11 @@
                 <div class="line" style="margin-top: 15px; margin-bottom: 15px;"></div>
 
               </div>
-            </div>
-          </div>
+            </ng-template>
+          </ng-container>
 
-        </div>
+        </owl-carousel-o>
+
       </div>
 
       <div class="clear"></div>

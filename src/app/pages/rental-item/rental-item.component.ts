@@ -24,7 +24,7 @@ declare var $: any;
   styleUrls: ['./rental-item.component.css']
 })
 export class RentalItemComponent implements OnInit, AfterViewInit {
-  
+
   public galleryOptions = [
     {'imageSize': 'contain'},
     {
@@ -45,18 +45,19 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     {'breakpoint': 500, 'width': '300px', 'height': '300px', 'thumbnailsColumns': 3},
     {'breakpoint': 300, 'width': '100%', 'height': '200px', 'thumbnailsColumns': 2},
   ];
-  
+
   public customOptions: OwlOptions = {
-    loop: true,
+    loop: false,
     mouseDrag: false,
     touchDrag: false,
     pullDrag: false,
     dots: false,
     merge: true,
+    lazyLoad: true,
     autoWidth: true,
     margin: 10,
     navSpeed: 700,
-    navText: ['', ''],
+    navText: ['<', '>'],
     responsive: {
       400: {
         items: 1
@@ -70,7 +71,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     },
     nav: true
   };
-  
+
   public galleryImages = [];
   public reviewsCount: number = 0;
   public selectedProduct: ProductModel;
@@ -78,7 +79,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public itemCategory: CategoryModel;
   public quantity: number = 0;
   private title$ = this.route.paramMap;
-  
+
   constructor(private titleService: Title,
               private locationService: LocationDateService,
               private route: ActivatedRoute,
@@ -90,14 +91,14 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private initializerService: InitializerService,
               private parseService: ParseService) {
   }
-  
+
   ngOnInit() {
     this.getRouteParams();
     this.routingService.itemIdSubject.subscribe(res => {
       // console.log(res);
     });
   }
-  
+
   private getSelectedProduct(productPatch: string) {
     this.productService.getProductByPatch(productPatch).subscribe((res: ProductModel) => {
       if (!res) {
@@ -114,23 +115,23 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       this.initGallery();
     });
   }
-  
+
   ngAfterViewInit(): void {
     setTimeout(() => {
       $('.css3-spinner').remove();
     }, 1500);
   }
-  
+
   private getRouteParams() {
     this.title$.subscribe((params: ParamMap) => {
       this.getSelectedProduct(params.get('title'));
     });
   }
-  
+
   public navigate(id: number, title: string) {
     this.router.navigate(['/rental', title], {queryParams: {id: id}});
   }
-  
+
   private initGallery() {
     this.galleryImages = [];
     for (let image of this.selectedProduct.images) {
@@ -141,19 +142,19 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  
+
   isSpecified() {
     return this.locationService.isSpecified;
   }
-  
+
   getSetupPolicy() {
     return Array.from(this.selectedProduct.setupPolicy.keys());
   }
-  
+
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number) {
     return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
   }
-  
+
   getQuantities(): number[] {
     let quantities = [];
     if (this.selectedProduct && this.selectedProduct.count > 0) {
@@ -165,7 +166,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     }
     return quantities;
   }
-  
+
   addToCart() {
     let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity);
     let items = [];
@@ -179,7 +180,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       this.initializerService.orderModel.orderItems.push(...order.orderItems);
     });
   }
-  
+
   public productInCart(): boolean {
     if (this.initializerService.orderModel.orderItems){
       for (let item of this.initializerService.orderModel.orderItems) {
@@ -190,11 +191,11 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     }
     return false;
   }
-  
+
   continueShopping() {
     this.router.navigate(['/rentals']);
   }
-  
+
   goToCart() {
     this.router.navigate(['/cart']);
   }

@@ -193,15 +193,15 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     zipCodeQuery.contains('zipCode', zipCode);
     let deliveries:DeliveryChartModel[] = [];
     let promise = zipCodeQuery.each(zipCodeItem=>{
-      let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
-      deliveryQuery.equalTo('zipCode', zipCodeItem);
-      if (city){
-        deliveryQuery.contains('city', city);
-      }
-      return deliveryQuery.each( (delivery) => {
-        deliveries.push( new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
-          delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
-      }).then(()=>deliveries);
+        let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
+        deliveryQuery.equalTo('zipCode', zipCodeItem);
+        if (city){
+          deliveryQuery.contains('city', city);
+        }
+        return deliveryQuery.first().then( (delivery) => {
+          deliveries.push( new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
+            delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
+        }).then(()=>deliveries);
     }).then(()=> deliveries);
 
     return from(promise);
