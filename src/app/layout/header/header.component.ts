@@ -14,6 +14,8 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   public isAdmin: boolean = false;
 
+  public toggle: boolean;
+
   public categories : CategoryModel[] = [];
 
   @Input() fixHeader: boolean = false;
@@ -76,5 +78,19 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   getHeaderClass() {
     return this.fixHeader? ["full-header", "sticky-header"]: ["full-header"];
+  }
+
+  scrollTop() {
+    (function smoothscroll() {
+      let currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 8));
+      }
+    })();
+  }
+
+  toggleMenu() {
+    this.toggle = !!!this.toggle;
   }
 }

@@ -6,7 +6,7 @@
 
     <div class="container clearfix">
 
-      <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
+      <div id="primary-menu-trigger" (click)="toggleMenu()"><i class="icon-reorder"></i></div>
 
       <!-- Logo
                 ============================================= -->
@@ -20,7 +20,7 @@
       <!-- Primary Navigation
                 ============================================= -->
       <nav id="primary-menu">
-        <ul>
+        <ul [ngStyle]="toggle === false?{'display': 'none'}:{'display': 'block'}">
           <li routerLinkActive="current"><a routerLink="home">
             <div>Home</div>
           </a></li>
@@ -73,4 +73,4 @@
 
 </header><!-- #header end -->
 
-<div id="gotoTop" [ngStyle]="top?{'display': 'block'}:{'display': 'none'}" class="icon-angle-up"></div>
+<div id="gotoTop" (click)="scrollTop()" [ngStyle]="top?{'display': 'block'}:{'display': 'none'}" class="icon-angle-up"></div>

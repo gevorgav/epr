@@ -22,18 +22,8 @@
 
   <link rel="stylesheet" href="assets/css/font-icons.css" type="text/css" />
   <link rel="stylesheet" href="assets/css/animate.css" type="text/css" />
-  <link rel="stylesheet" href="assets/css/magnific-popup.css" type="text/css" />
 
   <link rel="stylesheet" href="assets/real-estate/fonts.css" type="text/css" />
-
-  <!-- Bootstrap Select CSS -->
-  <link rel="stylesheet" href="assets/css/components/bs-select.css" type="text/css" />
-
-  <!-- Bootstrap Switch CSS -->
-  <link rel="stylesheet" href="assets/css/components/bs-switches.css" type="text/css" />
-
-  <!-- Range Slider CSS -->
-  <link rel="stylesheet" href="assets/css/components/ion.rangeslider.css" type="text/css" />
 
   <link rel="stylesheet" href="assets/css/responsive.css" type="text/css" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -80,51 +70,11 @@
   <!-- External JavaScripts
 	============================================= -->
   <script src="assets/js/jquery.js"></script>
-<!--  <script src="assets/js/plugins.js"></script>-->
-
-  <!-- Bootstrap Select Plugin -->
-  <script src="assets/js/components/bs-select.js"></script>
-
-  <!-- Bootstrap Switch Plugin -->
-  <script src="assets/js/components/bs-switches.js"></script>
-
-  <!-- Range Slider Plugin -->
-  <script src="assets/js/components/rangeslider.min.js"></script>
-
-
-  <!--<script src="assets/js/functions.js"></script>-->
 
   <script src="https://js.authorize.net/v3/AcceptUI.js" charset="utf-8"></script>
   <form method="post" action="https://accept.authorize.net/payment/payment" id="formAuthorizeNetTestPage" name="formAuthorizeNetTestPage">
     <input type="hidden" id="payTok" name="token" value="Replace with form token from getHostedPaymentPageResponse" />
     <button style="display: none" id="btnContinue">Continue to next page</button>
   </form>
-  <script>
-
-    jQuery(document).ready(function(){
-
-      jQuery(".price-range-slider").ionRangeSlider({
-        type: "double",
-        prefix: "$",
-        min: 200,
-        max: 10000,
-        max_postfix: "+"
-      });
-
-      jQuery(".area-range-slider").ionRangeSlider({
-        type: "double",
-        min: 50,
-        max: 20000,
-        from: 50,
-        to: 20000,
-        postfix: " sqm.",
-        max_postfix: "+"
-      });
-
-      jQuery(".bt-switch").bootstrapSwitch();
-
-    });
-
-  </script>
 </body>
 </html>

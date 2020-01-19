@@ -6,7 +6,6 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import {LocationDateService} from './shared/services/location-date.service';
 import {OrderService} from './shared/services/order.service';
 import {InitializerService} from './shared/services/initializer.service';
-import {ShippingHttpService} from './shared/services/shipping-http.service';
 
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 (Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
@@ -25,8 +24,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               private locationService: LocationDateService,
               private orderService: OrderService,
               private initializerService: InitializerService,
-              private titleService: Title,
-              private shippingService: ShippingHttpService) {
+              private titleService: Title) {
   }
 
   public isReady: boolean = false;
