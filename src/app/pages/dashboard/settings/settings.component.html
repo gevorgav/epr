@@ -1,0 +1,86 @@
+
+<div class="content-wrap" *ngIf="isReady">
+  <div class="clearfix">
+    <div class="card-body">
+      <form id="form" name="form" class="nobottommargin" [formGroup]="form">
+        <div class="col col_full">
+          <h4 style="color: #1c7430" *ngIf="saveSuccess">Save Success</h4>
+        </div>
+        <div class="col col_full">
+          <h4 style="color: #774F38">{{fileSizes}}</h4>
+        </div>
+
+        <div class=" col col_full">
+          <input  placeholder="Home Page Title" formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
+          <div
+            *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
+            class="alert alert-danger">
+            <div *ngIf="form.controls['title'].errors.required">
+              Title is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="col col_full">
+          <div
+            *ngIf="fileMaxSizeErrorMessage"
+            class="alert alert-danger">
+            <div>
+              {{fileMaxSizeErrorMessage}}
+            </div>
+          </div>
+          <div class=" col col_one_third">
+            <input type="file" (change)="onFileUpload($event, '1')" #input1 style="display: none;">
+            <button color="primary" mat-raised-button (click)="triggerClick(1)"><i class="material-icons left">backup</i>Attach picture</button>
+            <button *ngIf="form.get('imageUrl1').value"  mat-raised-button (click)="deleteImage(1)"><i class="material-icons left">delete</i>Delete Picture</button>
+          </div>
+          <div class="col col_one_third">
+            <img [src]="form.get('imageUrl1').value" alt="">
+          </div>
+        </div>
+
+        <div class="col col_full">
+          <div
+            *ngIf="fileMaxSizeErrorMessage"
+            class="alert alert-danger">
+            <div>
+              {{fileMaxSizeErrorMessage}}
+            </div>
+          </div>
+          <div class=" col col_one_third">
+            <input type="file" (change)="onFileUpload($event, '2')" #input2 style="display: none;">
+            <button color="primary" mat-raised-button (click)="triggerClick(2)"><i class="material-icons left">backup</i>Attach picture</button>
+            <button *ngIf="form.get('imageUrl2').value"  mat-raised-button (click)="deleteImage(2)"><i class="material-icons left">delete</i>Delete Picture</button>
+          </div>
+          <div class="col col_one_third">
+            <img [src]="form.get('imageUrl2').value" alt="">
+          </div>
+        </div>
+
+        <div class="col col_full">
+          <div
+            *ngIf="fileMaxSizeErrorMessage"
+            class="alert alert-danger">
+            <div>
+              {{fileMaxSizeErrorMessage}}
+            </div>
+          </div>
+          <div class=" col col_one_third">
+            <input type="file" (change)="onFileUpload($event, '3')" #input3 style="display: none;">
+            <button color="primary" mat-raised-button (click)="triggerClick(3)"><i class="material-icons left">backup</i>Attach picture</button>
+            <button *ngIf="form.get('imageUrl3').value"  mat-raised-button (click)="deleteImage(3)"><i class="material-icons left">delete</i>Delete Picture</button>
+          </div>
+          <div class="col col_one_third">
+            <img [src]="form.get('imageUrl3').value" alt="">
+          </div>
+        </div>
+
+        <div class="col_full nobottommargin">
+          <button type="submit" class="button button-3d " id="submit" name="submit"
+                  value="submit" (click)="submit()">Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
