@@ -1,14 +1,24 @@
-export class SettingModel {
+export class SettingsModel {
+  private _id: string;
   private _title: string;
   private _imageUrl1: string;
   private _imageUrl2: string;
   private _imageUrl3: string;
 
-  constructor(title: string, imageUrl1?: string, imageUrl2?: string, imageUrl3?: string) {
+  constructor(id: string, title: string, imageUrl1?: string, imageUrl2?: string, imageUrl3?: string) {
+    this._id = id;
     this._title = title;
     this._imageUrl1 = imageUrl1;
     this._imageUrl2 = imageUrl2;
     this._imageUrl3 = imageUrl3;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
   }
 
   get title(): string {

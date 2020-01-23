@@ -199,8 +199,10 @@ export class DeliveryChartHttpService extends DeliveryChartService{
           deliveryQuery.contains('city', city);
         }
         return deliveryQuery.first().then( (delivery) => {
-          deliveries.push( new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
-            delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
+          if (delivery){
+            deliveries.push( new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
+              delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
+          }
         }).then(()=>deliveries);
     }).then(()=> deliveries);
 

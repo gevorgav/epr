@@ -6,25 +6,22 @@ import {CategoryService} from './category.service';
 import {CategoryModel} from '../model/category.model';
 import {ParseService} from './parse.service';
 import {from, Observable} from 'rxjs';
-import {ProductViewModel} from '../model/product-view.model';
 import {forkJoin} from 'rxjs/index';
 import {map} from 'rxjs/operators';
 import {flatMap} from 'rxjs/internal/operators';
-import * as Parse from 'parse';
-import {ProductHttpService} from './product-http.service';
 import {ProductModel} from '../model/product.model';
 
 @Injectable()
 export class CategoryHttpService extends CategoryService {
-  
+
   static CATEGORY = 'Category';
-  
+
   private _categories: CategoryModel[] = [];
-  
+
   constructor(private parseService: ParseService) {
     super();
   }
-  
+
   get categories(): CategoryModel[] {
     if (this._categories.length === 0) {
       this.getCategories().subscribe(res => {
@@ -33,7 +30,7 @@ export class CategoryHttpService extends CategoryService {
     }
     return this._categories;
   }
-  
+
   getCategories(): Observable<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
@@ -46,14 +43,14 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-  
+
   static convertToCategoryModel(item: any, products?: Observable<ProductModel[]>): CategoryModel {
     if (products) {
       return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order'], products);
     }
     return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order']);
   }
-  
+
   getCategoryItems(categoryId: string): Observable<Array<ProductModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
@@ -64,7 +61,7 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-  
+
   getCategoriesWithDependency(): Observable<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
@@ -79,7 +76,7 @@ export class CategoryHttpService extends CategoryService {
             return CategoryHttpService.forOne(product);
           }));
           let categoryModel = CategoryHttpService.convertToCategoryModel(category, products$);
-          
+
           categories.push(categoryModel);
         }
         return categories;
@@ -95,7 +92,7 @@ export class CategoryHttpService extends CategoryService {
         ))
       ));
   }
-  
+
   private static parseObjectToProductModel(parseObject: any): ProductModel {
     return new ProductModel(
       parseObject.id,
@@ -119,7 +116,7 @@ export class CategoryHttpService extends CategoryService {
       parseObject.attributes['count'],
     );
   }
-  
+
   private static forOne(parseObject: any[]): ProductModel[] {
     let items: ProductModel[] = [];
     for (let item of parseObject) {
@@ -127,7 +124,7 @@ export class CategoryHttpService extends CategoryService {
     }
     return items;
   }
-  
+
   getCategoryByProductId(productId: string): Observable<CategoryModel> {
     let productQuery = new this.parseService.parse.Query('Product');
     productQuery.contains('objectId', productId);
@@ -140,7 +137,7 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-  
+
   deleteCategory(id: string): Observable<any> {
     const Product = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     const query = new this.parseService.parse.Query(Product);
@@ -153,7 +150,7 @@ export class CategoryHttpService extends CategoryService {
     });
     return from(promise);
   }
-  
+
   saveCategory(model: CategoryModel): Observable<any> {
     let Category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let category = new Category();
@@ -175,7 +172,7 @@ export class CategoryHttpService extends CategoryService {
     }
     return from(promise);
   }
-  
+
   private setFields(category: any, model: CategoryModel) {
     category.set('title', model.title);
     category.set('description', model.description);

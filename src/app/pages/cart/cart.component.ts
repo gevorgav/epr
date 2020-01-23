@@ -23,6 +23,10 @@ export class CartComponent implements OnInit {
 
   private _productsInCart : ProductModel[] = [];
 
+  private _minimalTotal: number = 89;
+
+  private _minimalDeliver: number = 35;
+
   public shippingPrice: number;
 
   public orderData = new Map<string, ProductInCartCalculation>();
@@ -124,13 +128,25 @@ export class CartComponent implements OnInit {
     }
   }
 
+  public getDeliveryFee(): string{
+    let subTotal = this.getSubtotalPrice() + this.shippingPrice;
+    if (subTotal < this._minimalTotal){
+      return '$ ' + (this.shippingPrice + this._minimalDeliver);
+    }
+    return this.shippingPrice?'$ ' + this.shippingPrice:'Free Delivery';
+  }
+
   getTotalPrice() {
-    return this.getSubtotalPrice() + this.shippingPrice;
+    let subTotal = this.getSubtotalPrice() + this.shippingPrice;
+    if (subTotal < this._minimalTotal){
+      return subTotal + this._minimalDeliver;
+    }
+    return subTotal;
   }
 
   getSubtotalPrice() {
     let subtotal: number = 0;
-    this.orderData.forEach((value: ProductInCartCalculation, key: string) => {
+    this.orderData.forEach((value: ProductInCartCalculation) => {
       subtotal += value.price * value.count;
     });
     return subtotal;
@@ -140,7 +156,8 @@ export class CartComponent implements OnInit {
     this.orderService.removeOrderItem(productId).subscribe(res=>{
       if (res){
         this.productsInCart = this.productsInCart.filter(value=> value.id !== productId);
-        this.initializerService.orderModel.orderItems = this.initializerService.orderModel.orderItems.filter(value=> value.productId !== productId)
+        this.initializerService.orderModel.orderItems = this.initializerService.orderModel.orderItems.filter(value=> value.productId !== productId);
+        this.orderData.delete(productId);
       }
     })
   }

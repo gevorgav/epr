@@ -14300,3 +14300,20 @@ body.side-panel-open #side-panel {
 .timepicker {
   z-index: 1000!important;
 }
+/*Slider animation*/
+.fade-slider {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade-slider {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade-slider {
+  from {opacity: .4}
+  to {opacity: 1}
+}

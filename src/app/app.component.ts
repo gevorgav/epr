@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import * as Parse from 'parse';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import {filter, map, mergeMap} from 'rxjs/operators';
 import {LocationDateService} from './shared/services/location-date.service';
 import {OrderService} from './shared/services/order.service';
 import {InitializerService} from './shared/services/initializer.service';

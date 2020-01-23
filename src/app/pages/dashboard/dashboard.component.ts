@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
     {routerLink: 'product', name: 'Product', isActive: false},
     {routerLink: 'delivery-chart', name: 'Delivery Chart', isActive: false},
     {routerLink: 'category', name: 'Category', isActive: false},
+    {routerLink: 'settings', name: 'Settings', isActive: false},
     {routerLink: 'user', name: 'User', isActive: false},
   ];
 

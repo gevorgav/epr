@@ -16,7 +16,7 @@ export class PageComponent implements OnInit {
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     let pos = window.pageYOffset;
-    this.fixHeader = pos > 100;
+    this.fixHeader = pos > 50;
     this.top = pos > 400;
   }
 

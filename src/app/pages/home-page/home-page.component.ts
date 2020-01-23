@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
+
+import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
@@ -7,9 +8,8 @@ import {ProductModel} from '../../shared/model/product.model';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {OwlOptions} from 'ngx-owl-carousel-o';
-//
-// declare var SEMICOLON: any;
-// declare var $: any;
+import {SettingsService} from '../../shared/services/settings.service';
+import {SettingsModel} from '../../shared/model/settings.model';
 
 @Component({
   selector: 'app-home-page',
@@ -20,7 +20,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
               private locationDateService: LocationDateService,
               private categoryService: CategoryService,
-              private productService: ProductService) {
+              private productService: ProductService,
+              private settingsService: SettingsService) {
     this.onResize();
   }
 
@@ -50,15 +51,22 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     nav: true
   };
 
+  @Input() settings: SettingsModel;
+
   public categories: CategoryModel[] = [];
 
   public screenHeight: number;
 
   public featuredRentalProducts: ProductModel[] = [];
+  private _imageUrl: string;
+  private sliderIndex = 0;
+  private maxImages = 0;
+  public sliderReady: boolean = false;
 
   ngOnInit() {
     this.initCategories();
     this.initProducts();
+    this.initSettings();
   }
 
   ngAfterViewInit(): void {
@@ -120,5 +128,26 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
   public getScreenHeight() {
     return this.screenHeight - 80;
+  }
+
+  private initImage() {
+    this.sliderIndex++;
+    if (this.sliderIndex > this.maxImages)
+      this.sliderIndex = 1;
+    setTimeout(()=>this.initImage(), 7000);
+  }
+
+
+  private initSettings() {
+    this.settingsService.getSettings().subscribe(res=>{
+      this.settings = res;
+      this.initImage();
+      let i = 1;
+      while (this.settings['imageUrl'+i]){
+        this.maxImages ++;
+        i++;
+      }
+      this.sliderReady = true;
+    });
   }
 }

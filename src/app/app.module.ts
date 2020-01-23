@@ -55,6 +55,9 @@ import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipp
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatDatepickerModule} from '@angular/material';
+import {SettingsService} from './shared/services/settings.service';
+import {SettingsHttpService} from './shared/services/settings-http.service';
+import { SettingsComponent } from './pages/dashboard/settings/settings.component';
 
 const appRoutes: Routes = [
   {
@@ -93,6 +96,7 @@ const appRoutes: Routes = [
       {path: 'product', component: ProductComponent},
       {path: 'category', component: CategoryComponent},
       {path: 'user', component: UserComponent},
+      {path: 'settings', component: SettingsComponent}
     ]
   },
   {
@@ -159,7 +163,8 @@ const appRoutes: Routes = [
     UserComponent,
     ShippingComponent,
     ShippedRentalsComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    SettingsComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -192,6 +197,7 @@ const appRoutes: Routes = [
     {provide: CategoryService, useClass: CategoryHttpService},
     {provide: ProductService, useClass: ProductHttpService},
     {provide: UserService, useClass: UserHttpService},
+    {provide: SettingsService, useClass: SettingsHttpService},
   ],
   entryComponents: [
     ProductPopupComponent,

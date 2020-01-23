@@ -70,7 +70,7 @@
         </table>
       </div>
 
-      <div class="row clearfix">
+      <div *ngIf="productsInCart.length" class="row clearfix">
         <div class="col-lg-6 clearfix">
           <h4>Shipping Information</h4>
           <form id="shipping-form" [formGroup]="shippingInformationForm" (ngSubmit)="onSubmitShippingForm()">
@@ -154,7 +154,7 @@
                 </td>
 
                 <td class="cart-product-name">
-                  <span class="amount">${{shippingPrice?shippingPrice:'Free Delivery'}}</span>
+                  <span class="amount">{{getDeliveryFee()}} </span>
                 </td>
               </tr>
               <tr class="cart_item">

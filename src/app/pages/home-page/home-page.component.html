@@ -1,8 +1,7 @@
 <!-- Slider
 		============================================= -->
-<section class="slider-element full-screen clearfix" id="slider"
-         style="background: url(../../../assets/images/party-at-home-new.jpg) top right no-repeat; background-size: cover;
-    position: relative;" [ngStyle]="{'height': getScreenHeight()+'px'}">
+<section class="slider-element full-screen clearfix " id="slider"
+         [ngStyle]="{'height': getScreenHeight()+'px'}">
 
   <div class="full-screen">
     <div class="real-estate-tabs-slider">
@@ -16,9 +15,24 @@
         </div>
       </div>
     </div>
+    <ng-container *ngIf="sliderReady">
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl1"
+           [ngStyle]="{'background': 'url('+settings.imageUrl1+') top right no-repeat',
+          'background-size': 'cover', 'display':sliderIndex == 1?'block':'none'}">
+      </div>
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl2"
+           [ngStyle]="{'background': 'url('+settings.imageUrl2+') top right no-repeat',
+          'background-size': 'cover', 'display':sliderIndex == 2?'block':'none'}">
+      </div>
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl3"
+           [ngStyle]="{'background': 'url('+settings.imageUrl3+') top right no-repeat',
+          'background-size': 'cover', 'display':sliderIndex == 3?'block':'none'}">
+      </div>
+    </ng-container>
   </div>
 
 </section><!-- #slider end -->
+
 
 <!-- Content
 		============================================= -->

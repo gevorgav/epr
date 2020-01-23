@@ -42,7 +42,7 @@ export class LocationDateService {
   setIsSpecified(value: boolean) {
     this._isSpecified.next(value);
   }
-  
+
   getShippingPriceByZipCode(zipCode: string): Observable<number>{
     return this.deliveryService.getDeliveryLocationByZipCode(zipCode).pipe(
       map((res: DeliveryChartModel)=>{
@@ -50,19 +50,18 @@ export class LocationDateService {
       })
     )
   }
-  
+
   getShippingPrice(): Observable<number>{
-    console.log(this._locationDate.location.zipCode);
     return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
   }
-  
+
   getCalculation(nightPrice: number, minPrice: number, minTime: number, price: number): Observable<number>{
     return this.isSpecified.pipe(map(res=>{
       if (res) {
         let night: number = 0;
         let hours: number = 0;
         let calculatedPrice = 0;
-  
+
         let days: Date[] = this.getDates();
         if (days.length === 1){
           hours = this.locationDate.endDateTime.getHours() - this.locationDate.startDateTime.getHours();
@@ -81,22 +80,22 @@ export class LocationDateService {
             }
           }
         }
-        
+
         if (hours > minTime) {
           hours = hours - minTime;
           calculatedPrice = nightPrice * night + price * hours + minPrice;
-    
+
           return calculatedPrice;
         }
-        
+
         return minPrice;
       }else {
         return 0;
       }
     }));
-    
+
   }
-  
+
   private getFutureHours(hour: number){
     let  futureHours = [];
     for(let i=hour; i<=21; i++) {
@@ -104,7 +103,7 @@ export class LocationDateService {
     }
     return futureHours;
   }
-  
+
   private getLastDayHours(hour: number){
     let  futureHours = [];
     for(let i=9; i<hour; i++) {
@@ -112,7 +111,7 @@ export class LocationDateService {
     }
     return futureHours;
   }
-  
+
   private getDates (): Date[] {
     let dates = [],
       currentDate = this._locationDate.startDateTime,
@@ -128,7 +127,7 @@ export class LocationDateService {
     }
     return dates;
   }
-  
+
 }
 
 export class LocationDate {
@@ -161,7 +160,7 @@ export class LocationDate {
   get location(): ZipCode {
     return this._location;
   }
-  
+
   getLocation(){
     return this._location?this._location.location:null;
   }
