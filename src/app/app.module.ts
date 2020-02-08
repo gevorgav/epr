@@ -58,6 +58,13 @@ import {MatDatepickerModule} from '@angular/material';
 import {SettingsService} from './shared/services/settings.service';
 import {SettingsHttpService} from './shared/services/settings-http.service';
 import { SettingsComponent } from './pages/dashboard/settings/settings.component';
+import {AdditionalComponent} from './pages/dashboard/additional/additional.component';
+import {AdditionalCategoryComponent} from './pages/dashboard/additional-cotegory/additional-category.component';
+import {AdditionCategoryHttp} from './shared/services/addition-category-http.service';
+import {AdditionCategoryService} from './shared/services/addition-category.service';
+import {AdditionalPopupComponent} from './pages/dashboard/additional/additional-popup/additional-popup.component';
+import {AdditionalCategoryPopupComponent} from './pages/dashboard/additional-cotegory/additional-category-popup/additional-category-popup.component';
+import {ShippingPopupComponent} from './pages/dashboard/shipping/shipping-popup/shipping-popup.component';
 
 const appRoutes: Routes = [
   {
@@ -96,7 +103,9 @@ const appRoutes: Routes = [
       {path: 'product', component: ProductComponent},
       {path: 'category', component: CategoryComponent},
       {path: 'user', component: UserComponent},
-      {path: 'settings', component: SettingsComponent}
+      {path: 'settings', component: SettingsComponent},
+      {path: 'additional', component: AdditionalComponent},
+      {path: 'additional-category', component: AdditionalCategoryComponent},
     ]
   },
   {
@@ -164,7 +173,12 @@ const appRoutes: Routes = [
     ShippingComponent,
     ShippedRentalsComponent,
     ResetPasswordComponent,
-    SettingsComponent
+    SettingsComponent,
+    AdditionalComponent,
+    AdditionalCategoryComponent,
+    AdditionalPopupComponent,
+    AdditionalCategoryPopupComponent,
+    ShippingPopupComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -198,11 +212,15 @@ const appRoutes: Routes = [
     {provide: ProductService, useClass: ProductHttpService},
     {provide: UserService, useClass: UserHttpService},
     {provide: SettingsService, useClass: SettingsHttpService},
+    {provide: AdditionCategoryService, useClass: AdditionCategoryHttp},
   ],
   entryComponents: [
     ProductPopupComponent,
     DeliveryChartPopupComponent,
     CategoryPopupComponent,
+    AdditionalPopupComponent,
+    AdditionalCategoryPopupComponent,
+    ShippingPopupComponent
   ],
   bootstrap: [AppComponent]
 })

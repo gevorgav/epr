@@ -1,0 +1,90 @@
+<div class="content-wrap">
+  <div class="clearfix">
+    <div class="card-body" style="padding: 40px;">
+      <h3>View Details</h3>
+
+      <div class="row clearfix">
+        <div class="col col_half">
+          <label for="startDate">Start Date: </label>
+          <p id="startDate" class="form-control">{{shippingModel.startDate.toLocaleString("en-US")}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="street">End Date:</label>
+          <p id="endDate" class="form-control">{{shippingModel.endDate.toLocaleString("en-US")}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="paid">Paid:</label>
+          <p id="paid" class="form-control">${{shippingModel.payed}}</p>
+        </div>
+      </div>
+      <ng-container *ngIf="shippingModel.orderItems && shippingModel.orderItems.length > 0">
+        <div class="row clearfix" *ngFor="let orderItem of shippingModel.orderItems">
+          <div class="col col_half">
+            <label for="rentalName">Rental name:</label>
+            <p id="rentalName" class="form-control">{{getProduct(orderItem.productId).name}}</p>
+          </div>
+          <div class="col col_one_fourth">
+            <label for="howMany">How many:</label>
+            <p id="howMany" class="form-control">{{getProduct(orderItem.productId).count}}</p>
+          </div>
+          <div *ngIf="orderItem.additionModels?.length > 0" class="col col_one_fourth">
+            <label>Additions:</label>
+            <ng-container *ngFor="let addition of orderItem.additionModels">
+              <p class="form-control">{{addition.name}}</p>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!shippingModel.orderItems || shippingModel.orderItems.length === 0"> <!--TODO will removed -->
+        <div class="row clearfix" *ngFor="let product of shippingModel.products">
+          <div class="col col_half">
+            <label for="rentalNameOld">Rental name:</label>
+            <p id="rentalNameOld" class="form-control">{{getProductWithCount(shippingModel, product)}}</p>
+          </div>
+          <div class="col col_one_fourth">
+            <label for="howManyOld">How many:</label>
+            <p id="howManyOld" class="form-control">{{getProductHowMany(shippingModel, product)}}</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <h4>User Information</h4>
+      <div class="row clearfix">
+        <div class="col col_half">
+          <label for="name">Name: </label>
+          <p id="name" class="form-control">{{shippingModel.name}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="phone">Phone:</label>
+          <p id="phone" class="form-control">{{shippingModel.phone}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="email">Email:</label>
+          <p id="email" class="form-control">{{shippingModel.email}}</p>
+        </div>
+      </div>
+
+      <div class="row clearfix">
+        <div class="col col_half">
+          <label for="specialInstructions">Special Instructions: </label>
+          <p id="specialInstructions" class="form-control">{{shippingModel.specialInstructions}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="street">Street:</label>
+          <p id="street" class="form-control">{{shippingModel.street}}</p>
+        </div>
+        <div class="col col_half">
+          <label for="email">Zip Code:</label>
+          <p id="zipCode" class="form-control">{{shippingModel.zipCode}}</p>
+        </div>
+      </div>
+
+      <div class="col_full nobottommargin">
+        <button (click)="close()" class="button button-success button-3d" id="cancel" name="cancel" value="cancel">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

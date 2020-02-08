@@ -1,5 +1,5 @@
 User-Agent: *
-Disallow:
-Allow: /entertainmentpartyrentals.com
+Disallow: /dashboard/
+Allow: /
 Host: https://entertainmentpartyrentals.com
 Sitemap: https://entertainmentpartyrentals.com/sitemap.xml

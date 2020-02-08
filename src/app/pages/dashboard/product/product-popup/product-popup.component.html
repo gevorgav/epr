@@ -17,7 +17,7 @@
               </div>
             </div>
           </div>
-          <div class="col col_half">
+          <div class="col col_one_fourth">
             <label for="price">Price:</label>
             <input matTooltip="Price-y minTime ancneluc heto jamavcharne" formControlName="price" type="number" id="price" name="price" value="" class="form-control"/>
             <div
@@ -30,6 +30,14 @@
                 Price must be higher than 0.
               </div>
             </div>
+          </div>
+          <div class="col col_one_fourth">
+            <mat-form-field>
+              <mat-label>Additional Categories</mat-label>
+              <mat-select formControlName="additionalCategories" multiple>
+                <mat-option *ngFor="let item of additionalCategories" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
 

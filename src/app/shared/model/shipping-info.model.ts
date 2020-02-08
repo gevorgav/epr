@@ -1,4 +1,6 @@
 import {ProductCount} from '../../pages/cart/cart.component';
+import {OrderModel} from './order.model';
+import {OrderItemModel} from './order-item.model';
 
 export class ShippingInfoModel {
   private _id: string;
@@ -17,10 +19,11 @@ export class ShippingInfoModel {
   private _payed: number;
   private _productCount: ProductCount[];
   private _email: string;
+  private _orderItems: OrderItemModel[];
 
   constructor(id:string, name: string, street: string, phone: string, email: string, specialInstructions: string, zipCode: string,
               products: ProductIdName[], isPayed: boolean, isShipped: boolean, user: any, createdAt: Date, startDate: Date, endDate: Date,
-              payed: number, productCount: ProductCount[]) {
+              payed: number, productCount: ProductCount[], orderItems: OrderItemModel[]) {
     this._name = name;
     this._street = street;
     this._phone = phone;
@@ -37,6 +40,7 @@ export class ShippingInfoModel {
     this._payed = payed;
     this._productCount = productCount;
     this._email = email;
+    this._orderItems = orderItems;
   }
 
   get id(): string {
@@ -165,6 +169,14 @@ export class ShippingInfoModel {
 
   set email(value: string) {
     this._email = value;
+  }
+
+  get orderItems(): OrderItemModel[] {
+    return this._orderItems;
+  }
+
+  set orderItems(value: OrderItemModel[]) {
+    this._orderItems = value;
   }
 }
 

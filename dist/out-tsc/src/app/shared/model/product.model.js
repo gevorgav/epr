@@ -5,7 +5,7 @@ import * as tslib_1 from "tslib";
 import { ProductViewModel } from './product-view.model';
 var ProductModel = /** @class */ (function (_super) {
     tslib_1.__extends(ProductModel, _super);
-    function ProductModel(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count) {
+    function ProductModel(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count, additionalCategories) {
         var _this = _super.call(this, id, title, price, images, isNew, isHotDeal, itemSize, pathParam) || this;
         _this._description = description;
         _this._rentalTerms = rentalTerms;
@@ -18,6 +18,7 @@ var ProductModel = /** @class */ (function (_super) {
         _this._minPrice = minPrice;
         _this._nightPrice = nightPrice;
         _this._count = count;
+        _this._additionalCategories = additionalCategories;
         return _this;
     }
     Object.defineProperty(ProductModel.prototype, "description", {
@@ -103,6 +104,16 @@ var ProductModel = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._calculatedPrice = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ProductModel.prototype, "additionalCategories", {
+        get: function () {
+            return this._additionalCategories;
+        },
+        set: function (value) {
+            this._additionalCategories = value;
         },
         enumerable: true,
         configurable: true

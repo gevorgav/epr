@@ -7,13 +7,15 @@ import { ParseService } from "../../../../shared/services/parse.service";
 import { CategoryService } from '../../../../shared/services/category.service';
 import { handleError } from '../../../../shared/util/error-handler';
 import { UploadService } from "../../../../shared/services/upload.service";
+import { AdditionCategoryService } from '../../../../shared/services/addition-category.service';
 var ProductPopupComponent = /** @class */ (function () {
-    function ProductPopupComponent(dialogRef, data, parseService, uploadService, categoryService) {
+    function ProductPopupComponent(dialogRef, data, parseService, uploadService, categoryService, additionalCategoryService) {
         this.dialogRef = dialogRef;
         this.data = data;
         this.parseService = parseService;
         this.uploadService = uploadService;
         this.categoryService = categoryService;
+        this.additionalCategoryService = additionalCategoryService;
         this.formBuilder = new FormBuilder();
         this.setupPolicyKeys = [];
         this.setupPolicyValues = [];
@@ -32,11 +34,12 @@ var ProductPopupComponent = /** @class */ (function () {
         this.initSafetyRules();
         this.initForm();
         this.getCategories();
+        this.getAdditionalCategories();
     };
     ProductPopupComponent.prototype.onSubmit = function () {
         if (this.form.valid) {
             this.dialogRef.close({
-                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.getSetupPolicy(), this.form.get('instructions').value, this.form.get('video').value, this.form.get('safetyRules').value, this.form.get('minTime').value, this.form.get('minPrice').value, this.form.get('nightPrice').value, this.form.get('count').value),
+                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.getSetupPolicy(), this.form.get('instructions').value, this.form.get('video').value, this.form.get('safetyRules').value, this.form.get('minTime').value, this.form.get('minPrice').value, this.form.get('nightPrice').value, this.form.get('count').value, this.form.get('additionalCategories').value),
                 newCategoryId: this.form.get('category').value,
                 oldCategoryId: this.categoryId
             });
@@ -117,6 +120,7 @@ var ProductPopupComponent = /** @class */ (function () {
                 Validators.required,
                 Validators.min(1)
             ]),
+            additionalCategories: this.formBuilder.control(this.product.additionalCategories, [])
         }, { validators: setupPolicyUniqueKeyValidator });
     };
     ProductPopupComponent.prototype.initSafetyRules = function () {
@@ -177,6 +181,12 @@ var ProductPopupComponent = /** @class */ (function () {
     ProductPopupComponent.prototype.compare = function (f1, f2) {
         return f1 === f2;
     };
+    ProductPopupComponent.prototype.getAdditionalCategories = function () {
+        var _this = this;
+        this.additionalCategoryService.getAdditionCategories().subscribe(function (res) {
+            _this.additionalCategories = res;
+        });
+    };
     tslib_1.__decorate([
         ViewChild('input'),
         tslib_1.__metadata("design:type", ElementRef)
@@ -190,7 +200,8 @@ var ProductPopupComponent = /** @class */ (function () {
         tslib_1.__param(1, Inject(MAT_DIALOG_DATA)),
         tslib_1.__metadata("design:paramtypes", [MatDialogRef, Object, ParseService,
             UploadService,
-            CategoryService])
+            CategoryService,
+            AdditionCategoryService])
     ], ProductPopupComponent);
     return ProductPopupComponent;
 }());

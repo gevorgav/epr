@@ -1,0 +1,30 @@
+<div class="content-wrap">
+  <div class="clearfix">
+    <div class="card-body" style="padding: 40px;">
+      <form id="form" name="form" class="nobottommargin" [formGroup]="form" >
+
+        <div class=" col col_full">
+          <label for="title">Title:</label>
+          <input formControlName="title" type="text" id="title" name="title" value="" class="form-control"/>
+          <div
+            *ngIf="form.controls['title'].invalid && (form.controls['title'].dirty || form.controls['title'].touched)"
+            class="alert alert-danger">
+            <div *ngIf="form.controls['title'].errors.required">
+              Title is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="col_full nobottommargin">
+          <button type="submit" class="button button-3d " id="submit" name="submit"
+                  value="submit" (click)="submit()">Save
+          </button>
+          <button (click)="cancel()" class="button button-white button-3d " id="cancel" name="cancel" value="cancel">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

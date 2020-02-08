@@ -14,6 +14,10 @@ import {OrderModel} from '../../shared/model/order.model';
 import {ParseService} from '../../shared/services/parse.service';
 import {OrderItemModel} from '../../shared/model/order-item.model';
 import {InitializerService} from '../../shared/services/initializer.service';
+import {AdditionCategoryModel} from '../../shared/model/addition-category.model';
+import {AdditionCategoryService} from '../../shared/services/addition-category.service';
+import {zip} from 'rxjs';
+import {AdditionModel} from '../../shared/model/addition.model';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -79,6 +83,8 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public itemCategory: CategoryModel;
   public quantity: number = 0;
   private title$ = this.route.paramMap;
+  public additionCategories: AdditionCategoryModel[] = [];
+  private selectedAdditions: AdditionModel[] = [];
 
   constructor(private titleService: Title,
               private locationService: LocationDateService,
@@ -89,7 +95,8 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private categoryService: CategoryService,
               private orderService: OrderService,
               private initializerService: InitializerService,
-              private parseService: ParseService) {
+              private parseService: ParseService,
+              private additionCategoryService :AdditionCategoryService) {
   }
 
   ngOnInit() {
@@ -100,10 +107,12 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   private getSelectedProduct(productPatch: string) {
-    this.productService.getProductByPatch(productPatch).subscribe((res: ProductModel) => {
+    this.productService.getProductByPatch(productPatch)
+      .subscribe((res: ProductModel) => {
       if (!res) {
         this.router.navigate(['/404']);
       }
+      this.initAdditions(res);
       this.selectedProduct = res;
       this.titleService.setTitle(res.title);
       this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
@@ -168,7 +177,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   addToCart() {
-    let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity);
+    let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity, this.selectedAdditions.map(value => value.id));
     let items = [];
     items.push(orderItem);
     let order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime,
@@ -198,5 +207,26 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
 
   goToCart() {
     this.router.navigate(['/cart']);
+  }
+
+  private initAdditions(productModel: ProductModel) {
+    let $obs = [];
+    productModel.additionalCategories.forEach(value => {
+      $obs.push(this.additionCategoryService.getAdditionalCategoryById(value))
+    });
+    zip(...$obs).subscribe((res: AdditionCategoryModel[]) =>{
+      this.additionCategories = res;
+    })
+  }
+
+  selectAddition($event: MouseEvent, item: AdditionModel) {
+    this.selectedAdditions.indexOf(item)>=0?
+      this.selectedAdditions.splice(this.selectedAdditions.indexOf(item), 1)
+      : this.selectedAdditions.push(item);
+    RentalItemComponent.setAdditionsStyle($event);
+  }
+
+  private static setAdditionsStyle($event: MouseEvent) {
+    $event.target['style'].opacity === '' ?$event.target['style'].opacity = "0.3":$event.target['style'].opacity = "";
   }
 }

@@ -1,5 +1,5 @@
 import * as tslib_1 from "tslib";
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ParseService } from '../../shared/services/parse.service';
 import { CategoryService } from '../../shared/services/category.service';
@@ -13,6 +13,8 @@ var HeaderComponent = /** @class */ (function () {
         this.categoryService = categoryService;
         this.isAdmin = false;
         this.categories = [];
+        this.fixHeader = false;
+        this.top = false;
     }
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -58,6 +60,29 @@ var HeaderComponent = /** @class */ (function () {
             _this.categories = res;
         });
     };
+    HeaderComponent.prototype.getHeaderClass = function () {
+        return this.fixHeader ? ["full-header", "sticky-header"] : ["full-header"];
+    };
+    HeaderComponent.prototype.scrollTop = function () {
+        (function smoothscroll() {
+            var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            if (currentScroll > 0) {
+                window.requestAnimationFrame(smoothscroll);
+                window.scrollTo(0, currentScroll - (currentScroll / 8));
+            }
+        })();
+    };
+    HeaderComponent.prototype.toggleMenu = function () {
+        this.toggle = !!!this.toggle;
+    };
+    tslib_1.__decorate([
+        Input(),
+        tslib_1.__metadata("design:type", Boolean)
+    ], HeaderComponent.prototype, "fixHeader", void 0);
+    tslib_1.__decorate([
+        Input(),
+        tslib_1.__metadata("design:type", Boolean)
+    ], HeaderComponent.prototype, "top", void 0);
     HeaderComponent = tslib_1.__decorate([
         Component({
             selector: 'app-header',

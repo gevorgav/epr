@@ -23,6 +23,7 @@ var DeliveryChartComponent = /** @class */ (function () {
                 deliveryChart: new DeliveryChartModel(null, '', null, null, null, null)
             },
             width: '50%',
+            maxHeight: 600
         });
         dialogRef.afterClosed().subscribe(function (data) {
             if (data) {
@@ -40,6 +41,7 @@ var DeliveryChartComponent = /** @class */ (function () {
                 deliveryChart: element
             },
             width: '50%',
+            maxHeight: 600
         });
         dialogRef.afterClosed().subscribe(function (data) {
             if (data) {
@@ -61,7 +63,9 @@ var DeliveryChartComponent = /** @class */ (function () {
         this.deliveryChartService.getDeliveryLocations()
             .subscribe(function (res) {
             _this.deliveryCharts = res;
-            _this.dataSource = new MatTableDataSource(_this.deliveryCharts);
+            _this.dataSource = new MatTableDataSource(_this.deliveryCharts.sort(function (a, b) {
+                return a.city.localeCompare(b.city);
+            }));
         }, function (error) { return handleError(error); });
     };
     DeliveryChartComponent.prototype.applyFilter = function ($event) {

@@ -3,6 +3,10 @@ import {ParseService} from './parse.service';
 import {ProductIdName, ShippingInfoModel} from '../model/shipping-info.model';
 import {Observable} from 'rxjs/internal/Observable';
 import {from} from 'rxjs/internal/observable/from';
+import {OrderService} from './order.service';
+import {OrderItemModel} from '../model/order-item.model';
+import {AdditionCategoryHttp} from './addition-category-http.service';
+import {AdditionModel} from '../model/addition.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,34 +17,45 @@ export class ShippingHttpService {
   static ZIP_CODE = 'ZipCode';
   static SHIPPING_INFO = 'ShippingInfo';
 
-  constructor(private parseService: ParseService) {
+  constructor(private parseService: ParseService, private orderService: OrderService) {
   }
 
   public saveShipping(shipping: ShippingInfoModel): Observable<any> {
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     const ZipCode = this.parseService.parse.Object.extend(ShippingHttpService.ZIP_CODE);
-
-    let parseShippingInfo = new ShippingInfo();
-    parseShippingInfo.set('name', shipping.name);
-    parseShippingInfo.set('streetAddress', shipping.street);
-    parseShippingInfo.set('phone', shipping.phone);
-    parseShippingInfo.set('email', shipping.email);
-    parseShippingInfo.set('specialInstructions', shipping.specialInstructions);
-    if (shipping.user){
-      parseShippingInfo.set('user', shipping.user);
-    }
-    parseShippingInfo.set('zipCode', new ZipCode({id: shipping.zipCode}));
-    parseShippingInfo.set('isPayed', shipping.isPayed);
-    parseShippingInfo.set('isShipped', shipping.isShipped);
-    parseShippingInfo.set('startDate', shipping.startDate);
-    parseShippingInfo.set('endDate', shipping.endDate);
-    parseShippingInfo.set('productCount', shipping.productCount);
-    parseShippingInfo.set('payed', shipping.payed);
-    parseShippingInfo.relation('products').add(this.getProductParseObjects(shipping.products));
-
-    let promise = parseShippingInfo.save().then(res=>{
-      return res;
+    let promise;
+    promise = this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res=>{
+      res.forEach((value, index) => {
+        shipping.orderItems[index].id = value.id;
+      });
+    }).then(()=>{
+      let parseShippingInfo = new ShippingInfo();
+      parseShippingInfo.set('name', shipping.name);
+      parseShippingInfo.set('streetAddress', shipping.street);
+      parseShippingInfo.set('phone', shipping.phone);
+      parseShippingInfo.set('email', shipping.email);
+      parseShippingInfo.set('specialInstructions', shipping.specialInstructions);
+      if (shipping.user){
+        parseShippingInfo.set('user', shipping.user);
+      }
+      parseShippingInfo.set('zipCode', new ZipCode({id: shipping.zipCode}));
+      parseShippingInfo.set('isPayed', shipping.isPayed);
+      parseShippingInfo.set('isShipped', shipping.isShipped);
+      parseShippingInfo.set('startDate', shipping.startDate);
+      parseShippingInfo.set('endDate', shipping.endDate);
+      parseShippingInfo.set('productCount', shipping.productCount);
+      parseShippingInfo.set('payed', shipping.payed);
+      parseShippingInfo.relation('products').add(
+        this.getRelatedParseObjects(shipping.products.map(value => value.id), ShippingHttpService.PRODUCT)
+      );
+      parseShippingInfo.relation('orderItems').add(
+        this.getRelatedParseObjects(shipping.orderItems.map(value => value.id), OrderService.ORDER_ITEM)
+      );
+      return parseShippingInfo.save().then(res=>{
+        return res;
+      });
     });
+
 
     return from(promise);
   }
@@ -66,7 +81,7 @@ export class ShippingHttpService {
     const query = new this.parseService.parse.Query(shippingInfo);
     let promise = query.equalTo('objectId', id)
     .first().catch(res => {
-      console.log(res);
+      // console.log(res);
     }).then(res=>{
       res.set('isShipped', shipped);
       return res.save().then(res => true)
@@ -95,8 +110,9 @@ export class ShippingHttpService {
     }
     let promise = query.each(item=>{
       let shippingModel = ShippingHttpService.convertToShippingInfoModel(item);
-      return this.loadProductRelation(item).then(res1=>{
-        shippingModel.products.push(...res1);
+      return this.loadShippingRelations(item).then((ordersProducts)=>{
+        shippingModel.products.push(...ordersProducts[1]);
+        shippingModel.orderItems.push(...ordersProducts[0]);
         shippings.push(shippingModel);
         return item;
       }).then(parseShipping=>{
@@ -105,7 +121,7 @@ export class ShippingHttpService {
         return query.equalTo('objectId', parseShipping.attributes['zipCode']['id']).first().then(parseZip=>{
           shippingModel.zipCode = parseZip.attributes['zipCode'];
         });
-      });
+      })
     }).then(res => {
       return shippings;
     });
@@ -129,7 +145,8 @@ export class ShippingHttpService {
       item.attributes['startDate'],
       item.attributes['endDate'],
       item.attributes['payed'],
-      item.attributes['productCount']
+      item.attributes['productCount'],
+      []
     );
   }
 
@@ -137,13 +154,13 @@ export class ShippingHttpService {
     return null;
   }
 
-  private getProductParseObjects(products: ProductIdName[]): any {
-    const ProductParse = this.parseService.parse.Object.extend(ShippingHttpService.PRODUCT);
-    let productsParse = [];
-    products.forEach(value=>{
-      productsParse.push(new ProductParse({id: value.id}))
+  private getRelatedParseObjects(items: string[], name: string): any {
+    const ParseObject = this.parseService.parse.Object.extend(name);
+    let parseItems = [];
+    items.forEach(value=>{
+      parseItems.push(new ParseObject({id: value}));
     });
-    return productsParse;
+    return parseItems;
   }
 
   private loadProductRelation(res: any): Promise<ProductIdName[]> {
@@ -155,12 +172,37 @@ export class ShippingHttpService {
     })
   }
 
+  private loadOrderItemRelation(res: any): Promise<OrderItemModel[]> {
+    let orderItems: OrderItemModel[] = [];
+    return res.relation('orderItems').query().each(resItem=>{
+      return this.getOrderItemsModel(resItem).then((resOrderItem) =>{
+        orderItems.push(resOrderItem);
+      });
+    }).then(()=>{
+      return orderItems;
+    })
+  }
+
   private getProductsName(prodList: any[]) {
     let names = [];
     for (let product of prodList){
       names.push({id: product.id, name: product.attributes['title']})
     }
     return names;
+  }
+
+  private loadShippingRelations(item: any) {
+    return Promise.all([this.loadOrderItemRelation(item), this.loadProductRelation(item)]);
+  }
+
+  private getOrderItemsModel(orderItem: any): Promise<OrderItemModel> {
+    const additions: AdditionModel[] = [];
+    return orderItem.relation('additions').query().each(item=>{
+      additions.push(AdditionCategoryHttp.convertToAdditionalModel(item))
+    }).then(() =>{
+      return new OrderItemModel(orderItem.attributes['product'].id,
+        orderItem.attributes['count'], [], orderItem.id, additions);
+    })
   }
 }
 

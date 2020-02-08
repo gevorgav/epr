@@ -27,11 +27,25 @@
 
             <!-- Product Single - Gallery
                             ============================================= -->
-            <div class="product-image" style="overflow: visible;">
-              <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isNew">New !</div>
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isHotDeal">Hot Deal !</div>
-            </div><!-- Product Single - Gallery End -->
+            <div class="col_full">
+              <div class="product-image" style="overflow: visible;">
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isNew">New !</div>
+                <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isHotDeal">Hot Deal !</div>
+              </div><!-- Product Single - Gallery End -->
+            </div>
+            <ng-container *ngFor="let item of additionCategories">
+              <div class="col_full">
+                <h6>Don't forget to choose {{item.name}}</h6>
+                <ng-container *ngFor="let addition of item.additions">
+                  <div class="col_one_sixth">
+                    <img (click)="selectAddition($event, addition)" [src]="addition.imageUrl" style=" height: 60px"/>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+
+
 
           </div>
 

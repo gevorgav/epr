@@ -26,6 +26,7 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         zipCodeQuery.contains('zipCode', zipCode);
         var deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
         deliveryQuery.matchesQuery('zipCode', zipCodeQuery);
+        // let deliveryChartModel: DeliveryChartModel;
         var promise = deliveryQuery.first().then(function (delivery) {
             return new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
         }, function (error) {
@@ -50,7 +51,19 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
         return from(promise1);
     };
     DeliveryChartHttpService.prototype.getDeliveryLocationByCity = function (city) {
-        return undefined;
+        var delivery = this.parseService.parse.Object.extend(DeliveryChartHttpService_1.DELIVERY_CHART);
+        var query = new this.parseService.parse.Query(delivery);
+        var deliveryCharts = [];
+        var promise1 = query.contains('city', city).each(function (item) {
+            var zipCodes = [];
+            return item.relation('zipCode').query().each(function (zip) {
+                zipCodes.push(DeliveryChartHttpService_1.parseObjectToZipCode(zip));
+            }).then(function () {
+                var deliveryChartModel = new DeliveryChartModel(item['id'], item.attributes['city'], item.attributes['price'], null, zipCodes);
+                deliveryCharts.push(deliveryChartModel);
+            });
+        }).then(function (deliveryChart) { return deliveryCharts; });
+        return from(promise1);
     };
     DeliveryChartHttpService.parseObjectToZipCode = function (parseObject) {
         return new ZipCode(parseObject.id, parseObject.attributes['zipCode']);
@@ -150,6 +163,31 @@ var DeliveryChartHttpService = /** @class */ (function (_super) {
             _this_1.saveDeliveryChart(res);
         });
         return of(deliveries);
+    };
+    DeliveryChartHttpService.prototype.getDeliveryLocationsByZipCodeSearch = function (zipCode, city) {
+        var _this_1 = this;
+        var zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
+        zipCodeQuery.contains('zipCode', zipCode);
+        var deliveries = [];
+        var promise = zipCodeQuery.each(function (zipCodeItem) {
+            var deliveryQuery = new _this_1.parseService.parse.Query('DeliveryChart');
+            deliveryQuery.equalTo('zipCode', zipCodeItem);
+            if (city) {
+                deliveryQuery.contains('city', city);
+            }
+            return deliveryQuery.first().then(function (delivery) {
+                if (delivery) {
+                    deliveries.push(new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null, [DeliveryChartHttpService_1.parseObjectToZipCode(zipCodeItem)]));
+                }
+            }).then(function () { return deliveries; });
+        }).then(function () { return deliveries; });
+        return from(promise);
+    };
+    DeliveryChartHttpService.prototype.getZipCodeModelByZipCode = function (zipCode) {
+        var zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
+        zipCodeQuery.equalTo('zipCode', zipCode);
+        var promise = zipCodeQuery.first().then(function (res) { return DeliveryChartHttpService_1.parseObjectToZipCode(res); });
+        return from(promise);
     };
     var DeliveryChartHttpService_1;
     DeliveryChartHttpService.DELIVERY_CHART = "DeliveryChart";

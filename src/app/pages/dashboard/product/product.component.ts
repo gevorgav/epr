@@ -18,6 +18,7 @@ export class ProductComponent implements OnInit {
   products: ProductViewModel[] = [];
   dataSource = new MatTableDataSource(this.products);
   displayedColumns = ['title', 'price', /*'isHotDeal',*/ 'edit', 'delete'];
+  private oldAdditionalCategories: string[];
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
@@ -47,32 +48,34 @@ export class ProductComponent implements OnInit {
       this.productService.getProduct(id),     // 0
       this.categoryService.getCategoryByProductId(id), // 1
     ).subscribe(([product, category]) => {
-        const dialogRef = this.dialog.open(ProductPopupComponent, {
-          data: {
-            product,
-            category
-          },
-          width: '80%',
-          height: '95%'
-        });
-        dialogRef.afterClosed().subscribe(data => {
-          if (data && data.product) {
-            this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId)
-              .subscribe(
-                res => {
-                    this.initProducts();
-                },
-                erorr => handleError(erorr))
-          }
-        })
-      })
+      this.oldAdditionalCategories = product.additionalCategories;
+      const dialogRef = this.dialog.open(ProductPopupComponent, {
+        data: {
+          product,
+          category
+        },
+        width: '80%',
+        height: '95%'
+      });
+      dialogRef.afterClosed().subscribe(data => {
+        if (data && data.product) {
+          this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId, this.oldAdditionalCategories)
+            .subscribe(
+              res => {
+                this.initProducts();
+                this.oldAdditionalCategories = [];
+              },
+              erorr => handleError(erorr));
+        }
+      });
+    });
   }
 
   addProduct() {
     const dialogRef = this.dialog.open(ProductPopupComponent, {
       data: {
         product: new ProductModel(null, null, null, null, null, null, null, null,
-          null, null, null, null, null, null, null, null, null, null, null)
+          null, null, null, null, null, null, null, null, null, null, null, null)
       },
       width: '80%',
       height: '95%'

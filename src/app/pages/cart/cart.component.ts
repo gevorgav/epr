@@ -13,6 +13,7 @@ import {CheckoutService} from '../../shared/services/checkout.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -46,11 +47,7 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.initOrderDataSelectedProducts();
     this.initShippingForm();
-    this.locationService.isSpecified.subscribe(res=>{
-      if (res) {
-        this.getShippingPrice();
-      }
-    })
+
   }
 
   get productsInCart(): ProductModel[] {
@@ -66,7 +63,7 @@ export class CartComponent implements OnInit {
     this.initializerService.orderModel.orderItems.forEach((item: OrderItemModel)=>{
       products$.push(this.productService.getProduct(item.productId))
     });
-    forkJoin(...products$).subscribe(res =>{
+    zip(...products$).subscribe(res =>{
       this.productsInCart = res;
       this.initOrderData();
     });
@@ -103,6 +100,11 @@ export class CartComponent implements OnInit {
         this.orderData.get(value.productId).price = res;
       })
     });
+    this.locationService.isSpecified.subscribe(res=>{
+      if (res) {
+        this.getShippingPrice();
+      }
+    })
   }
 
   getProductById(id: string): ProductModel{
@@ -188,7 +190,8 @@ export class CartComponent implements OnInit {
         this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value,
         this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
         this.parseService.isAuth()? this.parseService.getCurrentUser(): null, null,
-        this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
+        this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(),
+        this.initializerService.orderModel.orderItems);
       this.shippingService.saveShipping(shippingModel).subscribe(res=>{
         CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
           "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
@@ -228,7 +231,7 @@ export class CartComponent implements OnInit {
   private getProductCount(): ProductCount[] {
     let productCount: ProductCount[] = [];
     this.orderData.forEach((value: ProductInCartCalculation, key: string)=>{
-      productCount.push({productId: key, count: value.count})
+      productCount.push({productId: key, count: value.count, name: ""})
     });
     return productCount;
   }
@@ -243,4 +246,5 @@ export interface ProductInCartCalculation {
 export interface ProductCount {
   productId: string;
   count: number;
+  name: string;
 }

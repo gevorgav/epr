@@ -1,5 +1,5 @@
 var ShippingInfoModel = /** @class */ (function () {
-    function ShippingInfoModel(id, name, street, phone, specialInstructions, zipCode, products, isPayed, isShipped, user, createdAt, startDate, endDate, payed, productCount) {
+    function ShippingInfoModel(id, name, street, phone, email, specialInstructions, zipCode, products, isPayed, isShipped, user, createdAt, startDate, endDate, payed, productCount, orderItems) {
         this._name = name;
         this._street = street;
         this._phone = phone;
@@ -15,6 +15,8 @@ var ShippingInfoModel = /** @class */ (function () {
         this._endDate = endDate;
         this._payed = payed;
         this._productCount = productCount;
+        this._email = email;
+        this._orderItems = orderItems;
     }
     Object.defineProperty(ShippingInfoModel.prototype, "id", {
         get: function () {
@@ -162,6 +164,26 @@ var ShippingInfoModel = /** @class */ (function () {
         },
         set: function (value) {
             this._productCount = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ShippingInfoModel.prototype, "email", {
+        get: function () {
+            return this._email;
+        },
+        set: function (value) {
+            this._email = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ShippingInfoModel.prototype, "orderItems", {
+        get: function () {
+            return this._orderItems;
+        },
+        set: function (value) {
+            this._orderItems = value;
         },
         enumerable: true,
         configurable: true

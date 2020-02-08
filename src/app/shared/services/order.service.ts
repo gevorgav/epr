@@ -10,6 +10,7 @@ import {from} from 'rxjs/internal/observable/from';
 import {Promise} from 'q';
 import {of} from 'rxjs/internal/observable/of';
 import {DeliveryChartHttpService} from './delivery-chart-http.service';
+import {AdditionCategoryHttp} from './addition-category-http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -80,11 +81,18 @@ export class OrderService {
           });
         }).then(orderParse => {
           let list = [];
+          let additionObjs = [];
           return orderParse.relation('orderItems').query().each(relatedObject=> {
-            list.push(relatedObject);
+            return relatedObject.relation('additions').query().each(additionObj=> {
+              additionObjs.push(additionObj.id);
+            }).then(()=>{
+              relatedObject['additions'] = additionObjs;
+              list.push(relatedObject);
+            });
           }).then(()=>{
             list.forEach(item=>{
-              orderItems.push(new OrderItemModel(item.attributes['product'].id, item.attributes['count'], item.id))
+              orderItems.push(new OrderItemModel(item.attributes['product'].id,
+                item.attributes['count'], item['additions'], item.id))
             });
             orderModel.orderItems = orderItems;
             return orderModel;
@@ -135,7 +143,7 @@ export class OrderService {
     order.set('zipCode', model.zipCode.id);
   }
 
-  private saveAndGetOrderItems(orderItems: OrderItemModel[]): Promise<any[]> {
+  public saveAndGetOrderItems(orderItems: OrderItemModel[]): Promise<any[]> {
     const OrderItem = this.parseService.parse.Object.extend(OrderService.ORDER_ITEM);
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let savedOrderItems = [];
@@ -143,6 +151,9 @@ export class OrderService {
       let parseOrderItem = new OrderItem();
       parseOrderItem.set('product', new Product({id: orderItem.productId}));
       parseOrderItem.set('count', orderItem.count);
+      if (orderItem.additionIds && orderItem.additionIds.length > 0){
+        parseOrderItem.relation('additions').add(this.getRelationAdditional(orderItem.additionIds));
+      }
       savedOrderItems.push(parseOrderItem);
     }
     return this.parseService.parse.Object.saveAll(savedOrderItems, {
@@ -151,6 +162,17 @@ export class OrderService {
         console.error(res);
       }
     });
+  }
+
+  private getRelationAdditional(ids: string[]): any{
+    const Additional = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
+    let additions: any[] = [];
+    ids.forEach(value => {
+      let additional = new Additional();
+      additional.id = value;
+      additions.push(additional);
+    });
+    return additions;
   }
 
   private getZipCode(id: any): Promise<any> {
@@ -213,16 +235,21 @@ export class OrderService {
   }
 
   public destroyOrder(): Observable<any>{
-    const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
-    let order = new Order();
-    order.set('user', this.parseService.getCurrentUser());
-    const query = new this.parseService.parse.Query(order);
-    let promise = query.equalTo('user', this.parseService.getCurrentUser())
-      .first().then(orderParse=>{
-      return orderParse.destroy()
-    });
+    if(this.parseService.getCurrentUser()){
+      const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
+      let order = new Order();
+      order.set('user', this.parseService.getCurrentUser());
+      const query = new this.parseService.parse.Query(order);
+      let promise = query.equalTo('user', this.parseService.getCurrentUser())
+        .first().then(orderParse=>{
+          return orderParse.destroy()
+        });
 
-    return from(promise);
+      return from(promise);
+    }
+
+    return of(true);
+
   }
 
 }

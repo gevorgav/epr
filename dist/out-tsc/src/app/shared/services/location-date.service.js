@@ -43,7 +43,6 @@ var LocationDateService = /** @class */ (function () {
         }));
     };
     LocationDateService.prototype.getShippingPrice = function () {
-        console.log(this._locationDate.location.zipCode);
         return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
     };
     LocationDateService.prototype.getCalculation = function (nightPrice, minPrice, minTime, price) {
@@ -54,17 +53,25 @@ var LocationDateService = /** @class */ (function () {
                 var hours = 0;
                 var calculatedPrice = 0;
                 var days = _this.getDates();
-                for (var _i = 0, days_1 = days; _i < days_1.length; _i++) {
-                    var day = days_1[_i];
-                    if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length - 1) {
-                        hours += _this.getFutureHours(9).length;
-                        night += 1;
-                    }
-                    else if (days.indexOf(day) === 0) {
-                        hours += _this.getFutureHours(day.getHours()).length;
-                    }
-                    else if (days.indexOf(day) === days.length - 1) {
-                        hours += _this.getLastDayHours(_this._locationDate.endDateTime.getHours()).length;
+                if (days.length === 1) {
+                    hours = _this.locationDate.endDateTime.getHours() - _this.locationDate.startDateTime.getHours();
+                }
+                else {
+                    for (var _i = 0, days_1 = days; _i < days_1.length; _i++) {
+                        var day = days_1[_i];
+                        if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length - 1) {
+                            hours += _this.getFutureHours(9).length;
+                            night += 1;
+                        }
+                        else if (days.indexOf(day) === 0) {
+                            hours += _this.getFutureHours(day.getHours()).length;
+                            if (days.length > 1) {
+                                night += 1;
+                            }
+                        }
+                        else if (days.indexOf(day) === days.length - 1) {
+                            hours += _this.getLastDayHours(_this._locationDate.endDateTime.getHours()).length;
+                        }
                     }
                 }
                 if (hours > minTime) {

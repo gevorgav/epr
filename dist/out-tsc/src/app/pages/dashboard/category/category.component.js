@@ -19,7 +19,7 @@ var CategoryComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(CategoryPopupComponent, {
             data: {
-                category: new CategoryModel(null, null, null, null, null, null)
+                item: new CategoryModel(null, null, null, null, null, null)
             },
             width: '80%'
         });

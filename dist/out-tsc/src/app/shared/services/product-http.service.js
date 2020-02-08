@@ -6,6 +6,7 @@ import { ProductViewModel } from '../model/product-view.model';
 import { from } from "rxjs";
 import { ParseService } from "./parse.service";
 import { CategoryHttpService } from "./category-http.service";
+import { AdditionCategoryHttp } from './addition-category-http.service';
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
@@ -31,13 +32,26 @@ var ProductHttpService = /** @class */ (function (_super) {
         return from(promise);
     };
     ProductHttpService.prototype.getProduct = function (id) {
+        var _this_1 = this;
         var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
         var query = new this.parseService.parse.Query(Product);
         query.equalTo("objectId", id);
         var promise = query.first().then(function (result) {
-            return ProductHttpService_1.convertToProductModel(result);
+            return _this_1.loadProductAdditionalCategory(result).then(function (res) {
+                var productModel = ProductHttpService_1.convertToProductModel(result);
+                productModel.additionalCategories = res;
+                return productModel;
+            });
         });
         return from(promise);
+    };
+    ProductHttpService.prototype.loadProductAdditionalCategory = function (res) {
+        var productAdditionalCategory = [];
+        return res.relation('productAdditionalCategory').query().each(function (resProd) {
+            productAdditionalCategory.push(resProd.id);
+        }).then(function () {
+            return productAdditionalCategory;
+        });
     };
     ProductHttpService.prototype.deleteProduct = function (id) {
         var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
@@ -48,18 +62,18 @@ var ProductHttpService = /** @class */ (function (_super) {
         });
         return from(promise);
     };
-    ProductHttpService.prototype.saveProduct = function (productToSave, newCategoryId, oldCategoryId) {
+    ProductHttpService.prototype.saveProduct = function (productToSave, newCategoryId, oldCategoryId, oldAdditionalCategories) {
         var _this_1 = this;
         var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
         var product = new Product();
-        this.setFields(product, productToSave);
+        this.setFields(product, productToSave, []);
         var promise;
         var _this = this;
         if (productToSave.id) {
             var query = new this.parseService.parse.Query(Product);
             query.equalTo("objectId", productToSave.id);
             promise = query.first().then(function (res) {
-                _this_1.setFields(res, productToSave);
+                _this_1.setFields(res, productToSave, oldAdditionalCategories);
                 return res.save().then(function (savedProduct) {
                     if (newCategoryId !== oldCategoryId) {
                         var Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
@@ -77,9 +91,6 @@ var ProductHttpService = /** @class */ (function (_super) {
                                 return category.save();
                             });
                         });
-                    }
-                    else {
-                        return savedProduct.save();
                     }
                 });
             });
@@ -113,7 +124,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         return new ProductViewModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam']);
     };
     ProductHttpService.convertToProductModel = function (item) {
-        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null, item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules'], item.attributes['minTime'], item.attributes['minPrice'], item.attributes['nightPrice'], item.attributes['count']);
+        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null, item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules'], item.attributes['minTime'], item.attributes['minPrice'], item.attributes['nightPrice'], item.attributes['count'], []);
     };
     ProductHttpService.prototype.getProducts = function (count) {
         var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
@@ -128,7 +139,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         });
         return from(promise);
     };
-    ProductHttpService.prototype.setFields = function (product, productToSave) {
+    ProductHttpService.prototype.setFields = function (product, productToSave, oldAdditionalCategories) {
         product.set('title', productToSave.title);
         product.set('price', productToSave.price);
         product.set('images', productToSave.images);
@@ -147,16 +158,32 @@ var ProductHttpService = /** @class */ (function (_super) {
         product.set('nightPrice', productToSave.nightPrice);
         product.set('count', productToSave.count);
         product.set('pathParam', this.pathParamFromName(productToSave.title));
+        if (oldAdditionalCategories && oldAdditionalCategories.length) {
+            product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
+        }
+        if (productToSave.additionalCategories && productToSave.additionalCategories.length) {
+            product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories));
+        }
     };
     ProductHttpService.prototype.pathParamFromName = function (name) {
         return new Date().getTime() + '-' + name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
     };
     ProductHttpService.prototype.getProductByPatch = function (patch) {
+        var _this_1 = this;
         var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
         var query = new this.parseService.parse.Query(product);
         query.equalTo('pathParam', patch);
-        var promise = query.first().then(function (res) {
-            return res ? ProductHttpService_1.convertToProductModel(res) : null;
+        var promise = query.first().then(function (resProd) {
+            if (!resProd) {
+                return null;
+            }
+            else {
+                return _this_1.loadProductAdditionalCategory(resProd).then(function (res) {
+                    var productModel = ProductHttpService_1.convertToProductModel(resProd);
+                    productModel.additionalCategories = res;
+                    return productModel;
+                });
+            }
         });
         return from(promise);
     };
@@ -164,6 +191,14 @@ var ProductHttpService = /** @class */ (function (_super) {
         var obj = {};
         map.forEach(function (v, k) { obj[k] = v; });
         return obj;
+    };
+    ProductHttpService.prototype.getAdditionalCategoryRelations = function (additionalCategories) {
+        var CategoryParse = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
+        var productsParse = [];
+        additionalCategories.forEach(function (value) {
+            productsParse.push(new CategoryParse({ id: value }));
+        });
+        return productsParse;
     };
     var ProductHttpService_1;
     ProductHttpService.PRODUCT = "Product";

@@ -7,6 +7,8 @@ import {CategoryService} from '../../../../shared/services/category.service';
 import {CategoryModel} from '../../../../shared/model/category.model';
 import {handleError} from '../../../../shared/util/error-handler';
 import {UploadService} from "../../../../shared/services/upload.service";
+import {AdditionCategoryService} from '../../../../shared/services/addition-category.service';
+import {AdditionCategoryModel} from '../../../../shared/model/addition-category.model';
 
 @Component({
   selector: 'app-product-popup',
@@ -17,6 +19,7 @@ export class ProductPopupComponent implements OnInit {
 
   product: ProductModel;
   categories: CategoryModel[];
+  additionalCategories: AdditionCategoryModel[];
 
   public form: FormGroup;
   formBuilder: FormBuilder = new FormBuilder();
@@ -34,7 +37,8 @@ export class ProductPopupComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private parseService: ParseService,
               private uploadService: UploadService,
-              private categoryService: CategoryService) {
+              private categoryService: CategoryService,
+              private additionalCategoryService: AdditionCategoryService) {
     this.product = this.data.product;
   }
 
@@ -42,6 +46,7 @@ export class ProductPopupComponent implements OnInit {
     this.initSafetyRules();
     this.initForm();
     this.getCategories();
+    this.getAdditionalCategories();
   }
 
   onSubmit() {
@@ -67,6 +72,7 @@ export class ProductPopupComponent implements OnInit {
           this.form.get('minPrice').value,
           this.form.get('nightPrice').value,
           this.form.get('count').value,
+          this.form.get('additionalCategories').value
         ),
         newCategoryId: this.form.get('category').value,
         oldCategoryId: this.categoryId
@@ -175,6 +181,9 @@ export class ProductPopupComponent implements OnInit {
         Validators.required,
         Validators.min(1)
       ]),
+      additionalCategories: this.formBuilder.control(this.product.additionalCategories,[
+
+      ])
     }, {validators: setupPolicyUniqueKeyValidator})
   }
 
@@ -227,11 +236,11 @@ export class ProductPopupComponent implements OnInit {
     }
     return res;
   }
-  
+
   public getSetupPolicyValuesControls(){
     return (this.form.get('setupPolicyValues') as FormArray).controls;
   }
-  
+
   public getSetupPolicyKeysControls(){
     return (this.form.get('setupPolicyKeys') as FormArray).controls;
   }
@@ -250,6 +259,12 @@ export class ProductPopupComponent implements OnInit {
 
   compare(f1: any, f2: any) {
     return f1 === f2;
+  }
+
+  private getAdditionalCategories() {
+    this.additionalCategoryService.getAdditionCategories().subscribe(res=>{
+      this.additionalCategories = res;
+    })
   }
 }
 

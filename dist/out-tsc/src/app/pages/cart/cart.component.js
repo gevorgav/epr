@@ -4,13 +4,13 @@ import { InitializerService } from '../../shared/services/initializer.service';
 import { OrderService } from '../../shared/services/order.service';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { ProductService } from '../../shared/services/product.service';
-import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ParseService } from '../../shared/services/parse.service';
 import { CheckoutService } from '../../shared/services/checkout.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ShippingInfoModel } from '../../shared/model/shipping-info.model';
 import { ShippingHttpService } from '../../shared/services/shipping-http.service';
+import { zip } from 'rxjs';
 var CartComponent = /** @class */ (function () {
     function CartComponent(orderService, locationService, productService, route, router, parseService, checkoutService, shippingService, initializerService) {
         this.orderService = orderService;
@@ -23,6 +23,8 @@ var CartComponent = /** @class */ (function () {
         this.shippingService = shippingService;
         this.initializerService = initializerService;
         this._productsInCart = [];
+        this._minimalTotal = 89;
+        this._minimalDeliver = 35;
         this.orderData = new Map();
     }
     CartComponent.prototype.ngOnInit = function () {
@@ -51,7 +53,7 @@ var CartComponent = /** @class */ (function () {
         this.initializerService.orderModel.orderItems.forEach(function (item) {
             products$.push(_this.productService.getProduct(item.productId));
         });
-        forkJoin.apply(void 0, products$).subscribe(function (res) {
+        zip.apply(void 0, products$).subscribe(function (res) {
             _this.productsInCart = res;
             _this.initOrderData();
         });
@@ -108,12 +110,23 @@ var CartComponent = /** @class */ (function () {
             this.orderService.saveCount(value, productId);
         }
     };
+    CartComponent.prototype.getDeliveryFee = function () {
+        var subTotal = this.getSubtotalPrice() + this.shippingPrice;
+        if (subTotal < this._minimalTotal) {
+            return '$ ' + (this.shippingPrice + this._minimalDeliver);
+        }
+        return this.shippingPrice ? '$ ' + this.shippingPrice : 'Free Delivery';
+    };
     CartComponent.prototype.getTotalPrice = function () {
-        return this.getSubtotalPrice() + this.shippingPrice;
+        var subTotal = this.getSubtotalPrice() + this.shippingPrice;
+        if (subTotal < this._minimalTotal) {
+            return subTotal + this._minimalDeliver;
+        }
+        return subTotal;
     };
     CartComponent.prototype.getSubtotalPrice = function () {
         var subtotal = 0;
-        this.orderData.forEach(function (value, key) {
+        this.orderData.forEach(function (value) {
             subtotal += value.price * value.count;
         });
         return subtotal;
@@ -124,6 +137,7 @@ var CartComponent = /** @class */ (function () {
             if (res) {
                 _this.productsInCart = _this.productsInCart.filter(function (value) { return value.id !== productId; });
                 _this.initializerService.orderModel.orderItems = _this.initializerService.orderModel.orderItems.filter(function (value) { return value.productId !== productId; });
+                _this.orderData.delete(productId);
             }
         });
     };
@@ -146,7 +160,7 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.onSubmitShippingForm = function () {
         var _this = this;
         if (this.shippingInformationForm.valid) {
-            var shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount());
+            var shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(), this.initializerService.orderModel.orderItems);
             this.shippingService.saveShipping(shippingModel).subscribe(function (res) {
                 CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
                     "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
@@ -165,9 +179,10 @@ var CartComponent = /** @class */ (function () {
             'phone': new FormControl('', [
                 Validators.required
             ]),
-            'instruction': new FormControl('', [
+            'email': new FormControl('', [
                 Validators.required
-            ])
+            ]),
+            'instruction': new FormControl('', [])
         });
     };
     CartComponent.prototype.getProductsIds = function (productsInCart) {
@@ -180,7 +195,7 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.getProductCount = function () {
         var productCount = [];
         this.orderData.forEach(function (value, key) {
-            productCount.push({ productId: key, count: value.count });
+            productCount.push({ productId: key, count: value.count, name: "" });
         });
         return productCount;
     };

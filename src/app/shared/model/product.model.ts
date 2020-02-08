@@ -16,10 +16,12 @@ export class ProductModel extends ProductViewModel {
   private _nightPrice: number;
   private _count: number;
   private _calculatedPrice: number;
+  private _additionalCategories: string [];
 
   constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string,
               pathParam: string, description: string, rentalTerms: string, spaceRequired: string, setupPolicy: Map<string, string>,
-              instructions: string, video: string, safetyRules: string, minTime: number, minPrice: number, nightPrice: number, count: number) {
+              instructions: string, video: string, safetyRules: string, minTime: number, minPrice: number, nightPrice: number, count: number,
+              additionalCategories: string[]) {
     super(id, title, price, images, isNew, isHotDeal, itemSize, pathParam);
     this._description = description;
     this._rentalTerms = rentalTerms;
@@ -32,7 +34,7 @@ export class ProductModel extends ProductViewModel {
     this._minPrice = minPrice;
     this._nightPrice = nightPrice;
     this._count = count;
-    
+    this._additionalCategories = additionalCategories;
   }
 
   get description(): string {
@@ -62,28 +64,36 @@ export class ProductModel extends ProductViewModel {
   get safetyRules(): string {
     return this._safetyRules;
   }
-  
+
   get minTime(): number {
     return this._minTime;
   }
-  
+
   get minPrice(): number {
     return this._minPrice;
   }
-  
+
   get nightPrice(): number {
     return this._nightPrice;
   }
-  
+
   get count(): number {
     return this._count;
   }
-  
+
   get calculatedPrice(): number {
     return this._calculatedPrice;
   }
-  
+
   set calculatedPrice(value: number) {
     this._calculatedPrice = value;
+  }
+
+  get additionalCategories(): string[] {
+    return this._additionalCategories;
+  }
+
+  set additionalCategories(value: string[]) {
+    this._additionalCategories = value;
   }
 }

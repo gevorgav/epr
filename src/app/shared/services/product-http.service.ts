@@ -6,6 +6,8 @@ import {ProductViewModel} from '../model/product-view.model';
 import {from, Observable} from "rxjs";
 import {ParseService} from "./parse.service";
 import {CategoryHttpService} from "./category-http.service";
+import {AdditionCategoryHttp} from './addition-category-http.service';
+import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -37,9 +39,22 @@ export class ProductHttpService extends ProductService {
     const query = new this.parseService.parse.Query(Product);
     query.equalTo("objectId", id);
     const promise = query.first().then((result) =>{
-      return ProductHttpService.convertToProductModel(result);
+      return this.loadProductAdditionalCategory(result).then(res=>{
+        let productModel =  ProductHttpService.convertToProductModel(result);
+        productModel.additionalCategories = res;
+        return productModel;
+      })
     });
     return from(promise);
+  }
+
+  private loadProductAdditionalCategory(res: any): Promise<string[]>{
+    let productAdditionalCategory = [];
+    return res.relation('productAdditionalCategory').query().each(resProd=>{
+      productAdditionalCategory.push(resProd.id);
+    }).then(()=>{
+      return productAdditionalCategory
+    })
   }
 
   deleteProduct(id: string) {
@@ -52,10 +67,10 @@ export class ProductHttpService extends ProductService {
     return from(promise);
   }
 
-  saveProduct(productToSave: ProductModel, newCategoryId: string, oldCategoryId?: string) {
+  saveProduct(productToSave: ProductModel, newCategoryId: string, oldCategoryId?: string, oldAdditionalCategories?: string[]) {
     let Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let product = new Product();
-    this.setFields(product, productToSave);
+    this.setFields(product, productToSave, []);
     let promise;
     let _this = this;
     if (productToSave.id) {
@@ -63,7 +78,7 @@ export class ProductHttpService extends ProductService {
       query.equalTo("objectId", productToSave.id);
       promise = query.first().then(
         res => {
-          this.setFields(res, productToSave);
+          this.setFields(res, productToSave, oldAdditionalCategories);
           return res.save().then(
             savedProduct => {
               if (newCategoryId !== oldCategoryId) {
@@ -82,8 +97,6 @@ export class ProductHttpService extends ProductService {
                     return category.save();
                   })
                 });
-              } else {
-                return savedProduct.save()
               }
             }
           )
@@ -153,6 +166,7 @@ export class ProductHttpService extends ProductService {
       item.attributes['minPrice'],
       item.attributes['nightPrice'],
       item.attributes['count'],
+      []
     )
   }
 
@@ -169,7 +183,7 @@ export class ProductHttpService extends ProductService {
     return from(promise);
   }
 
-  private setFields(product: any, productToSave: ProductModel) {
+  private setFields(product: any, productToSave: ProductModel, oldAdditionalCategories: string[]) {
       product.set('title', productToSave.title);
       product.set('price', productToSave.price);
       product.set('images', productToSave.images);
@@ -188,6 +202,12 @@ export class ProductHttpService extends ProductService {
       product.set('nightPrice', productToSave.nightPrice);
       product.set('count', productToSave.count);
       product.set('pathParam', this.pathParamFromName(productToSave.title));
+      if (oldAdditionalCategories && oldAdditionalCategories.length){
+        product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
+      }
+      if (productToSave.additionalCategories && productToSave.additionalCategories.length){
+        product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories))
+      }
   }
 
   pathParamFromName(name: string) {
@@ -198,8 +218,16 @@ export class ProductHttpService extends ProductService {
     let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(product);
     query.equalTo('pathParam', patch);
-    let promise = query.first().then(res=>{
-      return res ? ProductHttpService.convertToProductModel(res) : null;
+    let promise = query.first().then(resProd=>{
+      if (!resProd){
+        return null;
+      } else {
+        return this.loadProductAdditionalCategory(resProd).then(res=>{
+          let productModel =  ProductHttpService.convertToProductModel(resProd);
+          productModel.additionalCategories = res;
+          return productModel;
+        })
+      }
     });
     return from(promise);
   }
@@ -209,5 +237,14 @@ export class ProductHttpService extends ProductService {
     const obj = {};
     map.forEach ((v,k) => { obj[k] = v });
     return obj;
+  }
+
+  private getAdditionalCategoryRelations(additionalCategories: string[]): any {
+    const CategoryParse = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
+    let productsParse = [];
+    additionalCategories.forEach(value=>{
+      productsParse.push(new CategoryParse({id: value}))
+    });
+    return productsParse;
   }
 }

@@ -11,7 +11,7 @@ export abstract class ProductService {
   abstract getProduct(id: string):  Observable<ProductModel>;
   abstract getProductByPatch(patch: string):  Observable<ProductModel>;
   abstract getProductByCategoryId(categoryId: number);
-  abstract saveProduct(product: ProductModel, newCategoryId: string, oldCategoryId?: string);
+  abstract saveProduct(product: ProductModel, newCategoryId: string, oldCategoryId?: string, oldAdditionalCategories?: string[]);
   abstract deleteProduct(id: string);
   abstract getSimilarProducts(id: number): Observable<Array<ProductViewModel>>;
   abstract getProductQuestions(id: number): Observable<Array<QuestionAnswerModel>>;

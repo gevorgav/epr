@@ -33,6 +33,7 @@ var ProductComponent = /** @class */ (function () {
         zip(this.productService.getProduct(id), // 0
         this.categoryService.getCategoryByProductId(id)).subscribe(function (_a) {
             var product = _a[0], category = _a[1];
+            _this.oldAdditionalCategories = product.additionalCategories;
             var dialogRef = _this.dialog.open(ProductPopupComponent, {
                 data: {
                     product: product,
@@ -43,9 +44,10 @@ var ProductComponent = /** @class */ (function () {
             });
             dialogRef.afterClosed().subscribe(function (data) {
                 if (data && data.product) {
-                    _this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId)
+                    _this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId, _this.oldAdditionalCategories)
                         .subscribe(function (res) {
                         _this.initProducts();
+                        _this.oldAdditionalCategories = [];
                     }, function (erorr) { return handleError(erorr); });
                 }
             });
@@ -55,7 +57,7 @@ var ProductComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(ProductPopupComponent, {
             data: {
-                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
             },
             width: '80%',
             height: '95%'

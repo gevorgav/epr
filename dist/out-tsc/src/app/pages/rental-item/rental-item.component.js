@@ -12,8 +12,10 @@ import { OrderModel } from '../../shared/model/order.model';
 import { ParseService } from '../../shared/services/parse.service';
 import { OrderItemModel } from '../../shared/model/order-item.model';
 import { InitializerService } from '../../shared/services/initializer.service';
+import { AdditionCategoryService } from '../../shared/services/addition-category.service';
+import { zip } from 'rxjs';
 var RentalItemComponent = /** @class */ (function () {
-    function RentalItemComponent(titleService, locationService, route, router, routingService, productService, categoryService, orderService, initializerService, parseService) {
+    function RentalItemComponent(titleService, locationService, route, router, routingService, productService, categoryService, orderService, initializerService, parseService, additionCategoryService) {
         this.titleService = titleService;
         this.locationService = locationService;
         this.route = route;
@@ -24,6 +26,7 @@ var RentalItemComponent = /** @class */ (function () {
         this.orderService = orderService;
         this.initializerService = initializerService;
         this.parseService = parseService;
+        this.additionCategoryService = additionCategoryService;
         this.galleryOptions = [
             { 'imageSize': 'contain' },
             {
@@ -45,16 +48,17 @@ var RentalItemComponent = /** @class */ (function () {
             { 'breakpoint': 300, 'width': '100%', 'height': '200px', 'thumbnailsColumns': 2 },
         ];
         this.customOptions = {
-            loop: true,
+            loop: false,
             mouseDrag: false,
             touchDrag: false,
             pullDrag: false,
             dots: false,
             merge: true,
+            lazyLoad: true,
             autoWidth: true,
             margin: 10,
             navSpeed: 700,
-            navText: ['', ''],
+            navText: ['<', '>'],
             responsive: {
                 400: {
                     items: 1
@@ -73,7 +77,10 @@ var RentalItemComponent = /** @class */ (function () {
         this.relatedProducts = [];
         this.quantity = 0;
         this.title$ = this.route.paramMap;
+        this.additionCategories = [];
+        this.selectedAdditions = [];
     }
+    RentalItemComponent_1 = RentalItemComponent;
     RentalItemComponent.prototype.ngOnInit = function () {
         this.getRouteParams();
         this.routingService.itemIdSubject.subscribe(function (res) {
@@ -82,10 +89,12 @@ var RentalItemComponent = /** @class */ (function () {
     };
     RentalItemComponent.prototype.getSelectedProduct = function (productPatch) {
         var _this = this;
-        this.productService.getProductByPatch(productPatch).subscribe(function (res) {
+        this.productService.getProductByPatch(productPatch)
+            .subscribe(function (res) {
             if (!res) {
                 _this.router.navigate(['/404']);
             }
+            _this.initAdditions(res);
             _this.selectedProduct = res;
             _this.titleService.setTitle(res.title);
             _this.categoryService.getCategoryByProductId(_this.selectedProduct.id).subscribe(function (res) {
@@ -144,7 +153,7 @@ var RentalItemComponent = /** @class */ (function () {
     };
     RentalItemComponent.prototype.addToCart = function () {
         var _this = this;
-        var orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity);
+        var orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity, this.selectedAdditions.map(function (value) { return value.id; }));
         var items = [];
         items.push(orderItem);
         var order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.parseService.getCurrentUser() ? this.parseService.getCurrentUser().id : null, this.locationService.locationDate.location, items);
@@ -173,7 +182,27 @@ var RentalItemComponent = /** @class */ (function () {
     RentalItemComponent.prototype.goToCart = function () {
         this.router.navigate(['/cart']);
     };
-    RentalItemComponent = tslib_1.__decorate([
+    RentalItemComponent.prototype.initAdditions = function (productModel) {
+        var _this = this;
+        var $obs = [];
+        productModel.additionalCategories.forEach(function (value) {
+            $obs.push(_this.additionCategoryService.getAdditionalCategoryById(value));
+        });
+        zip.apply(void 0, $obs).subscribe(function (res) {
+            _this.additionCategories = res;
+        });
+    };
+    RentalItemComponent.prototype.selectAddition = function ($event, item) {
+        this.selectedAdditions.indexOf(item) >= 0 ?
+            this.selectedAdditions.splice(this.selectedAdditions.indexOf(item), 1)
+            : this.selectedAdditions.push(item);
+        RentalItemComponent_1.setAdditionsStyle($event);
+    };
+    RentalItemComponent.setAdditionsStyle = function ($event) {
+        $event.target['style'].opacity === '' ? $event.target['style'].opacity = "0.3" : $event.target['style'].opacity = "";
+    };
+    var RentalItemComponent_1;
+    RentalItemComponent = RentalItemComponent_1 = tslib_1.__decorate([
         Component({
             selector: 'app-rental-item',
             templateUrl: './rental-item.component.html',
@@ -188,7 +217,8 @@ var RentalItemComponent = /** @class */ (function () {
             CategoryService,
             OrderService,
             InitializerService,
-            ParseService])
+            ParseService,
+            AdditionCategoryService])
     ], RentalItemComponent);
     return RentalItemComponent;
 }());

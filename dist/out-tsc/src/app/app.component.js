@@ -7,18 +7,16 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import { LocationDateService } from './shared/services/location-date.service';
 import { OrderService } from './shared/services/order.service';
 import { InitializerService } from './shared/services/initializer.service';
-import { ShippingHttpService } from './shared/services/shipping-http.service';
 Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
 Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, activatedRoute, locationService, orderService, initializerService, titleService, shippingService) {
+    function AppComponent(router, activatedRoute, locationService, orderService, initializerService, titleService) {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.locationService = locationService;
         this.orderService = orderService;
         this.initializerService = initializerService;
         this.titleService = titleService;
-        this.shippingService = shippingService;
         this.title = 'app';
         this.isReady = false;
     }
@@ -37,9 +35,9 @@ var AppComponent = /** @class */ (function () {
         // })
     };
     AppComponent.prototype.ngAfterViewInit = function () {
-        var script = document.createElement('script');
-        script.src = 'assets/js/functions.js';
-        document.body.appendChild(script);
+        // const script = document.createElement('script');
+        // script.src = 'assets/js/functions.js';
+        // document.body.appendChild(script);
     };
     AppComponent.prototype.setTitles = function () {
         var _this = this;
@@ -71,8 +69,7 @@ var AppComponent = /** @class */ (function () {
             LocationDateService,
             OrderService,
             InitializerService,
-            Title,
-            ShippingHttpService])
+            Title])
     ], AppComponent);
     return AppComponent;
 }());

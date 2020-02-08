@@ -16,6 +16,8 @@ export class DashboardComponent implements OnInit {
     {routerLink: 'category', name: 'Category', isActive: false},
     {routerLink: 'settings', name: 'Settings', isActive: false},
     {routerLink: 'user', name: 'User', isActive: false},
+    {routerLink: 'additional', name: 'Additional', isActive: false},
+    {routerLink: 'additional-category', name: 'Additional Category', isActive: false},
   ];
 
   searchValue: string;

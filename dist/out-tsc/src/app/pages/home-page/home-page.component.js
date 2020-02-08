@@ -1,50 +1,63 @@
 import * as tslib_1 from "tslib";
-import { Component } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../shared/services/category.service';
 import { ProductService } from '../../shared/services/product.service';
 import { map } from 'rxjs/operators';
 import { LocationDateService } from '../../shared/services/location-date.service';
+import { SettingsService } from '../../shared/services/settings.service';
+import { SettingsModel } from '../../shared/model/settings.model';
 var HomePageComponent = /** @class */ (function () {
-    function HomePageComponent(router, locationDateService, categoryService, productService) {
+    function HomePageComponent(router, locationDateService, categoryService, productService, settingsService) {
         this.router = router;
         this.locationDateService = locationDateService;
         this.categoryService = categoryService;
         this.productService = productService;
+        this.settingsService = settingsService;
+        this.customOptions = {
+            loop: false,
+            mouseDrag: true,
+            touchDrag: true,
+            pullDrag: true,
+            dots: false,
+            merge: true,
+            lazyLoad: true,
+            autoWidth: true,
+            margin: 5,
+            navSpeed: 700,
+            navText: ['<', '>'],
+            responsive: {
+                400: {
+                    items: 1
+                },
+                940: {
+                    items: 2
+                },
+                1100: {
+                    items: 4
+                }
+            },
+            nav: true
+        };
         this.categories = [];
         this.featuredRentalProducts = [];
+        this.sliderIndex = 0;
+        this.maxImages = 0;
+        this.sliderReady = false;
+        this.onResize();
     }
     HomePageComponent.prototype.ngOnInit = function () {
         this.initCategories();
         this.initProducts();
+        this.initSettings();
     };
     HomePageComponent.prototype.ngAfterViewInit = function () {
-        this.initGallery();
+    };
+    HomePageComponent.prototype.onResize = function (event) {
+        this.screenHeight = window.innerHeight;
     };
     HomePageComponent.prototype.locationDateSubmitted = function () {
         this.router.navigate(['rentals']);
-    };
-    HomePageComponent.prototype.initGallery = function () {
-        setTimeout(function () {
-            SEMICOLON.documentOnReady.init();
-            setTimeout(function () {
-                SEMICOLON.documentOnLoad.init();
-                setTimeout(function () {
-                    SEMICOLON.documentOnResize.init();
-                    setTimeout(function () {
-                        SEMICOLON.widget.init();
-                        setTimeout(function () {
-                            $('.css3-spinner').remove();
-                        }, 10);
-                    }, 10);
-                }, 10);
-            }, 10);
-        }, 1500);
-        $('#linked-to-gallery a').click(function () {
-            var imageLink = $(this).attr('data-image');
-            $('#oc-images').trigger('to.owl.carousel', [Number(imageLink) - 1, 300, true]);
-            return false;
-        });
     };
     HomePageComponent.prototype.initCategories = function () {
         var _this = this;
@@ -66,7 +79,8 @@ var HomePageComponent = /** @class */ (function () {
         this.router.navigate(['/rentals', title], { queryParams: { id: id } });
     };
     HomePageComponent.prototype.getClass = function (index) {
-        if (index === 0 || index === 1 || index === 11 || index === 12) {
+        if ((index === 0 || index === 1 || index === 11 || index === 12)
+            && this.categories.length % 3 !== 0) {
             return 'col-lg-6';
         }
         return 'col-lg-4';
@@ -83,6 +97,39 @@ var HomePageComponent = /** @class */ (function () {
     HomePageComponent.prototype.getPrice = function (nightPrice, minPrice, minTime, price) {
         return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
     };
+    HomePageComponent.prototype.getScreenHeight = function () {
+        return this.screenHeight - 80;
+    };
+    HomePageComponent.prototype.initImage = function () {
+        var _this = this;
+        this.sliderIndex++;
+        if (this.sliderIndex > this.maxImages)
+            this.sliderIndex = 1;
+        setTimeout(function () { return _this.initImage(); }, 7000);
+    };
+    HomePageComponent.prototype.initSettings = function () {
+        var _this = this;
+        this.settingsService.getSettings().subscribe(function (res) {
+            _this.settings = res;
+            _this.initImage();
+            var i = 1;
+            while (_this.settings['imageUrl' + i]) {
+                _this.maxImages++;
+                i++;
+            }
+            _this.sliderReady = true;
+        });
+    };
+    tslib_1.__decorate([
+        Input(),
+        tslib_1.__metadata("design:type", SettingsModel)
+    ], HomePageComponent.prototype, "settings", void 0);
+    tslib_1.__decorate([
+        HostListener('window:resize', ['$event']),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Object]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], HomePageComponent.prototype, "onResize", null);
     HomePageComponent = tslib_1.__decorate([
         Component({
             selector: 'app-home-page',
@@ -92,7 +139,8 @@ var HomePageComponent = /** @class */ (function () {
         tslib_1.__metadata("design:paramtypes", [Router,
             LocationDateService,
             CategoryService,
-            ProductService])
+            ProductService,
+            SettingsService])
     ], HomePageComponent);
     return HomePageComponent;
 }());

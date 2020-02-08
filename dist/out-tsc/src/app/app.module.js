@@ -13,7 +13,6 @@ import { HeaderComponent } from './layout/header/header.component';
 import { RouterModule } from '@angular/router';
 import { RentalsComponent } from './pages/rentals/rentals.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RentalItemComponent } from './pages/rental-item/rental-item.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
@@ -53,6 +52,19 @@ import { CheckoutService } from './shared/services/checkout.service';
 import { ShippingHttpService } from './shared/services/shipping-http.service';
 import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
 import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatDatepickerModule } from '@angular/material';
+import { SettingsService } from './shared/services/settings.service';
+import { SettingsHttpService } from './shared/services/settings-http.service';
+import { SettingsComponent } from './pages/dashboard/settings/settings.component';
+import { AdditionalComponent } from './pages/dashboard/additional/additional.component';
+import { AdditionalCategoryComponent } from './pages/dashboard/additional-cotegory/additional-category.component';
+import { AdditionCategoryHttp } from './shared/services/addition-category-http.service';
+import { AdditionCategoryService } from './shared/services/addition-category.service';
+import { AdditionalPopupComponent } from './pages/dashboard/additional/additional-popup/additional-popup.component';
+import { AdditionalCategoryPopupComponent } from './pages/dashboard/additional-cotegory/additional-category-popup/additional-category-popup.component';
+import { ShippingPopupComponent } from './pages/dashboard/shipping/shipping-popup/shipping-popup.component';
 var appRoutes = [
     {
         path: '',
@@ -90,7 +102,15 @@ var appRoutes = [
             { path: 'product', component: ProductComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'user', component: UserComponent },
+            { path: 'settings', component: SettingsComponent },
+            { path: 'additional', component: AdditionalComponent },
+            { path: 'additional-category', component: AdditionalCategoryComponent },
         ]
+    },
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        canActivate: [AuthGuardLoginService]
     },
     {
         path: 'login',
@@ -153,20 +173,27 @@ var AppModule = /** @class */ (function () {
                 PaymentFormComponent,
                 UserComponent,
                 ShippingComponent,
-                ShippedRentalsComponent
+                ShippedRentalsComponent,
+                ResetPasswordComponent,
+                SettingsComponent,
+                AdditionalComponent,
+                AdditionalCategoryComponent,
+                AdditionalPopupComponent,
+                AdditionalCategoryPopupComponent,
+                ShippingPopupComponent
             ],
             imports: [
                 RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
                 ),
-                BrowserModule,
+                BrowserModule.withServerTransition({ appId: 'serverApp' }),
                 FormsModule,
                 ReactiveFormsModule,
                 HttpClientModule,
                 BrowserAnimationsModule,
-                OwlDateTimeModule,
-                OwlNativeDateTimeModule,
                 MaterialModule,
                 NgxGalleryModule,
+                NgxMaterialTimepickerModule,
+                MatDatepickerModule,
                 CarouselModule
             ],
             providers: [
@@ -184,11 +211,16 @@ var AppModule = /** @class */ (function () {
                 { provide: CategoryService, useClass: CategoryHttpService },
                 { provide: ProductService, useClass: ProductHttpService },
                 { provide: UserService, useClass: UserHttpService },
+                { provide: SettingsService, useClass: SettingsHttpService },
+                { provide: AdditionCategoryService, useClass: AdditionCategoryHttp },
             ],
             entryComponents: [
                 ProductPopupComponent,
                 DeliveryChartPopupComponent,
                 CategoryPopupComponent,
+                AdditionalPopupComponent,
+                AdditionalCategoryPopupComponent,
+                ShippingPopupComponent
             ],
             bootstrap: [AppComponent]
         })

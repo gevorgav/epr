@@ -114,6 +114,7 @@ export class CategoryHttpService extends CategoryService {
       parseObject.attributes['minPrice'],
       parseObject.attributes['nightPrice'],
       parseObject.attributes['count'],
+      []
     );
   }
 

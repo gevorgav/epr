@@ -9,6 +9,7 @@ import { Error } from 'tslint/lib/error';
 import { from } from 'rxjs/internal/observable/from';
 import { Promise } from 'q';
 import { of } from 'rxjs/internal/observable/of';
+import { AdditionCategoryHttp } from './addition-category-http.service';
 var OrderService = /** @class */ (function () {
     function OrderService(parseService) {
         this.parseService = parseService;
@@ -72,17 +73,26 @@ var OrderService = /** @class */ (function () {
                     });
                 }).then(function (orderParse) {
                     var list = [];
+                    var additionObjs = [];
                     return orderParse.relation('orderItems').query().each(function (relatedObject) {
-                        list.push(relatedObject);
+                        return relatedObject.relation('additions').query().each(function (additionObj) {
+                            additionObjs.push(additionObj.id);
+                        }).then(function () {
+                            relatedObject['additions'] = additionObjs;
+                            list.push(relatedObject);
+                        });
                     }).then(function () {
                         list.forEach(function (item) {
-                            orderItems.push(new OrderItemModel(item.attributes['product'].id, item.attributes['count'], item.id));
+                            orderItems.push(new OrderItemModel(item.attributes['product'].id, item.attributes['count'], item['additions'], item.id));
                         });
                         orderModel.orderItems = orderItems;
                         return orderModel;
                     });
                 });
             }).catch(function (reason) {
+                if (reason.code == 209) {
+                    _this.parseService.logOut();
+                }
                 return Promise(function (resolver, reject) { resolver({}); });
             });
         }
@@ -132,6 +142,9 @@ var OrderService = /** @class */ (function () {
             var parseOrderItem = new OrderItem();
             parseOrderItem.set('product', new Product({ id: orderItem.productId }));
             parseOrderItem.set('count', orderItem.count);
+            if (orderItem.additionIds && orderItem.additionIds.length > 0) {
+                parseOrderItem.relation('additions').add(this.getRelationAdditional(orderItem.additionIds));
+            }
             savedOrderItems.push(parseOrderItem);
         }
         return this.parseService.parse.Object.saveAll(savedOrderItems, {
@@ -140,6 +153,16 @@ var OrderService = /** @class */ (function () {
                 console.error(res);
             }
         });
+    };
+    OrderService.prototype.getRelationAdditional = function (ids) {
+        var Additional = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
+        var additions = [];
+        ids.forEach(function (value) {
+            var additional = new Additional();
+            additional.id = value;
+            additions.push(additional);
+        });
+        return additions;
     };
     OrderService.prototype.getZipCode = function (id) {
         var ParseZipCode = this.parseService.parse.Object.extend(OrderService_1.ZIP_CODE);
@@ -176,11 +199,12 @@ var OrderService = /** @class */ (function () {
         return from(promise);
     };
     OrderService.prototype.removeOrderItem = function (productId) {
+        if (!this.parseService.getCurrentUser()) {
+            return of(true);
+        }
         var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
         var order = new Order();
         order.set('user', this.parseService.getCurrentUser());
-        var OrderItem = this.parseService.parse.Object.extend(OrderService_1.ORDER_ITEM);
-        var queryOrderItem = new this.parseService.parse.Query(OrderItem);
         var query = new this.parseService.parse.Query(order);
         var promise = query.equalTo('user', this.parseService.getCurrentUser())
             .first().then(function (res) {

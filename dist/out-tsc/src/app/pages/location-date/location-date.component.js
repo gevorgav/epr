@@ -2,20 +2,116 @@ import * as tslib_1 from "tslib";
 import { Component, EventEmitter, Output } from '@angular/core';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { debounceTime, finalize, flatMap, map, startWith, tap } from 'rxjs/operators';
 import { DeliveryChartService } from '../../shared/services/delivery-chart.service';
 import { OrderService } from '../../shared/services/order.service';
+import * as moment from 'moment';
 var LocationDateComponent = /** @class */ (function () {
     function LocationDateComponent(locationDateService, deliveryChartService, orderService) {
         this.locationDateService = locationDateService;
         this.deliveryChartService = deliveryChartService;
         this.orderService = orderService;
-        this.stateGroups = [];
+        this.stateGroupOptions = of([]);
         this.allDeliveryCharts = [];
+        this.isLoading = false;
         this.emitSubmit = new EventEmitter();
     }
+    LocationDateComponent_1 = LocationDateComponent;
     LocationDateComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.initForm();
+        this.stateGroupOptions = this.locationDateForm.get('zipCode').valueChanges
+            .pipe(debounceTime(300), startWith(''), tap(function () { return _this.isLoading = true; }), flatMap(function (value) { return _this._filterGroup(value)
+            .pipe(finalize(function () { return _this.isLoading = false; })); }));
+    };
+    LocationDateComponent.prototype._filterGroup = function (value) {
+        if (value) {
+            var city = value.match(/[a-zA-Z]+/g);
+            var zipCode = value.match(/\d+/g);
+            if (city && !zipCode) {
+                return this.getByCity(city[0].charAt(0).toUpperCase() + city[0].slice(1));
+            }
+            else if (zipCode && zipCode[0].length > 2) {
+                return this.getByZipCodeAndCity(zipCode, city ? city[0].charAt(0).toUpperCase() + city[0].slice(1) : null);
+            }
+        }
+        return of([]);
+    };
+    LocationDateComponent.prototype.onSubmit = function () {
+        var _this = this;
+        if (this.locationDateForm.valid) {
+            this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value).subscribe(function (res) {
+                if (res) {
+                    var finalStartDate_1 = LocationDateComponent_1.getTimeWithDateTime(_this.locationDateForm.get('startDate').value, _this.locationDateForm.get('startDateTime').value);
+                    var finalEndDate_1 = LocationDateComponent_1.getTimeWithDateTime(_this.locationDateForm.get('endDate').value, _this.locationDateForm.get('endDateTime').value);
+                    _this.getZipCode(_this.locationDateForm.get('zipCode').value).subscribe(function (zipCode) {
+                        _this.locationDateService.setLocationDate(finalStartDate_1, finalEndDate_1, zipCode);
+                        _this.orderService.setOrderDateLocation(finalStartDate_1, finalEndDate_1, zipCode);
+                        _this.locationDateService.setIsSpecified(true);
+                        _this.emitSubmit.emit(true);
+                    });
+                }
+                else {
+                    _this.locationDateForm.setErrors({ incorrectZipLocation: true });
+                }
+            });
+        }
+    };
+    LocationDateComponent.prototype.edit = function () {
+        this.locationDateService.setIsSpecified(false);
+    };
+    LocationDateComponent.prototype.checkCityOrZipCode = function (value) {
+        var city = value.match(/[a-zA-Z]+/g);
+        var zipCode = value.match(/\d+/g);
+        return this.deliveryChartService.getDeliveryLocationByZipCode(zipCode[0]).pipe(map(function (res) { return city.join(' ') === res.city; }));
+    };
+    LocationDateComponent.prototype.getZipCode = function (value) {
+        var zipCode = value.match(/\d+/g);
+        var city = value.match(/[a-zA-Z]+/g).join(" ");
+        return this.deliveryChartService.getZipCodeModelByZipCode(zipCode[0]).pipe(map(function (res) {
+            res.location = city + " " + res.zipCode;
+            return res;
+        }));
+    };
+    LocationDateComponent.prototype.getAutoCompleteOptions = function () {
+        var zipCodeNames = [];
+        for (var _i = 0, _a = this.allDeliveryCharts; _i < _a.length; _i++) {
+            var city = _a[_i];
+            for (var _b = 0, _c = city.zipCodes; _b < _c.length; _b++) {
+                var zipCode = _c[_b];
+                zipCodeNames.push(city.city + ' ' + zipCode.zipCode);
+            }
+        }
+        return zipCodeNames;
+    };
+    LocationDateComponent.prototype.isSpecified = function () {
+        return this.locationDateService.isSpecified;
+    };
+    LocationDateComponent.prototype.getByCity = function (city) {
+        var _this = this;
+        return this.deliveryChartService.getDeliveryLocationByCity(city).pipe(map(function (res) {
+            return _this.initDeliveryList(res);
+        }));
+    };
+    LocationDateComponent.prototype.initDeliveryList = function (res) {
+        this.allDeliveryCharts = res;
+        return this.getAutoCompleteOptions();
+    };
+    LocationDateComponent.prototype.getByZipCodeAndCity = function (zipCode, city) {
+        var _this = this;
+        return this.deliveryChartService.getDeliveryLocationsByZipCodeSearch(zipCode[0], city).pipe(map(function (res) {
+            return _this.initDeliveryList(res);
+        }));
+    };
+    LocationDateComponent.getTimeWithDateTime = function (date, time) {
+        if (date.toLocaleDateString().indexOf('.') >= 0) {
+            var replaceDate = date.toLocaleDateString().split(".").join("-");
+            return moment(replaceDate + " " + time, 'DD-MM-YYYY hh:mm A').toDate();
+        }
+        return moment(date.toLocaleDateString() + " " + time, 'MM-DD-YYYY hh:mm A').toDate();
+    };
+    LocationDateComponent.prototype.initForm = function () {
         this.locationDateForm = new FormGroup({
             'zipCode': new FormControl(this.locationDateService.locationDate.getLocation(), [
                 Validators.required
@@ -23,87 +119,25 @@ var LocationDateComponent = /** @class */ (function () {
             'startDate': new FormControl(this.locationDateService.locationDate.startDateTime, [
                 Validators.required
             ]),
+            'startDateTime': new FormControl(this.locationDateService.locationDate.startDateTime ?
+                this.locationDateService.locationDate.startDateTime.toLocaleTimeString() : null, [
+                Validators.required
+            ]),
+            'endDateTime': new FormControl(this.locationDateService.locationDate.endDateTime ?
+                this.locationDateService.locationDate.endDateTime.toLocaleTimeString() : null, [
+                Validators.required
+            ]),
             'endDate': new FormControl(this.locationDateService.locationDate.endDateTime, [
                 Validators.required
             ]),
         }, { validators: [identityRevealedValidator, identityTimeValidator] });
-        this.deliveryChartService.getDeliveryLocations().subscribe(function (res) {
-            _this.allDeliveryCharts = res;
-            _this.initAutoCompleteOptions();
-        });
-        this.stateGroupOptions = this.locationDateForm.valueChanges
-            .pipe(startWith(''), map(function (value) { return _this._filterGroup(value.zipCode); }));
     };
-    LocationDateComponent.prototype._filterGroup = function (value) {
-        if (value) {
-            var filterValue_1 = value.toLowerCase();
-            return this.stateGroups.filter(function (option) { return option.toLowerCase().includes(filterValue_1); });
-        }
-        return this.stateGroups;
-    };
-    LocationDateComponent.prototype.onSubmit = function () {
-        if (this.locationDateForm.valid) {
-            if (this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value)) {
-                this.locationDateService.setLocationDate(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
-                this.orderService.setOrderDateLocation(this.locationDateForm.get('startDate').value, this.locationDateForm.get('endDate').value, this.getZipCode(this.locationDateForm.get('zipCode').value));
-                this.locationDateService.setIsSpecified(true);
-                this.emitSubmit.emit(true);
-            }
-            else {
-                //@ts-ignore
-                this.locationDateForm.errors = { incorrectZipLocation: true };
-            }
-        }
-    };
-    LocationDateComponent.prototype.edit = function () {
-        this.locationDateService.setIsSpecified(false);
-    };
-    LocationDateComponent.prototype.checkCityOrZipCode = function (value) {
-        var isCorrect = false;
-        for (var _i = 0, _a = this.allDeliveryCharts; _i < _a.length; _i++) {
-            var city = _a[_i];
-            for (var _b = 0, _c = city.zipCodes; _b < _c.length; _b++) {
-                var zipCode = _c[_b];
-                if (value.indexOf(zipCode.zipCode) > -1) {
-                    isCorrect = true;
-                    break;
-                }
-            }
-        }
-        return isCorrect;
-    };
-    LocationDateComponent.prototype.getZipCode = function (value) {
-        for (var _i = 0, _a = this.allDeliveryCharts; _i < _a.length; _i++) {
-            var city = _a[_i];
-            for (var _b = 0, _c = city.zipCodes; _b < _c.length; _b++) {
-                var zipCode = _c[_b];
-                if (value.indexOf(zipCode.zipCode) > -1) {
-                    zipCode.location = value;
-                    return zipCode;
-                }
-            }
-        }
-    };
-    LocationDateComponent.prototype.initAutoCompleteOptions = function () {
-        var _a;
-        var zipCodeNames = [];
-        for (var _i = 0, _b = this.allDeliveryCharts; _i < _b.length; _i++) {
-            var city = _b[_i];
-            for (var _c = 0, _d = city.zipCodes; _c < _d.length; _c++) {
-                var zipCode = _d[_c];
-                zipCodeNames.push(city.city + ' ' + zipCode.zipCode);
-            }
-        }
-        (_a = this.stateGroups).push.apply(_a, zipCodeNames);
-    };
-    LocationDateComponent.prototype.isSpecified = function () {
-        return this.locationDateService.isSpecified;
-    };
+    var LocationDateComponent_1;
     tslib_1.__decorate([
         Output(),
         tslib_1.__metadata("design:type", Object)
     ], LocationDateComponent.prototype, "emitSubmit", void 0);
-    LocationDateComponent = tslib_1.__decorate([
+    LocationDateComponent = LocationDateComponent_1 = tslib_1.__decorate([
         Component({
             selector: 'app-location-date',
             templateUrl: './location-date.component.html',
@@ -117,13 +151,20 @@ var LocationDateComponent = /** @class */ (function () {
 }());
 export { LocationDateComponent };
 export var identityRevealedValidator = function (control) {
-    var startDate = control.get('startDate');
-    var endDate = control.get('endDate');
-    return startDate.value && endDate.value && (endDate.value.getTime() - startDate.value.getTime() < 0) ? { 'identityRevealed': true } : null;
+    if (!control.get('startDate').value || !control.get('startDateTime').value ||
+        !control.get('endDate').value || !control.get('endDateTime').value) {
+        return null;
+    }
+    var finalStartDate = LocationDateComponent.getTimeWithDateTime(control.get('startDate').value, control.get('startDateTime').value);
+    var finalEndDate = LocationDateComponent.getTimeWithDateTime(control.get('endDate').value, control.get('endDateTime').value);
+    return (finalEndDate.getTime() - finalStartDate.getTime() < 0) ? { 'identityRevealed': true } : null;
 };
 export var identityTimeValidator = function (control) {
-    var startDate = control.get('startDate');
+    if (!control.get('startDate').value || !control.get('startDateTime').value) {
+        return null;
+    }
+    var finalStartDate = LocationDateComponent.getTimeWithDateTime(control.get('startDate').value, control.get('startDateTime').value);
     var now = new Date();
-    return startDate.value && (startDate.value.getTime() - now.getTime() < 54000000) ? { 'identityTime': true } : null;
+    return (finalStartDate.getTime() - now.getTime() < 54000000) ? { 'identityTime': true } : null;
 };
 //# sourceMappingURL=location-date.component.js.map
