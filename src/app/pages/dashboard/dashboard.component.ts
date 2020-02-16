@@ -26,13 +26,12 @@ export class DashboardComponent implements OnInit {
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.selectTab(this.items[0])
+    // this.selectTab(this.items[0])
   }
 
   selectTab(item: DashboardItem): void {
     this.items.forEach(item => item.isActive = false);
     item.isActive = true;
-    this.router.navigate([item.routerLink],{relativeTo: this.activatedRoute});
   }
 }
 

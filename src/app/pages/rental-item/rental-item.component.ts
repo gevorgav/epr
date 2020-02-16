@@ -18,9 +18,6 @@ import {AdditionCategoryModel} from '../../shared/model/addition-category.model'
 import {AdditionCategoryService} from '../../shared/services/addition-category.service';
 import {zip} from 'rxjs';
 import {AdditionModel} from '../../shared/model/addition.model';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
-
-declare var SEMICOLON: any;
 declare var $: any;
 
 @Component({

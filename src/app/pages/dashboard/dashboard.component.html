@@ -3,12 +3,12 @@
     <div >
       <mat-list role="list" class="mat-elevation-z8 col">
         <mat-list-item *ngFor="let item of items" role="listitem" (click)="selectTab(item)"
-                       [ngClass]="{'is-active': item.isActive}">{{item.name}}
+                       [ngClass]="{'is-active': item.isActive}"><a [routerLink]="item.routerLink">{{item.name}}</a>
         </mat-list-item>
       </mat-list>
     </div>
     <div class="col col_five_sixth " style="padding-left: 40px">
-      <router-outlet></router-outlet>
+      <router-outlet name="dashboard"></router-outlet>
     </div>
   </div>
 </section>

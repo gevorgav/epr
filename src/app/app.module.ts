@@ -20,7 +20,6 @@ import {LoginPageComponent} from './pages/login-page/login-page.component';
 import { LocationDateComponent } from './pages/location-date/location-date.component';
 import {LocationDateService} from './shared/services/location-date.service';
 import { PageComponent } from './layout/page/page.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import {ParseService} from './shared/services/parse.service';
 import {AuthGuardLoginService, AuthGuardService as AuthGuard, AuthGuardVerificationService} from './shared/services/auth-guard.service';
 import { CartComponent } from './pages/cart/cart.component';
@@ -30,19 +29,12 @@ import {CategoryService} from './shared/services/category.service';
 import {CategoryHttpService} from './shared/services/category-http.service';
 import {RoutingService} from './shared/services/routing.service';
 import {MaterialModule} from "./mat/material.module";
-import { ProductComponent } from './pages/dashboard/product/product.component';
-import { DeliveryChartComponent as DashboardDeliveryChartComponent } from './pages/dashboard/delivery-chart/delivery-chart.component';
 import {ProductService} from "./shared/services/product.service";
 import {ProductHttpService} from "./shared/services/product-http.service";
-import { ProductPopupComponent } from './pages/dashboard/product/product-popup/product-popup.component';
-import { DeliveryChartPopupComponent } from './pages/dashboard/delivery-chart/delivery-chart-popup/delivery-chart-popup.component';
 import { VerificationComponent } from './pages/verification/verification.component';
-import { CategoryComponent } from './pages/dashboard/category/category.component';
-import { CategoryPopupComponent } from './pages/dashboard/category/category-popup/category-popup.component';
 import { NgxGalleryModule } from 'ngx-gallery';
 import {UserService} from './shared/services/user.service';
 import {UserHttpService} from './shared/services/user-http.service';
-import { UserComponent } from './pages/dashboard/user/user.component';
 import {CarouselModule} from 'ngx-owl-carousel-o';
 import {PaymentFormComponent} from './pages/payement-form/payment-form.component';
 import {OrderService} from './shared/services/order.service';
@@ -50,21 +42,13 @@ import {InitializerService} from './shared/services/initializer.service';
 import {HttpClientModule} from '@angular/common/http';
 import {CheckoutService} from './shared/services/checkout.service';
 import {ShippingHttpService} from './shared/services/shipping-http.service';
-import { ShippingComponent } from './pages/dashboard/shipping/shipping.component';
-import { ShippedRentalsComponent } from './pages/dashboard/shipped-rentals/shipped-rentals.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatDatepickerModule} from '@angular/material';
 import {SettingsService} from './shared/services/settings.service';
 import {SettingsHttpService} from './shared/services/settings-http.service';
-import { SettingsComponent } from './pages/dashboard/settings/settings.component';
-import {AdditionalComponent} from './pages/dashboard/additional/additional.component';
-import {AdditionalCategoryComponent} from './pages/dashboard/additional-cotegory/additional-category.component';
 import {AdditionCategoryHttp} from './shared/services/addition-category-http.service';
 import {AdditionCategoryService} from './shared/services/addition-category.service';
-import {AdditionalPopupComponent} from './pages/dashboard/additional/additional-popup/additional-popup.component';
-import {AdditionalCategoryPopupComponent} from './pages/dashboard/additional-cotegory/additional-category-popup/additional-category-popup.component';
-import {ShippingPopupComponent} from './pages/dashboard/shipping/shipping-popup/shipping-popup.component';
 
 const appRoutes: Routes = [
   {
@@ -94,19 +78,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {path: 'shipped', component: ShippedRentalsComponent},
-      {path: 'shipping', component: ShippingComponent},
-      {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
-      {path: 'product', component: ProductComponent},
-      {path: 'category', component: CategoryComponent},
-      {path: 'user', component: UserComponent},
-      {path: 'settings', component: SettingsComponent},
-      {path: 'additional', component: AdditionalComponent},
-      {path: 'additional-category', component: AdditionalCategoryComponent},
-    ]
+    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'reset-password',
@@ -145,6 +118,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    PaymentFormComponent,
     HomePageComponent,
     CategoriesComponent,
     CalculatorComponent,
@@ -159,26 +133,9 @@ const appRoutes: Routes = [
     LoginPageComponent,
     LocationDateComponent,
     PageComponent,
-    DashboardComponent,
     CartComponent,
-    ProductComponent,
-    DashboardDeliveryChartComponent,
-    ProductPopupComponent,
-    DeliveryChartPopupComponent,
     VerificationComponent,
-    CategoryComponent,
-    CategoryPopupComponent,
-    PaymentFormComponent,
-    UserComponent,
-    ShippingComponent,
-    ShippedRentalsComponent,
     ResetPasswordComponent,
-    SettingsComponent,
-    AdditionalComponent,
-    AdditionalCategoryComponent,
-    AdditionalPopupComponent,
-    AdditionalCategoryPopupComponent,
-    ShippingPopupComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -215,12 +172,7 @@ const appRoutes: Routes = [
     {provide: AdditionCategoryService, useClass: AdditionCategoryHttp},
   ],
   entryComponents: [
-    ProductPopupComponent,
-    DeliveryChartPopupComponent,
-    CategoryPopupComponent,
-    AdditionalPopupComponent,
-    AdditionalCategoryPopupComponent,
-    ShippingPopupComponent
+
   ],
   bootstrap: [AppComponent]
 })
