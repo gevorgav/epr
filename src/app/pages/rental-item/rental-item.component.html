@@ -39,7 +39,8 @@
                 <h6>Don't forget to choose {{item.name}}</h6>
                 <ng-container *ngFor="let addition of item.additions">
                   <div class="col_one_sixth">
-                    <img (click)="selectAddition($event, addition)" [src]="addition.imageUrl" style=" height: 60px"/>
+                    <img (click)="selectAddition($event, addition, item)" [src]="addition.imageUrl" style=" height: 60px"
+                         [ngStyle]="selectedAdditions.get(item.id)?.indexOf(addition)==-1?{'opacity':''}:{'opacity' : '0.3'}"/>
                   </div>
                 </ng-container>
               </div>

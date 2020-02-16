@@ -30,7 +30,8 @@ export class AdditionalCategoryPopupComponent implements OnInit {
       this.dialogRef.close({
           category: new AdditionCategoryModel(
             this.category.id,
-            this.form.get('title').value
+            this.form.get('title').value,
+            this.form.get('multiSelect').value
           )
         }
       );
@@ -57,6 +58,8 @@ export class AdditionalCategoryPopupComponent implements OnInit {
     this.form = this.formBuilder.group({
       title: this.formBuilder.control(this.category.name, [
         Validators.required
+      ]),
+      multiSelect: this.formBuilder.control(this.category.multiSelect, [
       ]),
     })
   }

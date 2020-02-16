@@ -165,11 +165,13 @@ export class AdditionCategoryHttp extends AdditionCategoryService{
 
   private setCategoryFields(category: any, model: AdditionCategoryModel) {
     category.set('name', model.name);
+    category.set('multiSelect', model.multiSelect);
   }
 
   private static convertToAdditionalCategoryModel(item: any): AdditionCategoryModel{
     return new AdditionCategoryModel(item.id,
-      item.attributes['name']);
+      item.attributes['name'],
+      item.attributes['multiSelect']);
   }
 
   public static convertToAdditionalModel(item: any): AdditionModel{

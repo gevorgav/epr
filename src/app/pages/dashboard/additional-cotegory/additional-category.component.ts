@@ -25,7 +25,7 @@ export class AdditionalCategoryComponent implements OnInit {
   addCategory() {
     let dialogRef = this.dialog.open(AdditionalCategoryPopupComponent, {
       data: {
-        category: new AdditionCategoryModel(null, null, null)
+        category: new AdditionCategoryModel(null, null, false)
       },
       width: '80%'
     });

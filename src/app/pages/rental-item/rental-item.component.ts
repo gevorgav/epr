@@ -18,6 +18,7 @@ import {AdditionCategoryModel} from '../../shared/model/addition-category.model'
 import {AdditionCategoryService} from '../../shared/services/addition-category.service';
 import {zip} from 'rxjs';
 import {AdditionModel} from '../../shared/model/addition.model';
+import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 declare var SEMICOLON: any;
 declare var $: any;
@@ -84,7 +85,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public quantity: number = 0;
   private title$ = this.route.paramMap;
   public additionCategories: AdditionCategoryModel[] = [];
-  private selectedAdditions: AdditionModel[] = [];
+  private selectedAdditions: Map<string, AdditionModel[]> = new Map<string, AdditionModel[]>();
 
   constructor(private titleService: Title,
               private locationService: LocationDateService,
@@ -96,7 +97,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private orderService: OrderService,
               private initializerService: InitializerService,
               private parseService: ParseService,
-              private additionCategoryService :AdditionCategoryService) {
+              private additionCategoryService: AdditionCategoryService) {
   }
 
   ngOnInit() {
@@ -109,20 +110,20 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   private getSelectedProduct(productPatch: string) {
     this.productService.getProductByPatch(productPatch)
       .subscribe((res: ProductModel) => {
-      if (!res) {
-        this.router.navigate(['/404']);
-      }
-      this.initAdditions(res);
-      this.selectedProduct = res;
-      this.titleService.setTitle(res.title);
-      this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
-        this.itemCategory = res;
-        this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[]) => {
-          this.relatedProducts = res.filter(product => product.id !== this.selectedProduct.id);
+        if (!res) {
+          this.router.navigate(['/404']);
+        }
+        this.initAdditions(res);
+        this.selectedProduct = res;
+        this.titleService.setTitle(res.title);
+        this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
+          this.itemCategory = res;
+          this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[]) => {
+            this.relatedProducts = res.filter(product => product.id !== this.selectedProduct.id);
+          });
         });
+        this.initGallery();
       });
-      this.initGallery();
-    });
   }
 
   ngAfterViewInit(): void {
@@ -177,11 +178,12 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   addToCart() {
-    let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity, this.selectedAdditions.map(value => value.id));
+    let selectedAdditions = this.getSelectedValues();
+    let orderItem = new OrderItemModel(this.selectedProduct.id, this.quantity, selectedAdditions.map(value => value.id));
     let items = [];
     items.push(orderItem);
     let order = new OrderModel(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime,
-      this.parseService.getCurrentUser()?this.parseService.getCurrentUser().id: null, this.locationService.locationDate.location, items);
+      this.parseService.getCurrentUser() ? this.parseService.getCurrentUser().id : null, this.locationService.locationDate.location, items);
     this.orderService.setOrder(order).subscribe(res => {
       if (!this.initializerService.orderModel.orderItems) {
         this.initializerService.orderModel.orderItems = [];
@@ -191,10 +193,10 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   public productInCart(): boolean {
-    if (this.initializerService.orderModel.orderItems){
+    if (this.initializerService.orderModel.orderItems) {
       for (let item of this.initializerService.orderModel.orderItems) {
         if (this.selectedProduct.id === item.productId) {
-          return true
+          return true;
         }
       }
     }
@@ -212,21 +214,31 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   private initAdditions(productModel: ProductModel) {
     let $obs = [];
     productModel.additionalCategories.forEach(value => {
-      $obs.push(this.additionCategoryService.getAdditionalCategoryById(value))
+      $obs.push(this.additionCategoryService.getAdditionalCategoryById(value));
     });
-    zip(...$obs).subscribe((res: AdditionCategoryModel[]) =>{
+    zip(...$obs).subscribe((res: AdditionCategoryModel[]) => {
+      res.forEach(value => {
+        this.selectedAdditions.set(value.id, []);
+      });
       this.additionCategories = res;
-    })
+    });
   }
 
-  selectAddition($event: MouseEvent, item: AdditionModel) {
-    this.selectedAdditions.indexOf(item)>=0?
-      this.selectedAdditions.splice(this.selectedAdditions.indexOf(item), 1)
-      : this.selectedAdditions.push(item);
-    RentalItemComponent.setAdditionsStyle($event);
+  selectAddition($event: MouseEvent, item: AdditionModel, category: AdditionCategoryModel) {
+    if (!this.selectedAdditions.has(category.id)) {
+      this.selectedAdditions.set(category.id, []);
+    }
+
+    category.multiSelect ?
+      this.selectedAdditions.get(category.id).indexOf(item)==-1?
+        this.selectedAdditions.get(category.id).push(item) :
+        this.selectedAdditions.set(category.id, this.selectedAdditions.get(category.id).filter(value => value.id != item.id))
+      :this.selectedAdditions.set(category.id, [item]);
   }
 
-  private static setAdditionsStyle($event: MouseEvent) {
-    $event.target['style'].opacity === '' ?$event.target['style'].opacity = "0.3":$event.target['style'].opacity = "";
+  private getSelectedValues() {
+    let selected = [];
+    this.selectedAdditions.forEach(value => selected.push(value));
+    return selected;
   }
 }

@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {AdditionCategoryModel} from '../../../shared/model/addition-category.model';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatTableDataSource} from '@angular/material';
 import {AdditionCategoryService} from '../../../shared/services/addition-category.service';
-import {AdditionalCategoryPopupComponent} from '../additional-cotegory/additional-category-popup/additional-category-popup.component';
 import {handleError} from '../../../shared/util/error-handler';
-import {CategoryModel} from '../../../shared/model/category.model';
 import {AdditionModel} from '../../../shared/model/addition.model';
 import {AdditionalPopupComponent} from './additional-popup/additional-popup.component';
 import {zip} from 'rxjs';
