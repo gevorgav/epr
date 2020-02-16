@@ -13,7 +13,7 @@
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run my-dream-app:server:production"
+    "build:client-and-server-bundles": "ng build --prod --build-optimizer --delete-output-path --aot && gzip-all \"dist/my-dream-app/*.{css,js,html}\" && ng run my-dream-app:server:production"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +35,7 @@
     "core-js": "^2.5.4",
     "express": "^4.15.2",
     "font-awesome": "^4.7.0",
+    "gzip-all": "^1.0.0",
     "hammerjs": "^2.0.8",
     "jquery": "^3.4.0",
     "luxon": "^1.21.3",
