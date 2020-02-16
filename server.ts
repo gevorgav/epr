@@ -1,5 +1,6 @@
 import 'zone.js/dist/zone-node';
 import {enableProdMode} from '@angular/core';
+
 // Express Engine
 import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
@@ -16,11 +17,14 @@ const app = express();
 
 const domino = require("domino");
 const fs = require("fs");
+const compression = require("compression");
 const path = require("path");
 const templateA = fs
   .readFileSync(path.join("dist/browser", "index.html"))
   .toString();
 const win = domino.createWindow(templateA);
+
+app.use(compression());
 
 global['document'] = win.document;
 global['KeyboardEvent'] = null;
