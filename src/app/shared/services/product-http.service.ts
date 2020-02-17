@@ -7,7 +7,6 @@ import {from, Observable} from "rxjs";
 import {ParseService} from "./parse.service";
 import {CategoryHttpService} from "./category-http.service";
 import {AdditionCategoryHttp} from './addition-category-http.service';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.

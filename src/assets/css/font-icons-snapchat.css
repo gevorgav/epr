@@ -7,6 +7,7 @@
 		url('fonts/font-icons-snapchat.svg?lp15pn#font-icons-snapchat') format('svg');
 	font-weight: normal;
 	font-style: normal;
+  font-display: fallback;
 }
 
 [class^="icon-snapchat-"], [class*=" icon-snapchat-"] { font-family: 'font-icons-snapchat' !important; }

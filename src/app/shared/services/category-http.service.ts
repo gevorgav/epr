@@ -5,10 +5,8 @@ import {Injectable} from '@angular/core';
 import {CategoryService} from './category.service';
 import {CategoryModel} from '../model/category.model';
 import {ParseService} from './parse.service';
-import {from, Observable} from 'rxjs';
-import {forkJoin} from 'rxjs/index';
-import {map} from 'rxjs/operators';
-import {flatMap} from 'rxjs/internal/operators';
+import {forkJoin, from, Observable} from 'rxjs';
+import {flatMap, map} from 'rxjs/operators';
 import {ProductModel} from '../model/product.model';
 
 @Injectable()

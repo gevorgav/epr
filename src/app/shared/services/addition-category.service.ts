@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {AdditionCategoryModel} from '../model/addition-category.model';
 import {AdditionModel} from '../model/addition.model';
-import {ProductModel} from '../model/product.model';
 
 @Injectable()
 export abstract class AdditionCategoryService {

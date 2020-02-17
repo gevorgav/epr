@@ -6,19 +6,14 @@ import {Injectable} from '@angular/core';
 import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
 import {ParseService} from './parse.service';
 import {Observable} from 'rxjs/internal/Observable';
-import {from} from 'rxjs/internal/observable/from';
-import {flatMap, map} from 'rxjs/operators';
-import {forkJoin} from 'rxjs';
-import {of} from 'rxjs/internal/observable/of';
 import {OrderService} from './order.service';
+import {from, of} from 'rxjs';
 
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
 
   static DELIVERY_CHART = "DeliveryChart";
   static ZIP_CODE = "ZipCode";
-
-  private _deliveryLocations : DeliveryChartModel[] = [];
 
   constructor(private parseService: ParseService) {
     super();

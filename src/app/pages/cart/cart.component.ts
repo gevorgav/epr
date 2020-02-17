@@ -6,7 +6,6 @@ import {LocationDateService} from '../../shared/services/location-date.service';
 import {ProductService} from '../../shared/services/product.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {OrderItemModel} from '../../shared/model/order-item.model';
-import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParseService} from '../../shared/services/parse.service';
 import {CheckoutService} from '../../shared/services/checkout.service';

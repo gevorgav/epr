@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {DeliveryChartModel} from '../../shared/model/delivery-chart.model';
 import {FormBuilder, FormGroup} from '@angular/forms';

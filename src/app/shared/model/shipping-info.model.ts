@@ -1,5 +1,4 @@
 import {ProductCount} from '../../pages/cart/cart.component';
-import {OrderModel} from './order.model';
 import {OrderItemModel} from './order-item.model';
 
 export class ShippingInfoModel {

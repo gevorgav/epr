@@ -1,17 +1,17 @@
 import {UserService} from './user.service';
 import {UserModel} from '../model/user.model';
 import {Injectable} from '@angular/core';
-import {from, Observable} from 'rxjs/index';
+import {from, Observable} from 'rxjs';
 import {ParseService} from './parse.service';
 @Injectable()
 export class UserHttpService extends UserService{
-  
+
   static USER = 'User';
-  
+
   constructor(private parseService: ParseService) {
     super();
   }
-  
+
   getAuthUsers(): Observable<Array<UserModel>> {
     let user = this.parseService.parse.Object.extend(UserHttpService.USER);
     let query = new this.parseService.parse.Query(user).equalTo('emailVerified', true);
@@ -20,7 +20,7 @@ export class UserHttpService extends UserService{
     });
     return from(promise);
   }
-  
+
   private static forOne(parseObject: any[]): UserModel[] {
     let items: UserModel[] = [];
     for (let item of parseObject) {
@@ -28,7 +28,7 @@ export class UserHttpService extends UserService{
     }
     return items;
   }
-  
+
   private static parseObjectToUserModel(parseObject: any): UserModel {
     return new UserModel(
       parseObject.attributes['name'],
@@ -37,5 +37,5 @@ export class UserHttpService extends UserService{
       parseObject.attributes['phone'],
     );
   }
-  
+
 }

@@ -2,11 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ParseService} from '../../shared/services/parse.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {UserModel} from '../../shared/model/user.model';
-import * as Parse from "parse";
-import {ActivatedRoute, Router} from '@angular/router';
-
-Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
-(Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -14,24 +10,23 @@ Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
-  
+
   public userRegisterForm: FormGroup;
-  
+
   public userLoginForm: FormGroup;
-  
+
   public loginErrorMessage: string = "";
-  
+
   public user: UserModel = new UserModel();
 
   constructor(private parseService: ParseService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+              private router: Router) { }
 
   ngOnInit() {
     this.initRegisterForm();
     this.initLoginForm();
   }
-  
+
   onSubmitLogin(){
     let that = this;
     if (this.userLoginForm.valid) {
@@ -46,7 +41,7 @@ export class LoginPageComponent implements OnInit {
       });
     }
   }
-  
+
   onSubmitRegistration(){
     if (this.userRegisterForm.valid){
       let user = new this.parseService.parse.User();
@@ -55,11 +50,11 @@ export class LoginPageComponent implements OnInit {
       user.setPassword(this.userRegisterForm.get('password').value);
       user.set('name', this.userRegisterForm.get('name').value);
       user.set('phone', this.userRegisterForm.get('phone').value);
-  
+
       let that = this;
-      
+
       user.signUp().then(function() {
-        var query = new that.parseService.parse.Query(that.parseService.parse.Role);
+        let query = new that.parseService.parse.Query(that.parseService.parse.Role);
         query.equalTo("name", 'user');
         return query.first();
         //first will return one object or null
@@ -77,29 +72,29 @@ export class LoginPageComponent implements OnInit {
         return user;
       }, console.error
       );
-      
-      
+
+
     }
   }
-  
+
   private checkMail(control: AbstractControl){
-    let Stores = Parse.Object.extend("User");
-    const query = new Parse.Query(Stores);
+    let Stores = this.parseService.parse.Object.extend("User");
+    const query = new this.parseService.parse.Query(Stores);
     query.equalTo("email", control.value.trim());
     return query.find().then(function(results) {
       return results.length == 0 ? null : { emailTaken: true } ;
     });
   }
-  
+
   private checkUsername(control: AbstractControl){
-    let Stores = Parse.Object.extend("User");
-    const query = new Parse.Query(Stores);
+    let Stores = this.parseService.parse.Object.extend("User");
+    const query = new this.parseService.parse.Query(Stores);
     query.equalTo("username", control.value.trim());
     return query.find().then(function(results) {
       return results.length == 0 ? null : { usernameTaken: true } ;
     });
   }
-  
+
   private initRegisterForm() {
     this.userRegisterForm = new FormGroup({
       'name': new FormControl(this.user.name, [
@@ -125,7 +120,7 @@ export class LoginPageComponent implements OnInit {
       ]),
     }, { validators: userRevealedValidator });
   }
-  
+
   private initLoginForm() {
     this.userLoginForm = new FormGroup({
       'username': new FormControl('',[
@@ -139,9 +134,9 @@ export class LoginPageComponent implements OnInit {
 }
 
 export const userRevealedValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-  
+
   const password = control.get('password');
   const repassword = control.get('repassword');
-  
+
   return password.value && repassword.value && password.value !== repassword.value? { 'userRevealedValidator': true } : null;
 };

@@ -6,13 +6,6 @@ import {CategoryService} from '../../shared/services/category.service';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
 
-declare var SEMICOLON: any;
-declare var $: any;
-
-declare var priceNum: any;
-declare var parseFloat: any;
-declare var elementFilterCount: any;
-
 
 @Component({
   selector: 'app-rentals',
@@ -20,17 +13,17 @@ declare var elementFilterCount: any;
   styleUrls: ['./rentals.component.css']
 })
 export class RentalsComponent implements OnInit, AfterViewInit {
-  
+
   public categories: CategoryModel[] = [];
   public activeCategory: CategoryModel;
-  
+
   constructor(private router: Router,
               private routingService: RoutingService,
               private route: ActivatedRoute,
               private categoryService: CategoryService,
               private locationDateService: LocationDateService) {
   }
-  
+
   ngOnInit() {
     this.categoryService.getCategoriesWithDependency().pipe(
       map(arr => arr.sort((a, b) => {
@@ -42,26 +35,26 @@ export class RentalsComponent implements OnInit, AfterViewInit {
       this.subscribeAndInit();
     });
   }
-  
+
   categoryOnClick(category: CategoryModel) {
     this.activeCategory = category;
   }
-  
+
   activeCategoryStyle(category: CategoryModel) {
     if (category === this.activeCategory) {
       return 'active-filter';
     }
     return '';
   }
-  
+
   ngAfterViewInit(): void {
   }
-  
+
   public navigate(id: string, title: string) {
     this.router.navigate(['/rental', title]);
     this.routingService.itemIdSubject.next(id);
   }
-  
+
   subscribeAndInit() {
     this.initCategory();
     this.router.events.subscribe(res => {
@@ -70,23 +63,23 @@ export class RentalsComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  
+
   private initCategory(routs?: ResolveEnd) {
     let categoryId = routs ? routs.urlAfterRedirects.replace('/rentals/', '') : this.route.snapshot.params['id'];
-    
+
     this.categories.forEach((value: CategoryModel) => {
       if (value.id === categoryId) {
         this.activeCategory = value;
       }
     });
   }
-  
+
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
     return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
   }
-  
+
   public isSpecified(){
     return this.locationDateService.isSpecified;
   }
-  
+
 }

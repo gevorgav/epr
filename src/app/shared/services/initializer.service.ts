@@ -2,10 +2,9 @@ import {Injectable} from '@angular/core';
 import {LocationDateService} from './location-date.service';
 import {OrderService} from './order.service';
 import {Observable} from 'rxjs/internal/Observable';
-import {flatMap, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {OrderModel} from '../model/order.model';
 import {DeliveryChartService} from './delivery-chart.service';
-import {DeliveryChartModel} from '../model/delivery-chart.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,17 +14,17 @@ export class InitializerService {
               private deliveryService: DeliveryChartService,
               private orderService: OrderService) {
   }
-  
+
   private _orderModel: OrderModel;
-  
+
   get orderModel(): OrderModel {
     return this._orderModel;
   }
-  
+
   set orderModel(value: OrderModel) {
     this._orderModel = value;
   }
-  
+
   initialize(): Observable<boolean> {
     return this.orderService.initOrderedData().pipe(
       map(res => {

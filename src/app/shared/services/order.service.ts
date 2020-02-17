@@ -6,11 +6,8 @@ import {ZipCode} from '../model/delivery-chart.model';
 import {Observable} from 'rxjs/internal/Observable';
 import {ProductHttpService} from './product-http.service';
 import {Error} from 'tslint/lib/error';
-import {from} from 'rxjs/internal/observable/from';
-import {Promise} from 'q';
-import {of} from 'rxjs/internal/observable/of';
-import {DeliveryChartHttpService} from './delivery-chart-http.service';
 import {AdditionCategoryHttp} from './addition-category-http.service';
+import {from, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -102,10 +99,10 @@ export class OrderService {
         if (reason.code == 209){
           this.parseService.logOut();
         }
-        return Promise((resolver, reject)=>{resolver({})});
+        return new Promise((resolver, reject)=>{resolver({})});
       });
     }else {
-      promise = Promise((resolver, reject)=>{resolver(orderModel)})
+      promise = new Promise((resolver, reject)=>{resolver(orderModel)})
     }
     return from(promise);
   }

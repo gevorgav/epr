@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {ParseService} from './parse.service';
 import {ProductIdName, ShippingInfoModel} from '../model/shipping-info.model';
 import {Observable} from 'rxjs/internal/Observable';
-import {from} from 'rxjs/internal/observable/from';
 import {OrderService} from './order.service';
 import {OrderItemModel} from '../model/order-item.model';
 import {AdditionCategoryHttp} from './addition-category-http.service';
 import {AdditionModel} from '../model/addition.model';
+import {from} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

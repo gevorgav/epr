@@ -1,7 +1,6 @@
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
-import {ProductViewModel} from './product-view.model';
 import {Observable} from 'rxjs/internal/Observable';
 import {ProductModel} from './product.model';
 
@@ -31,23 +30,23 @@ export class CategoryModel {
   get title(): string {
     return this._title;
   }
-  
+
   get $items(): Observable<ProductModel[]> {
     return this._$items;
   }
-  
+
   set $items(value: Observable<ProductModel[]>) {
     this._$items = value;
   }
-  
+
   get items(): ProductModel[] {
     return this._items;
   }
-  
+
   set items(value: ProductModel[]) {
     this._items = value;
   }
-  
+
   get description(): string {
     return this._description;
   }
@@ -55,7 +54,7 @@ export class CategoryModel {
   get imageUrl(): string {
     return this._imageUrl;
   }
-  
+
   get order(): number {
     return this._order;
   }

@@ -1,4 +1,3 @@
-
 import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';

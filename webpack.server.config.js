@@ -1,5 +1,5 @@
 // Work around for https://github.com/angular/angular-cli/issues/7200
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -12,7 +12,7 @@ module.exports = {
   target: 'node',
   resolve: { extensions: ['.ts', '.js'] },
   optimization: {
-    minimize: false
+    minimize: true
   },
   output: {
     // Puts the output at the root of the dist folder
