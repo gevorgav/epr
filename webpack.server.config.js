@@ -12,7 +12,10 @@ module.exports = {
   target: 'node',
   resolve: { extensions: ['.ts', '.js'] },
   optimization: {
-    minimize: true
+    minimizer: [new UglifyJsPlugin({
+      cache: true,
+      parallel: true
+    })],
   },
   output: {
     // Puts the output at the root of the dist folder
