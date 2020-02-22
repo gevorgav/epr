@@ -55,6 +55,11 @@ const appRoutes: Routes = [
     data: {title: 'Entertainment Party Rentals.'}
   },
   {
+    path: 'home',
+    component: HomePageComponent,
+    redirectTo: ''
+  },
+  {
     path: 'about-us',
     component: AboutUsComponent
   },
@@ -65,10 +70,6 @@ const appRoutes: Routes = [
   {
     path: 'delivery-chart',
     component: DeliveryChartComponent
-  },
-  {
-    path: 'rentals/:id',
-    component: RentalsComponent
   },
   {
     path: 'rentals',
