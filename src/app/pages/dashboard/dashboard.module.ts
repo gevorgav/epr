@@ -22,19 +22,25 @@ import {MatDatepickerModule} from '@angular/material';
 import {CommonModule} from '@angular/common';
 
 const dashboardRoutes: Routes = [
-  {path: '', component: DashboardComponent},
-  {path: 'shipped', component: ShippedRentalsComponent},
-  {path: 'shipping', component: ShippingComponent},
-  {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
-  {path: 'product', component: ProductComponent},
-  {path: 'category', component: CategoryComponent},
-  {path: 'user', component: UserComponent},
-  {path: 'settings', component: SettingsComponent},
-  {path: 'additional', component: AdditionalComponent},
-  {path: 'additional-category', component: AdditionalCategoryComponent},
+  {
+    path: '', component: DashboardComponent, children: [
+      {path: 'shipped', component: ShippedRentalsComponent},
+      {path: 'shipping', component: ShippingComponent},
+      {path: 'delivery-chart', component: DashboardDeliveryChartComponent},
+      {path: 'product', component: ProductComponent},
+      {path: 'category', component: CategoryComponent},
+      {path: 'user', component: UserComponent},
+      {path: 'settings', component: SettingsComponent},
+      {path: 'additional', component: AdditionalComponent},
+      {path: 'additional-category', component: AdditionalCategoryComponent},
+      {path: '**', redirectTo: 'page-not-found', pathMatch: 'full'}
+    ]
+  },
+
 ];
+
 @NgModule({
-  declarations:[
+  declarations: [
     DashboardComponent,
     SettingsComponent,
     AdditionalComponent,
@@ -52,7 +58,7 @@ const dashboardRoutes: Routes = [
     ProductPopupComponent,
     DeliveryChartPopupComponent,
   ],
-  imports:[
+  imports: [
     RouterModule.forChild(
       dashboardRoutes
     ),
@@ -62,10 +68,8 @@ const dashboardRoutes: Routes = [
     MaterialModule,
     MatDatepickerModule,
   ],
-  providers:[
-
-  ],
-  entryComponents:[
+  providers: [],
+  entryComponents: [
     ProductPopupComponent,
     DeliveryChartPopupComponent,
     CategoryPopupComponent,

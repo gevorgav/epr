@@ -2,13 +2,14 @@
   <div class="row">
     <div >
       <mat-list role="list" class="mat-elevation-z8 col">
-        <mat-list-item *ngFor="let item of items" role="listitem" (click)="selectTab(item)"
-                       [ngClass]="{'is-active': item.isActive}"><a [routerLink]="item.routerLink">{{item.name}}</a>
+        <mat-list-item class="pointer1" *ngFor="let item of items" role="listitem" (click)="selectTab(item)"
+                       [ngClass]="{'is-active': item.isActive}" [routerLink]="item.routerLink">
+          {{item.name}}
         </mat-list-item>
       </mat-list>
     </div>
     <div class="col col_five_sixth " style="padding-left: 40px">
-      <router-outlet name="dashboard"></router-outlet>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </section>

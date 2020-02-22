@@ -46,12 +46,13 @@ import {SettingsService} from './shared/services/settings.service';
 import {SettingsHttpService} from './shared/services/settings-http.service';
 import {AdditionCategoryHttp} from './shared/services/addition-category-http.service';
 import {AdditionCategoryService} from './shared/services/addition-category.service';
+import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    data: { title: 'Entertainment Party Rentals.' }
+    data: {title: 'Entertainment Party Rentals.'}
   },
   {
     path: 'about-us',
@@ -87,7 +88,7 @@ const appRoutes: Routes = [
     path: 'login',
     component: LoginPageComponent,
     canActivate: [AuthGuardLoginService],
-    data: { title: 'EPR login page.' }
+    data: {title: 'EPR login page.'}
   },
   {
     path: 'rental/:title',
@@ -107,8 +108,13 @@ const appRoutes: Routes = [
     canActivate: [AuthGuardVerificationService]
   },
   {
+    path: 'page-not-found',
+    component: PageNotFoundComponent,
+  },
+  {
     path: '**',
-    redirectTo: ''
+    redirectTo: 'page-not-found',
+    pathMatch: 'full'
   }
 ];
 
@@ -130,13 +136,14 @@ const appRoutes: Routes = [
     CartComponent,
     VerificationComponent,
     ResetPasswordComponent,
+    PageNotFoundComponent
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: false} // <-- debugging purposes only
     ),
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({appId: 'serverApp'}),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -165,9 +172,7 @@ const appRoutes: Routes = [
     {provide: SettingsService, useClass: SettingsHttpService},
     {provide: AdditionCategoryService, useClass: AdditionCategoryHttp},
   ],
-  entryComponents: [
-
-  ],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
