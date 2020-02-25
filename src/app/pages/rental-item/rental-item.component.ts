@@ -108,7 +108,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     this.productService.getProductByPatch(productPatch)
       .subscribe((res: ProductModel) => {
         if (!res) {
-          this.router.navigate(['/404']);
+          this.router.navigate(['page-not-found']);
         }
         this.initAdditions(res);
         this.selectedProduct = res;
@@ -221,21 +221,36 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     });
   }
 
-  selectAddition($event: MouseEvent, item: AdditionModel, category: AdditionCategoryModel) {
-    if (!this.selectedAdditions.has(category.id)) {
+  selectAddition(itemId: string | string[], category: AdditionCategoryModel) {
+    if (Array.isArray(itemId)){
       this.selectedAdditions.set(category.id, []);
+      itemId.forEach(valueId => {
+        this.setSelectedAdditions(valueId, category);
+      })
+    }else {
+      if (!this.selectedAdditions.has(category.id)) {
+        this.selectedAdditions.set(category.id, []);
+      }
+      this.setSelectedAdditions(itemId, category);
     }
+  }
+
+  private getSelectedValues() {
+    let selected = [];
+    this.selectedAdditions.forEach(value => {
+
+      selected.push(...value)
+    });
+    return selected;
+  }
+
+  private setSelectedAdditions(itemId: string, category: AdditionCategoryModel) {
+    let item = category.additions.find(value => itemId == value.id);
 
     category.multiSelect ?
       this.selectedAdditions.get(category.id).indexOf(item)==-1?
         this.selectedAdditions.get(category.id).push(item) :
         this.selectedAdditions.set(category.id, this.selectedAdditions.get(category.id).filter(value => value.id != item.id))
       :this.selectedAdditions.set(category.id, [item]);
-  }
-
-  private getSelectedValues() {
-    let selected = [];
-    this.selectedAdditions.forEach(value => selected.push(value));
-    return selected;
   }
 }

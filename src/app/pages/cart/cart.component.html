@@ -36,7 +36,8 @@
           <tbody>
           <tr class="cart_item" *ngFor="let product of productsInCart">
             <td class="cart-product-remove">
-              <button class="remove" title="Remove this item" (click)="removeOrderItem(product.id)"><i class="icon-trash2"></i></button>
+              <button title="Remove this item" (click)="removeOrderItem(product.id)">
+                <mat-icon>remove_shopping_cart</mat-icon></button>
             </td>
 
             <td class="cart-product-thumbnail">
