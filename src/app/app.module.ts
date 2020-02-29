@@ -47,6 +47,7 @@ import {SettingsHttpService} from './shared/services/settings-http.service';
 import {AdditionCategoryHttp} from './shared/services/addition-category-http.service';
 import {AdditionCategoryService} from './shared/services/addition-category.service';
 import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
+import {EmailService} from './shared/services/email.service';
 
 const appRoutes: Routes = [
   {
@@ -161,6 +162,7 @@ const appRoutes: Routes = [
     AuthGuardLoginService,
     AuthGuardVerificationService,
     RoutingService,
+    EmailService,
     OrderService,
     InitializerService,
     CheckoutService,
