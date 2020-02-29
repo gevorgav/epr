@@ -26,7 +26,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+  <!-- Google recaptcha -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151424290-2"></script>
   <script>
@@ -40,28 +41,28 @@
 <link rel="stylesheet" href="styles.231cb646f2346451fac4.css"></head>
 <body class="stretched side-push-panel device-xl quick-contact-form-ready">
   <!-- Load Facebook SDK for JavaScript -->
-  <div id="fb-root"></div>
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        xfbml            : true,
-        version          : 'v3.3'
-      });
-    };
+<!--  <div id="fb-root"></div>-->
+<!--  <script>-->
+<!--    window.fbAsyncInit = function() {-->
+<!--      FB.init({-->
+<!--        xfbml            : true,-->
+<!--        version          : 'v3.3'-->
+<!--      });-->
+<!--    };-->
 
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+<!--    (function(d, s, id) {-->
+<!--      var js, fjs = d.getElementsByTagName(s)[0];-->
+<!--      if (d.getElementById(id)) return;-->
+<!--      js = d.createElement(s); js.id = id;-->
+<!--      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';-->
+<!--      fjs.parentNode.insertBefore(js, fjs);-->
+<!--    }(document, 'script', 'facebook-jssdk'));</script>-->
 
-  <!-- Your customer chat code -->
-  <div class="fb-customerchat"
-       attribution=setup_tool
-       page_id="351209225522037">
-  </div>
+<!--  &lt;!&ndash; Your customer chat code &ndash;&gt;-->
+<!--  <div class="fb-customerchat"-->
+<!--       attribution=setup_tool-->
+<!--       page_id="351209225522037">-->
+<!--  </div>-->
 
   <app-root></app-root>
   <!-- External JavaScripts
@@ -73,5 +74,5 @@
     <input type="hidden" id="payTok" name="token" value="Replace with form token from getHostedPaymentPageResponse" />
     <button style="display: none" id="btnContinue">Continue to next page</button>
   </form>
-<script type="text/javascript" src="runtime.2162193fd458e6082887.js"></script><script type="text/javascript" src="es2015-polyfills.e17997aea7f522b8d49d.js" nomodule></script><script type="text/javascript" src="polyfills.3a7c8dbb44d0efc887b7.js"></script><script type="text/javascript" src="main.aa5340ed11388b663e04.js"></script></body>
+<script type="text/javascript" src="runtime.c2475b775fafe7d56744.js"></script><script type="text/javascript" src="es2015-polyfills.e17997aea7f522b8d49d.js" nomodule></script><script type="text/javascript" src="polyfills.3a7c8dbb44d0efc887b7.js"></script><script type="text/javascript" src="main.c5b8b4c7f5aa23623084.js"></script></body>
 </html>

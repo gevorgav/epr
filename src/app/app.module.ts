@@ -65,7 +65,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'contact-info',
-    component: ContactInfoComponent
+    loadChildren: './pages/contact-info/contact-info.module#ContactInfoModule',
   },
   {
     path: 'delivery-chart',
@@ -124,7 +124,6 @@ const appRoutes: Routes = [
     AppComponent,
     HomePageComponent,
     AboutUsComponent,
-    ContactInfoComponent,
     DeliveryChartComponent,
     HeaderComponent,
     FooterComponent,

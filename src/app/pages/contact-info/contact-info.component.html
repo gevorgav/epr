@@ -4,11 +4,11 @@
 <section id="page-title">
 
   <div class="container clearfix">
-    <h1>Contact</h1>
+    <h1>Contact Us</h1>
     <span>Get in Touch with Us</span>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a routerLink="/home">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Contact Info</li>
+      <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
     </ol>
   </div>
 
@@ -22,7 +22,61 @@
 
       <!-- Postcontent
           ============================================= -->
-      <div class="col_half">
+      <div class="postcontent nobottommargin">
+
+        <h3>Send us an Email</h3>
+
+        <div class="form-widget">
+
+          <div class="form-result"></div>
+          <h4 class="success">{{sendEmailErrorMessage}}</h4>
+
+          <form class="nobottommargin" (ngSubmit)="onSubmitSendEmail()" [formGroup]="emailForm">
+
+<!--            <div class="form-process"></div>-->
+
+            <div class="col_one_third">
+              <label for="template-contactform-name">Name <small>*</small></label>
+              <input type="text" formControlName="name" id="template-contactform-name" name="template-contactform-name" value="" class="sm-form-control required" />
+            </div>
+
+            <div class="col_one_third">
+              <label for="template-contactform-email">Email <small>*</small></label>
+              <input type="email" formControlName="email" id="template-contactform-email" name="template-contactform-email" value="" class="required email sm-form-control" />
+            </div>
+
+            <div class="col_one_third col_last">
+              <label for="template-contactform-phone">Phone</label>
+              <input type="text" formControlName="phone" id="template-contactform-phone" name="template-contactform-phone" value="" class="sm-form-control" />
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="col_full">
+              <label for="template-contactform-subject">Subject <small>*</small></label>
+              <input type="text" formControlName="subject" id="template-contactform-subject" name="subject" value="" class="required sm-form-control" />
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="col_full">
+              <label for="template-contactform-message">Message <small>*</small></label>
+              <textarea formControlName="message" class="required sm-form-control" id="template-contactform-message" name="template-contactform-message" rows="6" cols="30"></textarea>
+            </div>
+
+            <div class="col_full">
+              <re-captcha (resolved)="resolved($event)"
+                          formControlName="recaptchaReactive"
+                          siteKey="6Lc5h9wUAAAAAJlXX_Zf1YnSTXsHpXOwRsJZGQx0">
+              </re-captcha>
+            </div>
+
+            <div class="col_full">
+              <button class="button button-3d nomargin" type="submit" id="contactform-submit" name="contactform-submit" value="submit">Send Message</button>
+            </div>
+
+          </form>
+        </div>
 
       </div><!-- .postcontent end -->
 
@@ -48,19 +102,14 @@
         <div class="widget noborder notoppadding">
 
           <a href="https://www.facebook.com/Entertainment-Party-Rentals-351209225522037" target="_blank" class="social-icon si-small si-dark si-facebook">
-            <i class="icon-facebook"></i>
-            <i class="icon-facebook"></i>
-          </a>
-
-          <a href="#" class="social-icon si-small si-dark si-twitter">
-            <i class="icon-twitter"></i>
-            <i class="icon-twitter"></i>
+            <i><img src="../../../assets/facebook.svg"></i>
+            <i><img src="../../../assets/facebook.svg"></i>
           </a>
 
           <a href="https://www.instagram.com/entertainmentpartyrentals/" target="_blank"
              class="social-icon si-small si-dark si-instagram" title="Instagram">
-            <i class="icon-instagram"></i>
-            <i class="icon-instagram"></i>
+            <i><img src="../../../assets/instagram.svg"></i>
+            <i><img src="../../../assets/instagram.svg"></i>
           </a>
 
           <!--<a href="#" class="social-icon si-small si-dark si-dribbble">-->
