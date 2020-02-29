@@ -69,7 +69,7 @@ export class ShippingHttpService {
       console.error(e);
     }).then(res=>{
        res.set('isPayed', true);
-      return res.save().then(res => true)
+      return res.save().then(res => res)
     });
 
     return from(promise);

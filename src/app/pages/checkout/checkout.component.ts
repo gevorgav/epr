@@ -3,6 +3,8 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {OrderService} from '../../shared/services/order.service';
+import {map} from 'rxjs/operators';
+import {EmailService} from '../../shared/services/email.service';
 
 @Component({
   selector: 'app-checkout',
@@ -10,13 +12,14 @@ import {OrderService} from '../../shared/services/order.service';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
-  
+
   private id$ = this.route.paramMap;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private orderService: OrderService,
-              private shippingService: ShippingHttpService) { }
+              private shippingService: ShippingHttpService,
+              private mailService: EmailService) { }
 
   ngOnInit() {
     this.id$.subscribe((params: ParamMap) => {
@@ -36,11 +39,21 @@ export class CheckoutComponent implements OnInit {
       }
     })
   }
-  
+
   private setShippedTrue(id: string): Observable<any> {
-    return this.shippingService.setPayed(id)
+    return this.shippingService.setPayed(id).pipe(
+      map(res =>{
+        this.mailService.sendClientNotice({
+          email: res.attributes['email'],
+          subject: `Dear ${res.attributes['name']}`,
+          message: `Thank you for your order!
+                    We shall send you Pro-Forma Invoice.`
+        }).subscribe(res=>res);
+        return res;
+      })
+    );
   }
-  
+
   private removeProductsFromOrder() {
     return this.orderService.destroyOrder()
   }

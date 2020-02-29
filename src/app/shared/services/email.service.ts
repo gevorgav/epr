@@ -17,4 +17,14 @@ export class EmailService {
     return this.http.post<any>('/sendEmail', contactUsModel)
   }
 
+  public sendClientNotice(clientNotice: ClientNotice){
+    return this.http.post<any>('/sendEmail/client-notice', clientNotice)
+  }
+
+}
+
+interface ClientNotice {
+  email: string;
+  subject: string;
+  message: string;
 }

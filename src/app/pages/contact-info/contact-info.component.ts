@@ -28,8 +28,6 @@ export class ContactInfoComponent {
       contactUs.subject = this.emailForm.get('subject').value;
       contactUs.email = this.emailForm.get('email').value;
       this.emailService.sendEmail(contactUs).subscribe(res=>{
-
-      },error => {},()=>{
         location.reload();
       })
     }
