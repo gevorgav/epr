@@ -13070,7 +13070,7 @@ var EmailService = /** @class */ (function () {
         return this.http.post('/token_validate', { recaptcha: token });
     };
     EmailService.prototype.sendEmail = function (contactUsModel) {
-        return this.http.post('/sendEmail', {});
+        return this.http.post('/sendEmail', contactUsModel);
     };
     return EmailService;
 }());

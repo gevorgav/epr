@@ -14,7 +14,7 @@ export class EmailService {
   }
 
   public sendEmail(contactUsModel: ContactUsModel){
-    return this.http.post<any>('/sendEmail', {})
+    return this.http.post<any>('/sendEmail', contactUsModel)
   }
 
 }
