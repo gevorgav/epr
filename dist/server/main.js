@@ -4434,12 +4434,16 @@ var ContactInfoComponent = /** @class */ (function () {
         this.initForm();
     }
     ContactInfoComponent.prototype.onSubmitSendEmail = function () {
-        var _this = this;
         if (this.emailForm.valid && this.recaptcha) {
-            this.emailService.sendEmail(this.contactUs).subscribe(function (res) {
-                if (res) {
-                    _this.sendEmailErrorMessage = "Thank you, we will reply you soon.";
-                }
+            var contactUs = new _shared_model_contact_us_model__WEBPACK_IMPORTED_MODULE_1__["ContactUsModel"]();
+            contactUs.message = this.emailForm.get('message').value;
+            contactUs.name = this.emailForm.get('name').value;
+            contactUs.phone = this.emailForm.get('phone').value;
+            contactUs.subject = this.emailForm.get('subject').value;
+            contactUs.email = this.emailForm.get('email').value;
+            this.emailService.sendEmail(contactUs).subscribe(function (res) {
+            }, function (error) { }, function () {
+                location.reload();
             });
         }
     };

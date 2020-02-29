@@ -21,10 +21,16 @@ export class ContactInfoComponent {
 
   onSubmitSendEmail() {
     if (this.emailForm.valid && this.recaptcha) {
-      this.emailService.sendEmail(this.contactUs).subscribe(res=>{
-        if(res){
-          this.sendEmailErrorMessage = "Thank you, we will reply you soon.";
-        }
+      let contactUs = new ContactUsModel();
+      contactUs.message = this.emailForm.get('message').value;
+      contactUs.name = this.emailForm.get('name').value;
+      contactUs.phone = this.emailForm.get('phone').value;
+      contactUs.subject = this.emailForm.get('subject').value;
+      contactUs.email = this.emailForm.get('email').value;
+      this.emailService.sendEmail(contactUs).subscribe(res=>{
+
+      },error => {},()=>{
+        location.reload();
       })
     }
   }
