@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ContactUsModel} from '../../shared/model/contact-us.model';
 import {userRevealedValidator} from '../login-page/login-page.component';
-import {EmailService} from '../../shared/services/email.service';
+import {MailService} from '../../shared/services/mail.service';
 
 @Component({
   selector: 'app-contact-info',
@@ -15,7 +15,7 @@ export class ContactInfoComponent {
   public contactUs: ContactUsModel = new ContactUsModel();
   private recaptcha: boolean = false;
 
-  constructor(private emailService: EmailService) {
+  constructor(private emailService: MailService) {
     this.initForm();
   }
 

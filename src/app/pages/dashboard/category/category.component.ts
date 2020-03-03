@@ -26,7 +26,7 @@ export class CategoryComponent implements OnInit {
   addCategory() {
     let dialogRef = this.dialog.open(CategoryPopupComponent, {
       data: {
-        item: new CategoryModel(null, null, null, null, null, null)
+        category: new CategoryModel(null, null, null, null, null, null)
       },
       width: '80%'
     });
@@ -48,7 +48,7 @@ export class CategoryComponent implements OnInit {
   edit(category: CategoryModel) {
     let dialogRef = this.dialog.open(CategoryPopupComponent, {
       data: {
-        category: category
+        category
       },
       width: '80%'
     });

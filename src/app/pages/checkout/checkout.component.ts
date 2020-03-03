@@ -4,7 +4,7 @@ import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {OrderService} from '../../shared/services/order.service';
 import {map} from 'rxjs/operators';
-import {EmailService} from '../../shared/services/email.service';
+import {MailService} from '../../shared/services/mail.service';
 
 @Component({
   selector: 'app-checkout',
@@ -19,7 +19,7 @@ export class CheckoutComponent implements OnInit {
               private router: Router,
               private orderService: OrderService,
               private shippingService: ShippingHttpService,
-              private mailService: EmailService) { }
+              private mailService: MailService) { }
 
   ngOnInit() {
     this.id$.subscribe((params: ParamMap) => {

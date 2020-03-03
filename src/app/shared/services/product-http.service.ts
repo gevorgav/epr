@@ -210,7 +210,7 @@ export class ProductHttpService extends ProductService {
   }
 
   pathParamFromName(name: string) {
-    return new Date().getTime() + '-' + name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
   }
 
   getProductByPatch(patch: string): Observable<ProductModel> {

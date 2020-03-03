@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {MaterialModule} from '../../mat/material.module';
 import {RecaptchaFormsModule, RecaptchaModule} from 'ng-recaptcha';
-import {EmailService} from '../../shared/services/email.service';
+import {MailService} from '../../shared/services/mail.service';
 
 const contactInfoRoutes: Routes = [
   {
@@ -30,7 +30,7 @@ const contactInfoRoutes: Routes = [
     RecaptchaFormsModule
   ],
   providers: [
-    EmailService
+    MailService
   ]
 })
 export class ContactInfoModule {
