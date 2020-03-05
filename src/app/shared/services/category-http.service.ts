@@ -63,6 +63,19 @@ export class CategoryHttpService extends CategoryService {
     return from(promise);
   }
 
+  getCategoriesByPathParamWithDependency(pathParam: string): Observable<CategoryModel>{
+    let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+    let query = new this.parseService.parse.Query(category);
+    let promise = query.equalTo('pathParam', pathParam).first().then((res: any) => {
+      let products$: ProductModel[] = [];
+      return res.relation('products').query().each((product: any) => {
+        products$.push(CategoryHttpService.parseObjectToProductModel(product));
+      }).then(res1 => new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'],
+        res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['order'], null, products$));
+    });
+    return from(promise);
+  }
+
   getCategoriesWithDependency(): Observable<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
@@ -93,6 +106,8 @@ export class CategoryHttpService extends CategoryService {
         ))
       ));
   }
+
+
 
   private static parseObjectToProductModel(parseObject: any): ProductModel {
     return new ProductModel(

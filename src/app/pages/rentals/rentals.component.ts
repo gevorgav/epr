@@ -30,7 +30,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    zip(this.categoryService.getCategoriesWithDependency().pipe(
+    zip(this.categoryService.getCategories().pipe(
       map(arr => arr.sort((a, b) => {
         return a.order - b.order;
       }))
@@ -39,7 +39,9 @@ export class RentalsComponent implements OnInit, AfterViewInit {
       if (res[1]){
         this.categories.forEach(value => {
           if (value.pathParam === res[1])
-            this.activeCategory = value;
+            this.categoryService.getCategoriesByPathParamWithDependency(res[1]).subscribe(res=>{
+              this.activeCategory = res;
+            })
         })
       }else {
         this.navigate(res[0][0].id, res[0][0].pathParam);
@@ -60,7 +62,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   }
 
   activeCategoryStyle(category: CategoryModel) {
-    if (category === this.activeCategory) {
+    if (this.activeCategory && category.pathParam === this.activeCategory.pathParam) {
       return 'active-filter';
     }
     return '';
@@ -75,7 +77,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   }
 
   subscribeAndInit() {
-    this.initCategory();
+    // this.initCategory();
     this.router.events.subscribe(res => {
       if (res instanceof ResolveEnd && res.url.indexOf('/rentals/') > -1) {
         this.initCategory(res);
@@ -86,12 +88,10 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   private initCategory(routs?: ResolveEnd) {
     let pathParam = routs ? routs.urlAfterRedirects.replace('/rentals/', '') : this.route.snapshot.params['id'];
 
-    this.categories.forEach((value: CategoryModel) => {
-      if (value.pathParam === pathParam) {
-        this.activeCategory = value;
-        this.titleService.setTitle(value.title);
-        this.metaService.addTag({ name: 'description', content: value.metaDescription });
-      }
+    this.categoryService.getCategoriesByPathParamWithDependency(pathParam).subscribe(res=>{
+      this.activeCategory = res;
+      this.titleService.setTitle(res.description);
+      this.metaService.addTag({ name: 'description', content: res.metaDescription });
     });
   }
 
