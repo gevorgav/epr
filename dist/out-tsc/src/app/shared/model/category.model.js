@@ -1,5 +1,5 @@
 var CategoryModel = /** @class */ (function () {
-    function CategoryModel(id, title, description, imageUrl, order, $items, items) {
+    function CategoryModel(id, title, description, imageUrl, metaDescription, pathParam, order, $items, items) {
         this._id = id;
         this._title = title;
         this._description = description;
@@ -7,6 +7,8 @@ var CategoryModel = /** @class */ (function () {
         this._items = items;
         this._$items = $items;
         this._order = order;
+        this._metaDescription = metaDescription;
+        this._pathParam = pathParam;
     }
     Object.defineProperty(CategoryModel.prototype, "id", {
         get: function () {
@@ -59,6 +61,26 @@ var CategoryModel = /** @class */ (function () {
     Object.defineProperty(CategoryModel.prototype, "order", {
         get: function () {
             return this._order;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CategoryModel.prototype, "metaDescription", {
+        get: function () {
+            return this._metaDescription;
+        },
+        set: function (value) {
+            this._metaDescription = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CategoryModel.prototype, "pathParam", {
+        get: function () {
+            return this._pathParam;
+        },
+        set: function (value) {
+            this._pathParam = value;
         },
         enumerable: true,
         configurable: true

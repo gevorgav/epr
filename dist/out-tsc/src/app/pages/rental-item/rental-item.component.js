@@ -1,6 +1,6 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { RoutingService } from '../../shared/services/routing.service';
@@ -15,8 +15,9 @@ import { InitializerService } from '../../shared/services/initializer.service';
 import { AdditionCategoryService } from '../../shared/services/addition-category.service';
 import { zip } from 'rxjs';
 var RentalItemComponent = /** @class */ (function () {
-    function RentalItemComponent(titleService, locationService, route, router, routingService, productService, categoryService, orderService, initializerService, parseService, additionCategoryService) {
+    function RentalItemComponent(titleService, metaService, locationService, route, router, routingService, productService, categoryService, orderService, initializerService, parseService, additionCategoryService) {
         this.titleService = titleService;
+        this.metaService = metaService;
         this.locationService = locationService;
         this.route = route;
         this.router = router;
@@ -96,6 +97,7 @@ var RentalItemComponent = /** @class */ (function () {
             _this.initAdditions(res);
             _this.selectedProduct = res;
             _this.titleService.setTitle(res.title);
+            _this.metaService.addTag({ name: 'description', content: res.metaDescription });
             _this.categoryService.getCategoryByProductId(_this.selectedProduct.id).subscribe(function (res) {
                 _this.itemCategory = res;
                 _this.categoryService.getCategoryItems(res.id).subscribe(function (res) {
@@ -232,6 +234,7 @@ var RentalItemComponent = /** @class */ (function () {
             styleUrls: ['./rental-item.component.css']
         }),
         tslib_1.__metadata("design:paramtypes", [Title,
+            Meta,
             LocationDateService,
             ActivatedRoute,
             Router,

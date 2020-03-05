@@ -72,7 +72,8 @@ export class ProductPopupComponent implements OnInit {
           this.form.get('minPrice').value,
           this.form.get('nightPrice').value,
           this.form.get('count').value,
-          this.form.get('additionalCategories').value
+          this.form.get('additionalCategories').value,
+          this.form.get('metaDescription').value
         ),
         newCategoryId: this.form.get('category').value,
         oldCategoryId: this.categoryId
@@ -163,6 +164,9 @@ export class ProductPopupComponent implements OnInit {
 
       ]),
       video: this.formBuilder.control(this.product.video, [
+
+      ]),
+      metaDescription: this.formBuilder.control(this.product.metaDescription, [
 
       ]),
       minTime: this.formBuilder.control(this.product.minTime, [

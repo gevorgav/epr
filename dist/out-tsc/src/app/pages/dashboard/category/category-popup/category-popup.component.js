@@ -18,7 +18,7 @@ var CategoryPopupComponent = /** @class */ (function () {
     CategoryPopupComponent.prototype.submit = function () {
         if (this.form.valid) {
             this.dialogRef.close({
-                category: new CategoryModel(this.category.id, this.form.get('title').value, this.form.get('description').value, this.form.get('imageUrl').value)
+                category: new CategoryModel(this.category.id, this.form.get('title').value, this.form.get('description').value, this.form.get('imageUrl').value, this.form.get('metaDescription').value, null)
             });
         }
         else {

@@ -162,7 +162,7 @@
       <div class="row real-estate-properties clearfix bottommargin-lg">
         <ng-container *ngFor="let category of categories; let i = index">
           <div [ngClass]="getClass(i)">
-            <a [routerLink]="['/rentals', category.id]"
+            <a [routerLink]="['/rentals', category.pathParam]"
                [ngStyle]="{'background': 'url('+(category.imageUrl? category.imageUrl : category.items[0]?.images[0])+') no-repeat bottom center', 'background-size': 'cover'}">
               <div class="vertical-middle dark center" style="background-color: rgba(0, 0, 0, 0.6);">
                 <div class="heading-block nomargin noborder">

@@ -50,7 +50,8 @@ export class CategoryComponent implements OnInit {
       data: {
         category
       },
-      width: '80%'
+      width: '80%',
+      height: '95%'
     });
     dialogRef.afterClosed().subscribe(
       data => {

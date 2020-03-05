@@ -77,6 +77,10 @@ const appRoutes: Routes = [
     component: RentalsComponent
   },
   {
+    path: 'rentals/:title',
+    component: RentalsComponent
+  },
+  {
     path: 'dashboard',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
     canActivate: [AuthGuard]

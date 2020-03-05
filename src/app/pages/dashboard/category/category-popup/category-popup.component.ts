@@ -35,7 +35,9 @@ export class CategoryPopupComponent implements OnInit {
             this.category.id,
             this.form.get('title').value,
             this.form.get('description').value,
-            this.form.get('imageUrl').value
+            this.form.get('imageUrl').value,
+            this.form.get('metaDescription').value,
+            null
           )
         }
       );
@@ -94,6 +96,9 @@ export class CategoryPopupComponent implements OnInit {
       imageUrl: this.formBuilder.control(this.category.imageUrl || '', [
 
       ]),
+      metaDescription: this.formBuilder.control(this.category.metaDescription, [
+
+      ])
     })
   }
 }

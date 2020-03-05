@@ -27,7 +27,8 @@ export class AdditionalCategoryComponent implements OnInit {
       data: {
         category: new AdditionCategoryModel(null, null, false)
       },
-      width: '80%'
+      width: '80%',
+      height: '95%'
     });
     dialogRef.afterClosed().subscribe(
       data => {

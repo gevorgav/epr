@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
+import {Meta, Title} from '@angular/platform-browser';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {RoutingService} from '../../shared/services/routing.service';
@@ -85,6 +85,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   private selectedAdditions: Map<string, AdditionModel[]> = new Map<string, AdditionModel[]>();
 
   constructor(private titleService: Title,
+              private metaService: Meta,
               private locationService: LocationDateService,
               private route: ActivatedRoute,
               private router: Router,
@@ -113,6 +114,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         this.initAdditions(res);
         this.selectedProduct = res;
         this.titleService.setTitle(res.title);
+        this.metaService.addTag({ name: 'description', content: res.metaDescription });
         this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
           this.itemCategory = res;
           this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[]) => {

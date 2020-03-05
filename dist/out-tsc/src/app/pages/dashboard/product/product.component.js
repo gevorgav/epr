@@ -57,7 +57,7 @@ var ProductComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(ProductPopupComponent, {
             data: {
-                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
             },
             width: '80%',
             height: '95%'
@@ -67,7 +67,7 @@ var ProductComponent = /** @class */ (function () {
                 _this.productService.saveProduct(data.product, data.newCategoryId)
                     .subscribe(function (res) {
                     _this.initProducts();
-                }, function (erorr) { return handleError(erorr); });
+                }, function (error) { return handleError(error); });
             }
         });
     };

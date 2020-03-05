@@ -124,7 +124,7 @@ var ProductHttpService = /** @class */ (function (_super) {
         return new ProductViewModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam']);
     };
     ProductHttpService.convertToProductModel = function (item) {
-        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null, item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules'], item.attributes['minTime'], item.attributes['minPrice'], item.attributes['nightPrice'], item.attributes['count'], []);
+        return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null, item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules'], item.attributes['minTime'], item.attributes['minPrice'], item.attributes['nightPrice'], item.attributes['count'], [], item.attributes['metaDescription']);
     };
     ProductHttpService.prototype.getProducts = function (count) {
         var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
@@ -157,7 +157,8 @@ var ProductHttpService = /** @class */ (function (_super) {
         product.set('minPrice', productToSave.minPrice);
         product.set('nightPrice', productToSave.nightPrice);
         product.set('count', productToSave.count);
-        product.set('pathParam', this.pathParamFromName(productToSave.title));
+        product.set('metaDescription', productToSave.metaDescription);
+        product.set('pathParam', ProductHttpService_1.pathParamFromName(productToSave.title));
         if (oldAdditionalCategories && oldAdditionalCategories.length) {
             product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
         }
@@ -165,8 +166,8 @@ var ProductHttpService = /** @class */ (function (_super) {
             product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories));
         }
     };
-    ProductHttpService.prototype.pathParamFromName = function (name) {
-        return new Date().getTime() + '-' + name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    ProductHttpService.pathParamFromName = function (name) {
+        return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
     };
     ProductHttpService.prototype.getProductByPatch = function (patch) {
         var _this_1 = this;

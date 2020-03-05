@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ContactUsModel} from '../../shared/model/contact-us.model';
-import {userRevealedValidator} from '../login-page/login-page.component';
 import {MailService} from '../../shared/services/mail.service';
 
 @Component({

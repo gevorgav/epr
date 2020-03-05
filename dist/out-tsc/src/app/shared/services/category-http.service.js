@@ -46,9 +46,9 @@ var CategoryHttpService = /** @class */ (function (_super) {
     };
     CategoryHttpService.convertToCategoryModel = function (item, products) {
         if (products) {
-            return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order'], products);
+            return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order'], products);
         }
-        return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order']);
+        return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order']);
     };
     CategoryHttpService.prototype.getCategoryItems = function (categoryId) {
         var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
@@ -85,7 +85,7 @@ var CategoryHttpService = /** @class */ (function (_super) {
         })); }));
     };
     CategoryHttpService.parseObjectToProductModel = function (parseObject) {
-        return new ProductModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'], parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'], parseObject.attributes['pathParam'], parseObject.attributes['description'], parseObject.attributes['rentalTerms'], parseObject.attributes['spaceRequired'], parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null, parseObject.attributes['instructions'], parseObject.attributes['video'], parseObject.attributes['safetyRules'], parseObject.attributes['minTime'], parseObject.attributes['minPrice'], parseObject.attributes['nightPrice'], parseObject.attributes['count'], []);
+        return new ProductModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'], parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'], parseObject.attributes['pathParam'], parseObject.attributes['description'], parseObject.attributes['rentalTerms'], parseObject.attributes['spaceRequired'], parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null, parseObject.attributes['instructions'], parseObject.attributes['video'], parseObject.attributes['safetyRules'], parseObject.attributes['minTime'], parseObject.attributes['minPrice'], parseObject.attributes['nightPrice'], parseObject.attributes['count'], [], parseObject.attributes['metaDescription']);
     };
     CategoryHttpService.forOne = function (parseObject) {
         var items = [];

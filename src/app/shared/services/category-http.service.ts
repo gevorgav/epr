@@ -8,6 +8,7 @@ import {ParseService} from './parse.service';
 import {forkJoin, from, Observable} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
 import {ProductModel} from '../model/product.model';
+import {ProductHttpService} from './product-http.service';
 
 @Injectable()
 export class CategoryHttpService extends CategoryService {
@@ -44,9 +45,11 @@ export class CategoryHttpService extends CategoryService {
 
   static convertToCategoryModel(item: any, products?: Observable<ProductModel[]>): CategoryModel {
     if (products) {
-      return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order'], products);
+      return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'],
+        item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order'], products);
     }
-    return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['order']);
+    return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'],
+      item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order']);
   }
 
   getCategoryItems(categoryId: string): Observable<Array<ProductModel>> {
@@ -112,7 +115,8 @@ export class CategoryHttpService extends CategoryService {
       parseObject.attributes['minPrice'],
       parseObject.attributes['nightPrice'],
       parseObject.attributes['count'],
-      []
+      [],
+      parseObject.attributes['metaDescription']
     );
   }
 
@@ -172,9 +176,15 @@ export class CategoryHttpService extends CategoryService {
     return from(promise);
   }
 
+  static pathParamFromName(name: string) {
+    return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+  }
+
   private setFields(category: any, model: CategoryModel) {
     category.set('title', model.title);
     category.set('description', model.description);
     category.set('imageUrl', model.imageUrl);
+    category.set('metaDescription', model.metaDescription);
+    category.set('pathParam', CategoryHttpService.pathParamFromName(model.title));
   }
 }

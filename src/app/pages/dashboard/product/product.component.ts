@@ -75,7 +75,8 @@ export class ProductComponent implements OnInit {
     const dialogRef = this.dialog.open(ProductPopupComponent, {
       data: {
         product: new ProductModel(null, null, null, null, null, null, null, null,
-          null, null, null, null, null, null, null, null, null, null, null, null)
+          null, null, null, null, null, null, null, null,
+          null, null, null, null, null)
       },
       width: '80%',
       height: '95%'
@@ -87,7 +88,7 @@ export class ProductComponent implements OnInit {
             res => {
                 this.initProducts();
             },
-            erorr => handleError(erorr))
+            error => handleError(error))
       }
     })
   }

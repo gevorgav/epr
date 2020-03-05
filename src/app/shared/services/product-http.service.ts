@@ -165,7 +165,8 @@ export class ProductHttpService extends ProductService {
       item.attributes['minPrice'],
       item.attributes['nightPrice'],
       item.attributes['count'],
-      []
+      [],
+      item.attributes['metaDescription']
     )
   }
 
@@ -200,7 +201,8 @@ export class ProductHttpService extends ProductService {
       product.set('minPrice', productToSave.minPrice);
       product.set('nightPrice', productToSave.nightPrice);
       product.set('count', productToSave.count);
-      product.set('pathParam', this.pathParamFromName(productToSave.title));
+      product.set('metaDescription', productToSave.metaDescription);
+      product.set('pathParam', ProductHttpService.pathParamFromName(productToSave.title));
       if (oldAdditionalCategories && oldAdditionalCategories.length){
         product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
       }
@@ -209,7 +211,7 @@ export class ProductHttpService extends ProductService {
       }
   }
 
-  pathParamFromName(name: string) {
+  static pathParamFromName(name: string) {
     return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
   }
 

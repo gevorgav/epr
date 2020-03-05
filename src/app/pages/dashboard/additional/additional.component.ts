@@ -28,7 +28,8 @@ export class AdditionalComponent implements OnInit {
       data: {
         item: new AdditionModel(null, null, null)
       },
-      width: '80%'
+      width: '80%',
+      height: '95%'
     });
     dialogRef.afterClosed().subscribe(
       data => {
