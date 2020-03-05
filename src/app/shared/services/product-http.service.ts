@@ -3,9 +3,9 @@ import {ProductService} from './product.service';
 import {ProductModel} from '../model/product.model';
 import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
-import {from, Observable} from "rxjs";
-import {ParseService} from "./parse.service";
-import {CategoryHttpService} from "./category-http.service";
+import {from, Observable} from 'rxjs';
+import {ParseService} from './parse.service';
+import {CategoryHttpService} from './category-http.service';
 import {AdditionCategoryHttp} from './addition-category-http.service';
 
 /**
@@ -14,7 +14,7 @@ import {AdditionCategoryHttp} from './addition-category-http.service';
 @Injectable()
 export class ProductHttpService extends ProductService {
 
-  static PRODUCT = "Product";
+  static PRODUCT = 'Product';
 
   constructor(private parseService: ParseService) {
     super();
@@ -26,7 +26,7 @@ export class ProductHttpService extends ProductService {
     let promise = query.find().then(res => {
       let products: ProductModel [] = [];
       for (let item of res) {
-        products.push(ProductHttpService.convertToProductModel(item))
+        products.push(ProductHttpService.convertToProductModel(item));
       }
       return products;
     });
@@ -36,31 +36,31 @@ export class ProductHttpService extends ProductService {
   getProduct(id: string): Observable<ProductModel> {
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     const query = new this.parseService.parse.Query(Product);
-    query.equalTo("objectId", id);
-    const promise = query.first().then((result) =>{
-      return this.loadProductAdditionalCategory(result).then(res=>{
-        let productModel =  ProductHttpService.convertToProductModel(result);
+    query.equalTo('objectId', id);
+    const promise = query.first().then((result) => {
+      return this.loadProductAdditionalCategory(result).then(res => {
+        let productModel = ProductHttpService.convertToProductModel(result);
         productModel.additionalCategories = res;
         return productModel;
-      })
+      });
     });
     return from(promise);
   }
 
-  private loadProductAdditionalCategory(res: any): Promise<string[]>{
+  private loadProductAdditionalCategory(res: any): Promise<string[]> {
     let productAdditionalCategory = [];
-    return res.relation('productAdditionalCategory').query().each(resProd=>{
+    return res.relation('productAdditionalCategory').query().each(resProd => {
       productAdditionalCategory.push(resProd.id);
-    }).then(()=>{
-      return productAdditionalCategory
-    })
+    }).then(() => {
+      return productAdditionalCategory;
+    });
   }
 
   deleteProduct(id: string) {
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     const query = new this.parseService.parse.Query(Product);
-    query.equalTo("objectId", id);
-    const promise = query.first().then((result) =>{
+    query.equalTo('objectId', id);
+    const promise = query.first().then((result) => {
       return result.destroy({});
     });
     return from(promise);
@@ -74,7 +74,7 @@ export class ProductHttpService extends ProductService {
     let _this = this;
     if (productToSave.id) {
       const query = new this.parseService.parse.Query(Product);
-      query.equalTo("objectId", productToSave.id);
+      query.equalTo('objectId', productToSave.id);
       promise = query.first().then(
         res => {
           this.setFields(res, productToSave, oldAdditionalCategories);
@@ -83,29 +83,29 @@ export class ProductHttpService extends ProductService {
               if (newCategoryId !== oldCategoryId) {
                 let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
                 let query = new _this.parseService.parse.Query(Category);
-                query.equalTo("objectId", oldCategoryId);
+                query.equalTo('objectId', oldCategoryId);
                 return query.first().then(category => {
                   category.relation('products').remove(savedProduct);
                   return category.save();
                 }).then(res => {
                   let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
                   let query = new _this.parseService.parse.Query(Category);
-                  query.equalTo("objectId", newCategoryId);
+                  query.equalTo('objectId', newCategoryId);
                   return query.first().then(category => {
                     category.relation('products').add(savedProduct);
                     return category.save();
-                  })
+                  });
                 });
               }
             }
-          )
+          );
         }
       );
     } else {
       promise = product.save().then(product => {
         let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
         let query = new _this.parseService.parse.Query(Category);
-        query.equalTo("objectId", newCategoryId);
+        query.equalTo('objectId', newCategoryId);
         return query.first().then(category => {
           category.relation('products').add(product);
           return category.save();
@@ -157,7 +157,7 @@ export class ProductHttpService extends ProductService {
       item.attributes['description'],
       item.attributes['rentalTerms'],
       item.attributes['spaceRequired'],
-      item.attributes['setupPolicy']?new Map(Object.entries(item.attributes['setupPolicy'])):null,
+      item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null,
       item.attributes['instructions'],
       item.attributes['video'],
       item.attributes['safetyRules'],
@@ -166,14 +166,16 @@ export class ProductHttpService extends ProductService {
       item.attributes['nightPrice'],
       item.attributes['count'],
       [],
-      item.attributes['metaDescription']
-    )
+      item.attributes['metaDescription'],
+      item.attributes['pageTitle'],
+      item.attributes['relation']
+    );
   }
 
   getProducts(count?: number): Observable<Array<ProductModel>> {
     let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(product);
-    let promise = query.find().then(res=>{
+    let promise = query.find().then(res => {
       let products = [];
       for (let item of res) {
         products.push(ProductHttpService.convertToProductModel(item));
@@ -184,67 +186,71 @@ export class ProductHttpService extends ProductService {
   }
 
   private setFields(product: any, productToSave: ProductModel, oldAdditionalCategories: string[]) {
-      product.set('title', productToSave.title);
-      product.set('price', productToSave.price);
-      product.set('images', productToSave.images);
-      product.set('isNew', productToSave.isNew);
-      product.set('isHotDeal', productToSave.isHotDeal);
-      product.set('itemSize', productToSave.itemSize);
-      product.set('description', productToSave.description);
-      product.set('rentalTerms', productToSave.rentalTerms);
-      product.set('spaceRequired', productToSave.spaceRequired);
-      product.set('setupPolicy', this.mapToObject(productToSave.setupPolicy));
-      product.set('instructions', productToSave.instructions);
-      product.set('video', productToSave.video);
-      product.set('safetyRules', productToSave.safetyRules);
-      product.set('minTime', productToSave.minTime);
-      product.set('minPrice', productToSave.minPrice);
-      product.set('nightPrice', productToSave.nightPrice);
-      product.set('count', productToSave.count);
-      product.set('metaDescription', productToSave.metaDescription);
-      product.set('pathParam', ProductHttpService.pathParamFromName(productToSave.title));
-      if (oldAdditionalCategories && oldAdditionalCategories.length){
-        product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
-      }
-      if (productToSave.additionalCategories && productToSave.additionalCategories.length){
-        product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories))
-      }
+    product.set('title', productToSave.title);
+    product.set('price', productToSave.price);
+    product.set('images', productToSave.images);
+    product.set('isNew', productToSave.isNew);
+    product.set('isHotDeal', productToSave.isHotDeal);
+    product.set('itemSize', productToSave.itemSize);
+    product.set('description', productToSave.description);
+    product.set('rentalTerms', productToSave.rentalTerms);
+    product.set('spaceRequired', productToSave.spaceRequired);
+    product.set('setupPolicy', this.mapToObject(productToSave.setupPolicy));
+    product.set('instructions', productToSave.instructions);
+    product.set('video', productToSave.video);
+    product.set('safetyRules', productToSave.safetyRules);
+    product.set('minTime', productToSave.minTime);
+    product.set('minPrice', productToSave.minPrice);
+    product.set('nightPrice', productToSave.nightPrice);
+    product.set('count', productToSave.count);
+    product.set('metaDescription', productToSave.metaDescription);
+    product.set('pageTitle', productToSave.pageTitle);
+    product.set('relation', productToSave.relation);
+    product.set('pathParam', ProductHttpService.pathParamFromName(productToSave.title));
+    if (oldAdditionalCategories && oldAdditionalCategories.length) {
+      product.relation('productAdditionalCategory').remove(this.getAdditionalCategoryRelations(oldAdditionalCategories));
+    }
+    if (productToSave.additionalCategories && productToSave.additionalCategories.length) {
+      product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories));
+    }
   }
 
   static pathParamFromName(name: string) {
-    return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    return name.replace(/[^a-zA-Z0-9- ]/g, '').trim().replace(/\s/g, '-');
   }
 
   getProductByPatch(patch: string): Observable<ProductModel> {
     let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(product);
     query.equalTo('pathParam', patch);
-    let promise = query.first().then(resProd=>{
-      if (!resProd){
+    let promise = query.first().then(resProd => {
+      if (!resProd) {
         return null;
       } else {
-        return this.loadProductAdditionalCategory(resProd).then(res=>{
-          let productModel =  ProductHttpService.convertToProductModel(resProd);
+        return this.loadProductAdditionalCategory(resProd).then(res => {
+          let productModel = ProductHttpService.convertToProductModel(resProd);
           productModel.additionalCategories = res;
           return productModel;
-        })
+        });
       }
     });
     return from(promise);
   }
 
 
-  mapToObject(map: Map<any,any>) {
+  mapToObject(map: Map<any, any>) {
     const obj = {};
-    map.forEach ((v,k) => { obj[k] = v });
+    map.forEach((v, k) => {
+      obj[k] = v;
+    });
     return obj;
   }
 
   private getAdditionalCategoryRelations(additionalCategories: string[]): any {
     const CategoryParse = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
     let productsParse = [];
-    additionalCategories.forEach(value=>{
-      productsParse.push(new CategoryParse({id: value}))
+    additionalCategories.forEach(value => {
+      productsParse.push(new CategoryParse({id: value}));
     });
     return productsParse;
   }

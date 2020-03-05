@@ -15,9 +15,10 @@ export class CategoryModel {
   private _metaDescription: string;
   private _pathParam: string;
   private _count: number;
+  private _pageTitle: string;
 
   constructor(id: string, title: string, description: string, imageUrl: string, metaDescription: string, pathParam: string,
-              order?: number, $items?: Observable<ProductModel[]>, items?: ProductModel[], count?: number) {
+              pageTitle: string, order?: number, $items?: Observable<ProductModel[]>, items?: ProductModel[], count?: number) {
     this._id = id;
     this._title = title;
     this._description = description;
@@ -28,6 +29,7 @@ export class CategoryModel {
     this._metaDescription = metaDescription;
     this._pathParam = pathParam;
     this._count = count;
+    this._pageTitle = pageTitle;
   }
 
   get id(): string {
@@ -88,5 +90,13 @@ export class CategoryModel {
 
   set count(value: number) {
     this._count = value;
+  }
+
+  get pageTitle(): string {
+    return this._pageTitle;
+  }
+
+  set pageTitle(value: string) {
+    this._pageTitle = value;
   }
 }

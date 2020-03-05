@@ -9,6 +9,7 @@ import {LocationDateService} from '../../shared/services/location-date.service';
 import {OwlOptions} from 'ngx-owl-carousel-o';
 import {SettingsService} from '../../shared/services/settings.service';
 import {SettingsModel} from '../../shared/model/settings.model';
+import {Meta, Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home-page',
@@ -17,6 +18,8 @@ import {SettingsModel} from '../../shared/model/settings.model';
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
+              private titleService: Title,
+              private metaService: Meta,
               private locationDateService: LocationDateService,
               private categoryService: CategoryService,
               private productService: ProductService,
@@ -140,6 +143,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private initSettings() {
     this.settingsService.getSettings().subscribe(res=>{
       this.settings = res;
+      this.titleService.setTitle(this.settings.title);
+      this.metaService.addTag({ name: 'description', content: this.settings.homePageMetaDescription });
       this.initImage();
       let i = 1;
       while (this.settings['imageUrl'+i]){

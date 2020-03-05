@@ -21,7 +21,8 @@ var AdditionalCategoryComponent = /** @class */ (function () {
             data: {
                 category: new AdditionCategoryModel(null, null, false)
             },
-            width: '80%'
+            width: '80%',
+            height: '95%'
         });
         dialogRef.afterClosed().subscribe(function (data) {
             if (data && data.category) {

@@ -290,6 +290,23 @@
             <textarea formControlName="metaDescription" type="text" id="metaDescription" name="metaDescription" value=""
                    class="form-control"></textarea>
           </div>
+          <div class=" col col_one_third">
+            <label for="pageTitle">Page Title:</label>
+            <input formControlName="pageTitle" type="text" id="pageTitle" name="pageTitle" value=""
+                      class="form-control"/>
+          </div>
+        </div>
+        <div class="row clearfix">
+          <div class=" col col_one_fourth">
+            <mat-form-field>
+              <mat-label>Related Rentals</mat-label>
+              <mat-select formControlName="relation" (valueChange)="selectRelatedItems($event)" [multiple] = "true">
+                <mat-option *ngFor="let productModel of products" [value]="productModel.id">
+                   {{productModel.title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
 
         <div class="col_full nobottommargin">

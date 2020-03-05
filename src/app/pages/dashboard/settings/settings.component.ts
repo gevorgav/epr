@@ -23,7 +23,8 @@ export class SettingsComponent implements OnInit {
   @ViewChild('input3') inputRef3: ElementRef;
 
   constructor(private settingsService: SettingsService,
-              private uploadService: UploadService) { }
+              private uploadService: UploadService) {
+  }
 
   ngOnInit() {
     this.getSettings();
@@ -32,30 +33,31 @@ export class SettingsComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-          let settings = new SettingsModel(
-            null,
-            this.form.get('title').value,
-            this.form.get('imageUrl1').value,
-            this.form.get('imageUrl2').value,
-            this.form.get('imageUrl3').value
-          );
-      this.settingsService.updateSettings(settings).subscribe(res=>{
-        if (res){
+      let settings = new SettingsModel(
+        null,
+        this.form.get('title').value,
+        this.form.get('homePageMetaDescription').value,
+        this.form.get('imageUrl1').value,
+        this.form.get('imageUrl2').value,
+        this.form.get('imageUrl3').value
+      );
+      this.settingsService.updateSettings(settings).subscribe(res => {
+        if (res) {
           this.saveSuccess = true;
-          setTimeout(()=> this.saveSuccess = false, 3000);
+          setTimeout(() => this.saveSuccess = false, 3000);
         }
-      })
+      });
     } else {
-      this.markFormGroupTouched(this.form)
+      this.markFormGroupTouched(this.form);
     }
   }
 
-  public onFileUpload(event: any, imageNumber: string){
+  public onFileUpload(event: any, imageNumber: string) {
     this.fileMaxSizeErrorMessage = '';
     this.uploadFile(event, this.form.get('imageUrl' + imageNumber));
   }
 
-  public uploadFile(event:any, control: AbstractControl){
+  public uploadFile(event: any, control: AbstractControl) {
     if (event.target.files.length > 0) {
       this.uploadService.uploadFile(event.target.files[0])
         .subscribe(
@@ -72,7 +74,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    (<any>Object).values(formGroup.controls).forEach(control => {
+    (<any> Object).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
       if (control.controls) {
         this.markFormGroupTouched(control);
@@ -80,8 +82,8 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  deleteImage(imageIndex: number){
-    this.form.get('imageUrl'+imageIndex).setValue('');
+  deleteImage(imageIndex: number) {
+    this.form.get('imageUrl' + imageIndex).setValue('');
   }
 
 
@@ -100,11 +102,11 @@ export class SettingsComponent implements OnInit {
   }
 
   private getSettings() {
-    this.settingsService.getSettings().subscribe(res=>{
+    this.settingsService.getSettings().subscribe(res => {
       this.settings = res;
       this.initForm();
       this.isReady = true;
-    })
+    });
   }
 
   private initForm() {
@@ -112,15 +114,10 @@ export class SettingsComponent implements OnInit {
       title: this.formBuilder.control(this.settings.title, [
         Validators.required
       ]),
-      imageUrl1: this.formBuilder.control(this.settings.imageUrl1 || '', [
-
-      ]),
-      imageUrl2: this.formBuilder.control(this.settings.imageUrl2 || '', [
-
-      ]),
-      imageUrl3: this.formBuilder.control(this.settings.imageUrl3 || '', [
-
-      ]),
-    })
+      homePageMetaDescription: this.formBuilder.control(this.settings.homePageMetaDescription, []),
+      imageUrl1: this.formBuilder.control(this.settings.imageUrl1 || '', []),
+      imageUrl2: this.formBuilder.control(this.settings.imageUrl2 || '', []),
+      imageUrl3: this.formBuilder.control(this.settings.imageUrl3 || '', []),
+    });
   }
 }

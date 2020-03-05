@@ -18,7 +18,7 @@ var CategoryPopupComponent = /** @class */ (function () {
     CategoryPopupComponent.prototype.submit = function () {
         if (this.form.valid) {
             this.dialogRef.close({
-                category: new CategoryModel(this.category.id, this.form.get('title').value, this.form.get('description').value, this.form.get('imageUrl').value, this.form.get('metaDescription').value, null)
+                category: new CategoryModel(this.category.id, this.form.get('title').value, this.form.get('description').value, this.form.get('imageUrl').value, this.form.get('metaDescription').value, null, this.form.get('pageTitle').value)
             });
         }
         else {
@@ -64,6 +64,8 @@ var CategoryPopupComponent = /** @class */ (function () {
             ]),
             description: this.formBuilder.control(this.category.description, []),
             imageUrl: this.formBuilder.control(this.category.imageUrl || '', []),
+            metaDescription: this.formBuilder.control(this.category.metaDescription, []),
+            pageTitle: this.formBuilder.control(this.category.pageTitle, [])
         });
     };
     tslib_1.__decorate([

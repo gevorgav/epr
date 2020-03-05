@@ -13,16 +13,13 @@ import {ParseService} from './shared/services/parse.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  title = 'app';
-
 
   constructor(private router: Router,
               private parseService: ParseService,
               private activatedRoute: ActivatedRoute,
               private locationService: LocationDateService,
               private orderService: OrderService,
-              private initializerService: InitializerService,
-              private titleService: Title) {
+              private initializerService: InitializerService) {
   }
 
   public isReady: boolean = false;
@@ -50,22 +47,22 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private setTitles() {
-    this.router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.activatedRoute),
-      map((route) => {
-        while (route.firstChild) route = route.firstChild;
-        return route;
-      }),
-      map((route) => {
-        while (route.firstChild) route = route.firstChild;
-        return route;
-      }),
-      filter((route) => route.outlet === 'primary'),
-      mergeMap((route) => route.data)
-    )
-    .subscribe((event) => this.titleService.setTitle(event['title']));
+    // this.router.events
+    // .pipe(
+    //   filter(event => event instanceof NavigationEnd),
+    //   map(() => this.activatedRoute),
+    //   map((route) => {
+    //     while (route.firstChild) route = route.firstChild;
+    //     return route;
+    //   }),
+    //   map((route) => {
+    //     while (route.firstChild) route = route.firstChild;
+    //     return route;
+    //   }),
+    //   filter((route) => route.outlet === 'primary'),
+    //   mergeMap((route) => route.data)
+    // )
+    // .subscribe((event) => this.titleService.setTitle(event['title']));
   }
 
   private init() {

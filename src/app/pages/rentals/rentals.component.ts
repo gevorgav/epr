@@ -90,7 +90,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
 
     this.categoryService.getCategoriesByPathParamWithDependency(pathParam).subscribe(res=>{
       this.activeCategory = res;
-      this.titleService.setTitle(res.description);
+      this.titleService.setTitle(res.pageTitle? res.pageTitle: res.title);
       this.metaService.addTag({ name: 'description', content: res.metaDescription });
     });
   }

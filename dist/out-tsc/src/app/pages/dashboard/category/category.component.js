@@ -19,7 +19,7 @@ var CategoryComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(CategoryPopupComponent, {
             data: {
-                category: new CategoryModel(null, null, null, null, null, null)
+                category: new CategoryModel(null, null, null, null, null, null, null)
             },
             width: '80%'
         });
@@ -38,7 +38,8 @@ var CategoryComponent = /** @class */ (function () {
             data: {
                 category: category
             },
-            width: '80%'
+            width: '80%',
+            height: '95%'
         });
         dialogRef.afterClosed().subscribe(function (data) {
             if (data && data.category) {

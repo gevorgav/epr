@@ -46,9 +46,9 @@ var CategoryHttpService = /** @class */ (function (_super) {
     };
     CategoryHttpService.convertToCategoryModel = function (item, products) {
         if (products) {
-            return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order'], products);
+            return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order'], products);
         }
-        return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order']);
+        return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order']);
     };
     CategoryHttpService.prototype.getCategoryItems = function (categoryId) {
         var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
@@ -57,6 +57,17 @@ var CategoryHttpService = /** @class */ (function (_super) {
             return res.relation('products').query().find().then(function (res) {
                 return CategoryHttpService_1.forOne(res);
             });
+        });
+        return from(promise);
+    };
+    CategoryHttpService.prototype.getCategoriesByPathParamWithDependency = function (pathParam) {
+        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        var query = new this.parseService.parse.Query(category);
+        var promise = query.equalTo('pathParam', pathParam).first().then(function (res) {
+            var products$ = [];
+            return res.relation('products').query().each(function (product) {
+                products$.push(CategoryHttpService_1.parseObjectToProductModel(product));
+            }).then(function (res1) { return new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'], res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['pageTitle'], res.attributes['order'], null, products$); });
         });
         return from(promise);
     };
@@ -85,7 +96,7 @@ var CategoryHttpService = /** @class */ (function (_super) {
         })); }));
     };
     CategoryHttpService.parseObjectToProductModel = function (parseObject) {
-        return new ProductModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'], parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'], parseObject.attributes['pathParam'], parseObject.attributes['description'], parseObject.attributes['rentalTerms'], parseObject.attributes['spaceRequired'], parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null, parseObject.attributes['instructions'], parseObject.attributes['video'], parseObject.attributes['safetyRules'], parseObject.attributes['minTime'], parseObject.attributes['minPrice'], parseObject.attributes['nightPrice'], parseObject.attributes['count'], [], parseObject.attributes['metaDescription']);
+        return new ProductModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'], parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'], parseObject.attributes['pathParam'], parseObject.attributes['description'], parseObject.attributes['rentalTerms'], parseObject.attributes['spaceRequired'], parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null, parseObject.attributes['instructions'], parseObject.attributes['video'], parseObject.attributes['safetyRules'], parseObject.attributes['minTime'], parseObject.attributes['minPrice'], parseObject.attributes['nightPrice'], parseObject.attributes['count'], [], parseObject.attributes['metaDescription'], parseObject.attributes['pageTitle'], parseObject.attributes['relation']);
     };
     CategoryHttpService.forOne = function (parseObject) {
         var items = [];
@@ -140,10 +151,16 @@ var CategoryHttpService = /** @class */ (function (_super) {
         }
         return from(promise);
     };
+    CategoryHttpService.pathParamFromName = function (name) {
+        return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
+    };
     CategoryHttpService.prototype.setFields = function (category, model) {
         category.set('title', model.title);
         category.set('description', model.description);
         category.set('imageUrl', model.imageUrl);
+        category.set('metaDescription', model.metaDescription);
+        category.set('pathParam', CategoryHttpService_1.pathParamFromName(model.title));
+        category.set('pageTitle', model.pageTitle);
     };
     var CategoryHttpService_1;
     CategoryHttpService.CATEGORY = 'Category';

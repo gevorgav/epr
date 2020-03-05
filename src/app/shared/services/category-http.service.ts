@@ -46,10 +46,10 @@ export class CategoryHttpService extends CategoryService {
   static convertToCategoryModel(item: any, products?: Observable<ProductModel[]>): CategoryModel {
     if (products) {
       return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'],
-        item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order'], products);
+        item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order'], products);
     }
     return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'],
-      item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['order']);
+      item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order']);
   }
 
   getCategoryItems(categoryId: string): Observable<Array<ProductModel>> {
@@ -71,7 +71,7 @@ export class CategoryHttpService extends CategoryService {
       return res.relation('products').query().each((product: any) => {
         products$.push(CategoryHttpService.parseObjectToProductModel(product));
       }).then(res1 => new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'],
-        res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['order'], null, products$));
+        res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['pageTitle'], res.attributes['order'], null, products$));
     });
     return from(promise);
   }
@@ -131,7 +131,9 @@ export class CategoryHttpService extends CategoryService {
       parseObject.attributes['nightPrice'],
       parseObject.attributes['count'],
       [],
-      parseObject.attributes['metaDescription']
+      parseObject.attributes['metaDescription'],
+      parseObject.attributes['pageTitle'],
+      parseObject.attributes['relation']
     );
   }
 
@@ -201,5 +203,6 @@ export class CategoryHttpService extends CategoryService {
     category.set('imageUrl', model.imageUrl);
     category.set('metaDescription', model.metaDescription);
     category.set('pathParam', CategoryHttpService.pathParamFromName(model.title));
+    category.set('pageTitle', model.pageTitle);
   }
 }

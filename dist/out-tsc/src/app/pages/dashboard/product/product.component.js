@@ -37,7 +37,8 @@ var ProductComponent = /** @class */ (function () {
             var dialogRef = _this.dialog.open(ProductPopupComponent, {
                 data: {
                     product: product,
-                    category: category
+                    category: category,
+                    products: _this.products
                 },
                 width: '80%',
                 height: '95%'
@@ -57,7 +58,8 @@ var ProductComponent = /** @class */ (function () {
         var _this = this;
         var dialogRef = this.dialog.open(ProductPopupComponent, {
             data: {
-                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+                product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null),
+                products: this.products
             },
             width: '80%',
             height: '95%'

@@ -26,7 +26,7 @@ export class CategoryComponent implements OnInit {
   addCategory() {
     let dialogRef = this.dialog.open(CategoryPopupComponent, {
       data: {
-        category: new CategoryModel(null, null, null, null, null, null)
+        category: new CategoryModel(null, null, null, null, null, null, null)
       },
       width: '80%'
     });

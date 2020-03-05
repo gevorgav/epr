@@ -22,6 +22,7 @@ var ProductPopupComponent = /** @class */ (function () {
         this.fileMaxSizeErrorMessage = '';
         this.compareFn = this.compare;
         this.product = this.data.product;
+        this.products = this.data.products;
     }
     Object.defineProperty(ProductPopupComponent.prototype, "categoryId", {
         get: function () {
@@ -39,7 +40,7 @@ var ProductPopupComponent = /** @class */ (function () {
     ProductPopupComponent.prototype.onSubmit = function () {
         if (this.form.valid) {
             this.dialogRef.close({
-                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.getSetupPolicy(), this.form.get('instructions').value, this.form.get('video').value, this.form.get('safetyRules').value, this.form.get('minTime').value, this.form.get('minPrice').value, this.form.get('nightPrice').value, this.form.get('count').value, this.form.get('additionalCategories').value, this.form.get('metaDescription').value),
+                product: new ProductModel(this.product.id, this.form.get('title').value, this.form.get('price').value, this.form.get('images').value, this.form.get('isNew').value, this.form.get('isHotDeal').value, this.form.get('itemSize').value, null, this.form.get('description').value, this.form.get('rentalTerms').value, this.form.get('spaceRequired').value, this.getSetupPolicy(), this.form.get('instructions').value, this.form.get('video').value, this.form.get('safetyRules').value, this.form.get('minTime').value, this.form.get('minPrice').value, this.form.get('nightPrice').value, this.form.get('count').value, this.form.get('additionalCategories').value, this.form.get('metaDescription').value, this.form.get('pageTitle').value, this.selectedRelationProducts),
                 newCategoryId: this.form.get('category').value,
                 oldCategoryId: this.categoryId
             });
@@ -121,7 +122,9 @@ var ProductPopupComponent = /** @class */ (function () {
                 Validators.required,
                 Validators.min(1)
             ]),
-            additionalCategories: this.formBuilder.control(this.product.additionalCategories, [])
+            additionalCategories: this.formBuilder.control(this.product.additionalCategories, []),
+            pageTitle: this.formBuilder.control(this.product.pageTitle, []),
+            relation: this.formBuilder.control(this.product.relation, [])
         }, { validators: setupPolicyUniqueKeyValidator });
     };
     ProductPopupComponent.prototype.initSafetyRules = function () {
@@ -130,6 +133,9 @@ var ProductPopupComponent = /** @class */ (function () {
             _this.setupPolicyKeys.push(key);
             _this.setupPolicyValues.push(value);
         });
+    };
+    ProductPopupComponent.prototype.selectRelatedItems = function (item) {
+        this.selectedRelationProducts = item;
     };
     ProductPopupComponent.prototype.initSetupPolicyKeys = function () {
         var _this = this;

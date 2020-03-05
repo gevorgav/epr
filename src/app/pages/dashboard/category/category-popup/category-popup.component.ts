@@ -37,7 +37,8 @@ export class CategoryPopupComponent implements OnInit {
             this.form.get('description').value,
             this.form.get('imageUrl').value,
             this.form.get('metaDescription').value,
-            null
+            null,
+            this.form.get('pageTitle').value,
           )
         }
       );
@@ -97,6 +98,9 @@ export class CategoryPopupComponent implements OnInit {
 
       ]),
       metaDescription: this.formBuilder.control(this.category.metaDescription, [
+
+      ]),
+      pageTitle: this.formBuilder.control(this.category.pageTitle, [
 
       ])
     })

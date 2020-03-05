@@ -18,6 +18,8 @@ import {AdditionCategoryModel} from '../../../../shared/model/addition-category.
 export class ProductPopupComponent implements OnInit {
 
   product: ProductModel;
+  products: ProductModel[];
+  selectedRelationProducts: string[];
   categories: CategoryModel[];
   additionalCategories: AdditionCategoryModel[];
 
@@ -40,6 +42,7 @@ export class ProductPopupComponent implements OnInit {
               private categoryService: CategoryService,
               private additionalCategoryService: AdditionCategoryService) {
     this.product = this.data.product;
+    this.products = this.data.products;
   }
 
   ngOnInit() {
@@ -73,7 +76,9 @@ export class ProductPopupComponent implements OnInit {
           this.form.get('nightPrice').value,
           this.form.get('count').value,
           this.form.get('additionalCategories').value,
-          this.form.get('metaDescription').value
+          this.form.get('metaDescription').value,
+          this.form.get('pageTitle').value,
+          this.selectedRelationProducts
         ),
         newCategoryId: this.form.get('category').value,
         oldCategoryId: this.categoryId
@@ -187,6 +192,12 @@ export class ProductPopupComponent implements OnInit {
       ]),
       additionalCategories: this.formBuilder.control(this.product.additionalCategories,[
 
+      ]),
+      pageTitle: this.formBuilder.control(this.product.pageTitle, [
+
+      ]),
+      relation: this.formBuilder.control(this.product.relation, [
+
       ])
     }, {validators: setupPolicyUniqueKeyValidator})
   }
@@ -196,7 +207,10 @@ export class ProductPopupComponent implements OnInit {
       this.setupPolicyKeys.push(key);
       this.setupPolicyValues.push(value)
     });
+  }
 
+  selectRelatedItems(item: any){
+    this.selectedRelationProducts = item;
   }
 
   private initSetupPolicyKeys() {

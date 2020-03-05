@@ -22,7 +22,8 @@ var AdditionalComponent = /** @class */ (function () {
             data: {
                 item: new AdditionModel(null, null, null)
             },
-            width: '80%'
+            width: '80%',
+            height: '95%'
         });
         dialogRef.afterClosed().subscribe(function (data) {
             if (data && data.item) {

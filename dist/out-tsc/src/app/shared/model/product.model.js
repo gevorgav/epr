@@ -5,7 +5,7 @@ import * as tslib_1 from "tslib";
 import { ProductViewModel } from './product-view.model';
 var ProductModel = /** @class */ (function (_super) {
     tslib_1.__extends(ProductModel, _super);
-    function ProductModel(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count, additionalCategories, metaDescription) {
+    function ProductModel(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count, additionalCategories, metaDescription, pageTitle, relation) {
         var _this = _super.call(this, id, title, price, images, isNew, isHotDeal, itemSize, pathParam) || this;
         _this._description = description;
         _this._rentalTerms = rentalTerms;
@@ -20,6 +20,8 @@ var ProductModel = /** @class */ (function (_super) {
         _this._count = count;
         _this._additionalCategories = additionalCategories;
         _this._metaDescription = metaDescription;
+        _this._pageTitle = pageTitle;
+        _this._relation = relation;
         return _this;
     }
     Object.defineProperty(ProductModel.prototype, "description", {
@@ -125,6 +127,26 @@ var ProductModel = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._metaDescription = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ProductModel.prototype, "pageTitle", {
+        get: function () {
+            return this._pageTitle;
+        },
+        set: function (value) {
+            this._pageTitle = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ProductModel.prototype, "relation", {
+        get: function () {
+            return this._relation;
+        },
+        set: function (value) {
+            this._relation = value;
         },
         enumerable: true,
         configurable: true

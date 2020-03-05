@@ -18,11 +18,13 @@ export class ProductModel extends ProductViewModel {
   private _calculatedPrice: number;
   private _additionalCategories: string [];
   private _metaDescription: string;
+  private _pageTitle: string;
+  private _relation: string[];
 
   constructor(id: string, title: string, price: number, images: Array<string>, isNew: boolean, isHotDeal: boolean, itemSize: string,
               pathParam: string, description: string, rentalTerms: string, spaceRequired: string, setupPolicy: Map<string, string>,
               instructions: string, video: string, safetyRules: string, minTime: number, minPrice: number, nightPrice: number, count: number,
-              additionalCategories: string[], metaDescription: string) {
+              additionalCategories: string[], metaDescription: string, pageTitle: string, relation: string[]) {
     super(id, title, price, images, isNew, isHotDeal, itemSize, pathParam);
     this._description = description;
     this._rentalTerms = rentalTerms;
@@ -37,6 +39,8 @@ export class ProductModel extends ProductViewModel {
     this._count = count;
     this._additionalCategories = additionalCategories;
     this._metaDescription = metaDescription;
+    this._pageTitle = pageTitle;
+    this._relation = relation;
   }
 
   get description(): string {
@@ -105,5 +109,21 @@ export class ProductModel extends ProductViewModel {
 
   set metaDescription(value: string) {
     this._metaDescription = value;
+  }
+
+  get pageTitle(): string {
+    return this._pageTitle;
+  }
+
+  set pageTitle(value: string) {
+    this._pageTitle = value;
+  }
+
+  get relation(): string[] {
+    return this._relation;
+  }
+
+  set relation(value: string[]) {
+    this._relation = value;
   }
 }

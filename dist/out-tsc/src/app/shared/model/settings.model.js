@@ -1,10 +1,11 @@
 var SettingsModel = /** @class */ (function () {
-    function SettingsModel(id, title, imageUrl1, imageUrl2, imageUrl3) {
+    function SettingsModel(id, title, homePageMetaDescription, imageUrl1, imageUrl2, imageUrl3) {
         this._id = id;
         this._title = title;
         this._imageUrl1 = imageUrl1;
         this._imageUrl2 = imageUrl2;
         this._imageUrl3 = imageUrl3;
+        this._homePageMetaDescription = homePageMetaDescription;
     }
     Object.defineProperty(SettingsModel.prototype, "id", {
         get: function () {
@@ -52,6 +53,16 @@ var SettingsModel = /** @class */ (function () {
         },
         set: function (value) {
             this._imageUrl3 = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SettingsModel.prototype, "homePageMetaDescription", {
+        get: function () {
+            return this._homePageMetaDescription;
+        },
+        set: function (value) {
+            this._homePageMetaDescription = value;
         },
         enumerable: true,
         configurable: true
