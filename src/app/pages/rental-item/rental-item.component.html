@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a [routerLink]="['']">Home</a></li>
       <li class="breadcrumb-item"><a [routerLink]="['/rentals']">Rentals</a></li>
-      <li class="breadcrumb-item" *ngIf="itemCategory"><a [routerLink]="['/rentals', itemCategory.id]">{{itemCategory.title}}</a></li>
+      <li class="breadcrumb-item" *ngIf="itemCategory"><a [routerLink]="['/rentals', itemCategory.pathParam]">{{itemCategory.title}}</a></li>
     </ol>
   </div>
 </section><!-- #page-title end -->

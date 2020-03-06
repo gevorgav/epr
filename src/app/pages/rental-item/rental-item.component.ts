@@ -16,8 +16,9 @@ import {OrderItemModel} from '../../shared/model/order-item.model';
 import {InitializerService} from '../../shared/services/initializer.service';
 import {AdditionCategoryModel} from '../../shared/model/addition-category.model';
 import {AdditionCategoryService} from '../../shared/services/addition-category.service';
-import {zip} from 'rxjs';
+import {Observable, zip} from 'rxjs';
 import {AdditionModel} from '../../shared/model/addition.model';
+import {forEach} from '@angular/router/src/utils/collection';
 declare var $: any;
 
 @Component({
@@ -117,10 +118,11 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         this.metaService.addTag({ name: 'description', content: res.metaDescription });
         this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
           this.itemCategory = res;
-          this.categoryService.getCategoryItems(res.id).subscribe((res: ProductModel[]) => {
-            this.relatedProducts = res.filter(product => product.id !== this.selectedProduct.id);
-          });
         });
+        if (this.selectedProduct.relation && this.selectedProduct.relation.length > 0){
+          this.initRelatedProducts();
+        }
+
         this.initGallery();
       });
   }
@@ -254,5 +256,15 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         this.selectedAdditions.get(category.id).push(item) :
         this.selectedAdditions.set(category.id, this.selectedAdditions.get(category.id).filter(value => value.id != item.id))
       :this.selectedAdditions.set(category.id, [item]);
+  }
+
+  private initRelatedProducts() {
+    let relatedProducts$: Observable<ProductModel>[] = [];
+    this.selectedProduct.relation.forEach(value => {
+      relatedProducts$.push(this.productService.getProduct(value));
+    });
+    zip(...relatedProducts$).subscribe(res=>{
+      this.relatedProducts.push(...res);
+    });
   }
 }
