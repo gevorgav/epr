@@ -23,12 +23,14 @@ const templateA = fs
   .readFileSync(path.join("dist/browser", "index.html"))
   .toString();
 const win = domino.createWindow(templateA);
+const window = domino.createWindow(templateA);
 
 app.use(compression());
 
 global['document'] = win.document;
 global['KeyboardEvent'] = null;
 global['Event'] = null;
+global['window'] = window;
 
 const PORT = process.env.PORT || 4200;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');

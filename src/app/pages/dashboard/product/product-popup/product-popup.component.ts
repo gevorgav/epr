@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild, PLATFORM_ID} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ProductModel} from "../../../../shared/model/product.model";
 import {FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
@@ -9,7 +9,7 @@ import {handleError} from '../../../../shared/util/error-handler';
 import {UploadService} from "../../../../shared/services/upload.service";
 import {AdditionCategoryService} from '../../../../shared/services/addition-category.service';
 import {AdditionCategoryModel} from '../../../../shared/model/addition-category.model';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-product-popup',
@@ -24,7 +24,7 @@ export class ProductPopupComponent implements OnInit {
   categories: CategoryModel[];
   additionalCategories: AdditionCategoryModel[];
 
-  public Editor = ClassicEditor;
+  public Editor ;
   public form: FormGroup;
   formBuilder: FormBuilder = new FormBuilder();
 
@@ -33,16 +33,25 @@ export class ProductPopupComponent implements OnInit {
   setupPolicyKeys: string[] = [];
   setupPolicyValues: string[] = [];
   fileMaxSizeErrorMessage: string = '';
+  public isBrowser: boolean = false;
+
   get categoryId() {
     return this.data.category ? this.data.category.id : ''
   }
 
   constructor(public dialogRef: MatDialogRef<ProductPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
+              @Inject(PLATFORM_ID) private platformId: Object,
               private parseService: ParseService,
               private uploadService: UploadService,
               private categoryService: CategoryService,
-              private additionalCategoryService: AdditionCategoryService) {
+              private additionalCategoryService: AdditionCategoryService,
+              ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    if (this.isBrowser) {
+      const ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
+      this.Editor = ClassicEditor;
+    }
     this.product = this.data.product;
     this.products = this.data.products;
   }

@@ -75,10 +75,10 @@
 
         <div class="row clearfix">
           <div class=" col col_full">
-            <label for="description">Description:</label>
+            <label>Description:</label>
 <!--            <textarea formControlName="description" id="description" name="description" value=""-->
 <!--                      class="form-control"></textarea>-->
-            <ckeditor [editor]="Editor" formControlName="description" ></ckeditor>
+            <ckeditor *ngIf="isBrowser" [editor]="Editor" formControlName="description" ></ckeditor>
           </div>
         </div>
 
