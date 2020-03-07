@@ -76,8 +76,9 @@
         <div class="row clearfix">
           <div class=" col col_full">
             <label for="description">Description:</label>
-            <textarea formControlName="description" id="description" name="description" value=""
-                      class="form-control"></textarea>
+<!--            <textarea formControlName="description" id="description" name="description" value=""-->
+<!--                      class="form-control"></textarea>-->
+            <ckeditor [editor]="Editor" formControlName="description" ></ckeditor>
           </div>
         </div>
 

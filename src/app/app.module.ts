@@ -69,6 +69,10 @@ const appRoutes: Routes = [
     loadChildren: './pages/contact-info/contact-info.module#ContactInfoModule',
   },
   {
+    path: 'search/:searchText',
+    loadChildren: './pages/search/search.module#SearchModule',
+  },
+  {
     path: 'delivery-chart',
     component: DeliveryChartComponent
   },

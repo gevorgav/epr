@@ -53,8 +53,18 @@
                     ============================================= -->
         <div class="top-links">
           <ul>
-            <li class="d-md-none d-lg-block"><a routerLink=""><i class="icon-call"></i> +1 626 766 4440</a></li>
-            <li *ngIf="isLogin()" routerLinkActive="current"><a routerLink="#" class="side-panel-trigger">{{getCurrentUser()}}</a></li>
+            <li class="d-md-none d-lg-block">
+              <form>
+                <mat-form-field class="margin-top">
+                  <mat-label>Search</mat-label>
+                  <input matInput placeholder="Ex. Photo Booth" [(ngModel)]="searchText" name="search" (keydown.enter)="search()" >
+                  <button mat-button matSuffix mat-icon-button type="button" aria-label="Search" (click)="search()">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </mat-form-field>
+              </form>
+            </li>
+            <li *ngIf="isLogin()" routerLinkActive="current"><a class="side-panel-trigger">{{getCurrentUser()}}</a></li>
             <li *ngIf="isLogin()"><a href="#" (click)="logout()" data-lightbox="inline" class="header-login-trigger"><mat-icon>input</mat-icon></a></li>
             <li *ngIf="!isLogin()" routerLinkActive="current"><a routerLink="login" class="side-panel-trigger">Login/Register</a>
             </li>

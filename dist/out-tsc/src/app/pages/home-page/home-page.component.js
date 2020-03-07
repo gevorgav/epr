@@ -7,9 +7,12 @@ import { map } from 'rxjs/operators';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { SettingsService } from '../../shared/services/settings.service';
 import { SettingsModel } from '../../shared/model/settings.model';
+import { Meta, Title } from '@angular/platform-browser';
 var HomePageComponent = /** @class */ (function () {
-    function HomePageComponent(router, locationDateService, categoryService, productService, settingsService) {
+    function HomePageComponent(router, titleService, metaService, locationDateService, categoryService, productService, settingsService) {
         this.router = router;
+        this.titleService = titleService;
+        this.metaService = metaService;
         this.locationDateService = locationDateService;
         this.categoryService = categoryService;
         this.productService = productService;
@@ -111,6 +114,8 @@ var HomePageComponent = /** @class */ (function () {
         var _this = this;
         this.settingsService.getSettings().subscribe(function (res) {
             _this.settings = res;
+            _this.titleService.setTitle(_this.settings.title);
+            _this.metaService.addTag({ name: 'description', content: _this.settings.homePageMetaDescription });
             _this.initImage();
             var i = 1;
             while (_this.settings['imageUrl' + i]) {
@@ -137,6 +142,8 @@ var HomePageComponent = /** @class */ (function () {
             styleUrls: ['./home-page.component.css']
         }),
         tslib_1.__metadata("design:paramtypes", [Router,
+            Title,
+            Meta,
             LocationDateService,
             CategoryService,
             ProductService,

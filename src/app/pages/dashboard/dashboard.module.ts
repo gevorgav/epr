@@ -20,6 +20,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../mat/material.module';
 import {MatDatepickerModule} from '@angular/material';
 import {CommonModule} from '@angular/common';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
 const dashboardRoutes: Routes = [
   {
@@ -67,6 +68,7 @@ const dashboardRoutes: Routes = [
     CommonModule,
     MaterialModule,
     MatDatepickerModule,
+    CKEditorModule
   ],
   providers: [],
   entryComponents: [

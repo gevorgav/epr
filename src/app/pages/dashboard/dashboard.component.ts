@@ -30,7 +30,13 @@ export class DashboardComponent implements OnInit {
   }
 
   selectTab(item: DashboardItem): void {
+    this.setFalse();
+    item.isActive = true;
     this.router.navigateByUrl('dashboard/'+item.routerLink);
+  }
+
+  private setFalse() {
+    this.items.forEach(value => value.isActive = false)
   }
 }
 

@@ -21,7 +21,12 @@ var DashboardComponent = /** @class */ (function () {
         this.selectTab(this.items[0]);
     };
     DashboardComponent.prototype.selectTab = function (item) {
+        this.setFalse();
+        item.isActive = true;
         this.router.navigateByUrl('dashboard/' + item.routerLink);
+    };
+    DashboardComponent.prototype.setFalse = function () {
+        this.items.forEach(function (value) { return value.isActive = false; });
     };
     DashboardComponent = tslib_1.__decorate([
         Component({

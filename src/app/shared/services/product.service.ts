@@ -16,4 +16,5 @@ export abstract class ProductService {
   abstract getSimilarProducts(id: number): Observable<Array<ProductViewModel>>;
   abstract getProductQuestions(id: number): Observable<Array<QuestionAnswerModel>>;
   abstract getBestDealProducts(count: number): Observable<Array<ProductViewModel>>;
+  abstract getProductsByName(name: string): Observable<ProductModel[]>;
 }

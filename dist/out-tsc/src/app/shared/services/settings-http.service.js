@@ -18,7 +18,7 @@ var SettingsHttpService = /** @class */ (function () {
         return from(promise);
     };
     SettingsHttpService.convertSettingsToSettingsModel = function (item) {
-        return new SettingsModel(item.id, item.attributes['homePageTitle'], item.attributes['imageUrl1'], item.attributes['imageUrl2'], item.attributes['imageUrl3']);
+        return new SettingsModel(item.id, item.attributes['homePageTitle'], item.attributes['homePageMetaDescription'], item.attributes['imageUrl1'], item.attributes['imageUrl2'], item.attributes['imageUrl3']);
     };
     SettingsHttpService.prototype.updateSettings = function (settings) {
         var SettingsParse = this.parseService.parse.Object.extend(SettingsHttpService_1.SETTINGS_MODEL);
@@ -32,12 +32,13 @@ var SettingsHttpService = /** @class */ (function () {
     };
     SettingsHttpService.setFieldsForSettings = function (settingsParse, model) {
         settingsParse.set('homePageTitle', model.title);
+        settingsParse.set('homePageMetaDescription', model.homePageMetaDescription);
         settingsParse.set('imageUrl1', model.imageUrl1);
         settingsParse.set('imageUrl2', model.imageUrl2);
         settingsParse.set('imageUrl3', model.imageUrl3);
     };
     var SettingsHttpService_1;
-    SettingsHttpService.SETTINGS_MODEL = "Settings";
+    SettingsHttpService.SETTINGS_MODEL = 'Settings';
     SettingsHttpService = SettingsHttpService_1 = tslib_1.__decorate([
         Injectable(),
         tslib_1.__metadata("design:paramtypes", [ParseService])

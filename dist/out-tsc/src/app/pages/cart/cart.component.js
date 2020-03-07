@@ -22,10 +22,41 @@ var CartComponent = /** @class */ (function () {
         this.checkoutService = checkoutService;
         this.shippingService = shippingService;
         this.initializerService = initializerService;
+        this.stairs = [
+            {
+                name: 'None',
+                value: 0
+            },
+            {
+                name: '1-5 ($5)',
+                value: 5
+            },
+            {
+                name: '6-10 ($10)',
+                value: 10
+            },
+            {
+                name: '11-15($15)',
+                value: 15
+            },
+            {
+                name: '16-20($20)',
+                value: 20
+            },
+            {
+                name: '21-30($30)',
+                value: 30
+            },
+            {
+                name: '30+ ($40)',
+                value: 40
+            },
+        ];
         this._productsInCart = [];
         this._minimalTotal = 89;
         this._minimalDeliver = 35;
         this.orderData = new Map();
+        this.selectedStair = 0;
     }
     CartComponent.prototype.ngOnInit = function () {
         this.initOrderDataSelectedProducts();
@@ -119,9 +150,9 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.getTotalPrice = function () {
         var subTotal = this.getSubtotalPrice() + this.shippingPrice;
         if (subTotal < this._minimalTotal) {
-            return subTotal + this._minimalDeliver;
+            return subTotal + this._minimalDeliver + this.selectedStair;
         }
-        return subTotal;
+        return subTotal + this.selectedStair;
     };
     CartComponent.prototype.getSubtotalPrice = function () {
         var subtotal = 0;
@@ -159,12 +190,15 @@ var CartComponent = /** @class */ (function () {
     CartComponent.prototype.onSubmitShippingForm = function () {
         var _this = this;
         if (this.shippingInformationForm.valid) {
-            var shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(), this.initializerService.orderModel.orderItems);
+            var shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(), this.initializerService.orderModel.orderItems, this.getStairName());
             this.shippingService.saveShipping(shippingModel).subscribe(function (res) {
                 CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
                     "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
                 _this.redirect();
             });
+        }
+        else {
+            this.markFormGroupTouched(this.shippingInformationForm);
         }
     };
     CartComponent.prototype.initShippingForm = function () {
@@ -179,6 +213,9 @@ var CartComponent = /** @class */ (function () {
                 Validators.required
             ]),
             'email': new FormControl('', [
+                Validators.required
+            ]),
+            'stairs': new FormControl('', [
                 Validators.required
             ]),
             'instruction': new FormControl('', [])
@@ -197,6 +234,26 @@ var CartComponent = /** @class */ (function () {
             productCount.push({ productId: key, count: value.count, name: "" });
         });
         return productCount;
+    };
+    CartComponent.prototype.markFormGroupTouched = function (formGroup) {
+        var _this = this;
+        Object.values(formGroup.controls).forEach(function (control) {
+            control.markAsTouched();
+            if (control.controls) {
+                _this.markFormGroupTouched(control);
+            }
+        });
+    };
+    CartComponent.prototype.stairsChange = function ($event) {
+        this.selectedStair = Number($event.target.value);
+    };
+    CartComponent.prototype.getStairName = function () {
+        for (var _i = 0, _a = this.stairs; _i < _a.length; _i++) {
+            var stair = _a[_i];
+            if (stair.value == this.selectedStair)
+                return stair.name;
+        }
+        throw new Error();
     };
     CartComponent = tslib_1.__decorate([
         Component({

@@ -18,11 +18,12 @@ export class ShippingInfoModel {
   private _payed: number;
   private _productCount: ProductCount[];
   private _email: string;
+  private _stairs: string;
   private _orderItems: OrderItemModel[];
 
   constructor(id:string, name: string, street: string, phone: string, email: string, specialInstructions: string, zipCode: string,
               products: ProductIdName[], isPayed: boolean, isShipped: boolean, user: any, createdAt: Date, startDate: Date, endDate: Date,
-              payed: number, productCount: ProductCount[], orderItems: OrderItemModel[]) {
+              payed: number, productCount: ProductCount[], orderItems: OrderItemModel[], stairs: string) {
     this._name = name;
     this._street = street;
     this._phone = phone;
@@ -40,6 +41,7 @@ export class ShippingInfoModel {
     this._productCount = productCount;
     this._email = email;
     this._orderItems = orderItems;
+    this._stairs = stairs;
   }
 
   get id(): string {
@@ -176,6 +178,14 @@ export class ShippingInfoModel {
 
   set orderItems(value: OrderItemModel[]) {
     this._orderItems = value;
+  }
+
+  get stairs(): string {
+    return this._stairs;
+  }
+
+  set stairs(value: string) {
+    this._stairs = value;
   }
 }
 

@@ -267,4 +267,5 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       this.relatedProducts.push(...res);
     });
   }
+
 }

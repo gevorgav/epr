@@ -29,6 +29,8 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/platform-server": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "@ckeditor/ckeditor5-angular": "^1.2.2",
+    "@ckeditor/ckeditor5-build-classic": "^17.0.0",
     "@nguniversal/express-engine": "^7.1.1",
     "@nguniversal/module-map-ngfactory-loader": "0.0.0",
     "@types/luxon": "^1.21.0",

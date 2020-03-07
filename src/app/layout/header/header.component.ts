@@ -18,6 +18,8 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   public categories : CategoryModel[] = [];
 
+  public searchText: string;
+
   @Input() fixHeader: boolean = false;
 
   @Input() top: boolean = false;
@@ -92,5 +94,9 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   toggleMenu() {
     this.toggle = !!!this.toggle;
+  }
+
+  search() {
+    this.router.navigate(["search", this.searchText]);
   }
 }

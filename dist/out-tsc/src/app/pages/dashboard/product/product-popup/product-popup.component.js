@@ -8,6 +8,7 @@ import { CategoryService } from '../../../../shared/services/category.service';
 import { handleError } from '../../../../shared/util/error-handler';
 import { UploadService } from "../../../../shared/services/upload.service";
 import { AdditionCategoryService } from '../../../../shared/services/addition-category.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 var ProductPopupComponent = /** @class */ (function () {
     function ProductPopupComponent(dialogRef, data, parseService, uploadService, categoryService, additionalCategoryService) {
         this.dialogRef = dialogRef;
@@ -16,6 +17,7 @@ var ProductPopupComponent = /** @class */ (function () {
         this.uploadService = uploadService;
         this.categoryService = categoryService;
         this.additionalCategoryService = additionalCategoryService;
+        this.Editor = ClassicEditor;
         this.formBuilder = new FormBuilder();
         this.setupPolicyKeys = [];
         this.setupPolicyValues = [];

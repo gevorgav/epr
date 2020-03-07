@@ -40,6 +40,7 @@ var ShippingHttpService = /** @class */ (function () {
             parseShippingInfo.set('payed', shipping.payed);
             parseShippingInfo.relation('products').add(_this.getRelatedParseObjects(shipping.products.map(function (value) { return value.id; }), ShippingHttpService_1.PRODUCT));
             parseShippingInfo.relation('orderItems').add(_this.getRelatedParseObjects(shipping.orderItems.map(function (value) { return value.id; }), OrderService.ORDER_ITEM));
+            parseShippingInfo.set('stairs', shipping.stairs);
             return parseShippingInfo.save().then(function (res) {
                 return res;
             });
@@ -111,7 +112,7 @@ var ShippingHttpService = /** @class */ (function () {
         return from(promise);
     };
     ShippingHttpService.convertToShippingInfoModel = function (item) {
-        return new ShippingInfoModel(item.id, item.attributes['name'], item.attributes['streetAddress'], item.attributes['phone'], item.attributes['email'], item.attributes['specialInstructions'], '', [], item.attributes['isPayed'], item.attributes['isShipped'], item.attributes['user'] ? item.attributes['user']['attributes']['name'] : '', item.attributes['createdAt'], item.attributes['startDate'], item.attributes['endDate'], item.attributes['payed'], item.attributes['productCount'], []);
+        return new ShippingInfoModel(item.id, item.attributes['name'], item.attributes['streetAddress'], item.attributes['phone'], item.attributes['email'], item.attributes['specialInstructions'], '', [], item.attributes['isPayed'], item.attributes['isShipped'], item.attributes['user'] ? item.attributes['user']['attributes']['name'] : '', item.attributes['createdAt'], item.attributes['startDate'], item.attributes['endDate'], item.attributes['payed'], item.attributes['productCount'], [], item.attributes['stairs']);
     };
     ShippingHttpService.prototype.deleteShippingInformation = function (id) {
         return null;

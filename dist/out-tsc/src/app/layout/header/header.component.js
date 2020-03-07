@@ -75,6 +75,9 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.toggleMenu = function () {
         this.toggle = !!!this.toggle;
     };
+    HeaderComponent.prototype.search = function () {
+        this.router.navigate(["search", this.searchText]);
+    };
     tslib_1.__decorate([
         Input(),
         tslib_1.__metadata("design:type", Boolean)

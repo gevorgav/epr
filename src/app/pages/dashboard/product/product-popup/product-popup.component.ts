@@ -9,6 +9,7 @@ import {handleError} from '../../../../shared/util/error-handler';
 import {UploadService} from "../../../../shared/services/upload.service";
 import {AdditionCategoryService} from '../../../../shared/services/addition-category.service';
 import {AdditionCategoryModel} from '../../../../shared/model/addition-category.model';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-product-popup',
@@ -23,6 +24,7 @@ export class ProductPopupComponent implements OnInit {
   categories: CategoryModel[];
   additionalCategories: AdditionCategoryModel[];
 
+  public Editor = ClassicEditor;
   public form: FormGroup;
   formBuilder: FormBuilder = new FormBuilder();
 

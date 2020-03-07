@@ -13,6 +13,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 import {zip} from 'rxjs';
+import {ParseArgumentException} from '@angular/cli/models/parser';
 
 @Component({
   selector: 'app-cart',
@@ -20,6 +21,37 @@ import {zip} from 'rxjs';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+
+  public stairs = [
+    {
+      name: 'None',
+      value: 0
+    },
+    {
+      name: '1-5 ($5)',
+      value: 5
+    },
+    {
+      name: '6-10 ($10)',
+      value: 10
+    },
+    {
+      name: '11-15($15)',
+      value: 15
+    },
+    {
+      name: '16-20($20)',
+      value: 20
+    },
+    {
+      name: '21-30($30)',
+      value: 30
+    },
+    {
+      name: '30+ ($40)',
+      value: 40
+    },
+  ];
 
   private _productsInCart : ProductModel[] = [];
 
@@ -32,6 +64,8 @@ export class CartComponent implements OnInit {
   public orderData = new Map<string, ProductInCartCalculation>();
 
   public shippingInformationForm: FormGroup;
+  public selectedStair: number = 0;
+  enableCheckout: boolean = true;
 
   constructor(private orderService: OrderService,
               private locationService: LocationDateService,
@@ -140,9 +174,9 @@ export class CartComponent implements OnInit {
   getTotalPrice() {
     let subTotal = this.getSubtotalPrice() + this.shippingPrice;
     if (subTotal < this._minimalTotal){
-      return subTotal + this._minimalDeliver;
+      return subTotal + this._minimalDeliver + this.selectedStair;
     }
-    return subTotal;
+    return subTotal + this.selectedStair;
   }
 
   getSubtotalPrice() {
@@ -168,6 +202,10 @@ export class CartComponent implements OnInit {
   }
 
   checkout() {
+    this.enableCheckout = false;
+    setTimeout(()=>{
+      this.enableCheckout = true;
+    }, 3000);
     document.getElementById("shipping-submit").click();
   }
 
@@ -190,12 +228,14 @@ export class CartComponent implements OnInit {
         this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
         this.parseService.isAuth()? this.parseService.getCurrentUser(): null, null,
         this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(),
-        this.initializerService.orderModel.orderItems);
+        this.initializerService.orderModel.orderItems, this.getStairName());
       this.shippingService.saveShipping(shippingModel).subscribe(res=>{
         CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
           "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
         this.redirect();
       });
+    }else {
+      this.markFormGroupTouched(this.shippingInformationForm);
     }
   }
 
@@ -211,6 +251,9 @@ export class CartComponent implements OnInit {
         Validators.required
       ]),
       'email': new FormControl('',[
+        Validators.required
+      ]),
+      'stairs': new FormControl('',[
         Validators.required
       ]),
       'instruction': new FormControl('',[
@@ -233,6 +276,28 @@ export class CartComponent implements OnInit {
       productCount.push({productId: key, count: value.count, name: ""})
     });
     return productCount;
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    (<any> Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
+  stairsChange($event: any) {
+    this.selectedStair = Number($event.target.value);
+    this.setNewPrices();
+  }
+
+  private getStairName(): string {
+    for (let stair of this.stairs){
+      if (stair.value == this.selectedStair)
+        return stair.name;
+    }
+    throw new Error();
   }
 }
 

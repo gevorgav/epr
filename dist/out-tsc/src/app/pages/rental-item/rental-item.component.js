@@ -100,10 +100,10 @@ var RentalItemComponent = /** @class */ (function () {
             _this.metaService.addTag({ name: 'description', content: res.metaDescription });
             _this.categoryService.getCategoryByProductId(_this.selectedProduct.id).subscribe(function (res) {
                 _this.itemCategory = res;
-                _this.categoryService.getCategoryItems(res.id).subscribe(function (res) {
-                    _this.relatedProducts = res.filter(function (product) { return product.id !== _this.selectedProduct.id; });
-                });
             });
+            if (_this.selectedProduct.relation && _this.selectedProduct.relation.length > 0) {
+                _this.initRelatedProducts();
+            }
             _this.initGallery();
         });
     };
@@ -226,6 +226,17 @@ var RentalItemComponent = /** @class */ (function () {
                 this.selectedAdditions.get(category.id).push(item) :
                 this.selectedAdditions.set(category.id, this.selectedAdditions.get(category.id).filter(function (value) { return value.id != item.id; }))
             : this.selectedAdditions.set(category.id, [item]);
+    };
+    RentalItemComponent.prototype.initRelatedProducts = function () {
+        var _this = this;
+        var relatedProducts$ = [];
+        this.selectedProduct.relation.forEach(function (value) {
+            relatedProducts$.push(_this.productService.getProduct(value));
+        });
+        zip.apply(void 0, relatedProducts$).subscribe(function (res) {
+            var _a;
+            (_a = _this.relatedProducts).push.apply(_a, res);
+        });
     };
     RentalItemComponent = tslib_1.__decorate([
         Component({

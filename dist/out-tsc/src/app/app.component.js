@@ -1,22 +1,18 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocationDateService } from './shared/services/location-date.service';
 import { OrderService } from './shared/services/order.service';
 import { InitializerService } from './shared/services/initializer.service';
 import { ParseService } from './shared/services/parse.service';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, parseService, activatedRoute, locationService, orderService, initializerService, titleService) {
+    function AppComponent(router, parseService, activatedRoute, locationService, orderService, initializerService) {
         this.router = router;
         this.parseService = parseService;
         this.activatedRoute = activatedRoute;
         this.locationService = locationService;
         this.orderService = orderService;
         this.initializerService = initializerService;
-        this.titleService = titleService;
-        this.title = 'app';
         this.isReady = false;
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -39,18 +35,22 @@ var AppComponent = /** @class */ (function () {
         // document.body.appendChild(script);
     };
     AppComponent.prototype.setTitles = function () {
-        var _this = this;
-        this.router.events
-            .pipe(filter(function (event) { return event instanceof NavigationEnd; }), map(function () { return _this.activatedRoute; }), map(function (route) {
-            while (route.firstChild)
-                route = route.firstChild;
-            return route;
-        }), map(function (route) {
-            while (route.firstChild)
-                route = route.firstChild;
-            return route;
-        }), filter(function (route) { return route.outlet === 'primary'; }), mergeMap(function (route) { return route.data; }))
-            .subscribe(function (event) { return _this.titleService.setTitle(event['title']); });
+        // this.router.events
+        // .pipe(
+        //   filter(event => event instanceof NavigationEnd),
+        //   map(() => this.activatedRoute),
+        //   map((route) => {
+        //     while (route.firstChild) route = route.firstChild;
+        //     return route;
+        //   }),
+        //   map((route) => {
+        //     while (route.firstChild) route = route.firstChild;
+        //     return route;
+        //   }),
+        //   filter((route) => route.outlet === 'primary'),
+        //   mergeMap((route) => route.data)
+        // )
+        // .subscribe((event) => this.titleService.setTitle(event['title']));
     };
     AppComponent.prototype.init = function () {
         // zip(this.categoryService.getCategories(),this.deliveryService.getDeliveryLocationsFromCash()).subscribe(res=>{
@@ -68,8 +68,7 @@ var AppComponent = /** @class */ (function () {
             ActivatedRoute,
             LocationDateService,
             OrderService,
-            InitializerService,
-            Title])
+            InitializerService])
     ], AppComponent);
     return AppComponent;
 }());

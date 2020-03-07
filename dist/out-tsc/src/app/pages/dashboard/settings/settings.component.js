@@ -19,7 +19,7 @@ var SettingsComponent = /** @class */ (function () {
     SettingsComponent.prototype.submit = function () {
         var _this = this;
         if (this.form.valid) {
-            var settings = new SettingsModel(null, this.form.get('title').value, this.form.get('imageUrl1').value, this.form.get('imageUrl2').value, this.form.get('imageUrl3').value);
+            var settings = new SettingsModel(null, this.form.get('title').value, this.form.get('homePageMetaDescription').value, this.form.get('imageUrl1').value, this.form.get('imageUrl2').value, this.form.get('imageUrl3').value);
             this.settingsService.updateSettings(settings).subscribe(function (res) {
                 if (res) {
                     _this.saveSuccess = true;
@@ -86,6 +86,7 @@ var SettingsComponent = /** @class */ (function () {
             title: this.formBuilder.control(this.settings.title, [
                 Validators.required
             ]),
+            homePageMetaDescription: this.formBuilder.control(this.settings.homePageMetaDescription, []),
             imageUrl1: this.formBuilder.control(this.settings.imageUrl1 || '', []),
             imageUrl2: this.formBuilder.control(this.settings.imageUrl2 || '', []),
             imageUrl3: this.formBuilder.control(this.settings.imageUrl3 || '', []),

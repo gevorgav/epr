@@ -7,6 +7,7 @@ import {from, Observable} from 'rxjs';
 import {ParseService} from './parse.service';
 import {CategoryHttpService} from './category-http.service';
 import {AdditionCategoryHttp} from './addition-category-http.service';
+import {OrderService} from './order.service';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -253,5 +254,16 @@ export class ProductHttpService extends ProductService {
       productsParse.push(new CategoryParse({id: value}));
     });
     return productsParse;
+  }
+
+  getProductsByName(name: string): Observable<ProductModel[]> {
+    let productQuery = new this.parseService.parse.Query(ProductHttpService.PRODUCT);
+    let products: ProductModel [] = [];
+    let promise = productQuery.contains('title', name).each(res => {
+        products.push(ProductHttpService.convertToProductModel(res));
+    }).then(res=>{
+      return products;
+    });
+    return from(promise);
   }
 }

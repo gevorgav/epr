@@ -51,6 +51,7 @@ export class ShippingHttpService {
       parseShippingInfo.relation('orderItems').add(
         this.getRelatedParseObjects(shipping.orderItems.map(value => value.id), OrderService.ORDER_ITEM)
       );
+      parseShippingInfo.set('stairs', shipping.stairs);
       return parseShippingInfo.save().then(res=>{
         return res;
       });
@@ -146,7 +147,8 @@ export class ShippingHttpService {
       item.attributes['endDate'],
       item.attributes['payed'],
       item.attributes['productCount'],
-      []
+      [],
+      item.attributes['stairs']
     );
   }
 

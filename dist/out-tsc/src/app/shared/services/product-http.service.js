@@ -205,6 +205,16 @@ var ProductHttpService = /** @class */ (function (_super) {
         });
         return productsParse;
     };
+    ProductHttpService.prototype.getProductsByName = function (name) {
+        var productQuery = new this.parseService.parse.Query(ProductHttpService_1.PRODUCT);
+        var products = [];
+        var promise = productQuery.contains('title', name).each(function (res) {
+            products.push(ProductHttpService_1.convertToProductModel(res));
+        }).then(function (res) {
+            return products;
+        });
+        return from(promise);
+    };
     var ProductHttpService_1;
     ProductHttpService.PRODUCT = 'Product';
     ProductHttpService = ProductHttpService_1 = tslib_1.__decorate([

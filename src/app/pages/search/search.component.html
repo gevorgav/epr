@@ -1,0 +1,40 @@
+<section id="page-title">
+
+  <div class="container clearfix">
+    <h1>Search Results: "{{searchText}}"</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/home">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/rentals">Rentals</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{searchText}}</li>
+    </ol>
+  </div>
+
+</section><!-- #page-title end -->
+<section id="content">
+  <div class="content-wrap">
+    <div class="container clearfix">
+      <div id="shop" class="shop product-3 grid-container clearfix">
+
+        <div *ngFor="let product of products" class="product sf-tshirt clearfix">
+          <div class="product-image">
+            <a style="height: 230px !important;" [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img
+              src="{{product.images[0]}}" alt="{{product.title}}"></a>
+            <a style="height: 230px !important;" [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[1]"><img
+              src="{{product.images[1]}}" alt="{{product.title}}"></a>
+            <div class="sale-flash" *ngIf="product.isHotDeal"> Hot Deal</div>
+            <div class="sale-flash" *ngIf="product.isNew">New</div>
+          </div>
+          <div class="product-desc center">
+            <div class="product-title"><h3 style="white-space: nowrap;overflow: hidden;">
+              <a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a></h3></div>
+<!--            <div class="product-price" *ngIf="isSpecified() | async">-->
+              <!--<del>$45.99</del>-->
+<!--              <ins>${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}</ins>-->
+<!--            </div>-->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
