@@ -47,11 +47,19 @@ export class HeaderComponent implements OnInit , AfterViewInit{
   }
 
   getCartCount(){
-    return this.initializerService.orderModel.orderItems.length;
+    if (this.getOrderModel()){
+      return this.initializerService.orderModel.orderItems.length;
+    }
   }
 
   showCart(){
-    return !!this.initializerService.orderModel.orderItems
+    if (this.getOrderModel()){
+      return !!this.initializerService.orderModel.orderItems
+    }
+  }
+
+  getOrderModel(){
+    return this.initializerService.orderModel;
   }
 
   ngAfterViewInit(): void {}

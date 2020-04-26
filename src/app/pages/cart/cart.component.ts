@@ -78,9 +78,12 @@ export class CartComponent implements OnInit {
               private initializerService: InitializerService) { }
 
   ngOnInit() {
-    this.initOrderDataSelectedProducts();
-    this.initShippingForm();
-
+    this.initializerService.initialized.subscribe(res=>{
+      if (res){
+        this.initOrderDataSelectedProducts();
+        this.initShippingForm();
+      }
+    })
   }
 
   get productsInCart(): ProductModel[] {

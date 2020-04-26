@@ -194,7 +194,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   public productInCart(): boolean {
-    if (this.initializerService.orderModel.orderItems) {
+    if (this.initializerService.orderModel && this.initializerService.orderModel.orderItems) {
       for (let item of this.initializerService.orderModel.orderItems) {
         if (this.selectedProduct.id === item.productId) {
           return true;

@@ -22,14 +22,10 @@ export class AppComponent implements OnInit, AfterViewInit {
               private initializerService: InitializerService) {
   }
 
-  public isReady: boolean = false;
-
   ngOnInit(): void {
     this.setTitles();
     this.init();
-    this.initializerService.initialize().subscribe(res=>{
-      this.isReady = res;
-    });
+    this.initializerService.initialize().subscribe();
     // this.shippingService.loadShippings().subscribe(res=>{
     //   console.log(res);
     // })
