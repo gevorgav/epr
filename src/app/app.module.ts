@@ -48,6 +48,8 @@ import {AdditionCategoryHttp} from './shared/services/addition-category-http.ser
 import {AdditionCategoryService} from './shared/services/addition-category.service';
 import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
 import {MailService} from './shared/services/mail.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   {
@@ -161,7 +163,8 @@ const appRoutes: Routes = [
     NgxGalleryModule,
     NgxMaterialTimepickerModule,
     MatDatepickerModule,
-    CarouselModule
+    CarouselModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     ParseService,
