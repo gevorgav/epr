@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ContactUsModel} from '../../shared/model/contact-us.model';
 import {MailService} from '../../shared/services/mail.service';
+import {Meta, Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contact-info',
@@ -14,8 +15,18 @@ export class ContactInfoComponent {
   public contactUs: ContactUsModel = new ContactUsModel();
   private recaptcha: boolean = false;
 
-  constructor(private emailService: MailService) {
+  constructor(private emailService: MailService,
+              private titleService: Title,
+              private metaService: Meta) {
     this.initForm();
+    this.titleService.setTitle('CONTACT US | Get in Touch with Us');
+    this.metaService.updateTag({ name: 'description', content: `
+    Headquarters: 600 Glenwood rd C.Glendale
+    California 91202
+    Phone: +1 626 766 4440
+    Fax: +1 626 766 4440
+    Email: entertainmentpartyrentals@gmail.com
+    `});
   }
 
   onSubmitSendEmail() {

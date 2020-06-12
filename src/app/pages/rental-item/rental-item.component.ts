@@ -115,7 +115,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         this.initAdditions(res);
         this.selectedProduct = res;
         this.titleService.setTitle(res.title);
-        this.metaService.addTag({ name: 'description', content: res.metaDescription });
+        if (res.metaDescription || res.description){
+          this.metaService.addTag({ name: 'description', content: res.metaDescription?res.metaDescription: res.description.substring(0, 150) });
+        }
         this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
           this.itemCategory = res;
         });

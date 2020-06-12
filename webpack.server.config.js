@@ -22,6 +22,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
+  externals: [/node_modules/, 'bufferutil', 'utf-8-validate'],
   module: {
     rules: [
       { test: /\.ts$/, loader: 'ts-loader' },
