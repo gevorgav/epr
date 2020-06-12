@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1591988142087,
+  "timestamp": 1591989937608,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -124,6 +124,7 @@
         "/assets/css/styles.css",
         "/assets/css/swiper.css",
         "/assets/facebook.svg",
+        "/assets/icons/favicon.png",
         "/assets/icons/icon-128x128.png",
         "/assets/icons/icon-144x144.png",
         "/assets/icons/icon-152x152.png",
@@ -255,6 +256,7 @@
     "/assets/css/styles.css": "fac337ca49c476e1a1e98f981adb2e5673954542",
     "/assets/css/swiper.css": "bea6ecba283e14a2dec5c73934ebb21427c44ab0",
     "/assets/facebook.svg": "c6d0104642a26c4a426ff5135390e5c456e95488",
+    "/assets/icons/favicon.png": "391325e2c488cb381911a05028eb74600731dfa9",
     "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
     "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
     "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
