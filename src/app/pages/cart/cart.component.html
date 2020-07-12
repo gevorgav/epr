@@ -57,7 +57,7 @@
               <mat-form-field *ngIf="isSpecified() | async" style="width:70px;margin-right: 20px;">
                 <!--<mat-label>Quantity</mat-label>-->
                 <mat-select (valueChange)="countChange($event, product.id)" [(value)]="orderData.get(product.id).count">
-                  <mat-option *ngFor="let count of orderData.get(product.id)?.available" [value]="count">{{count}}</mat-option>
+                  <mat-option *ngFor="let count of orderData.get(product.id)?.available | async" [value]="count">{{count}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </td>
@@ -134,6 +134,20 @@
                 class="alert alert-danger">
                 <div *ngIf="shippingInformationForm.controls['stairs'].errors.required">
                   Stair is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="col_full">
+              <label for="shipping-form-phone">* Set up surface </label>
+              <select id="setUpSurface"  name="setUpSurface" class="form-control" formControlName="setUpSurface" (change)="setUpSurfaceChange($event)">
+                <option [value]="setUpSurface.name" *ngFor="let setUpSurface of setUpSurfaces">{{setUpSurface.name}}</option>
+              </select>
+              <div
+                *ngIf="shippingInformationForm.controls['setUpSurface'].invalid && (shippingInformationForm.controls['setUpSurface'].dirty || shippingInformationForm.controls['setUpSurface'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="shippingInformationForm.controls['setUpSurface'].errors.required">
+                  Set up surface is required.
                 </div>
               </div>
             </div>

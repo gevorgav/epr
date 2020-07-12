@@ -13,7 +13,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 import {zip} from 'rxjs';
-import {ParseArgumentException} from '@angular/cli/models/parser';
+import {flatMap, map, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-cart',
@@ -53,6 +53,27 @@ export class CartComponent implements OnInit {
     },
   ];
 
+  public setUpSurfaces  = [
+    {
+      name: 'Grass'
+    },
+    {
+      name: 'Concrete'
+    },
+    {
+      name: 'Asphalt'
+    },
+    {
+      name: 'Wood Deck'
+    },
+    {
+      name: 'Indoor'
+    },
+    {
+      name: 'Sand**'
+    },
+  ];
+
   private _productsInCart : ProductModel[] = [];
 
   private _minimalTotal: number = 89;
@@ -64,7 +85,11 @@ export class CartComponent implements OnInit {
   public orderData = new Map<string, ProductInCartCalculation>();
 
   public shippingInformationForm: FormGroup;
+
   public selectedStair: number = 0;
+
+  public selectedSetUpSurface: string;
+
   enableCheckout: boolean = true;
 
   constructor(private orderService: OrderService,
@@ -105,16 +130,21 @@ export class CartComponent implements OnInit {
     });
   }
 
-  getQuantities(product: ProductModel): number[] {
-    let quantities = [];
-    if (product && product.count > 0) {
-      let i = 1;
-      while (i <= product.count) {
-        quantities.push(i);
-        i++;
-      }
-    }
-    return quantities;
+  getQuantities(product: ProductModel): Observable<number[]> {
+    return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, 'oRjPMPyo8Y')
+      .pipe(
+        map(res => {
+          let quantities = [];
+          let count = product.count - res;
+          if (count > 0) {
+            let i = 1;
+            while (i <= count) {
+              quantities.push(i);
+              i++;
+            }
+          }
+          return quantities;
+        }))
   }
 
   isSpecified() {
@@ -231,7 +261,7 @@ export class CartComponent implements OnInit {
         this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
         this.parseService.isAuth()? this.parseService.getCurrentUser(): null, null,
         this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(),
-        this.initializerService.orderModel.orderItems, this.getStairName());
+        this.initializerService.orderModel.orderItems, this.getStairName(), this.selectedSetUpSurface);
       this.shippingService.saveShipping(shippingModel).subscribe(res=>{
         CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
           "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
@@ -244,25 +274,26 @@ export class CartComponent implements OnInit {
 
   private initShippingForm() {
     this.shippingInformationForm = new FormGroup({
-      'name': new FormControl('',[
+      'name': new FormControl('', [
         Validators.required
       ]),
-      'address': new FormControl('',[
+      'address': new FormControl('', [
         Validators.required
       ]),
-      'phone': new FormControl('',[
+      'phone': new FormControl('', [
         Validators.required
       ]),
-      'email': new FormControl('',[
+      'email': new FormControl('', [
         Validators.required
       ]),
-      'stairs': new FormControl('',[
+      'stairs': new FormControl('', [
         Validators.required
       ]),
-      'instruction': new FormControl('',[
-
-      ])
-    })
+      'setUpSurface': new FormControl('', [
+        Validators.required
+      ]),
+      'instruction': new FormControl('', [])
+    });
   }
 
   private getProductsIds(productsInCart: ProductModel[]): ProductIdName[] {
@@ -302,10 +333,14 @@ export class CartComponent implements OnInit {
     }
     throw new Error();
   }
+
+  public setUpSurfaceChange($event: any) {
+    this.selectedSetUpSurface = $event.target.value;
+  }
 }
 
 export interface ProductInCartCalculation {
-  available: number[];
+  available: Observable<number[]>;
   count: number;
   price: number;
 }

@@ -30,7 +30,6 @@ export class ParseService {
   
   isAdmin(): Observable<boolean>{
     if (Parse.User.current() && this.parse.User.current().authenticated()){
-      let that = this;
       let queryRole = new Parse.Query(Parse.Role);
       queryRole.equalTo('name', 'admin');
       let promise = queryRole.find().then((res)=>{

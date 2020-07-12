@@ -6,7 +6,8 @@ import {OrderService} from './order.service';
 import {OrderItemModel} from '../model/order-item.model';
 import {AdditionCategoryHttp} from './addition-category-http.service';
 import {AdditionModel} from '../model/addition.model';
-import {from} from 'rxjs';
+import {from, of} from 'rxjs';
+import {ProductCount} from '../../pages/cart/cart.component';
 
 @Injectable({
   providedIn: 'root'
@@ -52,11 +53,11 @@ export class ShippingHttpService {
         this.getRelatedParseObjects(shipping.orderItems.map(value => value.id), OrderService.ORDER_ITEM)
       );
       parseShippingInfo.set('stairs', shipping.stairs);
+      parseShippingInfo.set('setUpSurface', shipping.setUpSurface);
       return parseShippingInfo.save().then(res=>{
         return res;
       });
     });
-
 
     return from(promise);
   }
@@ -82,7 +83,6 @@ export class ShippingHttpService {
     const query = new this.parseService.parse.Query(shippingInfo);
     let promise = query.equalTo('objectId', id)
     .first().catch(res => {
-      // console.log(res);
     }).then(res=>{
       res.set('isShipped', shipped);
       return res.save().then(res => true)
@@ -97,6 +97,24 @@ export class ShippingHttpService {
 
   loadPayed(): Observable<ShippingInfoModel[]>{
     return this.loadShippings({columnName: 'isPayed', value: true});
+  }
+
+  public getInaccessibleCountForProductInDate(startDate: Date, endDate: Date, productId: string): Observable<number>{
+    let isAvailable: number = 0;
+    const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
+    let query1 = new this.parseService.parse.Query(ShippingInfo);
+    let query2 = new this.parseService.parse.Query(ShippingInfo);
+    query2 = query2.lessThanOrEqualTo('startDate', endDate).greaterThanOrEqualTo('endDate', endDate);
+    query1 = query1.lessThanOrEqualTo('startDate', startDate).greaterThanOrEqualTo('endDate', startDate);
+    let query = this.parseService.parse.Query.or(query1, query2).equalTo('isPayed', true);
+    let promise = query.each(item=>{
+      let products: ProductCount[] = item.attributes['productCount'];
+      let result = products.find(value => value.productId == productId);
+      if (result){
+        isAvailable += result.count;
+      }
+    }).then(res=> isAvailable);
+    return from(promise);
   }
 
   private loadShippings(option: Option): Observable<ShippingInfoModel[]>{
@@ -148,7 +166,8 @@ export class ShippingHttpService {
       item.attributes['payed'],
       item.attributes['productCount'],
       [],
-      item.attributes['stairs']
+      item.attributes['stairs'],
+      item.attributes['setUpSurface']
     );
   }
 
