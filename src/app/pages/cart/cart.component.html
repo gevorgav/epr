@@ -65,6 +65,10 @@
             <td class="cart-product-subtotal">
               <span class="amount">${{orderData.get(product.id)?.count * orderData.get(product.id)?.price}}</span>
             </td>
+
+            <td *ngIf="!(orderData.get(product.id)?.available | async)?.length">
+              <span style="color: #ef0000">This product is out of stock for selected dates.</span>
+            </td>
           </tr>
           </tbody>
 

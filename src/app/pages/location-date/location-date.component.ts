@@ -6,7 +6,7 @@ import {DeliveryChartService} from '../../shared/services/delivery-chart.service
 import {OrderService} from '../../shared/services/order.service';
 import * as moment from 'moment';
 import {Observable, of} from 'rxjs';
-import {debounceTime, finalize, flatMap, map, startWith, tap} from 'rxjs/operators';
+import {debounceTime, finalize, first, flatMap, map, startWith, tap} from 'rxjs/operators';
 
 
 @Component({
@@ -65,10 +65,10 @@ export class LocationDateComponent implements OnInit {
             this.locationDateForm.get('startDateTime').value);
           let finalEndDate = LocationDateComponent.getTimeWithDateTime(this.locationDateForm.get('endDate').value,
             this.locationDateForm.get('endDateTime').value);
-          this.getZipCode(this.locationDateForm.get('zipCode').value).subscribe((zipCode: ZipCode) => {
+          this.getZipCode(this.locationDateForm.get('zipCode').value).pipe(first()).subscribe((zipCode: ZipCode) => {
             this.locationDateService.setLocationDate(finalStartDate, finalEndDate, zipCode);
             this.orderService.setOrderDateLocation(finalStartDate, finalEndDate, zipCode);
-            this.locationDateService.setIsSpecified(true);
+            // this.locationDateService.setIsSpecified(true);
             this.emitSubmit.emit(true);
           });
         } else {

@@ -104,8 +104,15 @@ export class ShippingHttpService {
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     let query1 = new this.parseService.parse.Query(ShippingInfo);
     let query2 = new this.parseService.parse.Query(ShippingInfo);
-    query2 = query2.lessThanOrEqualTo('startDate', endDate).greaterThanOrEqualTo('endDate', endDate);
+    let query3 = new this.parseService.parse.Query(ShippingInfo);
+    let query4 = new this.parseService.parse.Query(ShippingInfo);
     query1 = query1.lessThanOrEqualTo('startDate', startDate).greaterThanOrEqualTo('endDate', startDate);
+    query2 = query2.lessThanOrEqualTo('startDate', endDate).greaterThanOrEqualTo('endDate', endDate);
+    // query3 = query3.lessThanOrEqualTo('startDate', startDate).lessThanOrEqualTo('endDate', endDate);
+
+    // query2 = query2.greaterThanOrEqualTo('endDate', startDate);
+    // query3 = query3.lessThanOrEqualTo('startDate', endDate);
+    // query4 = query4.greaterThanOrEqualTo('endDate', endDate);
     let query = this.parseService.parse.Query.or(query1, query2).equalTo('isPayed', true);
     let promise = query.each(item=>{
       let products: ProductCount[] = item.attributes['productCount'];
@@ -230,4 +237,13 @@ export class ShippingHttpService {
 export interface Option {
   columnName: string;
   value: any;
+}
+
+
+function aaa() {
+  for (let i = 0; i < 10; i++) {
+    setTimeout(()=>{
+      console.log(i);
+    },100)
+  }
 }

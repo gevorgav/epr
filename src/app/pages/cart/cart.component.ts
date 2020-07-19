@@ -107,6 +107,14 @@ export class CartComponent implements OnInit {
       if (res){
         this.initOrderDataSelectedProducts();
         this.initShippingForm();
+        this.locationService.isSpecified.subscribe(res=>{
+          if (res) {
+            this.getShippingPrice();
+            if (this._productsInCart && this._productsInCart.length > 0){
+              this.initOrderData();
+            }
+          }
+        })
       }
     })
   }
@@ -131,7 +139,7 @@ export class CartComponent implements OnInit {
   }
 
   getQuantities(product: ProductModel): Observable<number[]> {
-    return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, 'oRjPMPyo8Y')
+    return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, product.id)
       .pipe(
         map(res => {
           let quantities = [];
@@ -142,6 +150,9 @@ export class CartComponent implements OnInit {
               quantities.push(i);
               i++;
             }
+            this.enableCheckout = true;
+          } else {
+            this.enableCheckout = false;
           }
           return quantities;
         }))
@@ -166,11 +177,6 @@ export class CartComponent implements OnInit {
         this.orderData.get(value.productId).price = res;
       })
     });
-    this.locationService.isSpecified.subscribe(res=>{
-      if (res) {
-        this.getShippingPrice();
-      }
-    })
   }
 
   getProductById(id: string): ProductModel{
