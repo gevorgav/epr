@@ -75,12 +75,12 @@
 
             <!-- Product Single - Quantity & Cart Button
 								============================================= -->
-            <form *ngIf="(isSpecified() | async) && getQuantities().length > 0 && !productInCart()" class="cart nobottommargin clearfix">
+            <form *ngIf="(isSpecified() | async) && (quantities | async)?.length > 0 && !productInCart()" class="cart nobottommargin clearfix">
               <div class="line"></div>
               <mat-form-field style="width:100px;margin-right: 20px;" >
                 <mat-label>Quantity</mat-label>
                 <mat-select [(ngModel)]="quantity" name="quantity" required>
-                  <mat-option *ngFor="let item of getQuantities()" [value]="item">
+                  <mat-option *ngFor="let item of quantities | async" [value]="item">
                     {{item}}
                   </mat-option>
                 </mat-select>
@@ -100,7 +100,7 @@
               <button *ngIf="quantity > 0" type="button" class="add-to-cart button nomargin" (click)="addToCart()">Add to cart</button>
             </form><!-- Product Single - Quantity & Cart Button End -->
             <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time quote.</h4>
-            <h4 style="margin-top: 15px" *ngIf="(isSpecified() | async) && getQuantities().length == 0">Product is unavailable for the event date and time selected.</h4>
+            <h4 style="margin-top: 15px" *ngIf="(isSpecified() | async) && (quantities | async)?.length == 0">Product is unavailable for the event date and time selected.</h4>
             <div *ngIf="productInCart()">
               <h4 style="margin-top: 15px" >This product is in your cart!</h4>
               <button type="button" class="button button-3d button-rounded button-yellow button-light" (click)="goToCart()">View cart</button>

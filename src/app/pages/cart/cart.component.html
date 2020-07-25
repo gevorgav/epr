@@ -214,6 +214,7 @@
           </div>
           <button type="button" class="button button-3d button-rounded button-green" (click)="continueShopping()">Continue shopping</button>
           <button *ngIf="isSpecified() && getTotalPrice() > 0 && enableCheckout" id="btnContinue1" type="button" (click)="checkout()" class="button button-3d button-rounded"> Checkout </button>
+          <h6>Please, click CONTINUE on the next page, to complete the payment. It's mandatory for a successful transaction. Thank you in advance!</h6>
         </div>
 
         <div class="col-lg-6 clearfix">

@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1595168548882,
+  "timestamp": 1595680954277,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -14,7 +14,7 @@
         "/es2015-polyfills.e17997aea7f522b8d49d.js",
         "/favicon.ico",
         "/index.html",
-        "/main.a957a4d5a7614ebe8e8e.js",
+        "/main.123289935fff4dcbe24f.js",
         "/polyfills.3a7c8dbb44d0efc887b7.js",
         "/runtime.2156d29ee11c56b4fb31.js",
         "/styles.231cb646f2346451fac4.css"
@@ -286,8 +286,8 @@
     "/fontawesome-webfont.af7ae505a9eed503f8b8.woff2": "d6f48cba7d076fb6f2fd6ba993a75b9dc1ecbf0c",
     "/fontawesome-webfont.b06871f281fee6b241d6.ttf": "13b1eab65a983c7a73bc7997c479d66943f7c6cb",
     "/fontawesome-webfont.fee66e712a8a08eef580.woff": "28b782240b3e76db824e12c02754a9731a167527",
-    "/index.html": "d725e7c0057fe24e8a1441c952b0d33a9f802a98",
-    "/main.a957a4d5a7614ebe8e8e.js": "5fa4c3546f117178cb9530049360322cd58aef89",
+    "/index.html": "4fc9c8a5daae5bcf14346e53fc5645bbc2a350e3",
+    "/main.123289935fff4dcbe24f.js": "dbf28eee226f0c265c9f95eaa80e3f691d71c0db",
     "/owl.video.play.4a37f8008959c75f619b.png": "c0d64356ec2758cb280d183b4829c923e5ff61e5",
     "/polyfills.3a7c8dbb44d0efc887b7.js": "f09536d2f91a44209298dc1542ead932421ceb4a",
     "/runtime.2156d29ee11c56b4fb31.js": "b4732b898d7516c71069ffd09304dcba9dff5be7",

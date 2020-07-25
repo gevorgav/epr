@@ -16,9 +16,11 @@ import {OrderItemModel} from '../../shared/model/order-item.model';
 import {InitializerService} from '../../shared/services/initializer.service';
 import {AdditionCategoryModel} from '../../shared/model/addition-category.model';
 import {AdditionCategoryService} from '../../shared/services/addition-category.service';
-import {Observable, zip} from 'rxjs';
+import {Observable, of, zip} from 'rxjs';
 import {AdditionModel} from '../../shared/model/addition.model';
 import {forEach} from '@angular/router/src/utils/collection';
+import {map} from 'rxjs/operators';
+import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 declare var $: any;
 
 @Component({
@@ -82,6 +84,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   public itemCategory: CategoryModel;
   public quantity: number = 0;
   private title$ = this.route.paramMap;
+  public quantities: Observable<number[]>;
   public additionCategories: AdditionCategoryModel[] = [];
   private selectedAdditions: Map<string, AdditionModel[]> = new Map<string, AdditionModel[]>();
 
@@ -96,6 +99,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private orderService: OrderService,
               private initializerService: InitializerService,
               private parseService: ParseService,
+              private shippingService: ShippingHttpService,
               private additionCategoryService: AdditionCategoryService) {
   }
 
@@ -126,6 +130,9 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         }
 
         this.initGallery();
+        this.locationService.isSpecified.subscribe(specified => {
+          specified? this.quantities = this.getQuantities() : this.quantities = this.getQuantitiesByCount();
+        })
       });
   }
 
@@ -168,7 +175,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
   }
 
-  getQuantities(): number[] {
+  getQuantitiesByCount(): Observable<number[]> {
     let quantities = [];
     if (this.selectedProduct && this.selectedProduct.count > 0) {
       let i = 1;
@@ -177,7 +184,28 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         i++;
       }
     }
-    return quantities;
+    return of(quantities);
+  }
+
+  getQuantities(): Observable<number[]> {
+    return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime,
+      this.locationService.locationDate.endDateTime, this.selectedProduct.id)
+      .pipe(
+        map(res => {
+          let quantities = [];
+          let count = this.selectedProduct.count - res;
+          if (count > 0) {
+            let i = 1;
+            while (i <= count) {
+              quantities.push(i);
+              i++;
+            }
+            // this.enableCheckout = true;
+          } else {
+            // this.enableCheckout = false;
+          }
+          return quantities;
+        }))
   }
 
   addToCart() {
