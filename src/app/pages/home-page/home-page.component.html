@@ -9,22 +9,28 @@
         <div class="tabs advanced-real-estate-tabs nomargin clearfix" style="max-width: 500px;">
 
           <ul class="tab-nav clearfix">
-            <li class="noleftmargin"><a> Instant Price & Availability</a></li>
+            <li class="noleftmargin" (click)="showLocationDate=!showLocationDate">
+              <a *ngIf="!showLocationDate" style="background-color: rgba(0, 0, 0, 0.3);"><mat-icon >notifications_active</mat-icon></a>
+              <a>Price & Availability</a></li>
           </ul>
-          <app-location-date (emitSubmit)="locationDateSubmitted()"></app-location-date>
+          <app-location-date *ngIf="showLocationDate" (emitSubmit)="locationDateSubmitted()"></app-location-date>
         </div>
       </div>
     </div>
     <ng-container *ngIf="sliderReady">
-      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl1"
+      <div class="video-wrap-home fade-slider"><img  style="max-width: 100%;
+    height: 100%;" *ngIf="settings.mobileImageUrl && isMobile" [src]="settings.mobileImageUrl" /></div>
+
+
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl1 && !isMobile"
            [ngStyle]="{'background': 'url('+settings.imageUrl1+') top right no-repeat',
           'background-size': 'cover', 'display':sliderIndex == 1?'block':'none'}">
       </div>
-      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl2"
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl2  && !isMobile"
            [ngStyle]="{'background': 'url('+settings.imageUrl2+') top right no-repeat',
           'background-size': 'cover', 'display':sliderIndex == 2?'block':'none'}">
       </div>
-      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl3"
+      <div class="video-wrap-home fade-slider" *ngIf="settings.imageUrl3  && !isMobile"
            [ngStyle]="{'background': 'url('+settings.imageUrl3+') top right no-repeat',
           'background-size': 'cover', 'display':sliderIndex == 3?'block':'none'}">
       </div>

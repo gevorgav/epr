@@ -64,11 +64,16 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private sliderIndex = 0;
   private maxImages = 0;
   public sliderReady: boolean = false;
+  public showLocationDate: boolean = false;
+  public isMobile: boolean = false;
 
   ngOnInit() {
     this.initCategories();
     this.initProducts();
     this.initSettings();
+    if (window.innerWidth && window.innerWidth < 990) {
+      this.isMobile = true;
+    }
   }
 
   ngAfterViewInit(): void {

@@ -29,7 +29,8 @@ export class SettingsHttpService implements SettingsService {
       item.attributes['homePageMetaDescription'],
       item.attributes['imageUrl1'],
       item.attributes['imageUrl2'],
-      item.attributes['imageUrl3']);
+      item.attributes['imageUrl3'],
+      item.attributes['mobileImageUrl']);
   }
 
   updateSettings(settings: SettingsModel): Observable<any> {
@@ -49,6 +50,7 @@ export class SettingsHttpService implements SettingsService {
     settingsParse.set('imageUrl1', model.imageUrl1);
     settingsParse.set('imageUrl2', model.imageUrl2);
     settingsParse.set('imageUrl3', model.imageUrl3);
+    settingsParse.set('mobileImageUrl', model.mobileImageUrl);
   }
 
 }

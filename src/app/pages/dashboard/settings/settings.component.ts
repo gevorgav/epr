@@ -21,6 +21,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('input1') inputRef1: ElementRef;
   @ViewChild('input2') inputRef2: ElementRef;
   @ViewChild('input3') inputRef3: ElementRef;
+  @ViewChild('input4') inputRef4: ElementRef;
 
   constructor(private settingsService: SettingsService,
               private uploadService: UploadService) {
@@ -39,7 +40,8 @@ export class SettingsComponent implements OnInit {
         this.form.get('homePageMetaDescription').value,
         this.form.get('imageUrl1').value,
         this.form.get('imageUrl2').value,
-        this.form.get('imageUrl3').value
+        this.form.get('imageUrl3').value,
+        this.form.get('mobileImageUrl').value
       );
       this.settingsService.updateSettings(settings).subscribe(res => {
         if (res) {
@@ -54,7 +56,7 @@ export class SettingsComponent implements OnInit {
 
   public onFileUpload(event: any, imageNumber: string) {
     this.fileMaxSizeErrorMessage = '';
-    this.uploadFile(event, this.form.get('imageUrl' + imageNumber));
+    this.uploadFile(event, this.form.get(imageNumber));
   }
 
   public uploadFile(event: any, control: AbstractControl) {
@@ -98,6 +100,9 @@ export class SettingsComponent implements OnInit {
       case 3:
         this.inputRef3.nativeElement.click();
         break;
+      case 4:
+        this.inputRef4.nativeElement.click();
+        break;
     }
   }
 
@@ -118,6 +123,7 @@ export class SettingsComponent implements OnInit {
       imageUrl1: this.formBuilder.control(this.settings.imageUrl1 || '', []),
       imageUrl2: this.formBuilder.control(this.settings.imageUrl2 || '', []),
       imageUrl3: this.formBuilder.control(this.settings.imageUrl3 || '', []),
+      mobileImageUrl: this.formBuilder.control(this.settings.mobileImageUrl || '', [])
     });
   }
 }

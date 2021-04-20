@@ -4,7 +4,6 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {HomePageComponent} from './pages/home-page/home-page.component';
 import {AboutUsComponent} from './pages/about-us/about-us.component';
-import {ContactInfoComponent} from './pages/contact-info/contact-info.component';
 import {DeliveryChartComponent} from './pages/delivery-chart/delivery-chart.component';
 import {FooterComponent} from './layout/footer/footer.component';
 import {HeaderComponent} from './layout/header/header.component';
@@ -50,6 +49,7 @@ import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.compo
 import {MailService} from './shared/services/mail.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import {PrivacyComponent} from "./pages/privacy/privacy.component";
 
 const appRoutes: Routes = [
   {
@@ -65,6 +65,10 @@ const appRoutes: Routes = [
   {
     path: 'about-us',
     component: AboutUsComponent
+  },
+  {
+    path: 'privacy-statement',
+    component: PrivacyComponent
   },
   {
     path: 'contact-info',
@@ -135,6 +139,7 @@ const appRoutes: Routes = [
     AppComponent,
     HomePageComponent,
     AboutUsComponent,
+    PrivacyComponent,
     DeliveryChartComponent,
     HeaderComponent,
     FooterComponent,

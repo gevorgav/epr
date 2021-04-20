@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class=" col col_one_third">
-            <input type="file" (change)="onFileUpload($event, '1')" #input1 style="display: none;">
+            <input type="file" (change)="onFileUpload($event, 'imageUrl1')" #input1 style="display: none;">
             <button color="primary" mat-raised-button (click)="triggerClick(1)"><i class="material-icons left">backup</i>Attach picture</button>
             <button *ngIf="form.get('imageUrl1').value"  mat-raised-button (click)="deleteImage(1)"><i class="material-icons left">delete</i>Delete Picture</button>
           </div>
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class=" col col_one_third">
-            <input type="file" (change)="onFileUpload($event, '2')" #input2 style="display: none;">
+            <input type="file" (change)="onFileUpload($event, 'imageUrl2')" #input2 style="display: none;">
             <button color="primary" mat-raised-button (click)="triggerClick(2)"><i class="material-icons left">backup</i>Attach picture</button>
             <button *ngIf="form.get('imageUrl2').value"  mat-raised-button (click)="deleteImage(2)"><i class="material-icons left">delete</i>Delete Picture</button>
           </div>
@@ -68,12 +68,31 @@
             </div>
           </div>
           <div class=" col col_one_third">
-            <input type="file" (change)="onFileUpload($event, '3')" #input3 style="display: none;">
+            <input type="file" (change)="onFileUpload($event, 'imageUrl3')" #input3 style="display: none;">
             <button color="primary" mat-raised-button (click)="triggerClick(3)"><i class="material-icons left">backup</i>Attach picture</button>
             <button *ngIf="form.get('imageUrl3').value"  mat-raised-button (click)="deleteImage(3)"><i class="material-icons left">delete</i>Delete Picture</button>
           </div>
           <div class="col col_one_third">
             <img [src]="form.get('imageUrl3').value" alt="">
+          </div>
+        </div>
+
+        <div class="col col_full">
+          <h4 style="color: #774F38">Mobile image, Optimal image sizes:   Width: 375 pixels, Height: 730 pixels</h4>
+          <div
+            *ngIf="fileMaxSizeErrorMessage"
+            class="alert alert-danger">
+            <div>
+              {{fileMaxSizeErrorMessage}}
+            </div>
+          </div>
+          <div class=" col col_one_third">
+            <input type="file" (change)="onFileUpload($event, 'mobileImageUrl')" #input4 style="display: none;">
+            <button color="primary" mat-raised-button (click)="triggerClick(4)"><i class="material-icons left">backup</i>Attach picture</button>
+            <button *ngIf="form.get('mobileImageUrl').value"  mat-raised-button (click)="deleteImage(4)"><i class="material-icons left">delete</i>Delete Picture</button>
+          </div>
+          <div class="col col_one_third">
+            <img [src]="form.get('mobileImageUrl').value" alt="">
           </div>
         </div>
 

@@ -16,6 +16,8 @@ export class HeaderComponent implements OnInit , AfterViewInit{
 
   public toggle: boolean;
 
+  public innerWidth: number;
+
   public categories : CategoryModel[] = [];
 
   public searchText: string;
@@ -44,6 +46,9 @@ export class HeaderComponent implements OnInit , AfterViewInit{
         })
       }
     })
+    if (window.innerWidth && window.innerWidth < 990) {
+      this.toggle = false;
+    }
   }
 
   getCartCount(){
