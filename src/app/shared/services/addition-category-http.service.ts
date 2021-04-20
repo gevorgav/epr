@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {AdditionCategoryService} from './addition-category.service';
-import {from, Observable} from 'rxjs';
 import {AdditionModel} from '../model/addition.model';
 import {AdditionCategoryModel} from '../model/addition-category.model';
 import {ParseService} from './parse.service';
@@ -15,93 +14,86 @@ export class AdditionCategoryHttp extends AdditionCategoryService{
     super();
   }
 
-  deleteAddition(additionId: string): Observable<boolean> {
+  deleteAddition(additionId: string): Promise<boolean> {
     const Addition = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
     const query = new this.parseService.parse.Query(Addition);
     query.equalTo("objectId", additionId);
-    const promise = query.first().then((result) =>{
+    return query.first().then((result) => {
       return result.destroy({});
-    });
-    return from(promise);
+    })
   }
 
-  deleteAdditionalCategory(categoryId: string): Observable<boolean> {
+  deleteAdditionalCategory(categoryId: string): Promise<boolean> {
     const Category = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
     const query = new this.parseService.parse.Query(Category);
     query.equalTo('objectId', categoryId);
-    const promise = query.first().then((result) => {
+    return query.first().then((result) => {
       result.relation('additions').query().find().then(items => {
         items.forEach(item => item.destroy());
       });
       return result.destroy({});
     });
-    return from(promise);
   }
 
-  getAdditionById(additionId: string): Observable<AdditionModel> {
+  getAdditionById(additionId: string): Promise<AdditionModel> {
     const Addition = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
     const query = new this.parseService.parse.Query(Addition);
     query.equalTo("objectId", additionId);
-    const promise = query.first().then((result) =>{
+    return query.first().then((result) => {
       return AdditionCategoryHttp.convertToAdditionalModel(result);
     });
-    return from(promise);
   }
 
-  getAdditionCategories(): Observable<AdditionCategoryModel[]> {
+  getAdditionCategories(): Promise<AdditionCategoryModel[]> {
     let category = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
     let query = new this.parseService.parse.Query(category);
-    let promise = query.find().then(res => {
+    return query.find().then(res => {
       let categories = [];
       for (let item of res) {
         categories.push(AdditionCategoryHttp.convertToAdditionalCategoryModel(item));
       }
       return categories;
     });
-    return from(promise);
   }
 
-  getAdditionCategoriesWithAdditions(): Observable<AdditionCategoryModel[]> {
+  getAdditionCategoriesWithAdditions(): Promise<AdditionCategoryModel[]> {
     return undefined;
   }
 
-  getAdditionalCategoryById(categoryId: string): Observable<AdditionCategoryModel> {
+  getAdditionalCategoryById(categoryId: string): Promise<AdditionCategoryModel> {
     let categoryModel: AdditionCategoryModel;
 
     let category = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
     let query = new this.parseService.parse.Query(category);
 
-    let promise = query.equalTo('objectId', categoryId).first().then(res=>{
+    return query.equalTo('objectId', categoryId).first().then(res => {
       categoryModel = AdditionCategoryHttp.convertToAdditionalCategoryModel(res);
       categoryModel.additions = [];
-      return res.relation('additions').query().each(additional=>{
+      return res.relation('additions').query().each(additional => {
         categoryModel.additions.push(AdditionCategoryHttp.convertToAdditionalModel(additional));
-      }).then(additions=>{
+      }).then(additions => {
         return categoryModel
       });
-    }).then(res=> categoryModel);
-
-    return from(promise);
+    }).then(res => categoryModel);
   }
 
-  getAdditionsByCategoryId(categoryId: string): Observable<AdditionModel[]> {
+  getAdditionsByCategoryId(categoryId: string): Promise<AdditionModel[]> {
     return undefined;
   }
 
-  getAllAdditions(): Observable<AdditionModel[]> {
+  getAllAdditions(): Promise<AdditionModel[]> {
     let addition = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
     let query = new this.parseService.parse.Query(addition);
-    let promise = query.find().then(res => {
+    return query.find().then(res => {
       let additions = [];
       for (let item of res) {
         additions.push(AdditionCategoryHttp.convertToAdditionalModel(item));
       }
       return additions;
     });
-    return from(promise);
   }
 
-  saveAddition(additionToSave: AdditionModel, newCategoryId: string, oldCategoryId?: string): Observable<boolean> {
+  saveAddition(additionToSave: AdditionModel, newCategoryId: string, oldCategoryId?: string): Promise<boolean> {
     let Addition = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
     let addition = new Addition();
     this.setFields(addition, additionToSave);
@@ -133,10 +125,10 @@ export class AdditionCategoryHttp extends AdditionCategoryService{
     } else {
       promise = addition.save().then(addition => this.saveCategoryRelatedAddition(addition, newCategoryId));
     }
-    return from(promise);
+    return promise;
   }
 
-  saveAdditionalCategory(model: AdditionCategoryModel): Observable<boolean> {
+  saveAdditionalCategory(model: AdditionCategoryModel): Promise<boolean> {
     let Category = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
     let category = new Category();
     this.setCategoryFields(category, model);
@@ -155,7 +147,7 @@ export class AdditionCategoryHttp extends AdditionCategoryService{
         return category.save();
       });
     }
-    return from(promise);
+    return promise;
   }
 
   private setFields(item: any, model: AdditionModel) {
@@ -190,17 +182,16 @@ export class AdditionCategoryHttp extends AdditionCategoryService{
     });
   }
 
-  getAdditionCategoryByAdditionId(additionalId: string): Observable<AdditionCategoryModel> {
+  getAdditionCategoryByAdditionId(additionalId: string): Promise<AdditionCategoryModel> {
     let productQuery = new this.parseService.parse.Query(AdditionCategoryHttp.ADDITION);
     productQuery.contains('objectId', additionalId);
     let categoryQuery = new this.parseService.parse.Query(AdditionCategoryHttp.CATEGORY);
     categoryQuery.matchesQuery('additions', productQuery);
-    let promise = categoryQuery.first().then(function (list) {
+    return categoryQuery.first().then(function (list) {
       return AdditionCategoryHttp.convertToAdditionalCategoryModel(list);
     }, function (error) {
       console.log(error);
     });
-    return from(promise);
   }
 
 }

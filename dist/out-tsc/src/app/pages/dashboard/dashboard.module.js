@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate } from "tslib";
 import { RouterModule } from '@angular/router';
 import { ShippedRentalsComponent } from './shipped-rentals/shipped-rentals.component';
 import { ShippingComponent } from './shipping/shipping.component';
@@ -22,7 +22,7 @@ import { MaterialModule } from '../../mat/material.module';
 import { MatDatepickerModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-var dashboardRoutes = [
+const dashboardRoutes = [
     {
         path: '', component: DashboardComponent, children: [
             { path: 'shipped', component: ShippedRentalsComponent },
@@ -38,50 +38,47 @@ var dashboardRoutes = [
         ]
     },
 ];
-var DashboardModule = /** @class */ (function () {
-    function DashboardModule() {
-    }
-    DashboardModule = tslib_1.__decorate([
-        NgModule({
-            declarations: [
-                DashboardComponent,
-                SettingsComponent,
-                AdditionalComponent,
-                AdditionalCategoryComponent,
-                AdditionalPopupComponent,
-                AdditionalCategoryPopupComponent,
-                ShippingPopupComponent,
-                CategoryComponent,
-                CategoryPopupComponent,
-                UserComponent,
-                ShippingComponent,
-                ShippedRentalsComponent,
-                ProductComponent,
-                DashboardDeliveryChartComponent,
-                ProductPopupComponent,
-                DeliveryChartPopupComponent,
-            ],
-            imports: [
-                RouterModule.forChild(dashboardRoutes),
-                FormsModule,
-                ReactiveFormsModule,
-                CommonModule,
-                MaterialModule,
-                MatDatepickerModule,
-                CKEditorModule
-            ],
-            providers: [],
-            entryComponents: [
-                ProductPopupComponent,
-                DeliveryChartPopupComponent,
-                CategoryPopupComponent,
-                AdditionalPopupComponent,
-                AdditionalCategoryPopupComponent,
-                ShippingPopupComponent
-            ]
-        })
-    ], DashboardModule);
-    return DashboardModule;
-}());
+let DashboardModule = class DashboardModule {
+};
+DashboardModule = __decorate([
+    NgModule({
+        declarations: [
+            DashboardComponent,
+            SettingsComponent,
+            AdditionalComponent,
+            AdditionalCategoryComponent,
+            AdditionalPopupComponent,
+            AdditionalCategoryPopupComponent,
+            ShippingPopupComponent,
+            CategoryComponent,
+            CategoryPopupComponent,
+            UserComponent,
+            ShippingComponent,
+            ShippedRentalsComponent,
+            ProductComponent,
+            DashboardDeliveryChartComponent,
+            ProductPopupComponent,
+            DeliveryChartPopupComponent,
+        ],
+        imports: [
+            RouterModule.forChild(dashboardRoutes),
+            FormsModule,
+            ReactiveFormsModule,
+            CommonModule,
+            MaterialModule,
+            MatDatepickerModule,
+            CKEditorModule
+        ],
+        providers: [],
+        entryComponents: [
+            ProductPopupComponent,
+            DeliveryChartPopupComponent,
+            CategoryPopupComponent,
+            AdditionalPopupComponent,
+            AdditionalCategoryPopupComponent,
+            ShippingPopupComponent
+        ]
+    })
+], DashboardModule);
 export { DashboardModule };
 //# sourceMappingURL=dashboard.module.js.map

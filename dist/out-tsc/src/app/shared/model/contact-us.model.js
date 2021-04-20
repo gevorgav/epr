@@ -1,7 +1,3 @@
-var ContactUsModel = /** @class */ (function () {
-    function ContactUsModel() {
-    }
-    return ContactUsModel;
-}());
-export { ContactUsModel };
+export class ContactUsModel {
+}
 //# sourceMappingURL=contact-us.model.js.map

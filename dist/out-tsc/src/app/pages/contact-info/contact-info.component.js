@@ -1,30 +1,41 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ContactUsModel } from '../../shared/model/contact-us.model';
 import { MailService } from '../../shared/services/mail.service';
-var ContactInfoComponent = /** @class */ (function () {
-    function ContactInfoComponent(emailService) {
+import { Meta, Title } from '@angular/platform-browser';
+let ContactInfoComponent = class ContactInfoComponent {
+    constructor(emailService, titleService, metaService) {
         this.emailService = emailService;
+        this.titleService = titleService;
+        this.metaService = metaService;
         this.sendEmailErrorMessage = '';
         this.contactUs = new ContactUsModel();
         this.recaptcha = false;
         this.initForm();
+        this.titleService.setTitle('CONTACT US | Get in Touch with Us');
+        this.metaService.updateTag({ name: 'description', content: `
+    Headquarters: 600 Glenwood rd C.Glendale
+    California 91202
+    Phone: +1 626 766 4440
+    Fax: +1 626 766 4440
+    Email: entertainmentpartyrentals@gmail.com
+    ` });
     }
-    ContactInfoComponent.prototype.onSubmitSendEmail = function () {
+    onSubmitSendEmail() {
         if (this.emailForm.valid && this.recaptcha) {
-            var contactUs = new ContactUsModel();
+            let contactUs = new ContactUsModel();
             contactUs.message = this.emailForm.get('message').value;
             contactUs.name = this.emailForm.get('name').value;
             contactUs.phone = this.emailForm.get('phone').value;
             contactUs.subject = this.emailForm.get('subject').value;
             contactUs.email = this.emailForm.get('email').value;
-            this.emailService.sendEmail(contactUs).subscribe(function (res) {
+            this.emailService.sendEmail(contactUs).subscribe(res => {
                 location.reload();
             });
         }
-    };
-    ContactInfoComponent.prototype.initForm = function () {
+    }
+    initForm() {
         this.emailForm = new FormGroup({
             'name': new FormControl(this.contactUs.name, [
                 Validators.required
@@ -44,25 +55,25 @@ var ContactInfoComponent = /** @class */ (function () {
             ]),
             'recaptchaReactive': new FormControl('', []),
         });
-    };
-    ContactInfoComponent.prototype.resolved = function (captchaResponse) {
-        var _this = this;
-        this.emailService.sendToken(captchaResponse).subscribe(function (data) {
-            _this.recaptcha = true;
-        }, function (err) {
-            _this.recaptcha = false;
-            _this.sendEmailErrorMessage = 'Verification failed';
+    }
+    resolved(captchaResponse) {
+        this.emailService.sendToken(captchaResponse).subscribe(data => {
+            this.recaptcha = true;
+        }, err => {
+            this.recaptcha = false;
+            this.sendEmailErrorMessage = 'Verification failed';
         });
-    };
-    ContactInfoComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-contact-info',
-            templateUrl: './contact-info.component.html',
-            styleUrls: ['./contact-info.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [MailService])
-    ], ContactInfoComponent);
-    return ContactInfoComponent;
-}());
+    }
+};
+ContactInfoComponent = __decorate([
+    Component({
+        selector: 'app-contact-info',
+        templateUrl: './contact-info.component.html',
+        styleUrls: ['./contact-info.component.css']
+    }),
+    __metadata("design:paramtypes", [MailService,
+        Title,
+        Meta])
+], ContactInfoComponent);
 export { ContactInfoComponent };
 //# sourceMappingURL=contact-info.component.js.map

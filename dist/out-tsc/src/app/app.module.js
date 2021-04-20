@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate } from "tslib";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -29,7 +29,6 @@ import { MaterialModule } from './mat/material.module';
 import { ProductService } from './shared/services/product.service';
 import { ProductHttpService } from './shared/services/product-http.service';
 import { VerificationComponent } from './pages/verification/verification.component';
-import { NgxGalleryModule } from 'ngx-gallery';
 import { UserService } from './shared/services/user.service';
 import { UserHttpService } from './shared/services/user-http.service';
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -47,7 +46,11 @@ import { AdditionCategoryHttp } from './shared/services/addition-category-http.s
 import { AdditionCategoryService } from './shared/services/addition-category.service';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MailService } from './shared/services/mail.service';
-var appRoutes = [
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { PrivacyComponent } from "./pages/privacy/privacy.component";
+import { NgxGalleryModule } from "@kolkov/ngx-gallery";
+const appRoutes = [
     {
         path: '',
         component: HomePageComponent,
@@ -63,12 +66,16 @@ var appRoutes = [
         component: AboutUsComponent
     },
     {
+        path: 'privacy-statement',
+        component: PrivacyComponent
+    },
+    {
         path: 'contact-info',
-        loadChildren: './pages/contact-info/contact-info.module#ContactInfoModule',
+        loadChildren: () => import('./pages/contact-info/contact-info.module').then(m => m.ContactInfoModule),
     },
     {
         path: 'search/:searchText',
-        loadChildren: './pages/search/search.module#SearchModule',
+        loadChildren: () => import('./pages/search/search.module').then(m => m.SearchModule),
     },
     {
         path: 'delivery-chart',
@@ -84,7 +91,7 @@ var appRoutes = [
     },
     {
         path: 'dashboard',
-        loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]
     },
     {
@@ -125,67 +132,66 @@ var appRoutes = [
         pathMatch: 'full'
     }
 ];
-var AppModule = /** @class */ (function () {
-    function AppModule() {
-    }
-    AppModule = tslib_1.__decorate([
-        NgModule({
-            declarations: [
-                AppComponent,
-                HomePageComponent,
-                AboutUsComponent,
-                DeliveryChartComponent,
-                HeaderComponent,
-                FooterComponent,
-                RentalsComponent,
-                RentalItemComponent,
-                CheckoutComponent,
-                LoginPageComponent,
-                LocationDateComponent,
-                PageComponent,
-                CartComponent,
-                VerificationComponent,
-                ResetPasswordComponent,
-                PageNotFoundComponent
-            ],
-            imports: [
-                RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
-                ),
-                BrowserModule.withServerTransition({ appId: 'serverApp' }),
-                FormsModule,
-                ReactiveFormsModule,
-                HttpClientModule,
-                BrowserAnimationsModule,
-                MaterialModule,
-                NgxGalleryModule,
-                NgxMaterialTimepickerModule,
-                MatDatepickerModule,
-                CarouselModule
-            ],
-            providers: [
-                ParseService,
-                LocationDateService,
-                AuthGuard,
-                AuthGuardLoginService,
-                AuthGuardVerificationService,
-                RoutingService,
-                MailService,
-                OrderService,
-                InitializerService,
-                CheckoutService,
-                ShippingHttpService,
-                { provide: DeliveryChartService, useClass: DeliveryChartHttpService },
-                { provide: CategoryService, useClass: CategoryHttpService },
-                { provide: ProductService, useClass: ProductHttpService },
-                { provide: UserService, useClass: UserHttpService },
-                { provide: SettingsService, useClass: SettingsHttpService },
-                { provide: AdditionCategoryService, useClass: AdditionCategoryHttp },
-            ],
-            entryComponents: [],
-            bootstrap: [AppComponent]
-        })
-    ], AppModule);
-    return AppModule;
-}());
+let AppModule = class AppModule {
+};
+AppModule = __decorate([
+    NgModule({
+        declarations: [
+            AppComponent,
+            HomePageComponent,
+            AboutUsComponent,
+            PrivacyComponent,
+            DeliveryChartComponent,
+            HeaderComponent,
+            FooterComponent,
+            RentalsComponent,
+            RentalItemComponent,
+            CheckoutComponent,
+            LoginPageComponent,
+            LocationDateComponent,
+            PageComponent,
+            CartComponent,
+            VerificationComponent,
+            ResetPasswordComponent,
+            PageNotFoundComponent
+        ],
+        imports: [
+            RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
+            ),
+            BrowserModule.withServerTransition({ appId: 'serverApp' }),
+            FormsModule,
+            ReactiveFormsModule,
+            HttpClientModule,
+            BrowserAnimationsModule,
+            MaterialModule,
+            NgxGalleryModule,
+            NgxMaterialTimepickerModule,
+            MatDatepickerModule,
+            CarouselModule,
+            ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+        ],
+        providers: [
+            ParseService,
+            LocationDateService,
+            AuthGuard,
+            AuthGuardLoginService,
+            AuthGuardVerificationService,
+            RoutingService,
+            MailService,
+            OrderService,
+            InitializerService,
+            CheckoutService,
+            ShippingHttpService,
+            { provide: DeliveryChartService, useClass: DeliveryChartHttpService },
+            { provide: CategoryService, useClass: CategoryHttpService },
+            { provide: ProductService, useClass: ProductHttpService },
+            { provide: UserService, useClass: UserHttpService },
+            { provide: SettingsService, useClass: SettingsHttpService },
+            { provide: AdditionCategoryService, useClass: AdditionCategoryHttp },
+        ],
+        entryComponents: [],
+        bootstrap: [AppComponent]
+    })
+], AppModule);
 export { AppModule };
 //# sourceMappingURL=app.module.js.map

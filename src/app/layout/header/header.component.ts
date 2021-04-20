@@ -86,7 +86,7 @@ export class HeaderComponent implements OnInit , AfterViewInit{
   }
 
   private initCategories() {
-    this.categoryService.getCategories().subscribe(res=>{
+    this.categoryService.getCategories().then(res=>{
       this.categories = res;
     })
   }

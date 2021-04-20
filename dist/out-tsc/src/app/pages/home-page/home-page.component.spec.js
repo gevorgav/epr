@@ -1,20 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { HomePageComponent } from './home-page.component';
-describe('HomePageComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(async(function () {
+describe('HomePageComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [HomePageComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
+    beforeEach(() => {
         fixture = TestBed.createComponent(HomePageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should be created', function () {
+    it('should be created', () => {
         expect(component).toBeTruthy();
     });
 });

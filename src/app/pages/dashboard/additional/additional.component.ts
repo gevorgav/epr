@@ -35,7 +35,7 @@ export class AdditionalComponent implements OnInit {
       data => {
         if (data && data.item) {
           this.categoryService.saveAddition(data.item, data.newCategoryId)
-            .subscribe(
+            .then(
               res => {
                 this.initAdditions();
               },
@@ -62,7 +62,7 @@ export class AdditionalComponent implements OnInit {
         data => {
           if (data && data.item) {
             this.categoryService.saveAddition(data.item, data.newCategoryId, data.oldCategoryId)
-              .subscribe(
+              .then(
                 res => {
                   this.initAdditions();
                 },
@@ -75,7 +75,7 @@ export class AdditionalComponent implements OnInit {
 
   remove(id: string) {
     this.categoryService.deleteAddition(id)
-      .subscribe(
+      .then(
         res => {
           this.initAdditions();
         },
@@ -85,7 +85,7 @@ export class AdditionalComponent implements OnInit {
 
   private initAdditions() {
     this.categoryService.getAllAdditions()
-      .subscribe(
+      .then(
         res => {
           this.items = res;
           this.dataSource = new MatTableDataSource(this.items);

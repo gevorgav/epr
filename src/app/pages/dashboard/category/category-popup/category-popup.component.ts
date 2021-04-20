@@ -16,7 +16,7 @@ export class CategoryPopupComponent implements OnInit {
   form: FormGroup;
   fileMaxSizeErrorMessage: string;
 
-  @ViewChild('input') inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<CategoryPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,

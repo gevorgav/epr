@@ -1,20 +1,19 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
-var FooterComponent = /** @class */ (function () {
-    function FooterComponent() {
+let FooterComponent = class FooterComponent {
+    constructor() {
         this.currentYear = new Date();
     }
-    FooterComponent.prototype.ngOnInit = function () {
-    };
-    FooterComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-footer',
-            templateUrl: './footer.component.html',
-            styleUrls: ['./footer.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [])
-    ], FooterComponent);
-    return FooterComponent;
-}());
+    ngOnInit() {
+    }
+};
+FooterComponent = __decorate([
+    Component({
+        selector: 'app-footer',
+        templateUrl: './footer.component.html',
+        styleUrls: ['./footer.component.css']
+    }),
+    __metadata("design:paramtypes", [])
+], FooterComponent);
 export { FooterComponent };
 //# sourceMappingURL=footer.component.js.map

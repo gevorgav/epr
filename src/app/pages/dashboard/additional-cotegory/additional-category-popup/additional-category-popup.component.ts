@@ -14,7 +14,7 @@ export class AdditionalCategoryPopupComponent implements OnInit {
   formBuilder: FormBuilder = new FormBuilder();
   form: FormGroup;
 
-  @ViewChild('input') inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<AdditionalCategoryPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {

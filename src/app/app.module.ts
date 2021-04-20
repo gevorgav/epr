@@ -29,7 +29,6 @@ import {MaterialModule} from './mat/material.module';
 import {ProductService} from './shared/services/product.service';
 import {ProductHttpService} from './shared/services/product-http.service';
 import {VerificationComponent} from './pages/verification/verification.component';
-import {NgxGalleryModule} from 'ngx-gallery';
 import {UserService} from './shared/services/user.service';
 import {UserHttpService} from './shared/services/user-http.service';
 import {CarouselModule} from 'ngx-owl-carousel-o';
@@ -50,6 +49,7 @@ import {MailService} from './shared/services/mail.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {PrivacyComponent} from "./pages/privacy/privacy.component";
+import {NgxGalleryModule} from "@kolkov/ngx-gallery";
 
 const appRoutes: Routes = [
   {
@@ -72,11 +72,11 @@ const appRoutes: Routes = [
   },
   {
     path: 'contact-info',
-    loadChildren: './pages/contact-info/contact-info.module#ContactInfoModule',
+    loadChildren: () => import('./pages/contact-info/contact-info.module').then(m => m.ContactInfoModule),
   },
   {
     path: 'search/:searchText',
-    loadChildren: './pages/search/search.module#SearchModule',
+    loadChildren: () => import('./pages/search/search.module').then(m => m.SearchModule),
   },
   {
     path: 'delivery-chart',
@@ -92,7 +92,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard]
   },
   {

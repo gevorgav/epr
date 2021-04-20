@@ -5,7 +5,7 @@ import {DeliveryChartModel, ZipCode} from '../../shared/model/delivery-chart.mod
 import {DeliveryChartService} from '../../shared/services/delivery-chart.service';
 import {OrderService} from '../../shared/services/order.service';
 import * as moment from 'moment';
-import {Observable, of} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import {debounceTime, finalize, first, flatMap, map, startWith, tap} from 'rxjs/operators';
 
 
@@ -59,13 +59,13 @@ export class LocationDateComponent implements OnInit {
 
   onSubmit() {
     if (this.locationDateForm.valid) {
-      this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value).subscribe(res=>{
+      this.checkCityOrZipCode(this.locationDateForm.get('zipCode').value).then(res=>{
         if (res) {
           let finalStartDate = LocationDateComponent.getTimeWithDateTime(this.locationDateForm.get('startDate').value,
             this.locationDateForm.get('startDateTime').value);
           let finalEndDate = LocationDateComponent.getTimeWithDateTime(this.locationDateForm.get('endDate').value,
             this.locationDateForm.get('endDateTime').value);
-          this.getZipCode(this.locationDateForm.get('zipCode').value).pipe(first()).subscribe((zipCode: ZipCode) => {
+          from(this.getZipCode(this.locationDateForm.get('zipCode').value)).pipe(first()).subscribe((zipCode: ZipCode) => {
             this.locationDateService.setLocationDate(finalStartDate, finalEndDate, zipCode);
             this.orderService.setOrderDateLocation(finalStartDate, finalEndDate, zipCode);
             // this.locationDateService.setIsSpecified(true);
@@ -83,21 +83,21 @@ export class LocationDateComponent implements OnInit {
     this.locationDateService.setIsSpecified(false);
   }
 
-  checkCityOrZipCode(value: string): Observable<boolean> {
+  checkCityOrZipCode(value: string): Promise<boolean> {
     let city: string[] = value.match(/[a-zA-Z]+/g);
     let zipCode: string[] = value.match(/\d+/g);
-    return this.deliveryChartService.getDeliveryLocationByZipCode(zipCode[0]).pipe(
-      map(res=> city.join(' ') === res.city)
+    return this.deliveryChartService.getDeliveryLocationByZipCode(zipCode[0]).then(
+      res=> city.join(' ') === res.city
     );
   }
 
-  getZipCode(value: string): Observable<ZipCode> {
+  getZipCode(value: string): Promise<ZipCode> {
     let zipCode: string[] = value.match(/\d+/g);
     let city: string = value.match(/[a-zA-Z]+/g).join(" ");
-    return this.deliveryChartService.getZipCodeModelByZipCode(zipCode[0]).pipe(map(res=>{
+    return this.deliveryChartService.getZipCodeModelByZipCode(zipCode[0]).then(res=>{
       res.location = city + " " + res.zipCode;
       return res;
-    }));
+    });
   }
 
   private getAutoCompleteOptions(): string[] {
@@ -115,7 +115,7 @@ export class LocationDateComponent implements OnInit {
   }
 
   private getByCity(city: string): Observable<string[]> {
-    return this.deliveryChartService.getDeliveryLocationByCity(city).pipe(
+    return from(this.deliveryChartService.getDeliveryLocationByCity(city)).pipe(
       map(res => {
         return this.initDeliveryList(res);
       })
@@ -128,7 +128,7 @@ export class LocationDateComponent implements OnInit {
   }
 
   private getByZipCodeAndCity(zipCode: string[], city: string): Observable<string[]> {
-    return this.deliveryChartService.getDeliveryLocationsByZipCodeSearch(zipCode[0], city).pipe(
+    return from(this.deliveryChartService.getDeliveryLocationsByZipCodeSearch(zipCode[0], city)).pipe(
       map(res => {
         return this.initDeliveryList(res);
       })

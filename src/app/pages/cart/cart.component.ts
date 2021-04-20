@@ -12,7 +12,7 @@ import {CheckoutService} from '../../shared/services/checkout.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
-import {zip} from 'rxjs';
+import {from, zip} from 'rxjs';
 import {flatMap, map, switchMap} from 'rxjs/operators';
 
 @Component({
@@ -130,7 +130,7 @@ export class CartComponent implements OnInit {
   private initOrderDataSelectedProducts() {
     let products$: Observable<ProductModel>[] = [];
     this.initializerService.orderModel.orderItems.forEach((item: OrderItemModel)=>{
-      products$.push(this.productService.getProduct(item.productId))
+      products$.push(from(this.productService.getProduct(item.productId)))
     });
     zip(...products$).subscribe(res =>{
       this.productsInCart = res;
@@ -138,10 +138,9 @@ export class CartComponent implements OnInit {
     });
   }
 
-  getQuantities(product: ProductModel): Observable<number[]> {
+  getQuantities(product: ProductModel): Promise<number[]> {
     return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, product.id)
-      .pipe(
-        map(res => {
+      .then(res => {
           let quantities = [];
           let count = product.count - res;
           if (count > 0) {
@@ -155,7 +154,7 @@ export class CartComponent implements OnInit {
             this.enableCheckout = false;
           }
           return quantities;
-        }))
+        })
   }
 
   isSpecified() {
@@ -188,7 +187,7 @@ export class CartComponent implements OnInit {
   }
 
   private getShippingPrice() {
-    this.locationService.getShippingPrice().subscribe(res=>{
+    this.locationService.getShippingPrice().then(res=>{
       this.shippingPrice = res;
       this.setNewPrices();
     })
@@ -227,7 +226,7 @@ export class CartComponent implements OnInit {
   }
 
   removeOrderItem(productId: string) {
-    this.orderService.removeOrderItem(productId).subscribe(res=>{
+    this.orderService.removeOrderItem(productId).then(res=>{
       if (res){
         this.productsInCart = this.productsInCart.filter(value=> value.id !== productId);
         this.initializerService.orderModel.orderItems = this.initializerService.orderModel.orderItems.filter(value=> value.productId !== productId);
@@ -346,7 +345,7 @@ export class CartComponent implements OnInit {
 }
 
 export interface ProductInCartCalculation {
-  available: Observable<number[]>;
+  available: Promise<number[]>;
   count: number;
   price: number;
 }

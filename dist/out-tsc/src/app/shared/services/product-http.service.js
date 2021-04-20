@@ -1,4 +1,5 @@
-import * as tslib_1 from "tslib";
+var ProductHttpService_1;
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { ProductService } from './product.service';
 import { ProductModel } from '../model/product.model';
@@ -10,83 +11,74 @@ import { AdditionCategoryHttp } from './addition-category-http.service';
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
-var ProductHttpService = /** @class */ (function (_super) {
-    tslib_1.__extends(ProductHttpService, _super);
-    function ProductHttpService(parseService) {
-        var _this_1 = _super.call(this) || this;
-        _this_1.parseService = parseService;
-        return _this_1;
+let ProductHttpService = ProductHttpService_1 = class ProductHttpService extends ProductService {
+    constructor(parseService) {
+        super();
+        this.parseService = parseService;
     }
-    ProductHttpService_1 = ProductHttpService;
-    ProductHttpService.prototype.getAllProducts = function () {
-        var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var query = new this.parseService.parse.Query(Product);
-        var promise = query.find().then(function (res) {
-            var products = [];
-            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
-                var item = res_1[_i];
+    getAllProducts() {
+        let Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        let query = new this.parseService.parse.Query(Product);
+        return query.find().then(res => {
+            let products = [];
+            for (let item of res) {
                 products.push(ProductHttpService_1.convertToProductModel(item));
             }
             return products;
         });
-        return from(promise);
-    };
-    ProductHttpService.prototype.getProduct = function (id) {
-        var _this_1 = this;
-        var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var query = new this.parseService.parse.Query(Product);
+    }
+    getProduct(id) {
+        const Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        const query = new this.parseService.parse.Query(Product);
         query.equalTo('objectId', id);
-        var promise = query.first().then(function (result) {
-            return _this_1.loadProductAdditionalCategory(result).then(function (res) {
-                var productModel = ProductHttpService_1.convertToProductModel(result);
+        return query.first().then((result) => {
+            return this.loadProductAdditionalCategory(result).then(res => {
+                let productModel = ProductHttpService_1.convertToProductModel(result);
                 productModel.additionalCategories = res;
                 return productModel;
             });
         });
-        return from(promise);
-    };
-    ProductHttpService.prototype.loadProductAdditionalCategory = function (res) {
-        var productAdditionalCategory = [];
-        return res.relation('productAdditionalCategory').query().each(function (resProd) {
+    }
+    loadProductAdditionalCategory(res) {
+        let productAdditionalCategory = [];
+        return res.relation('productAdditionalCategory').query().each(resProd => {
             productAdditionalCategory.push(resProd.id);
-        }).then(function () {
+        }).then(() => {
             return productAdditionalCategory;
         });
-    };
-    ProductHttpService.prototype.deleteProduct = function (id) {
-        var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var query = new this.parseService.parse.Query(Product);
+    }
+    deleteProduct(id) {
+        const Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        const query = new this.parseService.parse.Query(Product);
         query.equalTo('objectId', id);
-        var promise = query.first().then(function (result) {
+        return query.first().then((result) => {
             return result.destroy({});
         });
-        return from(promise);
-    };
-    ProductHttpService.prototype.saveProduct = function (productToSave, newCategoryId, oldCategoryId, oldAdditionalCategories) {
-        var _this_1 = this;
-        var Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var product = new Product();
+    }
+    saveProduct(productToSave, newCategoryId, oldCategoryId, oldAdditionalCategories) {
+        let Product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        let product = new Product();
         this.setFields(product, productToSave, []);
-        var promise;
-        var _this = this;
+        let promise;
+        let _this = this;
         if (productToSave.id) {
-            var query = new this.parseService.parse.Query(Product);
+            const query = new this.parseService.parse.Query(Product);
             query.equalTo('objectId', productToSave.id);
-            promise = query.first().then(function (res) {
-                _this_1.setFields(res, productToSave, oldAdditionalCategories);
-                return res.save().then(function (savedProduct) {
+            promise = query.first().then(res => {
+                this.setFields(res, productToSave, oldAdditionalCategories);
+                return res.save().then(savedProduct => {
                     if (newCategoryId !== oldCategoryId) {
-                        var Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
-                        var query_1 = new _this.parseService.parse.Query(Category);
-                        query_1.equalTo('objectId', oldCategoryId);
-                        return query_1.first().then(function (category) {
+                        let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+                        let query = new _this.parseService.parse.Query(Category);
+                        query.equalTo('objectId', oldCategoryId);
+                        return query.first().then(category => {
                             category.relation('products').remove(savedProduct);
                             return category.save();
-                        }).then(function (res) {
-                            var Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
-                            var query = new _this.parseService.parse.Query(Category);
+                        }).then(res => {
+                            let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+                            let query = new _this.parseService.parse.Query(Category);
                             query.equalTo('objectId', newCategoryId);
-                            return query.first().then(function (category) {
+                            return query.first().then(category => {
                                 category.relation('products').add(savedProduct);
                                 return category.save();
                             });
@@ -96,50 +88,48 @@ var ProductHttpService = /** @class */ (function (_super) {
             });
         }
         else {
-            promise = product.save().then(function (product) {
-                var Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
-                var query = new _this.parseService.parse.Query(Category);
+            promise = product.save().then(product => {
+                let Category = _this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
+                let query = new _this.parseService.parse.Query(Category);
                 query.equalTo('objectId', newCategoryId);
-                return query.first().then(function (category) {
+                return query.first().then(category => {
                     category.relation('products').add(product);
                     return category.save();
                 });
             });
         }
         return from(promise);
-    };
-    ProductHttpService.prototype.getBestDealProducts = function (count) {
+    }
+    getBestDealProducts(count) {
         return undefined;
-    };
-    ProductHttpService.prototype.getProductQuestions = function (id) {
+    }
+    getProductQuestions(id) {
         return undefined;
-    };
-    ProductHttpService.prototype.getSimilarProducts = function (id) {
+    }
+    getSimilarProducts(id) {
         return undefined;
-    };
-    ProductHttpService.prototype.getProductByCategoryId = function (categoryId) {
-    };
+    }
+    getProductByCategoryId(categoryId) {
+    }
     // conversions
-    ProductHttpService.convertToProductViewModel = function (item) {
+    static convertToProductViewModel(item) {
         return new ProductViewModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam']);
-    };
-    ProductHttpService.convertToProductModel = function (item) {
+    }
+    static convertToProductModel(item) {
         return new ProductModel(item.id, item.attributes['title'], item.attributes['price'], item.attributes['images'], item.attributes['isNew'], item.attributes['isHotDeal'], item.attributes['itemSize'], item.attributes['pathParam'], item.attributes['description'], item.attributes['rentalTerms'], item.attributes['spaceRequired'], item.attributes['setupPolicy'] ? new Map(Object.entries(item.attributes['setupPolicy'])) : null, item.attributes['instructions'], item.attributes['video'], item.attributes['safetyRules'], item.attributes['minTime'], item.attributes['minPrice'], item.attributes['nightPrice'], item.attributes['count'], [], item.attributes['metaDescription'], item.attributes['pageTitle'], item.attributes['relation']);
-    };
-    ProductHttpService.prototype.getProducts = function (count) {
-        var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var query = new this.parseService.parse.Query(product);
-        var promise = query.find().then(function (res) {
-            var products = [];
-            for (var _i = 0, res_2 = res; _i < res_2.length; _i++) {
-                var item = res_2[_i];
+    }
+    getProducts(count) {
+        let product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        let query = new this.parseService.parse.Query(product);
+        return query.find().then(res => {
+            let products = [];
+            for (let item of res) {
                 products.push(ProductHttpService_1.convertToProductModel(item));
             }
             return products;
         });
-        return from(promise);
-    };
-    ProductHttpService.prototype.setFields = function (product, productToSave, oldAdditionalCategories) {
+    }
+    setFields(product, productToSave, oldAdditionalCategories) {
         product.set('title', productToSave.title);
         product.set('price', productToSave.price);
         product.set('images', productToSave.images);
@@ -167,61 +157,56 @@ var ProductHttpService = /** @class */ (function (_super) {
         if (productToSave.additionalCategories && productToSave.additionalCategories.length) {
             product.relation('productAdditionalCategory').add(this.getAdditionalCategoryRelations(productToSave.additionalCategories));
         }
-    };
-    ProductHttpService.pathParamFromName = function (name) {
+    }
+    static pathParamFromName(name) {
         return name.replace(/[^a-zA-Z0-9- ]/g, '').trim().replace(/\s/g, '-');
-    };
-    ProductHttpService.prototype.getProductByPatch = function (patch) {
-        var _this_1 = this;
-        var product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
-        var query = new this.parseService.parse.Query(product);
+    }
+    getProductByPatch(patch) {
+        let product = this.parseService.parse.Object.extend(ProductHttpService_1.PRODUCT);
+        let query = new this.parseService.parse.Query(product);
         query.equalTo('pathParam', patch);
-        var promise = query.first().then(function (resProd) {
+        return query.first().then(resProd => {
             if (!resProd) {
                 return null;
             }
             else {
-                return _this_1.loadProductAdditionalCategory(resProd).then(function (res) {
-                    var productModel = ProductHttpService_1.convertToProductModel(resProd);
+                return this.loadProductAdditionalCategory(resProd).then(res => {
+                    let productModel = ProductHttpService_1.convertToProductModel(resProd);
                     productModel.additionalCategories = res;
                     return productModel;
                 });
             }
         });
-        return from(promise);
-    };
-    ProductHttpService.prototype.mapToObject = function (map) {
-        var obj = {};
-        map.forEach(function (v, k) {
+    }
+    mapToObject(map) {
+        const obj = {};
+        map.forEach((v, k) => {
             obj[k] = v;
         });
         return obj;
-    };
-    ProductHttpService.prototype.getAdditionalCategoryRelations = function (additionalCategories) {
-        var CategoryParse = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
-        var productsParse = [];
-        additionalCategories.forEach(function (value) {
+    }
+    getAdditionalCategoryRelations(additionalCategories) {
+        const CategoryParse = this.parseService.parse.Object.extend(AdditionCategoryHttp.CATEGORY);
+        let productsParse = [];
+        additionalCategories.forEach(value => {
             productsParse.push(new CategoryParse({ id: value }));
         });
         return productsParse;
-    };
-    ProductHttpService.prototype.getProductsByName = function (name) {
-        var productQuery = new this.parseService.parse.Query(ProductHttpService_1.PRODUCT);
-        var products = [];
-        var promise = productQuery.contains('title', name).each(function (res) {
+    }
+    getProductsByName(name) {
+        let productQuery = new this.parseService.parse.Query(ProductHttpService_1.PRODUCT);
+        let products = [];
+        return productQuery.contains('title', name).each(res => {
             products.push(ProductHttpService_1.convertToProductModel(res));
-        }).then(function (res) {
+        }).then(res => {
             return products;
         });
-        return from(promise);
-    };
-    var ProductHttpService_1;
-    ProductHttpService.PRODUCT = 'Product';
-    ProductHttpService = ProductHttpService_1 = tslib_1.__decorate([
-        Injectable(),
-        tslib_1.__metadata("design:paramtypes", [ParseService])
-    ], ProductHttpService);
-    return ProductHttpService;
-}(ProductService));
+    }
+};
+ProductHttpService.PRODUCT = 'Product';
+ProductHttpService = ProductHttpService_1 = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [ParseService])
+], ProductHttpService);
 export { ProductHttpService };
 //# sourceMappingURL=product-http.service.js.map

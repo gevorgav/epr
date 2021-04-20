@@ -1,36 +1,34 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { UserService } from '../../../shared/services/user.service';
-var UserComponent = /** @class */ (function () {
-    function UserComponent(userService) {
+let UserComponent = class UserComponent {
+    constructor(userService) {
         this.userService = userService;
         this.dataSource = new MatTableDataSource(this.users);
         this.displayedColumns = ['name', 'email', 'phone'];
     }
-    UserComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initUsers();
-    };
-    UserComponent.prototype.initUsers = function () {
-        var _this = this;
+    }
+    initUsers() {
         this.userService.getAuthUsers()
-            .subscribe(function (res) {
-            _this.users = res;
-            _this.dataSource = new MatTableDataSource(_this.users);
+            .then(res => {
+            this.users = res;
+            this.dataSource = new MatTableDataSource(this.users);
         });
-    };
-    UserComponent.prototype.applyFilter = function ($event) {
+    }
+    applyFilter($event) {
         this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
-    };
-    UserComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-user',
-            templateUrl: './user.component.html',
-            styleUrls: ['./user.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [UserService])
-    ], UserComponent);
-    return UserComponent;
-}());
+    }
+};
+UserComponent = __decorate([
+    Component({
+        selector: 'app-user',
+        templateUrl: './user.component.html',
+        styleUrls: ['./user.component.css']
+    }),
+    __metadata("design:paramtypes", [UserService])
+], UserComponent);
 export { UserComponent };
 //# sourceMappingURL=user.component.js.map

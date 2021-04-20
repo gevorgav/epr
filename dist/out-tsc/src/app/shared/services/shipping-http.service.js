@@ -1,4 +1,5 @@
-import * as tslib_1 from "tslib";
+var ShippingHttpService_1;
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { ParseService } from './parse.service';
 import { ShippingInfoModel } from '../model/shipping-info.model';
@@ -6,23 +7,21 @@ import { OrderService } from './order.service';
 import { OrderItemModel } from '../model/order-item.model';
 import { AdditionCategoryHttp } from './addition-category-http.service';
 import { from } from 'rxjs';
-var ShippingHttpService = /** @class */ (function () {
-    function ShippingHttpService(parseService, orderService) {
+let ShippingHttpService = ShippingHttpService_1 = class ShippingHttpService {
+    constructor(parseService, orderService) {
         this.parseService = parseService;
         this.orderService = orderService;
     }
-    ShippingHttpService_1 = ShippingHttpService;
-    ShippingHttpService.prototype.saveShipping = function (shipping) {
-        var _this = this;
-        var ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
-        var ZipCode = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
-        var promise;
-        promise = this.orderService.saveAndGetOrderItems(shipping.orderItems).then(function (res) {
-            res.forEach(function (value, index) {
+    saveShipping(shipping) {
+        const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
+        const ZipCode = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
+        let promise;
+        promise = this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res => {
+            res.forEach((value, index) => {
                 shipping.orderItems[index].id = value.id;
             });
-        }).then(function () {
-            var parseShippingInfo = new ShippingInfo();
+        }).then(() => {
+            let parseShippingInfo = new ShippingInfo();
             parseShippingInfo.set('name', shipping.name);
             parseShippingInfo.set('streetAddress', shipping.street);
             parseShippingInfo.set('phone', shipping.phone);
@@ -38,143 +37,159 @@ var ShippingHttpService = /** @class */ (function () {
             parseShippingInfo.set('endDate', shipping.endDate);
             parseShippingInfo.set('productCount', shipping.productCount);
             parseShippingInfo.set('payed', shipping.payed);
-            parseShippingInfo.relation('products').add(_this.getRelatedParseObjects(shipping.products.map(function (value) { return value.id; }), ShippingHttpService_1.PRODUCT));
-            parseShippingInfo.relation('orderItems').add(_this.getRelatedParseObjects(shipping.orderItems.map(function (value) { return value.id; }), OrderService.ORDER_ITEM));
+            parseShippingInfo.relation('products').add(this.getRelatedParseObjects(shipping.products.map(value => value.id), ShippingHttpService_1.PRODUCT));
+            parseShippingInfo.relation('orderItems').add(this.getRelatedParseObjects(shipping.orderItems.map(value => value.id), OrderService.ORDER_ITEM));
             parseShippingInfo.set('stairs', shipping.stairs);
-            return parseShippingInfo.save().then(function (res) {
+            parseShippingInfo.set('setUpSurface', shipping.setUpSurface);
+            return parseShippingInfo.save().then(res => {
                 return res;
             });
         });
         return from(promise);
-    };
-    ShippingHttpService.prototype.setPayed = function (id) {
-        var ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
-        var shippingInfo = new ShippingInfo();
-        var query = new this.parseService.parse.Query(shippingInfo);
-        var promise = query.equalTo('objectId', id)
-            .first().catch(function (e) {
+    }
+    setPayed(id) {
+        const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
+        let shippingInfo = new ShippingInfo();
+        const query = new this.parseService.parse.Query(shippingInfo);
+        let promise = query.equalTo('objectId', id)
+            .first().catch(e => {
             console.error(e);
-        }).then(function (res) {
+        }).then(res => {
             res.set('isPayed', true);
-            return res.save().then(function (res) { return res; });
+            return res.save().then(res => res);
         });
         return from(promise);
-    };
-    ShippingHttpService.prototype.setShipped = function (id, shipped) {
-        var ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
-        var shippingInfo = new ShippingInfo();
-        var query = new this.parseService.parse.Query(shippingInfo);
-        var promise = query.equalTo('objectId', id)
-            .first().catch(function (res) {
-            // console.log(res);
-        }).then(function (res) {
+    }
+    setShipped(id, shipped) {
+        const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
+        let shippingInfo = new ShippingInfo();
+        const query = new this.parseService.parse.Query(shippingInfo);
+        let promise = query.equalTo('objectId', id)
+            .first().catch(res => {
+        }).then(res => {
             res.set('isShipped', shipped);
-            return res.save().then(function (res) { return true; });
+            return res.save().then(res => true);
         });
         return from(promise);
-    };
-    ShippingHttpService.prototype.loadShipped = function () {
+    }
+    loadShipped() {
         return this.loadShippings({ columnName: 'isShipped', value: true });
-    };
-    ShippingHttpService.prototype.loadPayed = function () {
+    }
+    loadPayed() {
         return this.loadShippings({ columnName: 'isPayed', value: true });
-    };
-    ShippingHttpService.prototype.loadShippings = function (option) {
-        var _this = this;
-        var ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
-        var ZipCodeParse = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
-        var shippings = [];
-        var query = new this.parseService.parse.Query(ShippingInfo);
+    }
+    getInaccessibleCountForProductInDate(startDate, endDate, productId) {
+        let isAvailable = 0;
+        const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
+        let query1 = new this.parseService.parse.Query(ShippingInfo);
+        let query2 = new this.parseService.parse.Query(ShippingInfo);
+        query1 = query1.lessThanOrEqualTo('startDate', startDate).greaterThanOrEqualTo('endDate', startDate);
+        query2 = query2.lessThanOrEqualTo('startDate', endDate).greaterThanOrEqualTo('endDate', endDate);
+        let query = this.parseService.parse.Query.or(query1, query2).equalTo('isPayed', true);
+        let promise = query.each(item => {
+            let products = item.attributes['productCount'];
+            let result = products.find(value => value.productId == productId);
+            if (result) {
+                isAvailable += result.count;
+            }
+        }).then(res => isAvailable);
+        return promise;
+    }
+    loadShippings(option) {
+        const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
+        const ZipCodeParse = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
+        let shippings = [];
+        let query = new this.parseService.parse.Query(ShippingInfo);
         if (option.columnName === 'isPayed') {
             query = query.equalTo(option.columnName, option.value).equalTo('isShipped', false);
         }
         else {
             query = query.equalTo(option.columnName, option.value);
         }
-        var promise = query.each(function (item) {
-            var shippingModel = ShippingHttpService_1.convertToShippingInfoModel(item);
-            return _this.loadShippingRelations(item).then(function (ordersProducts) {
-                var _a, _b;
-                (_a = shippingModel.products).push.apply(_a, ordersProducts[1]);
-                (_b = shippingModel.orderItems).push.apply(_b, ordersProducts[0]);
+        return query.each(item => {
+            let shippingModel = ShippingHttpService_1.convertToShippingInfoModel(item);
+            return this.loadShippingRelations(item).then((ordersProducts) => {
+                shippingModel.products.push(...ordersProducts[1]);
+                shippingModel.orderItems.push(...ordersProducts[0]);
                 shippings.push(shippingModel);
                 return item;
-            }).then(function (parseShipping) {
-                var zip = new ZipCodeParse();
-                var query = new _this.parseService.parse.Query(zip);
-                return query.equalTo('objectId', parseShipping.attributes['zipCode']['id']).first().then(function (parseZip) {
+            }).then(parseShipping => {
+                let zip = new ZipCodeParse();
+                const query = new this.parseService.parse.Query(zip);
+                return query.equalTo('objectId', parseShipping.attributes['zipCode']['id']).first().then(parseZip => {
                     shippingModel.zipCode = parseZip.attributes['zipCode'];
                 });
             });
-        }).then(function (res) {
+        }).then(res => {
             return shippings;
         });
-        return from(promise);
-    };
-    ShippingHttpService.convertToShippingInfoModel = function (item) {
-        return new ShippingInfoModel(item.id, item.attributes['name'], item.attributes['streetAddress'], item.attributes['phone'], item.attributes['email'], item.attributes['specialInstructions'], '', [], item.attributes['isPayed'], item.attributes['isShipped'], item.attributes['user'] ? item.attributes['user']['attributes']['name'] : '', item.attributes['createdAt'], item.attributes['startDate'], item.attributes['endDate'], item.attributes['payed'], item.attributes['productCount'], [], item.attributes['stairs']);
-    };
-    ShippingHttpService.prototype.deleteShippingInformation = function (id) {
+    }
+    static convertToShippingInfoModel(item) {
+        return new ShippingInfoModel(item.id, item.attributes['name'], item.attributes['streetAddress'], item.attributes['phone'], item.attributes['email'], item.attributes['specialInstructions'], '', [], item.attributes['isPayed'], item.attributes['isShipped'], item.attributes['user'] ? item.attributes['user']['attributes']['name'] : '', item.attributes['createdAt'], item.attributes['startDate'], item.attributes['endDate'], item.attributes['payed'], item.attributes['productCount'], [], item.attributes['stairs'], item.attributes['setUpSurface']);
+    }
+    deleteShippingInformation(id) {
         return null;
-    };
-    ShippingHttpService.prototype.getRelatedParseObjects = function (items, name) {
-        var ParseObject = this.parseService.parse.Object.extend(name);
-        var parseItems = [];
-        items.forEach(function (value) {
+    }
+    getRelatedParseObjects(items, name) {
+        const ParseObject = this.parseService.parse.Object.extend(name);
+        let parseItems = [];
+        items.forEach(value => {
             parseItems.push(new ParseObject({ id: value }));
         });
         return parseItems;
-    };
-    ShippingHttpService.prototype.loadProductRelation = function (res) {
-        var _this = this;
-        var prodList = [];
-        return res.relation('products').query().each(function (resProd) {
+    }
+    loadProductRelation(res) {
+        let prodList = [];
+        return res.relation('products').query().each(resProd => {
             prodList.push(resProd);
-        }).then(function () {
-            return _this.getProductsName(prodList);
+        }).then(() => {
+            return this.getProductsName(prodList);
         });
-    };
-    ShippingHttpService.prototype.loadOrderItemRelation = function (res) {
-        var _this = this;
-        var orderItems = [];
-        return res.relation('orderItems').query().each(function (resItem) {
-            return _this.getOrderItemsModel(resItem).then(function (resOrderItem) {
+    }
+    loadOrderItemRelation(res) {
+        let orderItems = [];
+        return res.relation('orderItems').query().each(resItem => {
+            return this.getOrderItemsModel(resItem).then((resOrderItem) => {
                 orderItems.push(resOrderItem);
             });
-        }).then(function () {
+        }).then(() => {
             return orderItems;
         });
-    };
-    ShippingHttpService.prototype.getProductsName = function (prodList) {
-        var names = [];
-        for (var _i = 0, prodList_1 = prodList; _i < prodList_1.length; _i++) {
-            var product = prodList_1[_i];
+    }
+    getProductsName(prodList) {
+        let names = [];
+        for (let product of prodList) {
             names.push({ id: product.id, name: product.attributes['title'] });
         }
         return names;
-    };
-    ShippingHttpService.prototype.loadShippingRelations = function (item) {
+    }
+    loadShippingRelations(item) {
         return Promise.all([this.loadOrderItemRelation(item), this.loadProductRelation(item)]);
-    };
-    ShippingHttpService.prototype.getOrderItemsModel = function (orderItem) {
-        var additions = [];
-        return orderItem.relation('additions').query().each(function (item) {
+    }
+    getOrderItemsModel(orderItem) {
+        const additions = [];
+        return orderItem.relation('additions').query().each(item => {
             additions.push(AdditionCategoryHttp.convertToAdditionalModel(item));
-        }).then(function () {
+        }).then(() => {
             return new OrderItemModel(orderItem.attributes['product'].id, orderItem.attributes['count'], [], orderItem.id, additions);
         });
-    };
-    var ShippingHttpService_1;
-    ShippingHttpService.PRODUCT = 'Product';
-    ShippingHttpService.ZIP_CODE = 'ZipCode';
-    ShippingHttpService.SHIPPING_INFO = 'ShippingInfo';
-    ShippingHttpService = ShippingHttpService_1 = tslib_1.__decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        tslib_1.__metadata("design:paramtypes", [ParseService, OrderService])
-    ], ShippingHttpService);
-    return ShippingHttpService;
-}());
+    }
+};
+ShippingHttpService.PRODUCT = 'Product';
+ShippingHttpService.ZIP_CODE = 'ZipCode';
+ShippingHttpService.SHIPPING_INFO = 'ShippingInfo';
+ShippingHttpService = ShippingHttpService_1 = __decorate([
+    Injectable({
+        providedIn: 'root'
+    }),
+    __metadata("design:paramtypes", [ParseService, OrderService])
+], ShippingHttpService);
 export { ShippingHttpService };
+function aaa() {
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+            console.log(i);
+        }, 100);
+    }
+}
 //# sourceMappingURL=shipping-http.service.js.map

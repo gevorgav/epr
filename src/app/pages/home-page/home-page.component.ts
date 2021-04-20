@@ -120,7 +120,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   private initProducts() {
-    this.productService.getAllProducts().subscribe((res: ProductModel[]) => {
+    this.productService.getAllProducts().then((res: ProductModel[]) => {
       this.initFeaturedRentalProducts(res);
     });
   }
@@ -146,7 +146,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
 
   private initSettings() {
-    this.settingsService.getSettings().subscribe(res=>{
+    this.settingsService.getSettings().then(res=>{
       this.settings = res;
       this.titleService.setTitle(this.settings.title);
       this.metaService.addTag({ name: 'description', content: this.settings.homePageMetaDescription });

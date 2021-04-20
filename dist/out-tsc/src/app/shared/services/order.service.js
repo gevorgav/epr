@@ -1,4 +1,5 @@
-import * as tslib_1 from "tslib";
+var OrderService_1;
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { ParseService } from './parse.service';
 import { OrderModel } from '../model/order.model';
@@ -8,33 +9,32 @@ import { ProductHttpService } from './product-http.service';
 import { Error } from 'tslint/lib/error';
 import { AdditionCategoryHttp } from './addition-category-http.service';
 import { from, of } from 'rxjs';
-var OrderService = /** @class */ (function () {
-    function OrderService(parseService) {
+let OrderService = OrderService_1 = class OrderService {
+    constructor(parseService) {
         this.parseService = parseService;
     }
-    OrderService_1 = OrderService;
-    OrderService.prototype.setOrderDateLocation = function (startDate, endDate, zipCode) {
+    setOrderDateLocation(startDate, endDate, zipCode) {
         if (this.parseService.isAuth()) {
-            var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-            var parseZipCode_1 = this.parseService.parse.Object.extend(OrderService_1.ZIP_CODE);
-            var order_1 = new Order();
-            order_1.set('startDate', startDate);
-            order_1.set('endDate', endDate);
-            order_1.set('user', this.parseService.getCurrentUser());
-            order_1.set('zipCode', new parseZipCode_1({ id: zipCode.id }));
-            var query = new this.parseService.parse.Query(order_1);
-            var promise = query.equalTo('user', this.parseService.getCurrentUser());
-            promise.first().catch(function (res) {
+            const Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+            const parseZipCode = this.parseService.parse.Object.extend(OrderService_1.ZIP_CODE);
+            let order = new Order();
+            order.set('startDate', startDate);
+            order.set('endDate', endDate);
+            order.set('user', this.parseService.getCurrentUser());
+            order.set('zipCode', new parseZipCode({ id: zipCode.id }));
+            const query = new this.parseService.parse.Query(order);
+            let promise = query.equalTo('user', this.parseService.getCurrentUser());
+            promise.first().catch(res => {
                 console.log(res);
-            }).then(function (res) {
+            }).then(res => {
                 if (res) {
                     res.set('startDate', startDate);
                     res.set('endDate', endDate);
-                    res.set('zipCode', new parseZipCode_1({ id: zipCode.id }));
+                    res.set('zipCode', new parseZipCode({ id: zipCode.id }));
                     return res.save();
                 }
                 else {
-                    return order_1.save().then(function (order) {
+                    return order.save().then(order => {
                         return order.save();
                     });
                 }
@@ -43,18 +43,17 @@ var OrderService = /** @class */ (function () {
         else {
             return null;
         }
-    };
-    OrderService.prototype.initOrderedData = function () {
-        var _this = this;
-        var orderModel = new OrderModel(null, null, null, null, []);
-        var orderItems = [];
-        var promise;
+    }
+    initOrderedData() {
+        let orderModel = new OrderModel(null, null, null, null, []);
+        let orderItems = [];
+        let promise;
         if (this.parseService.isAuth()) {
-            var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-            var order = new Order();
+            let Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+            let order = new Order();
             order.set('user', this.parseService.getCurrentUser());
-            var query = new this.parseService.parse.Query(order);
-            promise = query.equalTo('user', this.parseService.getCurrentUser()).first().then(function (orderParse) {
+            const query = new this.parseService.parse.Query(order);
+            promise = query.equalTo('user', this.parseService.getCurrentUser()).first().then(orderParse => {
                 if (!orderParse) {
                     throw new TypeError();
                 }
@@ -62,56 +61,55 @@ var OrderService = /** @class */ (function () {
                 orderModel.endDate = orderParse.attributes['endDate'];
                 orderModel.id = orderParse.id;
                 return orderParse;
-            }).then(function (orderParse) {
-                return _this.getZipCode(orderParse.attributes['zipCode'].id).then(function (zip) {
+            }).then(orderParse => {
+                return this.getZipCode(orderParse.attributes['zipCode'].id).then(zip => {
                     orderModel.zipCode = new ZipCode(zip.id, zip.attributes['zipCode']);
-                    return _this.getDeliveryByZipCodeId(orderModel.zipCode.id).then(function (delivery) {
+                    return this.getDeliveryByZipCodeId(orderModel.zipCode.id).then(delivery => {
                         orderModel.zipCode.location = delivery.attributes['city'] + ' ' + orderModel.zipCode.zipCode;
                         return orderParse;
                     });
-                }).then(function (orderParse) {
-                    var list = [];
-                    var additionObjs = [];
-                    return orderParse.relation('orderItems').query().each(function (relatedObject) {
-                        return relatedObject.relation('additions').query().each(function (additionObj) {
+                }).then(orderParse => {
+                    let list = [];
+                    let additionObjs = [];
+                    return orderParse.relation('orderItems').query().each(relatedObject => {
+                        return relatedObject.relation('additions').query().each(additionObj => {
                             additionObjs.push(additionObj.id);
-                        }).then(function () {
+                        }).then(() => {
                             relatedObject['additions'] = additionObjs;
                             list.push(relatedObject);
                         });
-                    }).then(function () {
-                        list.forEach(function (item) {
+                    }).then(() => {
+                        list.forEach(item => {
                             orderItems.push(new OrderItemModel(item.attributes['product'].id, item.attributes['count'], item['additions'], item.id));
                         });
                         orderModel.orderItems = orderItems;
                         return orderModel;
                     });
                 });
-            }).catch(function (reason) {
+            }).catch(reason => {
                 if (reason.code == 209) {
-                    _this.parseService.logOut();
+                    this.parseService.logOut();
                 }
-                return new Promise(function (resolver, reject) { resolver({}); });
+                return new Promise((resolver, reject) => { resolver({}); });
             });
         }
         else {
-            promise = new Promise(function (resolver, reject) { resolver(orderModel); });
+            promise = new Promise((resolver, reject) => { resolver(orderModel); });
         }
-        return from(promise);
-    };
-    OrderService.prototype.setOrder = function (model) {
-        var _this = this;
+        return promise;
+    }
+    setOrder(model) {
         if (this.parseService.isAuth()) {
-            var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-            var order = new Order();
+            const Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+            let order = new Order();
             order.set('user', this.parseService.getCurrentUser());
-            var query = new this.parseService.parse.Query(order);
-            var promise = query.equalTo('user', this.parseService.getCurrentUser())
-                .first().catch(function (res) {
+            const query = new this.parseService.parse.Query(order);
+            let promise = query.equalTo('user', this.parseService.getCurrentUser())
+                .first().catch(res => {
                 console.log(res);
-            }).then(function (res) {
+            }).then(res => {
                 if (res) {
-                    return _this.saveAndGetOrderItems(model.orderItems).then(function (items) {
+                    return this.saveAndGetOrderItems(model.orderItems).then(items => {
                         res.relation('orderItems').add(items);
                         return res.save();
                     });
@@ -123,21 +121,20 @@ var OrderService = /** @class */ (function () {
         else {
             return of(true);
         }
-    };
-    OrderService.prototype.setOrderFields = function (order, model) {
+    }
+    setOrderFields(order, model) {
         order.set('id', model.id);
         order.set('startDate', model.startDate);
         order.set('endDate', model.endDate);
         order.set('userId', this.parseService.getCurrentUser().id);
         order.set('zipCode', model.zipCode.id);
-    };
-    OrderService.prototype.saveAndGetOrderItems = function (orderItems) {
-        var OrderItem = this.parseService.parse.Object.extend(OrderService_1.ORDER_ITEM);
-        var Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
-        var savedOrderItems = [];
-        for (var _i = 0, orderItems_1 = orderItems; _i < orderItems_1.length; _i++) {
-            var orderItem = orderItems_1[_i];
-            var parseOrderItem = new OrderItem();
+    }
+    saveAndGetOrderItems(orderItems) {
+        const OrderItem = this.parseService.parse.Object.extend(OrderService_1.ORDER_ITEM);
+        const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
+        let savedOrderItems = [];
+        for (let orderItem of orderItems) {
+            let parseOrderItem = new OrderItem();
             parseOrderItem.set('product', new Product({ id: orderItem.productId }));
             parseOrderItem.set('count', orderItem.count);
             if (orderItem.additionIds && orderItem.additionIds.length > 0) {
@@ -146,47 +143,47 @@ var OrderService = /** @class */ (function () {
             savedOrderItems.push(parseOrderItem);
         }
         return this.parseService.parse.Object.saveAll(savedOrderItems, {
-            success: function (res) { return res; },
-            error: function (res) {
+            success: (res) => res,
+            error: (res) => {
                 console.error(res);
             }
         });
-    };
-    OrderService.prototype.getRelationAdditional = function (ids) {
-        var Additional = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
-        var additions = [];
-        ids.forEach(function (value) {
-            var additional = new Additional();
+    }
+    getRelationAdditional(ids) {
+        const Additional = this.parseService.parse.Object.extend(AdditionCategoryHttp.ADDITION);
+        let additions = [];
+        ids.forEach(value => {
+            let additional = new Additional();
             additional.id = value;
             additions.push(additional);
         });
         return additions;
-    };
-    OrderService.prototype.getZipCode = function (id) {
-        var ParseZipCode = this.parseService.parse.Object.extend(OrderService_1.ZIP_CODE);
-        var queryZip = new this.parseService.parse.Query(ParseZipCode);
-        return queryZip.equalTo("objectId", id).first().then(function (res) { return res; });
-    };
-    OrderService.prototype.getDeliveryByZipCodeId = function (zipCodeId) {
-        var zipCodeQuery = new this.parseService.parse.Query(OrderService_1.ZIP_CODE);
+    }
+    getZipCode(id) {
+        const ParseZipCode = this.parseService.parse.Object.extend(OrderService_1.ZIP_CODE);
+        let queryZip = new this.parseService.parse.Query(ParseZipCode);
+        return queryZip.equalTo("objectId", id).first().then(res => { return res; });
+    }
+    getDeliveryByZipCodeId(zipCodeId) {
+        let zipCodeQuery = new this.parseService.parse.Query(OrderService_1.ZIP_CODE);
         zipCodeQuery.contains('objectId', zipCodeId);
-        var deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
+        let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
         deliveryQuery.matchesQuery('zipCode', zipCodeQuery);
-        return deliveryQuery.first().then(function (delivery) {
+        return deliveryQuery.first().then((delivery) => {
             return delivery;
-        }, function (error) {
+        }, (error) => {
             console.log(error);
         });
-    };
-    OrderService.prototype.saveCount = function (value, productId) {
-        var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-        var order = new Order();
+    }
+    saveCount(value, productId) {
+        const Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+        let order = new Order();
         order.set('user', this.parseService.getCurrentUser());
-        var query = new this.parseService.parse.Query(order);
-        var promise = query.equalTo('user', this.parseService.getCurrentUser())
-            .first().then(function (res) {
-            return res.relation('orderItems').query().find().then(function (orderItemsParse) {
-                orderItemsParse.forEach(function (item) {
+        const query = new this.parseService.parse.Query(order);
+        return query.equalTo('user', this.parseService.getCurrentUser())
+            .first().then(res => {
+            return res.relation('orderItems').query().find().then((orderItemsParse) => {
+                orderItemsParse.forEach(item => {
                     if (item.attributes.product.id === productId) {
                         item.set('count', value);
                         return item.save();
@@ -194,54 +191,49 @@ var OrderService = /** @class */ (function () {
                 });
             });
         });
-        return from(promise);
-    };
-    OrderService.prototype.removeOrderItem = function (productId) {
+    }
+    removeOrderItem(productId) {
         if (!this.parseService.getCurrentUser()) {
-            return of(true);
+            return new Promise(() => true);
         }
-        var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-        var order = new Order();
+        const Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+        let order = new Order();
         order.set('user', this.parseService.getCurrentUser());
-        var query = new this.parseService.parse.Query(order);
-        var promise = query.equalTo('user', this.parseService.getCurrentUser())
-            .first().then(function (res) {
-            return res.relation('orderItems').query().find().then(function (orderItemsParse) {
-                for (var _i = 0, orderItemsParse_1 = orderItemsParse; _i < orderItemsParse_1.length; _i++) {
-                    var orderItemParse = orderItemsParse_1[_i];
+        const query = new this.parseService.parse.Query(order);
+        return query.equalTo('user', this.parseService.getCurrentUser())
+            .first().then(res => {
+            return res.relation('orderItems').query().find().then((orderItemsParse) => {
+                for (let orderItemParse of orderItemsParse) {
                     if (orderItemParse.attributes.product.id === productId) {
                         return orderItemParse.destroy();
                     }
                 }
             });
         });
-        return from(promise);
-    };
-    OrderService.prototype.destroyOrder = function () {
+    }
+    destroyOrder() {
         if (this.parseService.getCurrentUser()) {
-            var Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
-            var order = new Order();
+            const Order = this.parseService.parse.Object.extend(OrderService_1.ORDER);
+            let order = new Order();
             order.set('user', this.parseService.getCurrentUser());
-            var query = new this.parseService.parse.Query(order);
-            var promise = query.equalTo('user', this.parseService.getCurrentUser())
-                .first().then(function (orderParse) {
+            const query = new this.parseService.parse.Query(order);
+            let promise = query.equalTo('user', this.parseService.getCurrentUser())
+                .first().then(orderParse => {
                 return orderParse.destroy();
             });
             return from(promise);
         }
         return of(true);
-    };
-    var OrderService_1;
-    OrderService.ORDER = 'order';
-    OrderService.ZIP_CODE = 'ZipCode';
-    OrderService.ORDER_ITEM = 'orderItem';
-    OrderService = OrderService_1 = tslib_1.__decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        tslib_1.__metadata("design:paramtypes", [ParseService])
-    ], OrderService);
-    return OrderService;
-}());
+    }
+};
+OrderService.ORDER = 'order';
+OrderService.ZIP_CODE = 'ZipCode';
+OrderService.ORDER_ITEM = 'orderItem';
+OrderService = OrderService_1 = __decorate([
+    Injectable({
+        providedIn: 'root'
+    }),
+    __metadata("design:paramtypes", [ParseService])
+], OrderService);
 export { OrderService };
 //# sourceMappingURL=order.service.js.map

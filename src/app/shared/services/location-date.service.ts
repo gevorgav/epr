@@ -43,15 +43,15 @@ export class LocationDateService {
     this._isSpecified.next(value);
   }
 
-  getShippingPriceByZipCode(zipCode: string): Observable<number>{
-    return this.deliveryService.getDeliveryLocationByZipCode(zipCode).pipe(
-      map((res: DeliveryChartModel)=>{
+  getShippingPriceByZipCode(zipCode: string): Promise<number> {
+    return this.deliveryService.getDeliveryLocationByZipCode(zipCode).then(
+      (res: DeliveryChartModel) => {
         return res.price;
-      })
+      }
     )
   }
 
-  getShippingPrice(): Observable<number>{
+  getShippingPrice(): Promise<number>{
     return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
   }
 

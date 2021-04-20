@@ -1,19 +1,17 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
-var VerificationComponent = /** @class */ (function () {
-    function VerificationComponent() {
+let VerificationComponent = class VerificationComponent {
+    constructor() { }
+    ngOnInit() {
     }
-    VerificationComponent.prototype.ngOnInit = function () {
-    };
-    VerificationComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-verification',
-            templateUrl: './verification.component.html',
-            styleUrls: ['./verification.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [])
-    ], VerificationComponent);
-    return VerificationComponent;
-}());
+};
+VerificationComponent = __decorate([
+    Component({
+        selector: 'app-verification',
+        templateUrl: './verification.component.html',
+        styleUrls: ['./verification.component.css']
+    }),
+    __metadata("design:paramtypes", [])
+], VerificationComponent);
 export { VerificationComponent };
 //# sourceMappingURL=verification.component.js.map

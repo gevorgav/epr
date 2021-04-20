@@ -7,14 +7,14 @@ import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {Observable} from "rxjs";
 
 export abstract class ProductService {
-  abstract getAllProducts(): Observable<ProductModel[]>;
-  abstract getProduct(id: string):  Observable<ProductModel>;
-  abstract getProductByPatch(patch: string):  Observable<ProductModel>;
+  abstract getAllProducts(): Promise<ProductModel[]>;
+  abstract getProduct(id: string):  Promise<ProductModel>;
+  abstract getProductByPatch(patch: string):  Promise<ProductModel>;
   abstract getProductByCategoryId(categoryId: number);
   abstract saveProduct(product: ProductModel, newCategoryId: string, oldCategoryId?: string, oldAdditionalCategories?: string[]);
   abstract deleteProduct(id: string);
-  abstract getSimilarProducts(id: number): Observable<Array<ProductViewModel>>;
-  abstract getProductQuestions(id: number): Observable<Array<QuestionAnswerModel>>;
-  abstract getBestDealProducts(count: number): Observable<Array<ProductViewModel>>;
-  abstract getProductsByName(name: string): Observable<ProductModel[]>;
+  abstract getSimilarProducts(id: number): Promise<Array<ProductViewModel>>;
+  abstract getProductQuestions(id: number): Promise<Array<QuestionAnswerModel>>;
+  abstract getBestDealProducts(count: number): Promise<Array<ProductViewModel>>;
+  abstract getProductsByName(name: string): Promise<ProductModel[]>;
 }

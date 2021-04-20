@@ -1,40 +1,38 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../shared/services/product.service';
-var SearchComponent = /** @class */ (function () {
-    function SearchComponent(route, productService) {
+let SearchComponent = class SearchComponent {
+    constructor(route, productService) {
         this.route = route;
         this.productService = productService;
         this.products = [];
     }
-    SearchComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.route.paramMap.subscribe(function (res) {
-            _this.searchText = res.get("searchText").trim();
-            if (_this.searchText) {
-                _this.productService.getProductsByName(_this.searchText).subscribe(function (res) {
-                    _this.products = res;
+    ngOnInit() {
+        this.route.paramMap.subscribe(res => {
+            this.searchText = res.get("searchText").trim();
+            if (this.searchText) {
+                this.productService.getProductsByName(this.searchText).then(res => {
+                    this.products = res;
                     if (!res || res.length == 0) {
-                        var text = _this.searchText[0].toUpperCase() + _this.searchText.slice(1);
-                        _this.productService.getProductsByName(text).subscribe(function (res) {
-                            _this.products = res;
+                        let text = this.searchText[0].toUpperCase() + this.searchText.slice(1);
+                        this.productService.getProductsByName(text).then(res => {
+                            this.products = res;
                         });
                     }
                 });
             }
         });
-    };
-    SearchComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-search',
-            templateUrl: './search.component.html',
-            styleUrls: ['./search.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [ActivatedRoute,
-            ProductService])
-    ], SearchComponent);
-    return SearchComponent;
-}());
+    }
+};
+SearchComponent = __decorate([
+    Component({
+        selector: 'app-search',
+        templateUrl: './search.component.html',
+        styleUrls: ['./search.component.css']
+    }),
+    __metadata("design:paramtypes", [ActivatedRoute,
+        ProductService])
+], SearchComponent);
 export { SearchComponent };
 //# sourceMappingURL=search.component.js.map

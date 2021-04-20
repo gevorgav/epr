@@ -1,47 +1,46 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { LocationDateService } from './location-date.service';
 import { OrderService } from './order.service';
-import { map } from 'rxjs/operators';
 import { DeliveryChartService } from './delivery-chart.service';
-var InitializerService = /** @class */ (function () {
-    function InitializerService(locationService, deliveryService, orderService) {
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+let InitializerService = class InitializerService {
+    constructor(locationService, deliveryService, orderService) {
         this.locationService = locationService;
         this.deliveryService = deliveryService;
         this.orderService = orderService;
+        this._initialized = new BehaviorSubject(false);
     }
-    Object.defineProperty(InitializerService.prototype, "orderModel", {
-        get: function () {
-            return this._orderModel;
-        },
-        set: function (value) {
-            this._orderModel = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    InitializerService.prototype.initialize = function () {
-        var _this = this;
-        return this.orderService.initOrderedData().pipe(map(function (res) {
+    get orderModel() {
+        return this._orderModel;
+    }
+    set orderModel(value) {
+        this._orderModel = value;
+    }
+    initialize() {
+        return this.orderService.initOrderedData().then(res => {
             if (res) {
-                var now = new Date();
+                let now = new Date();
+                this.orderModel = res;
+                this._initialized.next(true);
                 if (res.startDate && res.endDate && location && !(res.startDate.getTime() - now.getTime() < 54000000)) {
-                    _this.locationService.setLocationDate(res.startDate, res.endDate, res.zipCode);
+                    this.locationService.setLocationDate(res.startDate, res.endDate, res.zipCode);
                 }
-                _this.orderModel = res;
             }
             return true;
-        }));
-    };
-    InitializerService = tslib_1.__decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        tslib_1.__metadata("design:paramtypes", [LocationDateService,
-            DeliveryChartService,
-            OrderService])
-    ], InitializerService);
-    return InitializerService;
-}());
+        });
+    }
+    get initialized() {
+        return this._initialized;
+    }
+};
+InitializerService = __decorate([
+    Injectable({
+        providedIn: 'root'
+    }),
+    __metadata("design:paramtypes", [LocationDateService,
+        DeliveryChartService,
+        OrderService])
+], InitializerService);
 export { InitializerService };
 //# sourceMappingURL=initializer.service.js.map

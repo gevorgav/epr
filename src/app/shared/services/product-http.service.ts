@@ -3,11 +3,10 @@ import {ProductService} from './product.service';
 import {ProductModel} from '../model/product.model';
 import {QuestionAnswerModel} from '../model/product-question-answer.model';
 import {ProductViewModel} from '../model/product-view.model';
-import {from, Observable} from 'rxjs';
+import {from} from 'rxjs';
 import {ParseService} from './parse.service';
 import {CategoryHttpService} from './category-http.service';
 import {AdditionCategoryHttp} from './addition-category-http.service';
-import {OrderService} from './order.service';
 
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
@@ -21,31 +20,29 @@ export class ProductHttpService extends ProductService {
     super();
   }
 
-  getAllProducts(): Observable<ProductModel[]> {
+  getAllProducts(): Promise<ProductModel[]> {
     let Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(Product);
-    let promise = query.find().then(res => {
+    return query.find().then(res => {
       let products: ProductModel [] = [];
       for (let item of res) {
         products.push(ProductHttpService.convertToProductModel(item));
       }
       return products;
     });
-    return from(promise);
   }
 
-  getProduct(id: string): Observable<ProductModel> {
+  getProduct(id: string): Promise<ProductModel> {
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     const query = new this.parseService.parse.Query(Product);
     query.equalTo('objectId', id);
-    const promise = query.first().then((result) => {
+    return query.first().then((result) => {
       return this.loadProductAdditionalCategory(result).then(res => {
         let productModel = ProductHttpService.convertToProductModel(result);
         productModel.additionalCategories = res;
         return productModel;
       });
     });
-    return from(promise);
   }
 
   private loadProductAdditionalCategory(res: any): Promise<string[]> {
@@ -61,10 +58,9 @@ export class ProductHttpService extends ProductService {
     const Product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     const query = new this.parseService.parse.Query(Product);
     query.equalTo('objectId', id);
-    const promise = query.first().then((result) => {
+    return query.first().then((result) => {
       return result.destroy({});
     });
-    return from(promise);
   }
 
   saveProduct(productToSave: ProductModel, newCategoryId: string, oldCategoryId?: string, oldAdditionalCategories?: string[]) {
@@ -116,15 +112,15 @@ export class ProductHttpService extends ProductService {
     return from(promise);
   }
 
-  getBestDealProducts(count: number): Observable<Array<ProductViewModel>> {
+  getBestDealProducts(count: number): Promise<Array<ProductViewModel>> {
     return undefined;
   }
 
-  getProductQuestions(id: number): Observable<Array<QuestionAnswerModel>> {
+  getProductQuestions(id: number): Promise<Array<QuestionAnswerModel>> {
     return undefined;
   }
 
-  getSimilarProducts(id: number): Observable<Array<ProductViewModel>> {
+  getSimilarProducts(id: number): Promise<Array<ProductViewModel>> {
     return undefined;
   }
 
@@ -173,17 +169,16 @@ export class ProductHttpService extends ProductService {
     );
   }
 
-  getProducts(count?: number): Observable<Array<ProductModel>> {
+  getProducts(count?: number): Promise<Array<ProductModel>> {
     let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(product);
-    let promise = query.find().then(res => {
+    return query.find().then(res => {
       let products = [];
       for (let item of res) {
         products.push(ProductHttpService.convertToProductModel(item));
       }
       return products;
     });
-    return from(promise);
   }
 
   private setFields(product: any, productToSave: ProductModel, oldAdditionalCategories: string[]) {
@@ -220,11 +215,11 @@ export class ProductHttpService extends ProductService {
     return name.replace(/[^a-zA-Z0-9- ]/g, '').trim().replace(/\s/g, '-');
   }
 
-  getProductByPatch(patch: string): Observable<ProductModel> {
+  getProductByPatch(patch: string): Promise<ProductModel> {
     let product = this.parseService.parse.Object.extend(ProductHttpService.PRODUCT);
     let query = new this.parseService.parse.Query(product);
     query.equalTo('pathParam', patch);
-    let promise = query.first().then(resProd => {
+    return query.first().then(resProd => {
       if (!resProd) {
         return null;
       } else {
@@ -235,7 +230,6 @@ export class ProductHttpService extends ProductService {
         });
       }
     });
-    return from(promise);
   }
 
 
@@ -256,14 +250,13 @@ export class ProductHttpService extends ProductService {
     return productsParse;
   }
 
-  getProductsByName(name: string): Observable<ProductModel[]> {
+  getProductsByName(name: string): Promise<ProductModel[]> {
     let productQuery = new this.parseService.parse.Query(ProductHttpService.PRODUCT);
     let products: ProductModel [] = [];
-    let promise = productQuery.contains('title', name).each(res => {
-        products.push(ProductHttpService.convertToProductModel(res));
-    }).then(res=>{
+    return productQuery.contains('title', name).each(res => {
+      products.push(ProductHttpService.convertToProductModel(res));
+    }).then(res => {
       return products;
     });
-    return from(promise);
   }
 }

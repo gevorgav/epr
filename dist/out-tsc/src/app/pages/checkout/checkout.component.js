@@ -1,12 +1,12 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShippingHttpService } from '../../shared/services/shipping-http.service';
 import { OrderService } from '../../shared/services/order.service';
 import { map } from 'rxjs/operators';
 import { MailService } from '../../shared/services/mail.service';
-var CheckoutComponent = /** @class */ (function () {
-    function CheckoutComponent(route, router, orderService, shippingService, mailService) {
+let CheckoutComponent = class CheckoutComponent {
+    constructor(route, router, orderService, shippingService, mailService) {
         this.route = route;
         this.router = router;
         this.orderService = orderService;
@@ -14,15 +14,14 @@ var CheckoutComponent = /** @class */ (function () {
         this.mailService = mailService;
         this.id$ = this.route.paramMap;
     }
-    CheckoutComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.id$.subscribe(function (params) {
-            var id = params.get('id');
+    ngOnInit() {
+        this.id$.subscribe((params) => {
+            let id = params.get('id');
             if (id) {
-                _this.setShippedTrue(params.get('id')).subscribe(function (res) {
+                this.setShippedTrue(params.get('id')).subscribe(res => {
                     if (res) {
-                        _this.removeProductsFromOrder().subscribe(function (res) {
-                            _this.router.navigateByUrl('/rentals').then(function (res) {
+                        this.removeProductsFromOrder().subscribe(res => {
+                            this.router.navigateByUrl('/rentals').then(res => {
                                 location.reload();
                             });
                         });
@@ -30,37 +29,36 @@ var CheckoutComponent = /** @class */ (function () {
                 });
             }
             else {
-                _this.router.navigateByUrl('/cart');
+                this.router.navigateByUrl('/cart');
             }
         });
-    };
-    CheckoutComponent.prototype.setShippedTrue = function (id) {
-        var _this = this;
-        return this.shippingService.setPayed(id).pipe(map(function (res) {
-            _this.mailService.sendClientNotice({
+    }
+    setShippedTrue(id) {
+        return this.shippingService.setPayed(id).pipe(map(res => {
+            this.mailService.sendClientNotice({
                 email: res.attributes['email'],
-                subject: "Dear " + res.attributes['name'],
-                message: "Thank you for your order!\n                    We shall send you Pro-Forma Invoice."
-            }).subscribe(function (res) { return res; });
+                subject: `Dear ${res.attributes['name']}`,
+                message: `Thank you for your order!
+                    We shall send you Pro-Forma Invoice.`
+            }).subscribe(res => res);
             return res;
         }));
-    };
-    CheckoutComponent.prototype.removeProductsFromOrder = function () {
+    }
+    removeProductsFromOrder() {
         return this.orderService.destroyOrder();
-    };
-    CheckoutComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-checkout',
-            templateUrl: './checkout.component.html',
-            styleUrls: ['./checkout.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [ActivatedRoute,
-            Router,
-            OrderService,
-            ShippingHttpService,
-            MailService])
-    ], CheckoutComponent);
-    return CheckoutComponent;
-}());
+    }
+};
+CheckoutComponent = __decorate([
+    Component({
+        selector: 'app-checkout',
+        templateUrl: './checkout.component.html',
+        styleUrls: ['./checkout.component.css']
+    }),
+    __metadata("design:paramtypes", [ActivatedRoute,
+        Router,
+        OrderService,
+        ShippingHttpService,
+        MailService])
+], CheckoutComponent);
 export { CheckoutComponent };
 //# sourceMappingURL=checkout.component.js.map

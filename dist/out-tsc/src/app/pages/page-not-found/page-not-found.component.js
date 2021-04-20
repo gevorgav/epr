@@ -1,19 +1,17 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
-var PageNotFoundComponent = /** @class */ (function () {
-    function PageNotFoundComponent() {
+let PageNotFoundComponent = class PageNotFoundComponent {
+    constructor() { }
+    ngOnInit() {
     }
-    PageNotFoundComponent.prototype.ngOnInit = function () {
-    };
-    PageNotFoundComponent = tslib_1.__decorate([
-        Component({
-            selector: 'page-not-found',
-            templateUrl: './page-not-found.component.html',
-            styleUrls: ['./page-not-found.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [])
-    ], PageNotFoundComponent);
-    return PageNotFoundComponent;
-}());
+};
+PageNotFoundComponent = __decorate([
+    Component({
+        selector: 'page-not-found',
+        templateUrl: './page-not-found.component.html',
+        styleUrls: ['./page-not-found.component.css']
+    }),
+    __metadata("design:paramtypes", [])
+], PageNotFoundComponent);
 export { PageNotFoundComponent };
 //# sourceMappingURL=page-not-found.component.js.map

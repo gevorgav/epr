@@ -1,20 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { AdditionalCategoryPopupComponent } from './additional-category-popup.component';
-describe('AdditionalCotegoryPopupComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(async(function () {
+describe('AdditionalCotegoryPopupComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [AdditionalCategoryPopupComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
+    beforeEach(() => {
         fixture = TestBed.createComponent(AdditionalCategoryPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

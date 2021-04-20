@@ -1,40 +1,26 @@
-var AdditionModel = /** @class */ (function () {
-    function AdditionModel(id, name, imageUrl) {
+export class AdditionModel {
+    constructor(id, name, imageUrl) {
         this._id = id;
         this._name = name;
         this._imageUrl = imageUrl;
     }
-    Object.defineProperty(AdditionModel.prototype, "id", {
-        get: function () {
-            return this._id;
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdditionModel.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdditionModel.prototype, "imageUrl", {
-        get: function () {
-            return this._imageUrl;
-        },
-        set: function (value) {
-            this._imageUrl = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return AdditionModel;
-}());
-export { AdditionModel };
+    get id() {
+        return this._id;
+    }
+    set id(value) {
+        this._id = value;
+    }
+    get name() {
+        return this._name;
+    }
+    set name(value) {
+        this._name = value;
+    }
+    get imageUrl() {
+        return this._imageUrl;
+    }
+    set imageUrl(value) {
+        this._imageUrl = value;
+    }
+}
 //# sourceMappingURL=addition.model.js.map

@@ -1,157 +1,88 @@
-import * as tslib_1 from "tslib";
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
 import { ProductViewModel } from './product-view.model';
-var ProductModel = /** @class */ (function (_super) {
-    tslib_1.__extends(ProductModel, _super);
-    function ProductModel(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count, additionalCategories, metaDescription, pageTitle, relation) {
-        var _this = _super.call(this, id, title, price, images, isNew, isHotDeal, itemSize, pathParam) || this;
-        _this._description = description;
-        _this._rentalTerms = rentalTerms;
-        _this._spaceRequired = spaceRequired;
-        _this._setupPolicy = setupPolicy || new Map();
-        _this._instructions = instructions;
-        _this._video = video;
-        _this._safetyRules = safetyRules;
-        _this._minTime = minTime;
-        _this._minPrice = minPrice;
-        _this._nightPrice = nightPrice;
-        _this._count = count;
-        _this._additionalCategories = additionalCategories;
-        _this._metaDescription = metaDescription;
-        _this._pageTitle = pageTitle;
-        _this._relation = relation;
-        return _this;
+export class ProductModel extends ProductViewModel {
+    constructor(id, title, price, images, isNew, isHotDeal, itemSize, pathParam, description, rentalTerms, spaceRequired, setupPolicy, instructions, video, safetyRules, minTime, minPrice, nightPrice, count, additionalCategories, metaDescription, pageTitle, relation) {
+        super(id, title, price, images, isNew, isHotDeal, itemSize, pathParam);
+        this._description = description;
+        this._rentalTerms = rentalTerms;
+        this._spaceRequired = spaceRequired;
+        this._setupPolicy = setupPolicy || new Map();
+        this._instructions = instructions;
+        this._video = video;
+        this._safetyRules = safetyRules;
+        this._minTime = minTime;
+        this._minPrice = minPrice;
+        this._nightPrice = nightPrice;
+        this._count = count;
+        this._additionalCategories = additionalCategories;
+        this._metaDescription = metaDescription;
+        this._pageTitle = pageTitle;
+        this._relation = relation;
     }
-    Object.defineProperty(ProductModel.prototype, "description", {
-        get: function () {
-            return this._description;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "rentalTerms", {
-        get: function () {
-            return this._rentalTerms;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "spaceRequired", {
-        get: function () {
-            return this._spaceRequired;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "setupPolicy", {
-        get: function () {
-            return this._setupPolicy;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "instructions", {
-        get: function () {
-            return this._instructions;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "video", {
-        get: function () {
-            return this._video;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "safetyRules", {
-        get: function () {
-            return this._safetyRules;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "minTime", {
-        get: function () {
-            return this._minTime;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "minPrice", {
-        get: function () {
-            return this._minPrice;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "nightPrice", {
-        get: function () {
-            return this._nightPrice;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "count", {
-        get: function () {
-            return this._count;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "calculatedPrice", {
-        get: function () {
-            return this._calculatedPrice;
-        },
-        set: function (value) {
-            this._calculatedPrice = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "additionalCategories", {
-        get: function () {
-            return this._additionalCategories;
-        },
-        set: function (value) {
-            this._additionalCategories = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "metaDescription", {
-        get: function () {
-            return this._metaDescription;
-        },
-        set: function (value) {
-            this._metaDescription = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "pageTitle", {
-        get: function () {
-            return this._pageTitle;
-        },
-        set: function (value) {
-            this._pageTitle = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ProductModel.prototype, "relation", {
-        get: function () {
-            return this._relation;
-        },
-        set: function (value) {
-            this._relation = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return ProductModel;
-}(ProductViewModel));
-export { ProductModel };
+    get description() {
+        return this._description;
+    }
+    get rentalTerms() {
+        return this._rentalTerms;
+    }
+    get spaceRequired() {
+        return this._spaceRequired;
+    }
+    get setupPolicy() {
+        return this._setupPolicy;
+    }
+    get instructions() {
+        return this._instructions;
+    }
+    get video() {
+        return this._video;
+    }
+    get safetyRules() {
+        return this._safetyRules;
+    }
+    get minTime() {
+        return this._minTime;
+    }
+    get minPrice() {
+        return this._minPrice;
+    }
+    get nightPrice() {
+        return this._nightPrice;
+    }
+    get count() {
+        return this._count;
+    }
+    get calculatedPrice() {
+        return this._calculatedPrice;
+    }
+    set calculatedPrice(value) {
+        this._calculatedPrice = value;
+    }
+    get additionalCategories() {
+        return this._additionalCategories;
+    }
+    set additionalCategories(value) {
+        this._additionalCategories = value;
+    }
+    get metaDescription() {
+        return this._metaDescription;
+    }
+    set metaDescription(value) {
+        this._metaDescription = value;
+    }
+    get pageTitle() {
+        return this._pageTitle;
+    }
+    set pageTitle(value) {
+        this._pageTitle = value;
+    }
+    get relation() {
+        return this._relation;
+    }
+    set relation(value) {
+        this._relation = value;
+    }
+}
 //# sourceMappingURL=product.model.js.map

@@ -1,23 +1,22 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ParseService } from './parse.service';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
-var AuthGuardService = /** @class */ (function () {
-    function AuthGuardService(parse, router) {
+let AuthGuardService = class AuthGuardService {
+    constructor(parse, router) {
         this.parse = parse;
         this.router = router;
     }
-    AuthGuardService.prototype.canActivate = function (route, state) {
-        var _this = this;
+    canActivate(route, state) {
         if (this.parse.isAuth()) {
-            return this.parse.isAdmin().pipe(map(function (res) {
+            return this.parse.isAdmin().pipe(map((res) => {
                 if (res) {
                     return true;
                 }
                 else {
-                    _this.router.navigate(['home']);
+                    this.router.navigate(['home']);
                     return false;
                 }
             }));
@@ -26,20 +25,19 @@ var AuthGuardService = /** @class */ (function () {
             this.router.navigate(['home']);
             return of(false);
         }
-    };
-    AuthGuardService = tslib_1.__decorate([
-        Injectable(),
-        tslib_1.__metadata("design:paramtypes", [ParseService, Router])
-    ], AuthGuardService);
-    return AuthGuardService;
-}());
+    }
+};
+AuthGuardService = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [ParseService, Router])
+], AuthGuardService);
 export { AuthGuardService };
-var AuthGuardLoginService = /** @class */ (function () {
-    function AuthGuardLoginService(parse, router) {
+let AuthGuardLoginService = class AuthGuardLoginService {
+    constructor(parse, router) {
         this.parse = parse;
         this.router = router;
     }
-    AuthGuardLoginService.prototype.canActivate = function (route, state) {
+    canActivate(route, state) {
         if (this.parse.isAuth()) {
             this.router.navigate(['home']);
             return of(false);
@@ -47,20 +45,19 @@ var AuthGuardLoginService = /** @class */ (function () {
         else {
             return of(true);
         }
-    };
-    AuthGuardLoginService = tslib_1.__decorate([
-        Injectable(),
-        tslib_1.__metadata("design:paramtypes", [ParseService, Router])
-    ], AuthGuardLoginService);
-    return AuthGuardLoginService;
-}());
+    }
+};
+AuthGuardLoginService = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [ParseService, Router])
+], AuthGuardLoginService);
 export { AuthGuardLoginService };
-var AuthGuardVerificationService = /** @class */ (function () {
-    function AuthGuardVerificationService(parse, router) {
+let AuthGuardVerificationService = class AuthGuardVerificationService {
+    constructor(parse, router) {
         this.parse = parse;
         this.router = router;
     }
-    AuthGuardVerificationService.prototype.canActivate = function (route, state) {
+    canActivate(route, state) {
         if (!this.parse.parse.User.current() || (this.parse.parse.User.current() && this.parse.parse.User.current().authenticated())) {
             this.router.navigate(['home']);
             return of(false);
@@ -68,12 +65,11 @@ var AuthGuardVerificationService = /** @class */ (function () {
         else {
             return of(true);
         }
-    };
-    AuthGuardVerificationService = tslib_1.__decorate([
-        Injectable(),
-        tslib_1.__metadata("design:paramtypes", [ParseService, Router])
-    ], AuthGuardVerificationService);
-    return AuthGuardVerificationService;
-}());
+    }
+};
+AuthGuardVerificationService = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [ParseService, Router])
+], AuthGuardVerificationService);
 export { AuthGuardVerificationService };
 //# sourceMappingURL=auth-guard.service.js.map

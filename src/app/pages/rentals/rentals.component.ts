@@ -6,7 +6,7 @@ import {CategoryService} from '../../shared/services/category.service';
 import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {Meta, Title} from '@angular/platform-browser';
-import {zip} from 'rxjs';
+import {from, zip} from 'rxjs';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    zip(this.categoryService.getCategories().pipe(
+    zip(from(this.categoryService.getCategories()).pipe(
       map(arr => arr.sort((a, b) => {
         return a.order - b.order;
       }))
@@ -39,7 +39,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
       if (res[1]){
         this.categories.forEach(value => {
           if (value.pathParam === res[1])
-            this.categoryService.getCategoriesByPathParamWithDependency(res[1]).subscribe(res=>{
+            this.categoryService.getCategoriesByPathParamWithDependency(res[1]).then(res=>{
               this.activeCategory = res;
             })
         })
@@ -88,7 +88,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   private initCategory(routs?: ResolveEnd) {
     let pathParam = routs ? routs.urlAfterRedirects.replace('/rentals/', '') : this.route.snapshot.params['id'];
 
-    this.categoryService.getCategoriesByPathParamWithDependency(pathParam).subscribe(res=>{
+    this.categoryService.getCategoriesByPathParamWithDependency(pathParam).then(res=>{
       this.activeCategory = res;
       this.titleService.setTitle(res.pageTitle? res.pageTitle: res.title);
       this.metaService.updateTag({ name: 'description', content: res.metaDescription });

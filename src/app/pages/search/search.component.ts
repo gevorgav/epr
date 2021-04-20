@@ -19,11 +19,11 @@ export class SearchComponent implements OnInit {
     this.route.paramMap.subscribe(res=>{
       this.searchText = res.get("searchText").trim();
       if (this.searchText){
-        this.productService.getProductsByName(this.searchText).subscribe(res=>{
+        this.productService.getProductsByName(this.searchText).then(res=>{
           this.products = res;
           if (!res || res.length == 0){
             let text = this.searchText[0].toUpperCase() + this.searchText.slice(1);
-            this.productService.getProductsByName(text).subscribe(res=>{
+            this.productService.getProductsByName(text).then(res=>{
               this.products = res;
             })
           }

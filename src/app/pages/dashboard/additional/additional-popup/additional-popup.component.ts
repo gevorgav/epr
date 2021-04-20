@@ -19,7 +19,7 @@ export class AdditionalPopupComponent implements OnInit {
   form: FormGroup;
   fileMaxSizeErrorMessage: string;
 
-  @ViewChild('input') inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
   public categories: AdditionCategoryModel[];
 
   constructor(public dialogRef: MatDialogRef<AdditionalPopupComponent>,
@@ -96,7 +96,7 @@ export class AdditionalPopupComponent implements OnInit {
 
   private getCategories() {
     this.categoryService.getAdditionCategories()
-      .subscribe(
+      .then(
         res => {
           this.categories = res;
         },

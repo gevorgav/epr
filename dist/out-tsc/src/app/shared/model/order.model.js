@@ -1,5 +1,5 @@
-var OrderModel = /** @class */ (function () {
-    function OrderModel(startDate, endDate, userId, zipCode, orderItems, id) {
+export class OrderModel {
+    constructor(startDate, endDate, userId, zipCode, orderItems, id) {
         this._id = id;
         this._startDate = startDate;
         this._endDate = endDate;
@@ -7,77 +7,47 @@ var OrderModel = /** @class */ (function () {
         this._zipCode = zipCode;
         this._orderItems = orderItems;
     }
-    Object.defineProperty(OrderModel.prototype, "id", {
-        get: function () {
-            return this._id;
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "startDate", {
-        get: function () {
-            return this._startDate;
-        },
-        set: function (value) {
-            this._startDate = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "endDate", {
-        get: function () {
-            return this._endDate;
-        },
-        set: function (value) {
-            this._endDate = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "userId", {
-        get: function () {
-            return this._userId;
-        },
-        set: function (value) {
-            this._userId = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "zipCode", {
-        get: function () {
-            return this._zipCode;
-        },
-        set: function (value) {
-            this._zipCode = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "orderItems", {
-        get: function () {
-            return this._orderItems;
-        },
-        set: function (value) {
-            this._orderItems = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderModel.prototype, "shipping", {
-        get: function () {
-            return this._shipping;
-        },
-        set: function (value) {
-            this._shipping = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return OrderModel;
-}());
-export { OrderModel };
+    get id() {
+        return this._id;
+    }
+    set id(value) {
+        this._id = value;
+    }
+    get startDate() {
+        return this._startDate;
+    }
+    set startDate(value) {
+        this._startDate = value;
+    }
+    get endDate() {
+        return this._endDate;
+    }
+    set endDate(value) {
+        this._endDate = value;
+    }
+    get userId() {
+        return this._userId;
+    }
+    set userId(value) {
+        this._userId = value;
+    }
+    get zipCode() {
+        return this._zipCode;
+    }
+    set zipCode(value) {
+        this._zipCode = value;
+    }
+    get orderItems() {
+        return this._orderItems;
+    }
+    set orderItems(value) {
+        this._orderItems = value;
+    }
+    get shipping() {
+        return this._shipping;
+    }
+    set shipping(value) {
+        this._shipping = value;
+    }
+}
 //# sourceMappingURL=order.model.js.map

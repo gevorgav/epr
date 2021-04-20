@@ -1,7 +1,3 @@
-var UserService = /** @class */ (function () {
-    function UserService() {
-    }
-    return UserService;
-}());
-export { UserService };
+export class UserService {
+}
 //# sourceMappingURL=user.service.js.map

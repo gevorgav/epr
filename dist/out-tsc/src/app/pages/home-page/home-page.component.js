@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../shared/services/category.service';
@@ -8,8 +8,8 @@ import { LocationDateService } from '../../shared/services/location-date.service
 import { SettingsService } from '../../shared/services/settings.service';
 import { SettingsModel } from '../../shared/model/settings.model';
 import { Meta, Title } from '@angular/platform-browser';
-var HomePageComponent = /** @class */ (function () {
-    function HomePageComponent(router, titleService, metaService, locationDateService, categoryService, productService, settingsService) {
+let HomePageComponent = class HomePageComponent {
+    constructor(router, titleService, metaService, locationDateService, categoryService, productService, settingsService) {
         this.router = router;
         this.titleService = titleService;
         this.metaService = metaService;
@@ -47,109 +47,108 @@ var HomePageComponent = /** @class */ (function () {
         this.sliderIndex = 0;
         this.maxImages = 0;
         this.sliderReady = false;
+        this.showLocationDate = false;
+        this.isMobile = false;
         this.onResize();
     }
-    HomePageComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initCategories();
         this.initProducts();
         this.initSettings();
-    };
-    HomePageComponent.prototype.ngAfterViewInit = function () {
-    };
-    HomePageComponent.prototype.onResize = function (event) {
+        if (window.innerWidth && window.innerWidth < 990) {
+            this.isMobile = true;
+        }
+    }
+    ngAfterViewInit() {
+    }
+    onResize(event) {
         this.screenHeight = window.innerHeight;
-    };
-    HomePageComponent.prototype.locationDateSubmitted = function () {
+    }
+    locationDateSubmitted() {
         this.router.navigate(['rentals']);
-    };
-    HomePageComponent.prototype.initCategories = function () {
-        var _this = this;
-        this.categoryService.getCategoriesWithDependency().pipe(map(function (arr) { return arr.sort(function (a, b) {
+    }
+    initCategories() {
+        this.categoryService.getCategoriesWithDependency().pipe(map((arr) => arr.sort((a, b) => {
             return a.order - b.order;
-        }); })).subscribe(function (res) {
-            _this.categories = res;
+        }))).subscribe(res => {
+            this.categories = res;
         });
-    };
-    HomePageComponent.prototype.initFeaturedRentalProducts = function (res) {
-        var _this = this;
-        res.forEach(function (product) {
+    }
+    initFeaturedRentalProducts(res) {
+        res.forEach((product) => {
             if (product.isNew || product.isHotDeal) {
-                _this.featuredRentalProducts.push(product);
+                this.featuredRentalProducts.push(product);
             }
         });
-    };
-    HomePageComponent.prototype.navigate = function (id, title) {
+    }
+    navigate(id, title) {
         this.router.navigate(['/rentals', title], { queryParams: { id: id } });
-    };
-    HomePageComponent.prototype.getClass = function (index) {
+    }
+    getClass(index) {
         if ((index === 0 || index === 1 || index === 11 || index === 12)
             && this.categories.length % 3 !== 0) {
             return 'col-lg-6';
         }
         return 'col-lg-4';
-    };
-    HomePageComponent.prototype.initProducts = function () {
-        var _this = this;
-        this.productService.getAllProducts().subscribe(function (res) {
-            _this.initFeaturedRentalProducts(res);
+    }
+    initProducts() {
+        this.productService.getAllProducts().subscribe((res) => {
+            this.initFeaturedRentalProducts(res);
         });
-    };
-    HomePageComponent.prototype.isSpecified = function () {
+    }
+    isSpecified() {
         return this.locationDateService.isSpecified;
-    };
-    HomePageComponent.prototype.getPrice = function (nightPrice, minPrice, minTime, price) {
+    }
+    getPrice(nightPrice, minPrice, minTime, price) {
         return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
-    };
-    HomePageComponent.prototype.getScreenHeight = function () {
+    }
+    getScreenHeight() {
         return this.screenHeight - 80;
-    };
-    HomePageComponent.prototype.initImage = function () {
-        var _this = this;
+    }
+    initImage() {
         this.sliderIndex++;
         if (this.sliderIndex > this.maxImages)
             this.sliderIndex = 1;
-        setTimeout(function () { return _this.initImage(); }, 7000);
-    };
-    HomePageComponent.prototype.initSettings = function () {
-        var _this = this;
-        this.settingsService.getSettings().subscribe(function (res) {
-            _this.settings = res;
-            _this.titleService.setTitle(_this.settings.title);
-            _this.metaService.addTag({ name: 'description', content: _this.settings.homePageMetaDescription });
-            _this.initImage();
-            var i = 1;
-            while (_this.settings['imageUrl' + i]) {
-                _this.maxImages++;
+        setTimeout(() => this.initImage(), 7000);
+    }
+    initSettings() {
+        this.settingsService.getSettings().then(res => {
+            this.settings = res;
+            this.titleService.setTitle(this.settings.title);
+            this.metaService.addTag({ name: 'description', content: this.settings.homePageMetaDescription });
+            this.initImage();
+            let i = 1;
+            while (this.settings['imageUrl' + i]) {
+                this.maxImages++;
                 i++;
             }
-            _this.sliderReady = true;
+            this.sliderReady = true;
         });
-    };
-    tslib_1.__decorate([
-        Input(),
-        tslib_1.__metadata("design:type", SettingsModel)
-    ], HomePageComponent.prototype, "settings", void 0);
-    tslib_1.__decorate([
-        HostListener('window:resize', ['$event']),
-        tslib_1.__metadata("design:type", Function),
-        tslib_1.__metadata("design:paramtypes", [Object]),
-        tslib_1.__metadata("design:returntype", void 0)
-    ], HomePageComponent.prototype, "onResize", null);
-    HomePageComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-home-page',
-            templateUrl: './home-page.component.html',
-            styleUrls: ['./home-page.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [Router,
-            Title,
-            Meta,
-            LocationDateService,
-            CategoryService,
-            ProductService,
-            SettingsService])
-    ], HomePageComponent);
-    return HomePageComponent;
-}());
+    }
+};
+__decorate([
+    Input(),
+    __metadata("design:type", SettingsModel)
+], HomePageComponent.prototype, "settings", void 0);
+__decorate([
+    HostListener('window:resize', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], HomePageComponent.prototype, "onResize", null);
+HomePageComponent = __decorate([
+    Component({
+        selector: 'app-home-page',
+        templateUrl: './home-page.component.html',
+        styleUrls: ['./home-page.component.css']
+    }),
+    __metadata("design:paramtypes", [Router,
+        Title,
+        Meta,
+        LocationDateService,
+        CategoryService,
+        ProductService,
+        SettingsService])
+], HomePageComponent);
 export { HomePageComponent };
 //# sourceMappingURL=home-page.component.js.map

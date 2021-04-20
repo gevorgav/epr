@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.setTitles();
     this.init();
-    this.initializerService.initialize().subscribe();
+    this.initializerService.initialize().then();
     // this.shippingService.loadShippings().subscribe(res=>{
     //   console.log(res);
     // })

@@ -1,80 +1,80 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ParseService } from '../../shared/services/parse.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../shared/model/user.model';
 import { Router } from '@angular/router';
-var LoginPageComponent = /** @class */ (function () {
-    function LoginPageComponent(parseService, router) {
+let LoginPageComponent = class LoginPageComponent {
+    constructor(parseService, router) {
         this.parseService = parseService;
         this.router = router;
         this.loginErrorMessage = "";
         this.user = new UserModel();
     }
-    LoginPageComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initRegisterForm();
         this.initLoginForm();
-    };
-    LoginPageComponent.prototype.onSubmitLogin = function () {
-        var that = this;
+    }
+    onSubmitLogin() {
+        let that = this;
         if (this.userLoginForm.valid) {
             this.parseService.login(this.userLoginForm.get('username').value, this.userLoginForm.get('password').value).subscribe(function (data) {
                 that.parseService.$loginSubject.next(true);
-                that.router.navigate(["home"]).then(function (res) {
+                that.router.navigate(["home"]).then(res => {
                     location.reload();
                 });
             }, function (error) {
                 that.loginErrorMessage = error.message;
             });
         }
-    };
-    LoginPageComponent.prototype.onSubmitRegistration = function () {
+    }
+    onSubmitRegistration() {
         if (this.userRegisterForm.valid) {
-            var user_1 = new this.parseService.parse.User();
-            user_1.setUsername(this.userRegisterForm.get('username').value.toLowerCase().trim());
-            user_1.setEmail(this.userRegisterForm.get('email').value);
-            user_1.setPassword(this.userRegisterForm.get('password').value);
-            user_1.set('name', this.userRegisterForm.get('name').value);
-            user_1.set('phone', this.userRegisterForm.get('phone').value);
-            var that_1 = this;
-            user_1.signUp().then(function () {
-                var query = new that_1.parseService.parse.Query(that_1.parseService.parse.Role);
+            let user = new this.parseService.parse.User();
+            user.setUsername(this.userRegisterForm.get('username').value.toLowerCase().trim());
+            user.setEmail(this.userRegisterForm.get('email').value);
+            user.setPassword(this.userRegisterForm.get('password').value);
+            user.set('name', this.userRegisterForm.get('name').value);
+            user.set('phone', this.userRegisterForm.get('phone').value);
+            let that = this;
+            user.signUp().then(function () {
+                let query = new that.parseService.parse.Query(that.parseService.parse.Role);
                 query.equalTo("name", 'user');
                 return query.first();
                 //first will return one object or null
             }).then(function (role) {
                 //.getUsers() is equal .relation('users')
                 if (role) {
-                    role.getUsers().add(user_1);
-                    role.save(null, {}).then(function (res) {
-                        that_1.router.navigate(["verification-page"]);
+                    role.getUsers().add(user);
+                    role.save(null, {}).then(res => {
+                        that.router.navigate(["verification-page"]);
                     });
                 }
                 else {
-                    return that_1.parseService.parse.Promise.error("no such role");
+                    return that.parseService.parse.Promise.error("no such role");
                 }
             }, console.error).then(function () {
-                return user_1;
+                return user;
             }, console.error);
         }
-    };
-    LoginPageComponent.prototype.checkMail = function (control) {
-        var Stores = this.parseService.parse.Object.extend("User");
-        var query = new this.parseService.parse.Query(Stores);
+    }
+    checkMail(control) {
+        let Stores = this.parseService.parse.Object.extend("User");
+        const query = new this.parseService.parse.Query(Stores);
         query.equalTo("email", control.value.trim());
         return query.find().then(function (results) {
             return results.length == 0 ? null : { emailTaken: true };
         });
-    };
-    LoginPageComponent.prototype.checkUsername = function (control) {
-        var Stores = this.parseService.parse.Object.extend("User");
-        var query = new this.parseService.parse.Query(Stores);
+    }
+    checkUsername(control) {
+        let Stores = this.parseService.parse.Object.extend("User");
+        const query = new this.parseService.parse.Query(Stores);
         query.equalTo("username", control.value.trim());
         return query.find().then(function (results) {
             return results.length == 0 ? null : { usernameTaken: true };
         });
-    };
-    LoginPageComponent.prototype.initRegisterForm = function () {
+    }
+    initRegisterForm() {
         this.userRegisterForm = new FormGroup({
             'name': new FormControl(this.user.name, [
                 Validators.required
@@ -98,8 +98,8 @@ var LoginPageComponent = /** @class */ (function () {
                 Validators.minLength(6)
             ]),
         }, { validators: userRevealedValidator });
-    };
-    LoginPageComponent.prototype.initLoginForm = function () {
+    }
+    initLoginForm() {
         this.userLoginForm = new FormGroup({
             'username': new FormControl('', [
                 Validators.required
@@ -108,22 +108,21 @@ var LoginPageComponent = /** @class */ (function () {
                 Validators.required
             ])
         });
-    };
-    LoginPageComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-login-page',
-            templateUrl: './login-page.component.html',
-            styleUrls: ['./login-page.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [ParseService,
-            Router])
-    ], LoginPageComponent);
-    return LoginPageComponent;
-}());
+    }
+};
+LoginPageComponent = __decorate([
+    Component({
+        selector: 'app-login-page',
+        templateUrl: './login-page.component.html',
+        styleUrls: ['./login-page.component.css']
+    }),
+    __metadata("design:paramtypes", [ParseService,
+        Router])
+], LoginPageComponent);
 export { LoginPageComponent };
-export var userRevealedValidator = function (control) {
-    var password = control.get('password');
-    var repassword = control.get('repassword');
+export const userRevealedValidator = (control) => {
+    const password = control.get('password');
+    const repassword = control.get('repassword');
     return password.value && repassword.value && password.value !== repassword.value ? { 'userRevealedValidator': true } : null;
 };
 //# sourceMappingURL=login-page.component.js.map

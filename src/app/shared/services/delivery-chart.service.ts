@@ -2,26 +2,26 @@
  * @author Gevorg Avetisyan on 3/16/2019.
  */
 import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
-import {Observable} from 'rxjs';
+import {Observable} from "rxjs";
 
 export abstract class DeliveryChartService {
-  abstract getDeliveryLocations(): Observable<Array<DeliveryChartModel>>;
+  abstract getDeliveryLocations(): Promise<Array<DeliveryChartModel>>;
 
   abstract getDeliveryLocationById(id: number): DeliveryChartModel;
 
-  abstract getDeliveryLocationByZipCode(zipCodeId: string): Observable<DeliveryChartModel>;
+  abstract getDeliveryLocationByZipCode(zipCodeId: string): Promise<DeliveryChartModel>;
 
-  abstract getDeliveryLocationByCity(city: string): Observable<Array<DeliveryChartModel>>;
+  abstract getDeliveryLocationByCity(city: string): Promise<Array<DeliveryChartModel>>;
 
   abstract getDeliveryLocationsFromCash(): Array<DeliveryChartModel>;
 
-  abstract getZipCodeModelByZipCode(zipCode: string): Observable<ZipCode>
+  abstract getZipCodeModelByZipCode(zipCode: string): Promise<ZipCode>
 
-  abstract saveDeliveryChart(model: DeliveryChartModel): Observable<any>;
+  abstract saveDeliveryChart(model: DeliveryChartModel): Promise<any>;
 
-  abstract deleteDeliveryChart(id: string): Observable<any>;
+  abstract deleteDeliveryChart(id: string): Promise<any>;
 
   abstract syncDeliveryChart(): Observable<any>;
 
-  abstract getDeliveryLocationsByZipCodeSearch(zipCode: string, city?: string): Observable<DeliveryChartModel[]>;
+  abstract getDeliveryLocationsByZipCodeSearch(zipCode: string, city?: string): Promise<DeliveryChartModel[]>;
 }

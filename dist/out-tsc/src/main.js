@@ -6,7 +6,7 @@ import { environment } from './environments/environment';
 if (environment.production) {
     enableProdMode();
 }
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     platformBrowserDynamic().bootstrapModule(AppModule);
 });
 //# sourceMappingURL=main.js.map

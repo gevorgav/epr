@@ -1,5 +1,5 @@
 import {SettingsService} from './settings.service';
-import {from, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {SettingsModel} from '../model/settings.model';
 import {ParseService} from './parse.service';
 import {Injectable} from '@angular/core';
@@ -12,14 +12,13 @@ export class SettingsHttpService implements SettingsService {
   constructor(private parseService: ParseService) {
   }
 
-  getSettings(): Observable<SettingsModel> {
+  getSettings(): Promise<SettingsModel> {
     const SettingsParse = this.parseService.parse.Object.extend(SettingsHttpService.SETTINGS_MODEL);
     let settingsParse = new SettingsParse();
     const query = new this.parseService.parse.Query(settingsParse);
-    let promise = query.first().then(res => {
+    return query.first().then(res => {
       return SettingsHttpService.convertSettingsToSettingsModel(res);
     });
-    return from(promise);
   }
 
   private static convertSettingsToSettingsModel(item: any): SettingsModel {
@@ -33,15 +32,14 @@ export class SettingsHttpService implements SettingsService {
       item.attributes['mobileImageUrl']);
   }
 
-  updateSettings(settings: SettingsModel): Observable<any> {
+  updateSettings(settings: SettingsModel): Promise<any> {
     const SettingsParse = this.parseService.parse.Object.extend(SettingsHttpService.SETTINGS_MODEL);
     let settingsParse = new SettingsParse();
     const query = new this.parseService.parse.Query(settingsParse);
-    let promise = query.first().then(res => {
+    return query.first().then(res => {
       SettingsHttpService.setFieldsForSettings(res, settings);
       return res.save();
     });
-    return from(promise);
   }
 
   private static setFieldsForSettings(settingsParse: any, model: SettingsModel) {

@@ -11,14 +11,14 @@ export class CategoryModel {
   private _imageUrl: string;
   private _order: number;
   private _items: ProductModel[];
-  private _$items: Observable<ProductModel[]>;
+  private _$items: Promise<ProductModel[]>;
   private _metaDescription: string;
   private _pathParam: string;
   private _count: number;
   private _pageTitle: string;
 
   constructor(id: string, title: string, description: string, imageUrl: string, metaDescription: string, pathParam: string,
-              pageTitle: string, order?: number, $items?: Observable<ProductModel[]>, items?: ProductModel[], count?: number) {
+              pageTitle: string, order?: number, $items?: Promise<ProductModel[]>, items?: ProductModel[], count?: number) {
     this._id = id;
     this._title = title;
     this._description = description;
@@ -40,11 +40,11 @@ export class CategoryModel {
     return this._title;
   }
 
-  get $items(): Observable<ProductModel[]> {
+  get $items(): Promise<ProductModel[]> {
     return this._$items;
   }
 
-  set $items(value: Observable<ProductModel[]>) {
+  set $items(value: Promise<ProductModel[]>) {
     this._$items = value;
   }
 

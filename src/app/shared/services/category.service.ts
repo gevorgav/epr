@@ -6,11 +6,11 @@ import {Observable} from 'rxjs';
 import {ProductViewModel} from '../model/product-view.model';
 
 export abstract class CategoryService {
-  abstract getCategories(): Observable<Array<CategoryModel>>;
+  abstract getCategories(): Promise<Array<CategoryModel>>;
   abstract getCategoriesWithDependency(): Observable<Array<CategoryModel>>;
-  abstract getCategoriesByPathParamWithDependency(pathParam: string): Observable<CategoryModel>;
-  abstract getCategoryItems(categoryId: string): Observable<Array<ProductViewModel>>;
-  abstract getCategoryByProductId(productId: string): Observable<CategoryModel>;
-  abstract deleteCategory(id: string): Observable<any>;
-  abstract saveCategory(model: CategoryModel): Observable<any>;
+  abstract getCategoriesByPathParamWithDependency(pathParam: string): Promise<CategoryModel>;
+  abstract getCategoryItems(categoryId: string): Promise<Array<ProductViewModel>>;
+  abstract getCategoryByProductId(productId: string): Promise<CategoryModel>;
+  abstract deleteCategory(id: string): Promise<any>;
+  abstract saveCategory(model: CategoryModel): Promise<any>;
 }

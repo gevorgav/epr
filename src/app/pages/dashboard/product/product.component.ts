@@ -97,7 +97,7 @@ export class ProductComponent implements OnInit {
 
   private initProducts() {
     this.productService.getAllProducts()
-      .subscribe(
+      .then(
         products => {
           this.products = products;
           this.dataSource = new MatTableDataSource(this.products);

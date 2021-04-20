@@ -1,7 +1,3 @@
-var CategoryService = /** @class */ (function () {
-    function CategoryService() {
-    }
-    return CategoryService;
-}());
-export { CategoryService };
+export class CategoryService {
+}
 //# sourceMappingURL=category.service.js.map

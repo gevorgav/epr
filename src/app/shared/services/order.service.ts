@@ -52,7 +52,7 @@ export class OrderService {
     }
   }
 
-  initOrderedData(): Observable<OrderModel>{
+  initOrderedData(): Promise<OrderModel>{
     let orderModel = new OrderModel(null,null,null,null,[]);
     let orderItems: OrderItemModel[] = [];
     let promise;
@@ -104,7 +104,7 @@ export class OrderService {
     }else {
       promise = new Promise((resolver, reject)=>{resolver(orderModel)})
     }
-    return from(promise);
+    return promise;
   }
 
   setOrder(model: OrderModel): Observable<any> {
@@ -190,45 +190,43 @@ export class OrderService {
     });
   }
 
-  saveCount(value: number, productId: string): Observable<boolean> {
+  saveCount(value: number, productId: string): Promise<boolean> {
     const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
     let order = new Order();
     order.set('user', this.parseService.getCurrentUser());
 
     const query = new this.parseService.parse.Query(order);
-    let promise = query.equalTo('user', this.parseService.getCurrentUser())
-      .first().then(res=>{
-        return res.relation('orderItems').query().find().then((orderItemsParse)=>{
-          orderItemsParse.forEach(item=>{
-            if (item.attributes.product.id === productId){
+    return query.equalTo('user', this.parseService.getCurrentUser())
+      .first().then(res => {
+        return res.relation('orderItems').query().find().then((orderItemsParse) => {
+          orderItemsParse.forEach(item => {
+            if (item.attributes.product.id === productId) {
               item.set('count', value);
               return item.save()
             }
           });
         })
       });
-    return from(promise);
   }
 
-  removeOrderItem(productId: string): Observable<boolean>{
+  removeOrderItem(productId: string): Promise<boolean>{
     if (!this.parseService.getCurrentUser()){
-      return of(true);
+      return new Promise<boolean>(()=>true);
     }
     const Order = this.parseService.parse.Object.extend(OrderService.ORDER);
     let order = new Order();
     order.set('user', this.parseService.getCurrentUser());
     const query = new this.parseService.parse.Query(order);
-    let promise = query.equalTo('user', this.parseService.getCurrentUser())
-    .first().then(res=>{
-      return res.relation('orderItems').query().find().then((orderItemsParse)=>{
-        for (let orderItemParse of orderItemsParse){
-          if (orderItemParse.attributes.product.id === productId){
-            return orderItemParse.destroy()
+    return query.equalTo('user', this.parseService.getCurrentUser())
+      .first().then(res => {
+        return res.relation('orderItems').query().find().then((orderItemsParse) => {
+          for (let orderItemParse of orderItemsParse) {
+            if (orderItemParse.attributes.product.id === productId) {
+              return orderItemParse.destroy()
+            }
           }
-        }
-      })
-    });
-    return from(promise);
+        })
+      });
   }
 
   public destroyOrder(): Observable<any>{

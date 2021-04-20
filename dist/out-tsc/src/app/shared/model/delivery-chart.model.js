@@ -1,5 +1,5 @@
-var DeliveryChartModel = /** @class */ (function () {
-    function DeliveryChartModel(id, city, price, $zipCodes, zipCodes, locationId) {
+export class DeliveryChartModel {
+    constructor(id, city, price, $zipCodes, zipCodes, locationId) {
         this._id = id;
         this._city = city;
         this._zipCodes = zipCodes;
@@ -7,91 +7,51 @@ var DeliveryChartModel = /** @class */ (function () {
         this._locationId = locationId;
         this._$zipCodes = $zipCodes;
     }
-    Object.defineProperty(DeliveryChartModel.prototype, "$zipCodes", {
-        get: function () {
-            return this._$zipCodes;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(DeliveryChartModel.prototype, "id", {
-        get: function () {
-            return this._id;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(DeliveryChartModel.prototype, "city", {
-        get: function () {
-            return this._city;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(DeliveryChartModel.prototype, "zipCodes", {
-        get: function () {
-            return this._zipCodes;
-        },
-        set: function (value) {
-            this._zipCodes = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(DeliveryChartModel.prototype, "price", {
-        get: function () {
-            return this._price;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(DeliveryChartModel.prototype, "locationId", {
-        get: function () {
-            return this._locationId;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return DeliveryChartModel;
-}());
-export { DeliveryChartModel };
-var ZipCode = /** @class */ (function () {
-    function ZipCode(id, zipCode, location) {
+    get $zipCodes() {
+        return this._$zipCodes;
+    }
+    get id() {
+        return this._id;
+    }
+    get city() {
+        return this._city;
+    }
+    set zipCodes(value) {
+        this._zipCodes = value;
+    }
+    get zipCodes() {
+        return this._zipCodes;
+    }
+    get price() {
+        return this._price;
+    }
+    get locationId() {
+        return this._locationId;
+    }
+}
+export class ZipCode {
+    constructor(id, zipCode, location) {
         this._id = id;
         this._zipCode = zipCode;
         this._location = location;
     }
-    Object.defineProperty(ZipCode.prototype, "id", {
-        get: function () {
-            return this._id;
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ZipCode.prototype, "zipCode", {
-        get: function () {
-            return this._zipCode;
-        },
-        set: function (value) {
-            this._zipCode = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ZipCode.prototype, "location", {
-        get: function () {
-            return this._location;
-        },
-        set: function (value) {
-            this._location = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return ZipCode;
-}());
-export { ZipCode };
+    get id() {
+        return this._id;
+    }
+    get zipCode() {
+        return this._zipCode;
+    }
+    set id(value) {
+        this._id = value;
+    }
+    set zipCode(value) {
+        this._zipCode = value;
+    }
+    get location() {
+        return this._location;
+    }
+    set location(value) {
+        this._location = value;
+    }
+}
 //# sourceMappingURL=delivery-chart.model.js.map

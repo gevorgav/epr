@@ -35,7 +35,7 @@ export class DeliveryChartComponent implements OnInit {
       data => {
         if (data) {
           this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
-            .subscribe(
+            .then(
               res => {
                   this.initDeliveryCharts();
               },
@@ -58,7 +58,7 @@ export class DeliveryChartComponent implements OnInit {
       data => {
         if (data) {
           this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
-            .subscribe(
+            .then(
               res => {
                   this.initDeliveryCharts();
               },
@@ -72,7 +72,7 @@ export class DeliveryChartComponent implements OnInit {
 
   remove(id: string) {
     this.deliveryChartService.deleteDeliveryChart(id)
-      .subscribe(
+      .then(
         res => {
           //
         },
@@ -83,7 +83,7 @@ export class DeliveryChartComponent implements OnInit {
 
   private initDeliveryCharts() {
     this.deliveryChartService.getDeliveryLocations()
-      .subscribe(
+      .then(
         res => {
           this.deliveryCharts = res;
           this.dataSource = new MatTableDataSource(this.deliveryCharts.sort((a, b) => {

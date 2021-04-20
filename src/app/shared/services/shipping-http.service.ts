@@ -6,7 +6,7 @@ import {OrderService} from './order.service';
 import {OrderItemModel} from '../model/order-item.model';
 import {AdditionCategoryHttp} from './addition-category-http.service';
 import {AdditionModel} from '../model/addition.model';
-import {from, of} from 'rxjs';
+import {from} from 'rxjs';
 import {ProductCount} from '../../pages/cart/cart.component';
 
 @Injectable({
@@ -99,20 +99,13 @@ export class ShippingHttpService {
     return this.loadShippings({columnName: 'isPayed', value: true});
   }
 
-  public getInaccessibleCountForProductInDate(startDate: Date, endDate: Date, productId: string): Observable<number>{
+  public getInaccessibleCountForProductInDate(startDate: Date, endDate: Date, productId: string): Promise<number>{
     let isAvailable: number = 0;
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     let query1 = new this.parseService.parse.Query(ShippingInfo);
     let query2 = new this.parseService.parse.Query(ShippingInfo);
-    let query3 = new this.parseService.parse.Query(ShippingInfo);
-    let query4 = new this.parseService.parse.Query(ShippingInfo);
     query1 = query1.lessThanOrEqualTo('startDate', startDate).greaterThanOrEqualTo('endDate', startDate);
     query2 = query2.lessThanOrEqualTo('startDate', endDate).greaterThanOrEqualTo('endDate', endDate);
-    // query3 = query3.lessThanOrEqualTo('startDate', startDate).lessThanOrEqualTo('endDate', endDate);
-
-    // query2 = query2.greaterThanOrEqualTo('endDate', startDate);
-    // query3 = query3.lessThanOrEqualTo('startDate', endDate);
-    // query4 = query4.greaterThanOrEqualTo('endDate', endDate);
     let query = this.parseService.parse.Query.or(query1, query2).equalTo('isPayed', true);
     let promise = query.each(item=>{
       let products: ProductCount[] = item.attributes['productCount'];
@@ -121,7 +114,7 @@ export class ShippingHttpService {
         isAvailable += result.count;
       }
     }).then(res=> isAvailable);
-    return from(promise);
+    return promise;
   }
 
   private loadShippings(option: Option): Observable<ShippingInfoModel[]>{
@@ -134,24 +127,23 @@ export class ShippingHttpService {
     } else{
       query = query.equalTo(option.columnName, option.value);
     }
-    let promise = query.each(item=>{
+    return query.each(item => {
       let shippingModel = ShippingHttpService.convertToShippingInfoModel(item);
-      return this.loadShippingRelations(item).then((ordersProducts)=>{
+      return this.loadShippingRelations(item).then((ordersProducts) => {
         shippingModel.products.push(...ordersProducts[1]);
         shippingModel.orderItems.push(...ordersProducts[0]);
         shippings.push(shippingModel);
         return item;
-      }).then(parseShipping=>{
+      }).then(parseShipping => {
         let zip = new ZipCodeParse();
         const query = new this.parseService.parse.Query(zip);
-        return query.equalTo('objectId', parseShipping.attributes['zipCode']['id']).first().then(parseZip=>{
+        return query.equalTo('objectId', parseShipping.attributes['zipCode']['id']).first().then(parseZip => {
           shippingModel.zipCode = parseZip.attributes['zipCode'];
         });
       })
     }).then(res => {
       return shippings;
     });
-    return from(promise);
   }
 
   static convertToShippingInfoModel(item: any): ShippingInfoModel {

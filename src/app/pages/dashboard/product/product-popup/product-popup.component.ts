@@ -28,7 +28,7 @@ export class ProductPopupComponent implements OnInit {
   public form: FormGroup;
   formBuilder: FormBuilder = new FormBuilder();
 
-  @ViewChild('input') inputRef: ElementRef;
+  @ViewChild('input', { static: false }) inputRef: ElementRef;
 
   setupPolicyKeys: string[] = [];
   setupPolicyValues: string[] = [];
@@ -276,12 +276,12 @@ export class ProductPopupComponent implements OnInit {
 
   private getCategories() {
     this.categoryService.getCategories()
-      .subscribe(
+      .then(
         res => {
           this.categories = res;
-        },
-        error => handleError(error)
+        }
       )
+      .catch(error => handleError(error))
   }
 
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compare;
@@ -291,7 +291,7 @@ export class ProductPopupComponent implements OnInit {
   }
 
   private getAdditionalCategories() {
-    this.additionalCategoryService.getAdditionCategories().subscribe(res=>{
+    this.additionalCategoryService.getAdditionCategories().then(res=>{
       this.additionalCategories = res;
     })
   }

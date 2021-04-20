@@ -7,7 +7,6 @@ import {ProductModel} from '../../shared/model/product.model';
 import {ProductService} from '../../shared/services/product.service';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
-import {NgxGalleryAnimation} from 'ngx-gallery';
 import {OwlOptions} from 'ngx-owl-carousel-o';
 import {OrderService} from '../../shared/services/order.service';
 import {OrderModel} from '../../shared/model/order.model';
@@ -16,11 +15,11 @@ import {OrderItemModel} from '../../shared/model/order-item.model';
 import {InitializerService} from '../../shared/services/initializer.service';
 import {AdditionCategoryModel} from '../../shared/model/addition-category.model';
 import {AdditionCategoryService} from '../../shared/services/addition-category.service';
-import {Observable, of, zip} from 'rxjs';
+import {from, Observable, of, zip} from 'rxjs';
 import {AdditionModel} from '../../shared/model/addition.model';
-import {forEach} from '@angular/router/src/utils/collection';
 import {map} from 'rxjs/operators';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
+import {NgxGalleryAnimation} from "@kolkov/ngx-gallery";
 declare var $: any;
 
 @Component({
@@ -112,7 +111,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
 
   private getSelectedProduct(productPatch: string) {
     this.productService.getProductByPatch(productPatch)
-      .subscribe((res: ProductModel) => {
+      .then((res: ProductModel) => {
         if (!res) {
           this.router.navigate(['page-not-found']);
         }
@@ -122,7 +121,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
         if (res.metaDescription || res.description){
           this.metaService.addTag({ name: 'description', content: res.metaDescription?res.metaDescription: res.description.substring(0, 150) });
         }
-        this.categoryService.getCategoryByProductId(this.selectedProduct.id).subscribe((res: CategoryModel) => {
+        this.categoryService.getCategoryByProductId(this.selectedProduct.id).then((res: CategoryModel) => {
           this.itemCategory = res;
         });
         if (this.selectedProduct.relation && this.selectedProduct.relation.length > 0){
@@ -131,7 +130,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
 
         this.initGallery();
         this.locationService.isSpecified.subscribe(specified => {
-          specified? this.quantities = this.getQuantities() : this.quantities = this.getQuantitiesByCount();
+          specified? this.quantities = from(this.getQuantities()) : this.quantities = this.getQuantitiesByCount();
         })
       });
   }
@@ -187,11 +186,10 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
     return of(quantities);
   }
 
-  getQuantities(): Observable<number[]> {
+  getQuantities(): Promise<number[]> {
     return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime,
       this.locationService.locationDate.endDateTime, this.selectedProduct.id)
-      .pipe(
-        map(res => {
+      .then(res => {
           let quantities = [];
           let count = this.selectedProduct.count - res;
           if (count > 0) {
@@ -205,7 +203,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
             // this.enableCheckout = false;
           }
           return quantities;
-        }))
+        })
   }
 
   addToCart() {
@@ -291,7 +289,7 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   private initRelatedProducts() {
     let relatedProducts$: Observable<ProductModel>[] = [];
     this.selectedProduct.relation.forEach(value => {
-      relatedProducts$.push(this.productService.getProduct(value));
+      relatedProducts$.push(from(this.productService.getProduct(value)));
     });
     zip(...relatedProducts$).subscribe(res=>{
       this.relatedProducts.push(...res);

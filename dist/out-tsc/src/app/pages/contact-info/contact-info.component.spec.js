@@ -1,20 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { ContactInfoComponent } from './contact-info.component';
-describe('ContactInfoComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(async(function () {
+describe('ContactInfoComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ContactInfoComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
+    beforeEach(() => {
         fixture = TestBed.createComponent(ContactInfoComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should be created', function () {
+    it('should be created', () => {
         expect(component).toBeTruthy();
     });
 });

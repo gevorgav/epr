@@ -1,55 +1,52 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ShippingHttpService } from '../../../shared/services/shipping-http.service';
 import { ShippingPopupComponent } from './shipping-popup/shipping-popup.component';
-var ShippingComponent = /** @class */ (function () {
-    function ShippingComponent(_shippingService, dialog) {
+let ShippingComponent = class ShippingComponent {
+    constructor(_shippingService, dialog) {
         this._shippingService = _shippingService;
         this.dialog = dialog;
         this.shippingModels = [];
         this.dataSource = new MatTableDataSource(this.shippingModels);
         this.displayedColumns = ['startDate', 'endDate', 'zipCode', 'address/street', 'paid', 'details', 'ship off'];
     }
-    ShippingComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initShipping();
-    };
-    ShippingComponent.prototype.initShipping = function () {
-        var _this = this;
-        this._shippingService.loadPayed().subscribe(function (res) {
-            _this.shippingModels = res;
-            _this.dataSource = new MatTableDataSource(_this.shippingModels);
+    }
+    initShipping() {
+        this._shippingService.loadPayed().subscribe(res => {
+            this.shippingModels = res;
+            this.dataSource = new MatTableDataSource(this.shippingModels);
         });
-    };
-    ShippingComponent.prototype.setShipped = function (id) {
-        var _this = this;
-        this._shippingService.setShipped(id, true).subscribe(function (res) {
-            _this.initShipping();
+    }
+    setShipped(id) {
+        this._shippingService.setShipped(id, true).subscribe(res => {
+            this.initShipping();
         });
-    };
-    ShippingComponent.prototype.openViewDetails = function (id) {
-        var shippingInfoModel = this.getShippingModelById(id);
+    }
+    openViewDetails(id) {
+        let shippingInfoModel = this.getShippingModelById(id);
         this.dialog.open(ShippingPopupComponent, {
             data: {
-                shippingInfoModel: shippingInfoModel
+                shippingInfoModel
             },
             width: '80%',
             height: '95%'
         });
-    };
-    ShippingComponent.prototype.getShippingModelById = function (id) {
-        return this.shippingModels.find(function (value) { return value.id === id; });
-    };
-    ShippingComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-shipping',
-            templateUrl: './shipping.component.html',
-            styleUrls: ['./shipping.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [ShippingHttpService,
-            MatDialog])
-    ], ShippingComponent);
-    return ShippingComponent;
-}());
+    }
+    getShippingModelById(id) {
+        return this.shippingModels.find(value => value.id === id);
+    }
+};
+ShippingComponent = __decorate([
+    Component({
+        selector: 'app-shipping',
+        templateUrl: './shipping.component.html',
+        styleUrls: ['./shipping.component.css']
+    }),
+    __metadata("design:paramtypes", [ShippingHttpService,
+        MatDialog])
+], ShippingComponent);
 export { ShippingComponent };
 //# sourceMappingURL=shipping.component.js.map

@@ -1,51 +1,33 @@
-var AdditionCategoryModel = /** @class */ (function () {
-    function AdditionCategoryModel(id, name, multiSelect, additions) {
+export class AdditionCategoryModel {
+    constructor(id, name, multiSelect, additions) {
         this._id = id;
         this._name = name;
         this._additions = additions;
         this._multiSelect = multiSelect;
     }
-    Object.defineProperty(AdditionCategoryModel.prototype, "id", {
-        get: function () {
-            return this._id;
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdditionCategoryModel.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdditionCategoryModel.prototype, "additions", {
-        get: function () {
-            return this._additions;
-        },
-        set: function (value) {
-            this._additions = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdditionCategoryModel.prototype, "multiSelect", {
-        get: function () {
-            return this._multiSelect;
-        },
-        set: function (value) {
-            this._multiSelect = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return AdditionCategoryModel;
-}());
-export { AdditionCategoryModel };
+    get id() {
+        return this._id;
+    }
+    set id(value) {
+        this._id = value;
+    }
+    get name() {
+        return this._name;
+    }
+    set name(value) {
+        this._name = value;
+    }
+    get additions() {
+        return this._additions;
+    }
+    set additions(value) {
+        this._additions = value;
+    }
+    get multiSelect() {
+        return this._multiSelect;
+    }
+    set multiSelect(value) {
+        this._multiSelect = value;
+    }
+}
 //# sourceMappingURL=addition-category.model.js.map

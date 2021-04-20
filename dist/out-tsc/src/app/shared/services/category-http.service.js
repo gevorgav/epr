@@ -1,4 +1,5 @@
-import * as tslib_1 from "tslib";
+var CategoryHttpService_1;
+import { __decorate, __metadata } from "tslib";
 /**
  * @author Gevorg Avetisyan on 3/16/2019.
  */
@@ -9,166 +10,147 @@ import { ParseService } from './parse.service';
 import { forkJoin, from } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { ProductModel } from '../model/product.model';
-var CategoryHttpService = /** @class */ (function (_super) {
-    tslib_1.__extends(CategoryHttpService, _super);
-    function CategoryHttpService(parseService) {
-        var _this = _super.call(this) || this;
-        _this.parseService = parseService;
-        _this._categories = [];
-        return _this;
+let CategoryHttpService = CategoryHttpService_1 = class CategoryHttpService extends CategoryService {
+    constructor(parseService) {
+        super();
+        this.parseService = parseService;
+        this._categories = [];
     }
-    CategoryHttpService_1 = CategoryHttpService;
-    Object.defineProperty(CategoryHttpService.prototype, "categories", {
-        get: function () {
-            var _this = this;
-            if (this._categories.length === 0) {
-                this.getCategories().subscribe(function (res) {
-                    _this._categories = res;
-                });
-            }
-            return this._categories;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    CategoryHttpService.prototype.getCategories = function () {
-        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parseService.parse.Query(category);
-        var promise = query.find().then(function (res) {
-            var categories = [];
-            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
-                var item = res_1[_i];
+    get categories() {
+        if (this._categories.length === 0) {
+            this.getCategories().then(res => {
+                this._categories = res;
+            });
+        }
+        return this._categories;
+    }
+    getCategories() {
+        let category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        let query = new this.parseService.parse.Query(category);
+        return query.find().then(res => {
+            let categories = [];
+            for (let item of res) {
                 categories.push(CategoryHttpService_1.convertToCategoryModel(item));
             }
             return categories;
         });
-        return from(promise);
-    };
-    CategoryHttpService.convertToCategoryModel = function (item, products) {
+    }
+    static convertToCategoryModel(item, products) {
         if (products) {
             return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order'], products);
         }
         return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'], item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order']);
-    };
-    CategoryHttpService.prototype.getCategoryItems = function (categoryId) {
-        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
-        var promise = query.first().then(function (res) {
-            return res.relation('products').query().find().then(function (res) {
+    }
+    getCategoryItems(categoryId) {
+        let category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
+        return query.first().then(res => {
+            return res.relation('products').query().find().then(res => {
                 return CategoryHttpService_1.forOne(res);
             });
         });
-        return from(promise);
-    };
-    CategoryHttpService.prototype.getCategoriesByPathParamWithDependency = function (pathParam) {
-        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parseService.parse.Query(category);
-        var promise = query.equalTo('pathParam', pathParam).first().then(function (res) {
-            var products$ = [];
-            return res.relation('products').query().each(function (product) {
+    }
+    getCategoriesByPathParamWithDependency(pathParam) {
+        let category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        let query = new this.parseService.parse.Query(category);
+        return query.equalTo('pathParam', pathParam).first().then((res) => {
+            let products$ = [];
+            return res.relation('products').query().each((product) => {
                 products$.push(CategoryHttpService_1.parseObjectToProductModel(product));
-            }).then(function (res1) { return new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'], res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['pageTitle'], res.attributes['order'], null, products$); });
+            }).then(res1 => new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'], res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['pageTitle'], res.attributes['order'], null, products$));
         });
-        return from(promise);
-    };
-    CategoryHttpService.prototype.getCategoriesWithDependency = function () {
-        var category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parseService.parse.Query(category);
-        var promise = query.find().then(function (res) {
+    }
+    getCategoriesWithDependency() {
+        let category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        let query = new this.parseService.parse.Query(category);
+        let promise = query.find().then((res) => {
             return res;
         });
-        return from(promise).pipe(map(function (res) {
-            var categories = [];
-            for (var _i = 0, res_2 = res; _i < res_2.length; _i++) {
-                var category_1 = res_2[_i];
-                var products$ = from(category_1.relation('products').query().find().then(function (product) {
+        return from(promise).pipe(map((res) => {
+            let categories = [];
+            for (let category of res) {
+                let products$ = category.relation('products').query().find().then((product) => {
                     return CategoryHttpService_1.forOne(product);
-                }));
-                var categoryModel = CategoryHttpService_1.convertToCategoryModel(category_1, products$);
+                });
+                let categoryModel = CategoryHttpService_1.convertToCategoryModel(category, products$);
                 categories.push(categoryModel);
             }
             return categories;
-        }), flatMap(function (categories) { return forkJoin(categories.map(function (categoryFork) {
-            return forkJoin(categoryFork.$items).pipe(map(function (products) {
+        }), flatMap((categories) => forkJoin(categories.map((categoryFork) => {
+            return forkJoin(categoryFork.$items).pipe(map((products) => {
                 categoryFork.items = products[0];
                 return categoryFork;
             }));
-        })); }));
-    };
-    CategoryHttpService.parseObjectToProductModel = function (parseObject) {
+        }))));
+    }
+    static parseObjectToProductModel(parseObject) {
         return new ProductModel(parseObject.id, parseObject.attributes['title'], parseObject.attributes['price'], parseObject.attributes['images'], parseObject.attributes['isNew'], parseObject.attributes['isHotDeal'], parseObject.attributes['itemSize'], parseObject.attributes['pathParam'], parseObject.attributes['description'], parseObject.attributes['rentalTerms'], parseObject.attributes['spaceRequired'], parseObject.attributes['setupPolicy'] ? new Map(Object.entries(parseObject.attributes['setupPolicy'])) : null, parseObject.attributes['instructions'], parseObject.attributes['video'], parseObject.attributes['safetyRules'], parseObject.attributes['minTime'], parseObject.attributes['minPrice'], parseObject.attributes['nightPrice'], parseObject.attributes['count'], [], parseObject.attributes['metaDescription'], parseObject.attributes['pageTitle'], parseObject.attributes['relation']);
-    };
-    CategoryHttpService.forOne = function (parseObject) {
-        var items = [];
-        for (var _i = 0, parseObject_1 = parseObject; _i < parseObject_1.length; _i++) {
-            var item = parseObject_1[_i];
+    }
+    static forOne(parseObject) {
+        let items = [];
+        for (let item of parseObject) {
             items.push(CategoryHttpService_1.parseObjectToProductModel(item));
         }
         return items;
-    };
-    CategoryHttpService.prototype.getCategoryByProductId = function (productId) {
-        var productQuery = new this.parseService.parse.Query('Product');
+    }
+    getCategoryByProductId(productId) {
+        let productQuery = new this.parseService.parse.Query('Product');
         productQuery.contains('objectId', productId);
-        var categoryQuery = new this.parseService.parse.Query(CategoryHttpService_1.CATEGORY);
+        let categoryQuery = new this.parseService.parse.Query(CategoryHttpService_1.CATEGORY);
         categoryQuery.matchesQuery('products', productQuery);
-        var promise = categoryQuery.first().then(function (list) {
+        return categoryQuery.first().then(function (list) {
             return CategoryHttpService_1.convertToCategoryModel(list);
         }, function (error) {
             console.log(error);
         });
-        return from(promise);
-    };
-    CategoryHttpService.prototype.deleteCategory = function (id) {
-        var Product = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var query = new this.parseService.parse.Query(Product);
+    }
+    deleteCategory(id) {
+        const Product = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        const query = new this.parseService.parse.Query(Product);
         query.equalTo('objectId', id);
-        var promise = query.first().then(function (result) {
-            result.relation('products').query().find().then(function (items) {
-                items.forEach(function (item) { return item.destroy(); });
+        return query.first().then((result) => {
+            result.relation('products').query().find().then(items => {
+                items.forEach(item => item.destroy());
             });
             return result.destroy({});
         });
-        return from(promise);
-    };
-    CategoryHttpService.prototype.saveCategory = function (model) {
-        var _this = this;
-        var Category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
-        var category = new Category();
+    }
+    saveCategory(model) {
+        let Category = this.parseService.parse.Object.extend(CategoryHttpService_1.CATEGORY);
+        let category = new Category();
         this.setFields(category, model);
-        var promise;
+        let promise;
         if (model.id) {
-            var query = new this.parseService.parse.Query(Category);
+            const query = new this.parseService.parse.Query(Category);
             query.equalTo('objectId', model.id);
-            promise = query.first().then(function (res) {
-                _this.setFields(res, model);
+            promise = query.first().then(res => {
+                this.setFields(res, model);
                 return res.save();
             });
         }
         else {
-            promise = category.save().then(function (category) {
+            promise = category.save().then(category => {
                 return category.save();
             });
         }
-        return from(promise);
-    };
-    CategoryHttpService.pathParamFromName = function (name) {
+        return promise;
+    }
+    static pathParamFromName(name) {
         return name.replace(/[^a-zA-Z0-9- ]/g, "").trim().replace(/\s/g, '-');
-    };
-    CategoryHttpService.prototype.setFields = function (category, model) {
+    }
+    setFields(category, model) {
         category.set('title', model.title);
         category.set('description', model.description);
         category.set('imageUrl', model.imageUrl);
         category.set('metaDescription', model.metaDescription);
         category.set('pathParam', CategoryHttpService_1.pathParamFromName(model.title));
         category.set('pageTitle', model.pageTitle);
-    };
-    var CategoryHttpService_1;
-    CategoryHttpService.CATEGORY = 'Category';
-    CategoryHttpService = CategoryHttpService_1 = tslib_1.__decorate([
-        Injectable(),
-        tslib_1.__metadata("design:paramtypes", [ParseService])
-    ], CategoryHttpService);
-    return CategoryHttpService;
-}(CategoryService));
+    }
+};
+CategoryHttpService.CATEGORY = 'Category';
+CategoryHttpService = CategoryHttpService_1 = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [ParseService])
+], CategoryHttpService);
 export { CategoryHttpService };
 //# sourceMappingURL=category-http.service.js.map

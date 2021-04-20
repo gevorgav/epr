@@ -18,10 +18,10 @@ export class SettingsComponent implements OnInit {
   public saveSuccess: boolean = false;
   public fileSizes = 'Optimal image sizes:   Width: 1720 pixels, Height: 1105 pixels';
   public isReady: boolean = false;
-  @ViewChild('input1') inputRef1: ElementRef;
-  @ViewChild('input2') inputRef2: ElementRef;
-  @ViewChild('input3') inputRef3: ElementRef;
-  @ViewChild('input4') inputRef4: ElementRef;
+  @ViewChild('input1', { static: false }) inputRef1: ElementRef;
+  @ViewChild('input2', { static: false }) inputRef2: ElementRef;
+  @ViewChild('input3', { static: false }) inputRef3: ElementRef;
+  @ViewChild('input4', { static: false }) inputRef4: ElementRef;
 
   constructor(private settingsService: SettingsService,
               private uploadService: UploadService) {
@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit {
         this.form.get('imageUrl3').value,
         this.form.get('mobileImageUrl').value
       );
-      this.settingsService.updateSettings(settings).subscribe(res => {
+      this.settingsService.updateSettings(settings).then(res => {
         if (res) {
           this.saveSuccess = true;
           setTimeout(() => this.saveSuccess = false, 3000);
@@ -107,7 +107,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private getSettings() {
-    this.settingsService.getSettings().subscribe(res => {
+    this.settingsService.getSettings().then(res => {
       this.settings = res;
       this.initForm();
       this.isReady = true;

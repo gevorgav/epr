@@ -1,86 +1,82 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { DeliveryChartService } from "../../../shared/services/delivery-chart.service";
 import { DeliveryChartModel } from "../../../shared/model/delivery-chart.model";
 import { handleError } from "../../../shared/util/error-handler";
 import { MatDialog, MatTableDataSource } from "@angular/material";
 import { DeliveryChartPopupComponent } from "./delivery-chart-popup/delivery-chart-popup.component";
-var DeliveryChartComponent = /** @class */ (function () {
-    function DeliveryChartComponent(deliveryChartService, dialog) {
+let DeliveryChartComponent = class DeliveryChartComponent {
+    constructor(deliveryChartService, dialog) {
         this.deliveryChartService = deliveryChartService;
         this.dialog = dialog;
         this.deliveryCharts = [];
         this.dataSource = new MatTableDataSource(this.deliveryCharts);
         this.displayedColumns = ['city', 'price', 'edit', 'delete'];
     }
-    DeliveryChartComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initDeliveryCharts();
-    };
-    DeliveryChartComponent.prototype.addDeliveryChart = function () {
-        var _this = this;
-        var dialogRef = this.dialog.open(DeliveryChartPopupComponent, {
+    }
+    addDeliveryChart() {
+        const dialogRef = this.dialog.open(DeliveryChartPopupComponent, {
             data: {
                 deliveryChart: new DeliveryChartModel(null, '', null, null, null, null)
             },
             width: '50%',
             maxHeight: 600
         });
-        dialogRef.afterClosed().subscribe(function (data) {
+        dialogRef.afterClosed().subscribe(data => {
             if (data) {
-                _this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
-                    .subscribe(function (res) {
-                    _this.initDeliveryCharts();
-                }, function (error) { return handleError(error); });
+                this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
+                    .then(res => {
+                    this.initDeliveryCharts();
+                }, error => handleError(error));
             }
         });
-    };
-    DeliveryChartComponent.prototype.edit = function (element) {
-        var _this = this;
-        var dialogRef = this.dialog.open(DeliveryChartPopupComponent, {
+    }
+    edit(element) {
+        const dialogRef = this.dialog.open(DeliveryChartPopupComponent, {
             data: {
                 deliveryChart: element
             },
             width: '50%',
             maxHeight: 600
         });
-        dialogRef.afterClosed().subscribe(function (data) {
+        dialogRef.afterClosed().subscribe(data => {
             if (data) {
-                _this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
-                    .subscribe(function (res) {
-                    _this.initDeliveryCharts();
-                }, function (error) { return handleError(error); });
+                this.deliveryChartService.saveDeliveryChart(data.deliveryChart)
+                    .then(res => {
+                    this.initDeliveryCharts();
+                }, error => handleError(error));
             }
         });
-    };
-    DeliveryChartComponent.prototype.remove = function (id) {
+    }
+    remove(id) {
         this.deliveryChartService.deleteDeliveryChart(id)
-            .subscribe(function (res) {
+            .then(res => {
             //
-        }, function (error) { return handleError(error); });
-    };
-    DeliveryChartComponent.prototype.initDeliveryCharts = function () {
-        var _this = this;
+        }, error => handleError(error));
+    }
+    initDeliveryCharts() {
         this.deliveryChartService.getDeliveryLocations()
-            .subscribe(function (res) {
-            _this.deliveryCharts = res;
-            _this.dataSource = new MatTableDataSource(_this.deliveryCharts.sort(function (a, b) {
+            .then(res => {
+            this.deliveryCharts = res;
+            this.dataSource = new MatTableDataSource(this.deliveryCharts.sort((a, b) => {
                 return a.city.localeCompare(b.city);
             }));
-        }, function (error) { return handleError(error); });
-    };
-    DeliveryChartComponent.prototype.applyFilter = function ($event) {
+        }, error => handleError(error));
+    }
+    applyFilter($event) {
         this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
-    };
-    DeliveryChartComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-delivery-chart',
-            templateUrl: './delivery-chart.component.html',
-            styleUrls: ['./delivery-chart.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [DeliveryChartService,
-            MatDialog])
-    ], DeliveryChartComponent);
-    return DeliveryChartComponent;
-}());
+    }
+};
+DeliveryChartComponent = __decorate([
+    Component({
+        selector: 'app-delivery-chart',
+        templateUrl: './delivery-chart.component.html',
+        styleUrls: ['./delivery-chart.component.css']
+    }),
+    __metadata("design:paramtypes", [DeliveryChartService,
+        MatDialog])
+], DeliveryChartComponent);
 export { DeliveryChartComponent };
 //# sourceMappingURL=delivery-chart.component.js.map

@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata, __param } from "tslib";
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
@@ -6,8 +6,8 @@ import { UploadService } from '../../../../shared/services/upload.service';
 import { AdditionModel } from '../../../../shared/model/addition.model';
 import { handleError } from '../../../../shared/util/error-handler';
 import { AdditionCategoryService } from '../../../../shared/services/addition-category.service';
-var AdditionalPopupComponent = /** @class */ (function () {
-    function AdditionalPopupComponent(dialogRef, data, uploadService, categoryService) {
+let AdditionalPopupComponent = class AdditionalPopupComponent {
+    constructor(dialogRef, data, uploadService, categoryService) {
         this.dialogRef = dialogRef;
         this.data = data;
         this.uploadService = uploadService;
@@ -16,18 +16,14 @@ var AdditionalPopupComponent = /** @class */ (function () {
         this.compareFn = this.compare;
         this.additionModel = this.data.item;
     }
-    AdditionalPopupComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initForm();
         this.getCategories();
-    };
-    Object.defineProperty(AdditionalPopupComponent.prototype, "categoryId", {
-        get: function () {
-            return this.data.category ? this.data.category.id : '';
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AdditionalPopupComponent.prototype.submit = function () {
+    }
+    get categoryId() {
+        return this.data.category ? this.data.category.id : '';
+    }
+    submit() {
         if (this.form.valid) {
             this.dialogRef.close({
                 item: new AdditionModel(this.additionModel.id, this.form.get('title').value, this.form.get('imageUrl').value),
@@ -38,47 +34,44 @@ var AdditionalPopupComponent = /** @class */ (function () {
         else {
             this.markFormGroupTouched(this.form);
         }
-    };
-    AdditionalPopupComponent.prototype.markFormGroupTouched = function (formGroup) {
-        var _this = this;
-        Object.values(formGroup.controls).forEach(function (control) {
+    }
+    markFormGroupTouched(formGroup) {
+        Object.values(formGroup.controls).forEach(control => {
             control.markAsTouched();
             if (control.controls) {
-                _this.markFormGroupTouched(control);
+                this.markFormGroupTouched(control);
             }
         });
-    };
-    AdditionalPopupComponent.prototype.cancel = function () {
+    }
+    cancel() {
         this.dialogRef.close(null);
-    };
-    AdditionalPopupComponent.prototype.deleteImage = function () {
+    }
+    deleteImage() {
         this.form.get('imageUrl').setValue('');
-    };
-    AdditionalPopupComponent.prototype.triggerClick = function () {
+    }
+    triggerClick() {
         this.inputRef.nativeElement.click();
-    };
-    AdditionalPopupComponent.prototype.onFileUpload = function (event) {
-        var _this = this;
+    }
+    onFileUpload(event) {
         this.fileMaxSizeErrorMessage = '';
         if (event.target.files.length > 0) {
             this.uploadService.uploadFile(event.target.files[0])
-                .subscribe(function (res) {
-                _this.form.get('imageUrl').setValue(res.fileName);
-            }, function (error) {
+                .subscribe(res => {
+                this.form.get('imageUrl').setValue(res.fileName);
+            }, error => {
                 if (error.fileMaxSize) {
-                    _this.fileMaxSizeErrorMessage = error.message;
+                    this.fileMaxSizeErrorMessage = error.message;
                 }
             });
         }
-    };
-    AdditionalPopupComponent.prototype.getCategories = function () {
-        var _this = this;
+    }
+    getCategories() {
         this.categoryService.getAdditionCategories()
-            .subscribe(function (res) {
-            _this.categories = res;
-        }, function (error) { return handleError(error); });
-    };
-    AdditionalPopupComponent.prototype.initForm = function () {
+            .then(res => {
+            this.categories = res;
+        }, error => handleError(error));
+    }
+    initForm() {
         this.form = this.formBuilder.group({
             title: this.formBuilder.control(this.additionModel.name, [
                 Validators.required
@@ -88,25 +81,24 @@ var AdditionalPopupComponent = /** @class */ (function () {
                 Validators.required
             ]),
         });
-    };
-    AdditionalPopupComponent.prototype.compare = function (f1, f2) {
+    }
+    compare(f1, f2) {
         return f1 === f2;
-    };
-    tslib_1.__decorate([
-        ViewChild('input'),
-        tslib_1.__metadata("design:type", ElementRef)
-    ], AdditionalPopupComponent.prototype, "inputRef", void 0);
-    AdditionalPopupComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-additional-popup',
-            templateUrl: './additional-popup.component.html',
-            styleUrls: ['./additional-popup.component.css']
-        }),
-        tslib_1.__param(1, Inject(MAT_DIALOG_DATA)),
-        tslib_1.__metadata("design:paramtypes", [MatDialogRef, Object, UploadService,
-            AdditionCategoryService])
-    ], AdditionalPopupComponent);
-    return AdditionalPopupComponent;
-}());
+    }
+};
+__decorate([
+    ViewChild('input', { static: true }),
+    __metadata("design:type", ElementRef)
+], AdditionalPopupComponent.prototype, "inputRef", void 0);
+AdditionalPopupComponent = __decorate([
+    Component({
+        selector: 'app-additional-popup',
+        templateUrl: './additional-popup.component.html',
+        styleUrls: ['./additional-popup.component.css']
+    }),
+    __param(1, Inject(MAT_DIALOG_DATA)),
+    __metadata("design:paramtypes", [MatDialogRef, Object, UploadService,
+        AdditionCategoryService])
+], AdditionalPopupComponent);
 export { AdditionalPopupComponent };
 //# sourceMappingURL=additional-popup.component.js.map

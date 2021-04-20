@@ -1,8 +1,8 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-var DashboardComponent = /** @class */ (function () {
-    function DashboardComponent(router, activatedRoute) {
+let DashboardComponent = class DashboardComponent {
+    constructor(router, activatedRoute) {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.items = [
@@ -17,27 +17,26 @@ var DashboardComponent = /** @class */ (function () {
             { routerLink: 'additional-category', name: 'Additional Category', isActive: false },
         ];
     }
-    DashboardComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.selectTab(this.items[0]);
-    };
-    DashboardComponent.prototype.selectTab = function (item) {
+    }
+    selectTab(item) {
         this.setFalse();
         item.isActive = true;
         this.router.navigateByUrl('dashboard/' + item.routerLink);
-    };
-    DashboardComponent.prototype.setFalse = function () {
-        this.items.forEach(function (value) { return value.isActive = false; });
-    };
-    DashboardComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-dashboard',
-            templateUrl: './dashboard.component.html',
-            styleUrls: ['./dashboard.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [Router,
-            ActivatedRoute])
-    ], DashboardComponent);
-    return DashboardComponent;
-}());
+    }
+    setFalse() {
+        this.items.forEach(value => value.isActive = false);
+    }
+};
+DashboardComponent = __decorate([
+    Component({
+        selector: 'app-dashboard',
+        templateUrl: './dashboard.component.html',
+        styleUrls: ['./dashboard.component.css']
+    }),
+    __metadata("design:paramtypes", [Router,
+        ActivatedRoute])
+], DashboardComponent);
 export { DashboardComponent };
 //# sourceMappingURL=dashboard.component.js.map

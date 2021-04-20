@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ProductService } from "../../../shared/services/product.service";
 import { handleError } from "../../../shared/util/error-handler";
@@ -7,8 +7,8 @@ import { ProductPopupComponent } from "./product-popup/product-popup.component";
 import { ProductModel } from "../../../shared/model/product.model";
 import { CategoryService } from "../../../shared/services/category.service";
 import { zip } from "rxjs";
-var ProductComponent = /** @class */ (function () {
-    function ProductComponent(productService, categoryService, dialog) {
+let ProductComponent = class ProductComponent {
+    constructor(productService, categoryService, dialog) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.dialog = dialog;
@@ -16,47 +16,43 @@ var ProductComponent = /** @class */ (function () {
         this.dataSource = new MatTableDataSource(this.products);
         this.displayedColumns = ['title', 'price', /*'isHotDeal',*/ 'edit', 'delete'];
     }
-    ProductComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initProducts();
-    };
-    ProductComponent.prototype.remove = function (id) {
-        var _this = this;
+    }
+    remove(id) {
         this.productService.deleteProduct(id)
-            .subscribe(function (res) {
+            .subscribe(res => {
             if (res.id) {
-                _this.initProducts();
+                this.initProducts();
             }
-        }, function (error) { return handleError(error); });
-    };
-    ProductComponent.prototype.edit = function (id) {
-        var _this = this;
+        }, error => handleError(error));
+    }
+    edit(id) {
         zip(this.productService.getProduct(id), // 0
-        this.categoryService.getCategoryByProductId(id)).subscribe(function (_a) {
-            var product = _a[0], category = _a[1];
-            _this.oldAdditionalCategories = product.additionalCategories;
-            var dialogRef = _this.dialog.open(ProductPopupComponent, {
+        this.categoryService.getCategoryByProductId(id)).subscribe(([product, category]) => {
+            this.oldAdditionalCategories = product.additionalCategories;
+            const dialogRef = this.dialog.open(ProductPopupComponent, {
                 data: {
-                    product: product,
-                    category: category,
-                    products: _this.products
+                    product,
+                    category,
+                    products: this.products
                 },
                 width: '80%',
                 height: '95%'
             });
-            dialogRef.afterClosed().subscribe(function (data) {
+            dialogRef.afterClosed().subscribe(data => {
                 if (data && data.product) {
-                    _this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId, _this.oldAdditionalCategories)
-                        .subscribe(function (res) {
-                        _this.initProducts();
-                        _this.oldAdditionalCategories = [];
-                    }, function (erorr) { return handleError(erorr); });
+                    this.productService.saveProduct(data.product, data.newCategoryId, data.oldCategoryId, this.oldAdditionalCategories)
+                        .subscribe(res => {
+                        this.initProducts();
+                        this.oldAdditionalCategories = [];
+                    }, erorr => handleError(erorr));
                 }
             });
         });
-    };
-    ProductComponent.prototype.addProduct = function () {
-        var _this = this;
-        var dialogRef = this.dialog.open(ProductPopupComponent, {
+    }
+    addProduct() {
+        const dialogRef = this.dialog.open(ProductPopupComponent, {
             data: {
                 product: new ProductModel(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null),
                 products: this.products
@@ -64,39 +60,37 @@ var ProductComponent = /** @class */ (function () {
             width: '80%',
             height: '95%'
         });
-        dialogRef.afterClosed().subscribe(function (data) {
+        dialogRef.afterClosed().subscribe(data => {
             if (data && data.product) {
-                _this.productService.saveProduct(data.product, data.newCategoryId)
-                    .subscribe(function (res) {
-                    _this.initProducts();
-                }, function (error) { return handleError(error); });
+                this.productService.saveProduct(data.product, data.newCategoryId)
+                    .subscribe(res => {
+                    this.initProducts();
+                }, error => handleError(error));
             }
         });
-    };
-    ProductComponent.prototype.initProducts = function () {
-        var _this = this;
+    }
+    initProducts() {
         this.productService.getAllProducts()
-            .subscribe(function (products) {
-            _this.products = products;
-            _this.dataSource = new MatTableDataSource(_this.products);
-        }, function (error) {
+            .then(products => {
+            this.products = products;
+            this.dataSource = new MatTableDataSource(this.products);
+        }, error => {
             handleError(error);
         });
-    };
-    ProductComponent.prototype.applyFilter = function ($event) {
+    }
+    applyFilter($event) {
         this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
-    };
-    ProductComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-product',
-            templateUrl: './product.component.html',
-            styleUrls: ['./product.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [ProductService,
-            CategoryService,
-            MatDialog])
-    ], ProductComponent);
-    return ProductComponent;
-}());
+    }
+};
+ProductComponent = __decorate([
+    Component({
+        selector: 'app-product',
+        templateUrl: './product.component.html',
+        styleUrls: ['./product.component.css']
+    }),
+    __metadata("design:paramtypes", [ProductService,
+        CategoryService,
+        MatDialog])
+], ProductComponent);
 export { ProductComponent };
 //# sourceMappingURL=product.component.js.map

@@ -8,7 +8,6 @@ import {ParseService} from './parse.service';
 import {forkJoin, from, Observable} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
 import {ProductModel} from '../model/product.model';
-import {ProductHttpService} from './product-http.service';
 
 @Injectable()
 export class CategoryHttpService extends CategoryService {
@@ -23,27 +22,26 @@ export class CategoryHttpService extends CategoryService {
 
   get categories(): CategoryModel[] {
     if (this._categories.length === 0) {
-      this.getCategories().subscribe(res => {
+      this.getCategories().then(res => {
         this._categories = res;
       });
     }
     return this._categories;
   }
 
-  getCategories(): Observable<Array<CategoryModel>> {
+  getCategories(): Promise<Array<CategoryModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
-    let promise = query.find().then(res => {
+    return query.find().then(res => {
       let categories = [];
       for (let item of res) {
         categories.push(CategoryHttpService.convertToCategoryModel(item));
       }
       return categories;
     });
-    return from(promise);
   }
 
-  static convertToCategoryModel(item: any, products?: Observable<ProductModel[]>): CategoryModel {
+  static convertToCategoryModel(item: any, products?: Promise<ProductModel[]>): CategoryModel {
     if (products) {
       return new CategoryModel(item.id, item.attributes['title'], item.attributes['description'], item.attributes['imageUrl'],
         item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order'], products);
@@ -52,28 +50,26 @@ export class CategoryHttpService extends CategoryService {
       item.attributes['metaDescription'], item.attributes['pathParam'], item.attributes['pageTitle'], item.attributes['order']);
   }
 
-  getCategoryItems(categoryId: string): Observable<Array<ProductModel>> {
+  getCategoryItems(categoryId: string): Promise<Array<ProductModel>> {
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category).equalTo('objectId', categoryId);
-    let promise = query.first().then(res => {
+    return query.first().then(res => {
       return res.relation('products').query().find().then(res => {
         return CategoryHttpService.forOne(res);
       });
     });
-    return from(promise);
   }
 
-  getCategoriesByPathParamWithDependency(pathParam: string): Observable<CategoryModel>{
+  getCategoriesByPathParamWithDependency(pathParam: string): Promise<CategoryModel>{
     let category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let query = new this.parseService.parse.Query(category);
-    let promise = query.equalTo('pathParam', pathParam).first().then((res: any) => {
+    return query.equalTo('pathParam', pathParam).first().then((res: any) => {
       let products$: ProductModel[] = [];
       return res.relation('products').query().each((product: any) => {
         products$.push(CategoryHttpService.parseObjectToProductModel(product));
       }).then(res1 => new CategoryModel(res.id, res.attributes['title'], res.attributes['description'], res.attributes['imageUrl'],
         res.attributes['metaDescription'], res.attributes['pathParam'], res.attributes['pageTitle'], res.attributes['order'], null, products$));
     });
-    return from(promise);
   }
 
   getCategoriesWithDependency(): Observable<Array<CategoryModel>> {
@@ -86,9 +82,9 @@ export class CategoryHttpService extends CategoryService {
       map((res: any[]) => {
         let categories: Array<CategoryModel> = [];
         for (let category of res) {
-          let products$: Observable<ProductModel[]> = from(category.relation('products').query().find().then((product: any[]) => {
+          let products$: Promise<ProductModel[]> = category.relation('products').query().find().then((product: any[]) => {
             return CategoryHttpService.forOne(product);
-          }));
+          });
           let categoryModel = CategoryHttpService.convertToCategoryModel(category, products$);
 
           categories.push(categoryModel);
@@ -145,33 +141,31 @@ export class CategoryHttpService extends CategoryService {
     return items;
   }
 
-  getCategoryByProductId(productId: string): Observable<CategoryModel> {
+  getCategoryByProductId(productId: string): Promise<CategoryModel> {
     let productQuery = new this.parseService.parse.Query('Product');
     productQuery.contains('objectId', productId);
     let categoryQuery = new this.parseService.parse.Query(CategoryHttpService.CATEGORY);
     categoryQuery.matchesQuery('products', productQuery);
-    let promise = categoryQuery.first().then(function (list) {
+    return categoryQuery.first().then(function (list) {
       return CategoryHttpService.convertToCategoryModel(list);
     }, function (error) {
       console.log(error);
     });
-    return from(promise);
   }
 
-  deleteCategory(id: string): Observable<any> {
+  deleteCategory(id: string): Promise<any> {
     const Product = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     const query = new this.parseService.parse.Query(Product);
     query.equalTo('objectId', id);
-    const promise = query.first().then((result) => {
+    return query.first().then((result) => {
       result.relation('products').query().find().then(items => {
         items.forEach(item => item.destroy());
       });
       return result.destroy({});
     });
-    return from(promise);
   }
 
-  saveCategory(model: CategoryModel): Observable<any> {
+  saveCategory(model: CategoryModel): Promise<any> {
     let Category = this.parseService.parse.Object.extend(CategoryHttpService.CATEGORY);
     let category = new Category();
     this.setFields(category, model);
@@ -190,7 +184,7 @@ export class CategoryHttpService extends CategoryService {
         return category.save();
       });
     }
-    return from(promise);
+    return promise;
   }
 
   static pathParamFromName(name: string) {

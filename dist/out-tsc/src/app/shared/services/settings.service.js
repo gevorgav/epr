@@ -1,7 +1,3 @@
-var SettingsService = /** @class */ (function () {
-    function SettingsService() {
-    }
-    return SettingsService;
-}());
-export { SettingsService };
+export class SettingsService {
+}
 //# sourceMappingURL=settings.service.js.map

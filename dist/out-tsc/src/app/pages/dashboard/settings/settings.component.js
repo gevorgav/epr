@@ -1,11 +1,11 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { SettingsService } from '../../../shared/services/settings.service';
 import { SettingsModel } from '../../../shared/model/settings.model';
 import { UploadService } from '../../../shared/services/upload.service';
 import { FormBuilder, Validators } from '@angular/forms';
-var SettingsComponent = /** @class */ (function () {
-    function SettingsComponent(settingsService, uploadService) {
+let SettingsComponent = class SettingsComponent {
+    constructor(settingsService, uploadService) {
         this.settingsService = settingsService;
         this.uploadService = uploadService;
         this.formBuilder = new FormBuilder();
@@ -13,54 +13,51 @@ var SettingsComponent = /** @class */ (function () {
         this.fileSizes = 'Optimal image sizes:   Width: 1720 pixels, Height: 1105 pixels';
         this.isReady = false;
     }
-    SettingsComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.getSettings();
-    };
-    SettingsComponent.prototype.submit = function () {
-        var _this = this;
+    }
+    submit() {
         if (this.form.valid) {
-            var settings = new SettingsModel(null, this.form.get('title').value, this.form.get('homePageMetaDescription').value, this.form.get('imageUrl1').value, this.form.get('imageUrl2').value, this.form.get('imageUrl3').value);
-            this.settingsService.updateSettings(settings).subscribe(function (res) {
+            let settings = new SettingsModel(null, this.form.get('title').value, this.form.get('homePageMetaDescription').value, this.form.get('imageUrl1').value, this.form.get('imageUrl2').value, this.form.get('imageUrl3').value, this.form.get('mobileImageUrl').value);
+            this.settingsService.updateSettings(settings).then(res => {
                 if (res) {
-                    _this.saveSuccess = true;
-                    setTimeout(function () { return _this.saveSuccess = false; }, 3000);
+                    this.saveSuccess = true;
+                    setTimeout(() => this.saveSuccess = false, 3000);
                 }
             });
         }
         else {
             this.markFormGroupTouched(this.form);
         }
-    };
-    SettingsComponent.prototype.onFileUpload = function (event, imageNumber) {
+    }
+    onFileUpload(event, imageNumber) {
         this.fileMaxSizeErrorMessage = '';
-        this.uploadFile(event, this.form.get('imageUrl' + imageNumber));
-    };
-    SettingsComponent.prototype.uploadFile = function (event, control) {
-        var _this = this;
+        this.uploadFile(event, this.form.get(imageNumber));
+    }
+    uploadFile(event, control) {
         if (event.target.files.length > 0) {
             this.uploadService.uploadFile(event.target.files[0])
-                .subscribe(function (res) {
+                .subscribe(res => {
                 control.setValue(res.fileName);
-            }, function (error) {
+            }, error => {
                 if (error.fileMaxSize) {
-                    _this.fileMaxSizeErrorMessage = error.message;
+                    this.fileMaxSizeErrorMessage = error.message;
                 }
             });
         }
-    };
-    SettingsComponent.prototype.markFormGroupTouched = function (formGroup) {
-        var _this = this;
-        Object.values(formGroup.controls).forEach(function (control) {
+    }
+    markFormGroupTouched(formGroup) {
+        Object.values(formGroup.controls).forEach(control => {
             control.markAsTouched();
             if (control.controls) {
-                _this.markFormGroupTouched(control);
+                this.markFormGroupTouched(control);
             }
         });
-    };
-    SettingsComponent.prototype.deleteImage = function (imageIndex) {
+    }
+    deleteImage(imageIndex) {
         this.form.get('imageUrl' + imageIndex).setValue('');
-    };
-    SettingsComponent.prototype.triggerClick = function (imageIndex) {
+    }
+    triggerClick(imageIndex) {
         switch (imageIndex) {
             case 1:
                 this.inputRef1.nativeElement.click();
@@ -71,17 +68,19 @@ var SettingsComponent = /** @class */ (function () {
             case 3:
                 this.inputRef3.nativeElement.click();
                 break;
+            case 4:
+                this.inputRef4.nativeElement.click();
+                break;
         }
-    };
-    SettingsComponent.prototype.getSettings = function () {
-        var _this = this;
-        this.settingsService.getSettings().subscribe(function (res) {
-            _this.settings = res;
-            _this.initForm();
-            _this.isReady = true;
+    }
+    getSettings() {
+        this.settingsService.getSettings().then(res => {
+            this.settings = res;
+            this.initForm();
+            this.isReady = true;
         });
-    };
-    SettingsComponent.prototype.initForm = function () {
+    }
+    initForm() {
         this.form = this.formBuilder.group({
             title: this.formBuilder.control(this.settings.title, [
                 Validators.required
@@ -90,30 +89,34 @@ var SettingsComponent = /** @class */ (function () {
             imageUrl1: this.formBuilder.control(this.settings.imageUrl1 || '', []),
             imageUrl2: this.formBuilder.control(this.settings.imageUrl2 || '', []),
             imageUrl3: this.formBuilder.control(this.settings.imageUrl3 || '', []),
+            mobileImageUrl: this.formBuilder.control(this.settings.mobileImageUrl || '', [])
         });
-    };
-    tslib_1.__decorate([
-        ViewChild('input1'),
-        tslib_1.__metadata("design:type", ElementRef)
-    ], SettingsComponent.prototype, "inputRef1", void 0);
-    tslib_1.__decorate([
-        ViewChild('input2'),
-        tslib_1.__metadata("design:type", ElementRef)
-    ], SettingsComponent.prototype, "inputRef2", void 0);
-    tslib_1.__decorate([
-        ViewChild('input3'),
-        tslib_1.__metadata("design:type", ElementRef)
-    ], SettingsComponent.prototype, "inputRef3", void 0);
-    SettingsComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-settings',
-            templateUrl: './settings.component.html',
-            styleUrls: ['./settings.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [SettingsService,
-            UploadService])
-    ], SettingsComponent);
-    return SettingsComponent;
-}());
+    }
+};
+__decorate([
+    ViewChild('input1', { static: false }),
+    __metadata("design:type", ElementRef)
+], SettingsComponent.prototype, "inputRef1", void 0);
+__decorate([
+    ViewChild('input2', { static: false }),
+    __metadata("design:type", ElementRef)
+], SettingsComponent.prototype, "inputRef2", void 0);
+__decorate([
+    ViewChild('input3', { static: false }),
+    __metadata("design:type", ElementRef)
+], SettingsComponent.prototype, "inputRef3", void 0);
+__decorate([
+    ViewChild('input4', { static: false }),
+    __metadata("design:type", ElementRef)
+], SettingsComponent.prototype, "inputRef4", void 0);
+SettingsComponent = __decorate([
+    Component({
+        selector: 'app-settings',
+        templateUrl: './settings.component.html',
+        styleUrls: ['./settings.component.css']
+    }),
+    __metadata("design:paramtypes", [SettingsService,
+        UploadService])
+], SettingsComponent);
 export { SettingsComponent };
 //# sourceMappingURL=settings.component.js.map

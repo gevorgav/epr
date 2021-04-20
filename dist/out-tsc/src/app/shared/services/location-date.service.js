@@ -1,76 +1,66 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { DeliveryChartService } from './delivery-chart.service';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-var LocationDateService = /** @class */ (function () {
-    function LocationDateService(deliveryService) {
+let LocationDateService = class LocationDateService {
+    constructor(deliveryService) {
         this.deliveryService = deliveryService;
         this._isSpecified = new BehaviorSubject(false);
         this._locationDate = new LocationDate(null, null, null);
     }
-    LocationDateService.prototype.setLocationDate = function (start, end, location) {
-        var now = new Date();
+    setLocationDate(start, end, location) {
+        let now = new Date();
         if (start && end && location && !(start.getTime() - now.getTime() < 54000000)) {
             this._locationDate = new LocationDate(start, end, location);
             this.setIsSpecified(true);
         }
-    };
-    LocationDateService.prototype.reset = function () {
+    }
+    reset() {
         this._locationDate = null;
         this.setIsSpecified(false);
-    };
-    Object.defineProperty(LocationDateService.prototype, "locationDate", {
-        get: function () {
-            return this._locationDate;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(LocationDateService.prototype, "isSpecified", {
-        get: function () {
-            return this._isSpecified;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    LocationDateService.prototype.setIsSpecified = function (value) {
+    }
+    get locationDate() {
+        return this._locationDate;
+    }
+    get isSpecified() {
+        return this._isSpecified;
+    }
+    setIsSpecified(value) {
         this._isSpecified.next(value);
-    };
-    LocationDateService.prototype.getShippingPriceByZipCode = function (zipCode) {
-        return this.deliveryService.getDeliveryLocationByZipCode(zipCode).pipe(map(function (res) {
+    }
+    getShippingPriceByZipCode(zipCode) {
+        return this.deliveryService.getDeliveryLocationByZipCode(zipCode).then((res) => {
             return res.price;
-        }));
-    };
-    LocationDateService.prototype.getShippingPrice = function () {
+        });
+    }
+    getShippingPrice() {
         return this.getShippingPriceByZipCode(this._locationDate.location.zipCode);
-    };
-    LocationDateService.prototype.getCalculation = function (nightPrice, minPrice, minTime, price) {
-        var _this = this;
-        return this.isSpecified.pipe(map(function (res) {
+    }
+    getCalculation(nightPrice, minPrice, minTime, price) {
+        return this.isSpecified.pipe(map(res => {
             if (res) {
-                var night = 0;
-                var hours = 0;
-                var calculatedPrice = 0;
-                var days = _this.getDates();
+                let night = 0;
+                let hours = 0;
+                let calculatedPrice = 0;
+                let days = this.getDates();
                 if (days.length === 1) {
-                    hours = _this.locationDate.endDateTime.getHours() - _this.locationDate.startDateTime.getHours();
+                    hours = this.locationDate.endDateTime.getHours() - this.locationDate.startDateTime.getHours();
                 }
                 else {
-                    for (var _i = 0, days_1 = days; _i < days_1.length; _i++) {
-                        var day = days_1[_i];
+                    for (let day of days) {
                         if (days.indexOf(day) !== 0 && days.indexOf(day) !== days.length - 1) {
-                            hours += _this.getFutureHours(9).length;
+                            hours += this.getFutureHours(9).length;
                             night += 1;
                         }
                         else if (days.indexOf(day) === 0) {
-                            hours += _this.getFutureHours(day.getHours()).length;
+                            hours += this.getFutureHours(day.getHours()).length;
                             if (days.length > 1) {
                                 night += 1;
                             }
                         }
                         else if (days.indexOf(day) === days.length - 1) {
-                            hours += _this.getLastDayHours(_this._locationDate.endDateTime.getHours()).length;
+                            hours += this.getLastDayHours(this._locationDate.endDateTime.getHours()).length;
                         }
                     }
                 }
@@ -85,24 +75,24 @@ var LocationDateService = /** @class */ (function () {
                 return 0;
             }
         }));
-    };
-    LocationDateService.prototype.getFutureHours = function (hour) {
-        var futureHours = [];
-        for (var i = hour; i <= 21; i++) {
+    }
+    getFutureHours(hour) {
+        let futureHours = [];
+        for (let i = hour; i <= 21; i++) {
             futureHours.push(i + ":" + ("00"));
         }
         return futureHours;
-    };
-    LocationDateService.prototype.getLastDayHours = function (hour) {
-        var futureHours = [];
-        for (var i = 9; i < hour; i++) {
+    }
+    getLastDayHours(hour) {
+        let futureHours = [];
+        for (let i = 9; i < hour; i++) {
             futureHours.push(i + ":" + ("00"));
         }
         return futureHours;
-    };
-    LocationDateService.prototype.getDates = function () {
-        var dates = [], currentDate = this._locationDate.startDateTime, addDays = function (days) {
-            var date = new Date(this.valueOf());
+    }
+    getDates() {
+        let dates = [], currentDate = this._locationDate.startDateTime, addDays = function (days) {
+            let date = new Date(this.valueOf());
             date.setHours(0, 0, 0, 0);
             date.setDate(date.getDate() + days);
             return date;
@@ -112,56 +102,41 @@ var LocationDateService = /** @class */ (function () {
             currentDate = addDays.call(currentDate, 1);
         }
         return dates;
-    };
-    LocationDateService = tslib_1.__decorate([
-        Injectable({
-            providedIn: "root"
-        }),
-        tslib_1.__metadata("design:paramtypes", [DeliveryChartService])
-    ], LocationDateService);
-    return LocationDateService;
-}());
+    }
+};
+LocationDateService = __decorate([
+    Injectable({
+        providedIn: "root"
+    }),
+    __metadata("design:paramtypes", [DeliveryChartService])
+], LocationDateService);
 export { LocationDateService };
-var LocationDate = /** @class */ (function () {
-    function LocationDate(startDateTime, endDateTime, location) {
+export class LocationDate {
+    constructor(startDateTime, endDateTime, location) {
         this._startDateTime = startDateTime;
         this._endDateTime = endDateTime;
         this._location = location;
     }
-    Object.defineProperty(LocationDate.prototype, "startDateTime", {
-        get: function () {
-            return this._startDateTime;
-        },
-        set: function (value) {
-            this._startDateTime = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(LocationDate.prototype, "endDateTime", {
-        get: function () {
-            return this._endDateTime;
-        },
-        set: function (value) {
-            this._endDateTime = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(LocationDate.prototype, "location", {
-        get: function () {
-            return this._location;
-        },
-        set: function (value) {
-            this._location = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    LocationDate.prototype.getLocation = function () {
+    get startDateTime() {
+        return this._startDateTime;
+    }
+    set startDateTime(value) {
+        this._startDateTime = value;
+    }
+    get endDateTime() {
+        return this._endDateTime;
+    }
+    set endDateTime(value) {
+        this._endDateTime = value;
+    }
+    get location() {
+        return this._location;
+    }
+    getLocation() {
         return this._location ? this._location.location : null;
-    };
-    return LocationDate;
-}());
-export { LocationDate };
+    }
+    set location(value) {
+        this._location = value;
+    }
+}
 //# sourceMappingURL=location-date.service.js.map

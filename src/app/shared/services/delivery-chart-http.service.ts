@@ -5,9 +5,8 @@ import {DeliveryChartService} from './delivery-chart.service';
 import {Injectable} from '@angular/core';
 import {DeliveryChartModel, ZipCode} from '../model/delivery-chart.model';
 import {ParseService} from './parse.service';
-import {Observable} from 'rxjs/internal/Observable';
 import {OrderService} from './order.service';
-import {from, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class DeliveryChartHttpService extends DeliveryChartService{
@@ -23,50 +22,46 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return undefined;
   }
 
-  getDeliveryLocationByZipCode(zipCode: string): Observable<DeliveryChartModel> {
+  getDeliveryLocationByZipCode(zipCode: string): Promise<DeliveryChartModel> {
     let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
     zipCodeQuery.contains('zipCode', zipCode);
     let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
     deliveryQuery.matchesQuery('zipCode', zipCodeQuery);
     // let deliveryChartModel: DeliveryChartModel;
-    let promise = deliveryQuery.first().then( (delivery) => {
+    return deliveryQuery.first().then((delivery) => {
       return new DeliveryChartModel(delivery['id'], delivery.attributes['city'], delivery.attributes['price'], null);
     }, (error) => {
       console.log(error);
     });
-
-    return from(promise);
   }
 
   getDeliveryLocationsFromCash(): DeliveryChartModel[] {
     return null;
   }
 
-  getDeliveryLocations(): Observable<Array<DeliveryChartModel>> {
+  getDeliveryLocations(): Promise<Array<DeliveryChartModel>> {
     let delivery = this.parseService.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let query = new this.parseService.parse.Query(delivery);
 
     let deliveryCharts: DeliveryChartModel[] = [];
 
-    let promise1 = query.each(item=>{
+    return query.each(item => {
       let zipCodes = [];
-      item.relation('zipCode').query().each(zip=>{
+      item.relation('zipCode').query().each(zip => {
         zipCodes.push(DeliveryChartHttpService.parseObjectToZipCode(zip));
       });
       deliveryCharts.push(new DeliveryChartModel(item['id'], item.attributes['city'],
         item.attributes['price'], null, zipCodes))
     }).then(() => deliveryCharts);
-
-    return from(promise1);
   }
 
-  getDeliveryLocationByCity(city: string): Observable<Array<DeliveryChartModel>> {
+  getDeliveryLocationByCity(city: string): Promise<Array<DeliveryChartModel>> {
     let delivery = this.parseService.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let query = new this.parseService.parse.Query(delivery);
 
     let deliveryCharts: DeliveryChartModel[] = [];
 
-    let promise1 = query.contains('city', city).each(item => {
+    return query.contains('city', city).each(item => {
       let zipCodes = [];
       return item.relation('zipCode').query().each(zip => {
         zipCodes.push(DeliveryChartHttpService.parseObjectToZipCode(zip));
@@ -76,8 +71,6 @@ export class DeliveryChartHttpService extends DeliveryChartService{
         deliveryCharts.push(deliveryChartModel);
       });
     }).then((deliveryChart) => deliveryCharts);
-
-    return from(promise1);
   }
 
   private static parseObjectToZipCode(parseObject: any): ZipCode{
@@ -92,20 +85,19 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return items;
   }
 
-  deleteDeliveryChart(id: string): Observable<any> {
+  deleteDeliveryChart(id: string): Promise<any> {
     const DeliveryChart = this.parseService.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     const query = new this.parseService.parse.Query(DeliveryChart);
     query.equalTo("objectId", id);
-    const promise = query.first().then((result) =>{
+    return query.first().then((result) => {
       result.relation('zipCode').query().find().then(items => {
         items.forEach(item => item.destroy())
       });
       return result.destroy();
     });
-    return from(promise);
   }
 
-  saveDeliveryChart(model: DeliveryChartModel): Observable<any> {
+  saveDeliveryChart(model: DeliveryChartModel): Promise<any> {
     const DeliveryChart = this.parseService.parse.Object.extend(DeliveryChartHttpService.DELIVERY_CHART);
     let delivery = new DeliveryChart();
     let zipCodes = this.setZipCodeFields(model.zipCodes);
@@ -136,7 +128,7 @@ export class DeliveryChartHttpService extends DeliveryChartService{
         return delivery.save();
       });
     }
-    return from(promise);
+    return promise;
   }
 
   private setDeliveryChartFields(deliveryChart: any, model: DeliveryChartModel) {
@@ -183,32 +175,29 @@ export class DeliveryChartHttpService extends DeliveryChartService{
     return of(deliveries);
   }
 
-  getDeliveryLocationsByZipCodeSearch(zipCode: string, city?: string): Observable<DeliveryChartModel[]> {
+  getDeliveryLocationsByZipCodeSearch(zipCode: string, city?: string): Promise<DeliveryChartModel[]> {
     let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
     zipCodeQuery.contains('zipCode', zipCode);
     let deliveries:DeliveryChartModel[] = [];
-    let promise = zipCodeQuery.each(zipCodeItem=>{
-        let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
-        deliveryQuery.equalTo('zipCode', zipCodeItem);
-        if (city){
-          deliveryQuery.contains('city', city);
+    return zipCodeQuery.each(zipCodeItem => {
+      let deliveryQuery = new this.parseService.parse.Query('DeliveryChart');
+      deliveryQuery.equalTo('zipCode', zipCodeItem);
+      if (city) {
+        deliveryQuery.contains('city', city);
+      }
+      return deliveryQuery.first().then((delivery) => {
+        if (delivery) {
+          deliveries.push(new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
+            delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
         }
-        return deliveryQuery.first().then( (delivery) => {
-          if (delivery){
-            deliveries.push( new DeliveryChartModel(delivery['id'], delivery.attributes['city'],
-              delivery.attributes['price'], null, [DeliveryChartHttpService.parseObjectToZipCode(zipCodeItem)]));
-          }
-        }).then(()=>deliveries);
-    }).then(()=> deliveries);
-
-    return from(promise);
+      }).then(() => deliveries);
+    }).then(() => deliveries);
   }
 
-  getZipCodeModelByZipCode(zipCode: string): Observable<ZipCode> {
+  getZipCodeModelByZipCode(zipCode: string): Promise<ZipCode> {
     let zipCodeQuery = new this.parseService.parse.Query(OrderService.ZIP_CODE);
     zipCodeQuery.equalTo('zipCode', zipCode);
-    let promise = zipCodeQuery.first().then(res=> DeliveryChartHttpService.parseObjectToZipCode(res));
-    return from(promise);
+    return zipCodeQuery.first().then(res => DeliveryChartHttpService.parseObjectToZipCode(res));
   }
 
 }

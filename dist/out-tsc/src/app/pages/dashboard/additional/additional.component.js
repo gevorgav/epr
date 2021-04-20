@@ -1,4 +1,4 @@
-import * as tslib_1 from "tslib";
+import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { AdditionCategoryService } from '../../../shared/services/addition-category.service';
@@ -6,84 +6,78 @@ import { handleError } from '../../../shared/util/error-handler';
 import { AdditionModel } from '../../../shared/model/addition.model';
 import { AdditionalPopupComponent } from './additional-popup/additional-popup.component';
 import { zip } from 'rxjs';
-var AdditionalComponent = /** @class */ (function () {
-    function AdditionalComponent(categoryService, dialog) {
+let AdditionalComponent = class AdditionalComponent {
+    constructor(categoryService, dialog) {
         this.categoryService = categoryService;
         this.dialog = dialog;
         this.dataSource = new MatTableDataSource(this.items);
         this.displayedColumns = ['name', 'edit', 'delete'];
     }
-    AdditionalComponent.prototype.ngOnInit = function () {
+    ngOnInit() {
         this.initAdditions();
-    };
-    AdditionalComponent.prototype.addItem = function () {
-        var _this = this;
-        var dialogRef = this.dialog.open(AdditionalPopupComponent, {
+    }
+    addItem() {
+        let dialogRef = this.dialog.open(AdditionalPopupComponent, {
             data: {
                 item: new AdditionModel(null, null, null)
             },
             width: '80%',
             height: '95%'
         });
-        dialogRef.afterClosed().subscribe(function (data) {
+        dialogRef.afterClosed().subscribe(data => {
             if (data && data.item) {
-                _this.categoryService.saveAddition(data.item, data.newCategoryId)
-                    .subscribe(function (res) {
-                    _this.initAdditions();
-                }, function (error) { return handleError(error); });
+                this.categoryService.saveAddition(data.item, data.newCategoryId)
+                    .then(res => {
+                    this.initAdditions();
+                }, error => handleError(error));
             }
         });
-    };
-    AdditionalComponent.prototype.edit = function (additionId) {
-        var _this = this;
+    }
+    edit(additionId) {
         zip(this.categoryService.getAdditionById(additionId), // 0
-        this.categoryService.getAdditionCategoryByAdditionId(additionId)).subscribe(function (_a) {
-            var addition = _a[0], category = _a[1];
-            var dialogRef = _this.dialog.open(AdditionalPopupComponent, {
+        this.categoryService.getAdditionCategoryByAdditionId(additionId)).subscribe(([addition, category]) => {
+            let dialogRef = this.dialog.open(AdditionalPopupComponent, {
                 data: {
                     item: addition,
-                    category: category
+                    category
                 },
                 width: '80%'
             });
-            dialogRef.afterClosed().subscribe(function (data) {
+            dialogRef.afterClosed().subscribe(data => {
                 if (data && data.item) {
-                    _this.categoryService.saveAddition(data.item, data.newCategoryId, data.oldCategoryId)
-                        .subscribe(function (res) {
-                        _this.initAdditions();
-                    }, function (error) { return handleError(error); });
+                    this.categoryService.saveAddition(data.item, data.newCategoryId, data.oldCategoryId)
+                        .then(res => {
+                        this.initAdditions();
+                    }, error => handleError(error));
                 }
             });
         });
-    };
-    AdditionalComponent.prototype.remove = function (id) {
-        var _this = this;
+    }
+    remove(id) {
         this.categoryService.deleteAddition(id)
-            .subscribe(function (res) {
-            _this.initAdditions();
-        }, function (error) { return handleError(error); });
-    };
-    AdditionalComponent.prototype.initAdditions = function () {
-        var _this = this;
+            .then(res => {
+            this.initAdditions();
+        }, error => handleError(error));
+    }
+    initAdditions() {
         this.categoryService.getAllAdditions()
-            .subscribe(function (res) {
-            _this.items = res;
-            _this.dataSource = new MatTableDataSource(_this.items);
+            .then(res => {
+            this.items = res;
+            this.dataSource = new MatTableDataSource(this.items);
         });
-    };
-    AdditionalComponent.prototype.applyFilter = function ($event) {
+    }
+    applyFilter($event) {
         this.dataSource.filter = $event.path[0].value.trim().toLowerCase();
-    };
-    AdditionalComponent = tslib_1.__decorate([
-        Component({
-            selector: 'app-additional',
-            templateUrl: './additional.component.html',
-            styleUrls: ['./additional.component.css']
-        }),
-        tslib_1.__metadata("design:paramtypes", [AdditionCategoryService,
-            MatDialog])
-    ], AdditionalComponent);
-    return AdditionalComponent;
-}());
+    }
+};
+AdditionalComponent = __decorate([
+    Component({
+        selector: 'app-additional',
+        templateUrl: './additional.component.html',
+        styleUrls: ['./additional.component.css']
+    }),
+    __metadata("design:paramtypes", [AdditionCategoryService,
+        MatDialog])
+], AdditionalComponent);
 export { AdditionalComponent };
 //# sourceMappingURL=additional.component.js.map

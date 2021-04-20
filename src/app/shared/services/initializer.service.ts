@@ -28,9 +28,9 @@ export class InitializerService {
     this._orderModel = value;
   }
 
-  initialize(): Observable<boolean> {
-    return this.orderService.initOrderedData().pipe(
-      map(res => {
+  initialize(): Promise<boolean> {
+    return this.orderService.initOrderedData().then(
+      res => {
         if (res) {
           let now = new Date();
           this.orderModel = res;
@@ -40,7 +40,7 @@ export class InitializerService {
           }
         }
         return true;
-      }));
+      });
   }
 
   get initialized(): BehaviorSubject<boolean> {

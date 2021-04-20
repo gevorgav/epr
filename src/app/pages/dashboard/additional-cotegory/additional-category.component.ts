@@ -34,12 +34,12 @@ export class AdditionalCategoryComponent implements OnInit {
       data => {
         if (data && data.category) {
           this.categoryService.saveAdditionalCategory(data.category)
-            .subscribe(
+            .then(
               res => {
                 this.initCategories();
-              },
-              error => handleError(error)
+              }
             )
+            .catch(error => handleError(error))
         }
       }
     )
@@ -56,7 +56,7 @@ export class AdditionalCategoryComponent implements OnInit {
       data => {
         if (data && data.category) {
           this.categoryService.saveAdditionalCategory(data.category)
-            .subscribe(
+            .then(
               res => {
                 this.initCategories();
               },
@@ -69,7 +69,7 @@ export class AdditionalCategoryComponent implements OnInit {
 
   remove(id: string) {
     this.categoryService.deleteAdditionalCategory(id)
-      .subscribe(
+      .then(
         res => {
           this.initCategories();
         },
@@ -79,7 +79,7 @@ export class AdditionalCategoryComponent implements OnInit {
 
   private initCategories() {
     this.categoryService.getAdditionCategories()
-      .subscribe(
+      .then(
         res => {
           this.categories = res;
           this.dataSource = new MatTableDataSource(this.categories);

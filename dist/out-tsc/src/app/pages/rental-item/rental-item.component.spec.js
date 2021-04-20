@@ -1,20 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RentalItemComponent } from './rental-item.component';
-describe('RentalItemComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(async(function () {
+describe('RentalItemComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [RentalItemComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
+    beforeEach(() => {
         fixture = TestBed.createComponent(RentalItemComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

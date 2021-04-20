@@ -1,20 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { ProductPopupComponent } from './product-popup.component';
-describe('ProductPopupComponent', function () {
-    var component;
-    var fixture;
-    beforeEach(async(function () {
+describe('ProductPopupComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ProductPopupComponent]
         })
             .compileComponents();
     }));
-    beforeEach(function () {
+    beforeEach(() => {
         fixture = TestBed.createComponent(ProductPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
-    it('should create', function () {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });
