@@ -18,9 +18,9 @@ import {ProductPopupComponent} from './product/product-popup/product-popup.compo
 import {DeliveryChartPopupComponent} from './delivery-chart/delivery-chart-popup/delivery-chart-popup.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../mat/material.module';
-import {MatDatepickerModule} from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 const dashboardRoutes: Routes = [
   {

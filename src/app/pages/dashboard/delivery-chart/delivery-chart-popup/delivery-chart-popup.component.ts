@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {DeliveryChartModel, ZipCode} from "../../../../shared/model/delivery-chart.model";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-delivery-chart-popup',
@@ -9,7 +9,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
   styleUrls: ['./delivery-chart-popup.component.css']
 })
 export class DeliveryChartPopupComponent implements OnInit {
-  
+
   deliveryChart: DeliveryChartModel;
   form: FormGroup;
   formBuilder = new FormBuilder();
@@ -109,7 +109,7 @@ export class DeliveryChartPopupComponent implements OnInit {
     }
     return res;
   }
-  
+
   public getZipCodesControls(){
     return (this.form.get('zipCodes') as FormArray).controls
   }

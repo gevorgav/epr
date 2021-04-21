@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {ProductIdName, ShippingInfoModel} from '../../../../shared/model/shipping-info.model';
 import {ProductCount} from '../../../cart/cart.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-shipping-popup',

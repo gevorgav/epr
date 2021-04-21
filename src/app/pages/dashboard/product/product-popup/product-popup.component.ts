@@ -1,5 +1,4 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild, PLATFORM_ID} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ProductModel} from "../../../../shared/model/product.model";
 import {FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {ParseService} from "../../../../shared/services/parse.service";
@@ -10,6 +9,7 @@ import {UploadService} from "../../../../shared/services/upload.service";
 import {AdditionCategoryService} from '../../../../shared/services/addition-category.service';
 import {AdditionCategoryModel} from '../../../../shared/model/addition-category.model';
 import {isPlatformBrowser} from '@angular/common';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-product-popup',

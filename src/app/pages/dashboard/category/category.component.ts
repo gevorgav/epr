@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {CategoryService} from '../../../shared/services/category.service';
 import {CategoryModel} from '../../../shared/model/category.model';
-import {MatDialog, MatTableDataSource} from '@angular/material';
-import {DeliveryChartService} from '../../../shared/services/delivery-chart.service';
 import {CategoryPopupComponent} from './category-popup/category-popup.component';
 import {handleError} from '../../../shared/util/error-handler';
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-category',

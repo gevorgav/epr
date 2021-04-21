@@ -1,12 +1,11 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {CategoryModel} from '../../../../shared/model/category.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {UploadService} from '../../../../shared/services/upload.service';
 import {AdditionModel} from '../../../../shared/model/addition.model';
 import {handleError} from '../../../../shared/util/error-handler';
 import {AdditionCategoryService} from '../../../../shared/services/addition-category.service';
 import {AdditionCategoryModel} from '../../../../shared/model/addition-category.model';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-additional-popup',

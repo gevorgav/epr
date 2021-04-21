@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {ProductService} from "../../../shared/services/product.service";
 import {ProductViewModel} from "../../../shared/model/product-view.model";
 import {handleError} from "../../../shared/util/error-handler";
-import {MatDialog, MatTableDataSource} from "@angular/material";
 import {ProductPopupComponent} from "./product-popup/product-popup.component";
 import {ProductModel} from "../../../shared/model/product.model";
 import {CategoryService} from "../../../shared/services/category.service";
 import {zip} from "rxjs";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-product',

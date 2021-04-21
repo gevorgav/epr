@@ -39,7 +39,6 @@ import {CheckoutService} from './shared/services/checkout.service';
 import {ShippingHttpService} from './shared/services/shipping-http.service';
 import {ResetPasswordComponent} from './pages/reset-password/reset-password.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {MatDatepickerModule} from '@angular/material';
 import {SettingsService} from './shared/services/settings.service';
 import {SettingsHttpService} from './shared/services/settings-http.service';
 import {AdditionCategoryHttp} from './shared/services/addition-category-http.service';
@@ -50,6 +49,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {PrivacyComponent} from "./pages/privacy/privacy.component";
 import {NgxGalleryModule} from "@kolkov/ngx-gallery";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 const appRoutes: Routes = [
   {

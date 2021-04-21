@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {DeliveryChartService} from "../../../shared/services/delivery-chart.service";
 import {DeliveryChartModel} from "../../../shared/model/delivery-chart.model";
 import {handleError} from "../../../shared/util/error-handler";
-import {MatDialog, MatTableDataSource} from "@angular/material";
 import {DeliveryChartPopupComponent} from "./delivery-chart-popup/delivery-chart-popup.component";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-delivery-chart',

@@ -1,8 +1,8 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {CategoryModel} from '../../../../shared/model/category.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UploadService} from "../../../../shared/services/upload.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-category-popup',

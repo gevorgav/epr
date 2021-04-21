@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog, MatTableDataSource} from '@angular/material';
 import {ProductIdName, ShippingInfoModel} from '../../../shared/model/shipping-info.model';
 import {ShippingHttpService} from '../../../shared/services/shipping-http.service';
-import {ProductPopupComponent} from '../product/product-popup/product-popup.component';
-import {handleError} from '../../../shared/util/error-handler';
 import {ShippingPopupComponent} from './shipping-popup/shipping-popup.component';
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-shipping',
@@ -27,7 +26,7 @@ export class ShippingComponent implements OnInit {
   }
 
   private initShipping() {
-    this._shippingService.loadPayed().subscribe(res => {
+    this._shippingService.loadPayed().then(res => {
       this.shippingModels = res;
       this.dataSource = new MatTableDataSource(this.shippingModels);
     });

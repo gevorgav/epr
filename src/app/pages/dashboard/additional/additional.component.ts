@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog, MatTableDataSource} from '@angular/material';
 import {AdditionCategoryService} from '../../../shared/services/addition-category.service';
 import {handleError} from '../../../shared/util/error-handler';
 import {AdditionModel} from '../../../shared/model/addition.model';
 import {AdditionalPopupComponent} from './additional-popup/additional-popup.component';
 import {zip} from 'rxjs';
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-additional',

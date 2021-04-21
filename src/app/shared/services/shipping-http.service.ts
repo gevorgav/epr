@@ -91,11 +91,11 @@ export class ShippingHttpService {
     return from(promise);
   }
 
-  loadShipped(): Observable<ShippingInfoModel[]>{
+  loadShipped(): Promise<ShippingInfoModel[]>{
     return this.loadShippings({columnName: 'isShipped', value: true});
   }
 
-  loadPayed(): Observable<ShippingInfoModel[]>{
+  loadPayed(): Promise<ShippingInfoModel[]>{
     return this.loadShippings({columnName: 'isPayed', value: true});
   }
 
@@ -117,13 +117,13 @@ export class ShippingHttpService {
     return promise;
   }
 
-  private loadShippings(option: Option): Observable<ShippingInfoModel[]>{
+  private loadShippings(option: Option): Promise<ShippingInfoModel[]>{
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     const ZipCodeParse = this.parseService.parse.Object.extend(ShippingHttpService.ZIP_CODE);
     let shippings: ShippingInfoModel[] = [];
     let query = new this.parseService.parse.Query(ShippingInfo);
     if (option.columnName === 'isPayed'){
-      query = query.equalTo(option.columnName, option.value).equalTo('isShipped', false);
+      query = query.equalTo(option.columnName, option.value).equalTo('isShipped', false).withinRadians();
     } else{
       query = query.equalTo(option.columnName, option.value);
     }
