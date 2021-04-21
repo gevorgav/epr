@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ProductIdName, ShippingInfoModel} from '../../../../shared/model/shipping-info.model';
 import {ProductCount} from '../../../cart/cart.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { OrderItemModel } from '../../../../shared/model/order-item.model';
 
 @Component({
   selector: 'app-shipping-popup',
@@ -10,6 +11,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class ShippingPopupComponent implements OnInit {
   public shippingModel: ShippingInfoModel;
+  public orderItems: OrderItemModel[];
+  public productIdNames: ProductIdName[];
 
   constructor(public dialogRef: MatDialogRef<ShippingPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,) {
@@ -17,6 +20,12 @@ export class ShippingPopupComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.shippingModel.relationOrderItems.subscribe(res => {
+      this.orderItems = res;
+    })
+    this.shippingModel.relationProducts.subscribe(res => {
+      this.productIdNames = res;
+    })
   }
 
   close() {
@@ -25,7 +34,7 @@ export class ShippingPopupComponent implements OnInit {
 
   getProduct(productId: string): ProductCount {
     let productCount: ProductCount;
-    this.shippingModel.products.forEach(value => {
+    this.productIdNames.forEach(value => {
       if (productId ===  value.id){
         productCount = this.shippingModel.productCount.find(value1 => value.id === value1.productId);
         productCount.name = value.name;

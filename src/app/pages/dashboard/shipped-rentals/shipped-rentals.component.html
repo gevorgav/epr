@@ -11,7 +11,7 @@
   </ng-container>
   <ng-container matColumnDef="zipCode">
     <th mat-header-cell *matHeaderCellDef> Zip Code</th>
-    <td mat-cell *matCellDef="let element">{{element.zipCode}}</td>
+    <td mat-cell *matCellDef="let element">{{element.relationZipCode | async}}</td>
   </ng-container>
   <ng-container matColumnDef="address/street">
     <th mat-header-cell *matHeaderCellDef> Address/Street</th>
@@ -35,13 +35,15 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div *ngIf="panelOpenState">
-            <p *ngFor="let product of element.products">{{getProductWithCount(element, product)}}</p>
+            <ng-container *ngFor="let product of (element.relationProducts | async)">
+              <p>{{getProductWithCount(element, product)}}</p>
+            </ng-container>
             <p>Name: {{element.name}}</p>
             <p>Phone: {{element.phone}}</p>
             <p>Email: {{element.email}}</p>
             <p>SpecialInstructions: {{element.specialInstructions}}</p>
           </div>
-          
+
         </mat-expansion-panel>
       </mat-accordion>
     </td>

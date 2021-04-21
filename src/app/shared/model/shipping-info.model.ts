@@ -1,5 +1,8 @@
-import {ProductCount} from '../../pages/cart/cart.component';
-import {OrderItemModel} from './order-item.model';
+import { Observable } from 'rxjs';
+import { ProductCount } from '../../pages/cart/cart.component';
+import { ZipCode } from './delivery-chart.model';
+import { OrderItemModel } from './order-item.model';
+import { ProductModel } from './product.model';
 
 export class ShippingInfoModel {
   private _id: string;
@@ -21,10 +24,14 @@ export class ShippingInfoModel {
   private _stairs: string;
   private _orderItems: OrderItemModel[];
   private _setUpSurface: string;
+  public relationProducts?: Observable<ProductIdName[]>
+  public relationOrderItems?: Observable<OrderItemModel[]>
+  public relationZipCode?: Observable<string>;
 
-  constructor(id:string, name: string, street: string, phone: string, email: string, specialInstructions: string, zipCode: string,
-              products: ProductIdName[], isPayed: boolean, isShipped: boolean, user: any, createdAt: Date, startDate: Date, endDate: Date,
-              payed: number, productCount: ProductCount[], orderItems: OrderItemModel[], stairs: string, setUpSurfaces: string) {
+
+  constructor(id: string, name: string, street: string, phone: string, email: string, specialInstructions: string, zipCode: string,
+    products: ProductIdName[], isPayed: boolean, isShipped: boolean, user: any, createdAt: Date, startDate: Date, endDate: Date,
+    payed: number, productCount: ProductCount[], orderItems: OrderItemModel[], stairs: string, setUpSurfaces: string) {
     this._name = name;
     this._street = street;
     this._phone = phone;

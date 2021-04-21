@@ -11,7 +11,7 @@
   </ng-container>
   <ng-container matColumnDef="zipCode">
     <th mat-header-cell *matHeaderCellDef> Zip Code</th>
-    <td mat-cell *matCellDef="let element">{{element.zipCode}}</td>
+    <td mat-cell *matCellDef="let element">{{element.relationZipCode | async}}</td>
   </ng-container>
   <ng-container matColumnDef="address/street">
     <th mat-header-cell *matHeaderCellDef> Address/Street</th>

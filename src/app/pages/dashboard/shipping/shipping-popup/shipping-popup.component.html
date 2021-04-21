@@ -17,26 +17,24 @@
           <p id="paid" class="form-control">${{shippingModel.payed}}</p>
         </div>
       </div>
-      <ng-container *ngIf="shippingModel.orderItems && shippingModel.orderItems.length > 0">
-        <div class="row clearfix" *ngFor="let orderItem of shippingModel.orderItems">
-          <div class="col col_half">
-            <label for="rentalName">Rental name:</label>
-            <p id="rentalName" class="form-control">{{getProduct(orderItem.productId).name}}</p>
-          </div>
-          <div class="col col_one_fourth">
-            <label for="howMany">How many:</label>
-            <p id="howMany" class="form-control">{{getProduct(orderItem.productId).count}}</p>
-          </div>
-          <div *ngIf="orderItem.additionModels?.length > 0" class="col col_one_fourth">
-            <label>Additions:</label>
-            <ng-container *ngFor="let addition of orderItem.additionModels">
-              <p class="form-control">{{addition.name}}</p>
-            </ng-container>
-          </div>
+      <div class="row clearfix" *ngFor="let orderItem of orderItems">
+        <div class="col col_half">
+          <label for="rentalName">Rental name:</label>
+          <p id="rentalName" class="form-control">{{getProduct(orderItem.productId).name}}</p>
         </div>
-      </ng-container>
+        <div class="col col_one_fourth">
+          <label for="howMany">How many:</label>
+          <p id="howMany" class="form-control">{{getProduct(orderItem.productId).count}}</p>
+        </div>
+        <div *ngIf="orderItem.additionModels?.length > 0" class="col col_one_fourth">
+          <label>Additions:</label>
+          <ng-container *ngFor="let addition of orderItem.additionModels">
+            <p class="form-control">{{addition.name}}</p>
+          </ng-container>
+        </div>
+      </div>
 
-      <ng-container *ngIf="!shippingModel.orderItems || shippingModel.orderItems.length === 0"> <!--TODO will removed -->
+      <!-- <ng-container *ngIf="!shippingModel.orderItems || shippingModel.orderItems.length === 0"> 
         <div class="row clearfix" *ngFor="let product of shippingModel.products">
           <div class="col col_half">
             <label for="rentalNameOld">Rental name:</label>
@@ -47,7 +45,7 @@
             <p id="howManyOld" class="form-control">{{getProductHowMany(shippingModel, product)}}</p>
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
 
       <h4>User Information</h4>
       <div class="row clearfix">
