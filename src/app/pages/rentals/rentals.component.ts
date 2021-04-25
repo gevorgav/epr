@@ -18,6 +18,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
 
   public categories: CategoryModel[] = [];
   public activeCategory: CategoryModel;
+  public isMobile: boolean = false;
   private title$ = this.route.paramMap;
 
   constructor(private router: Router,
@@ -30,6 +31,9 @@ export class RentalsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    if (window.innerWidth && window.innerWidth < 990) {
+      this.isMobile = true;
+    }
     zip(from(this.categoryService.getCategories()).pipe(
       map(arr => arr.sort((a, b) => {
         return a.order - b.order;
@@ -43,7 +47,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
               this.activeCategory = res;
             })
         })
-      }else {
+      }else if(!this.isMobile) {
         this.navigate(res[0][0].id, res[0][0].pathParam);
       }
       this.subscribeAndInit();
