@@ -159,10 +159,8 @@ const appRoutes: Routes = [
     PageNotFoundComponent
   ],
   imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: false} // <-- debugging purposes only
-    ),
+    RouterModule.forRoot(appRoutes, { enableTracing: false, initialNavigation: 'enabled' } // <-- debugging purposes only
+),
     BrowserModule.withServerTransition({appId: 'serverApp'}),
     FormsModule,
     ReactiveFormsModule,
