@@ -14,7 +14,7 @@ export class ShippingComponent implements OnInit {
 
   public shippingModels: ShippingInfoModel[] = [];
   dataSource = new MatTableDataSource(this.shippingModels);
-  displayedColumns = ['startDate', 'endDate', 'zipCode', 'address/street', 'paid', 'details', 'ship off'];
+  displayedColumns = ['orderId', 'endDate', 'zipCode', 'address/street', 'paid', 'details', 'ship off'];
 
 
   constructor(private _shippingService: ShippingHttpService,
@@ -32,7 +32,7 @@ export class ShippingComponent implements OnInit {
     });
   }
 
-  public setShipped(id: string) {
+  public setShipped(id: string): void {
     this._shippingService.setShipped(id, true).subscribe(res => {
       this.initShipping();
     });

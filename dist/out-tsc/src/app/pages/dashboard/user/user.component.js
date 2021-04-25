@@ -1,7 +1,7 @@
 import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import { UserService } from '../../../shared/services/user.service';
+import { MatTableDataSource } from "@angular/material/table";
 let UserComponent = class UserComponent {
     constructor(userService) {
         this.userService = userService;

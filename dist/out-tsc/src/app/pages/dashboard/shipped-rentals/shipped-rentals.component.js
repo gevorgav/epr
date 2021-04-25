@@ -1,19 +1,20 @@
 import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import { ShippingHttpService } from '../../../shared/services/shipping-http.service';
+import { MatTableDataSource } from "@angular/material/table";
 let ShippedRentalsComponent = class ShippedRentalsComponent {
     constructor(_shippingService) {
         this._shippingService = _shippingService;
         this.shippingModels = [];
+        this.panelOpenState = false;
         this.dataSource = new MatTableDataSource(this.shippingModels);
-        this.displayedColumns = ['startDate', 'endDate', 'zipCode', 'address/street', 'paid', 'details'];
+        this.displayedColumns = ['orderId', 'endDate', 'zipCode', 'address/street', 'paid', 'details'];
     }
     ngOnInit() {
         this.initShipping();
     }
     initShipping() {
-        this._shippingService.loadShipped().subscribe(res => {
+        this._shippingService.loadShipped().then(res => {
             this.shippingModels = res;
             this.dataSource = new MatTableDataSource(this.shippingModels);
         });

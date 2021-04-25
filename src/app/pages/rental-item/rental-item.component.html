@@ -29,7 +29,7 @@
                             ============================================= -->
             <div class="col_full">
               <div class="product-image" style="overflow: visible;">
-                <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                <ngx-gallery [options]="galleryOptions" style="display: inline-block;" [images]="galleryImages"></ngx-gallery>
                 <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isNew">New !</div>
                 <div class="sale-flash" style="z-index: 1000;" *ngIf="selectedProduct.isHotDeal">Hot Deal !</div>
               </div><!-- Product Single - Gallery End -->
@@ -287,11 +287,10 @@
 
           <ng-container *ngFor="let product of relatedProducts">
             <ng-template carouselSlide  [width]="300" [id]="product.id">
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isNew">New !</div>
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isHotDeal">Hot Deal !</div>
-              <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title" style="height: 260px !important;"></a>
-              <div class="real-estate-item-price" *ngIf="(isSpecified() | async)">
-              ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
+              <div class="sale-flash" style="z-index: 1000;">{{getProductLabel(product)}}</div>
+              <a [routerLink]="['/rental', product.pathParam]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title" style="height: 260px !important;"></a>
+              <div class="real-estate-item-price">
+              {{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
               </div>
               <div class="real-estate-item-desc">
                 <h3 style="white-space: nowrap;overflow: hidden;"><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>

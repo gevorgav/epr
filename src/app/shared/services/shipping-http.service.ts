@@ -21,11 +21,10 @@ export class ShippingHttpService {
   constructor(private parseService: ParseService, private orderService: OrderService) {
   }
 
-  public saveShipping(shipping: ShippingInfoModel): Observable<any> {
+  public saveShipping(shipping: ShippingInfoModel): Promise<ShippingInfoModel> {
     const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService.SHIPPING_INFO);
     const ZipCode = this.parseService.parse.Object.extend(ShippingHttpService.ZIP_CODE);
-    let promise;
-    promise = this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res => {
+    return this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res => {
       res.forEach((value, index) => {
         shipping.orderItems[index].id = value.id;
       });
@@ -58,8 +57,6 @@ export class ShippingHttpService {
         return res;
       });
     });
-
-    return from(promise);
   }
 
   public setPayed(id: string): Observable<any> {

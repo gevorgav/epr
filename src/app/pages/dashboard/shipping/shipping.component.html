@@ -1,13 +1,13 @@
-
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <ng-container matColumnDef="endDate">
-    <th mat-header-cell *matHeaderCellDef> Created at</th>
-    <td mat-cell *matCellDef="let element">{{element.createdAt.toLocaleString("en-US")}} </td>
+  <ng-container matColumnDef="orderId">
+    <th mat-header-cell *matHeaderCellDef>Order #</th>
+    <td mat-cell *matCellDef="let element">{{element.id}} </td>
   </ng-container>
-  <ng-container matColumnDef="startDate">
+  <ng-container matColumnDef="endDate">
     <th mat-header-cell *matHeaderCellDef> Start Date - End Date</th>
-    <td mat-cell *matCellDef="let element"> {{element.startDate.toLocaleString("en-US")}} - {{element.endDate.toLocaleString("en-US")}}</td>
+    <td mat-cell *matCellDef="let element"> {{element.startDate.toLocaleString("en-US")}} -
+      {{element.endDate.toLocaleString("en-US")}}</td>
   </ng-container>
   <ng-container matColumnDef="zipCode">
     <th mat-header-cell *matHeaderCellDef> Zip Code</th>
@@ -24,33 +24,32 @@
   <ng-container matColumnDef="details">
     <th mat-header-cell *matHeaderCellDef>View Details</th>
     <td mat-cell *matCellDef="let element">
-      <mat-icon aria-label="Open"
-                (click)="openViewDetails(element.id)">launch</mat-icon>
-<!--      <mat-accordion>-->
-<!--        <mat-expansion-panel>-->
-<!--          <mat-expansion-panel-header>-->
-<!--            &lt;!&ndash;<mat-panel-title>&ndash;&gt;-->
-<!--              &lt;!&ndash;Self aware panel&ndash;&gt;-->
-<!--            &lt;!&ndash;</mat-panel-title>&ndash;&gt;-->
-<!--            <mat-panel-description>-->
-<!--              User & Rental Products Information-->
-<!--            </mat-panel-description>-->
-<!--          </mat-expansion-panel-header>-->
-<!--          <p *ngFor="let product of element.products">{{getProductWithCount(element, product)}}</p>-->
-<!--          <p>Name: {{element.name}}</p>-->
-<!--          <p>Phone: {{element.phone}}</p>-->
-<!--          <p>Email: {{element.email}}</p>-->
-<!--          <p>SpecialInstructions: {{element.specialInstructions}}</p>-->
-<!--        </mat-expansion-panel>-->
-<!--      </mat-accordion>-->
+      <mat-icon aria-label="Open" (click)="openViewDetails(element.id)">launch</mat-icon>
+      <!--      <mat-accordion>-->
+      <!--        <mat-expansion-panel>-->
+      <!--          <mat-expansion-panel-header>-->
+      <!--            &lt;!&ndash;<mat-panel-title>&ndash;&gt;-->
+      <!--              &lt;!&ndash;Self aware panel&ndash;&gt;-->
+      <!--            &lt;!&ndash;</mat-panel-title>&ndash;&gt;-->
+      <!--            <mat-panel-description>-->
+      <!--              User & Rental Products Information-->
+      <!--            </mat-panel-description>-->
+      <!--          </mat-expansion-panel-header>-->
+      <!--          <p *ngFor="let product of element.products">{{getProductWithCount(element, product)}}</p>-->
+      <!--          <p>Name: {{element.name}}</p>-->
+      <!--          <p>Phone: {{element.phone}}</p>-->
+      <!--          <p>Email: {{element.email}}</p>-->
+      <!--          <p>SpecialInstructions: {{element.specialInstructions}}</p>-->
+      <!--        </mat-expansion-panel>-->
+      <!--      </mat-accordion>-->
     </td>
   </ng-container>
   <ng-container matColumnDef="ship off">
     <th mat-header-cell *matHeaderCellDef>Ship off </th>
-    <td mat-cell *matCellDef="let element"><mat-icon aria-label="Delete"
-                                                     (click)="setShipped(element.id)">local_shipping</mat-icon></td>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon aria-label="Delete" (click)="setShipped(element.id)">local_shipping</mat-icon>
+    </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-

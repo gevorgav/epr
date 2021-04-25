@@ -1,6 +1,5 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, ElementRef, Inject, ViewChild, PLATFORM_ID } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { ProductModel } from "../../../../shared/model/product.model";
 import { FormBuilder, Validators } from '@angular/forms';
 import { ParseService } from "../../../../shared/services/parse.service";
@@ -9,6 +8,7 @@ import { handleError } from '../../../../shared/util/error-handler';
 import { UploadService } from "../../../../shared/services/upload.service";
 import { AdditionCategoryService } from '../../../../shared/services/addition-category.service';
 import { isPlatformBrowser } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let ProductPopupComponent = class ProductPopupComponent {
     constructor(dialogRef, data, platformId, parseService, uploadService, categoryService, additionalCategoryService) {
         this.dialogRef = dialogRef;
@@ -194,7 +194,7 @@ let ProductPopupComponent = class ProductPopupComponent {
     }
 };
 __decorate([
-    ViewChild('input', { static: true }),
+    ViewChild('input', { static: false }),
     __metadata("design:type", ElementRef)
 ], ProductPopupComponent.prototype, "inputRef", void 0);
 ProductPopupComponent = __decorate([

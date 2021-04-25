@@ -1,9 +1,9 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { CategoryModel } from '../../../../shared/model/category.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UploadService } from "../../../../shared/services/upload.service";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let CategoryPopupComponent = class CategoryPopupComponent {
     constructor(dialogRef, data, uploadService) {
         this.dialogRef = dialogRef;
@@ -68,7 +68,7 @@ let CategoryPopupComponent = class CategoryPopupComponent {
     }
 };
 __decorate([
-    ViewChild('input', { static: true }),
+    ViewChild('input', { static: false }),
     __metadata("design:type", ElementRef)
 ], CategoryPopupComponent.prototype, "inputRef", void 0);
 CategoryPopupComponent = __decorate([

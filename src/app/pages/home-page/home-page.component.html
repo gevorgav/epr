@@ -124,13 +124,11 @@
 
         <owl-carousel-o [options]="customOptions">
 
-          <ng-container *ngFor="let product of featuredRentalProducts">
-            <ng-template carouselSlide  [width]="300" [id]="product.id">
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isNew">New !</div>
-              <div class="sale-flash" style="z-index: 1000;" *ngIf="product.isHotDeal">Hot Deal !</div>
-              <a [routerLink]="['/rental', product.pathParam]" *ngIf="product.images[0]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title" style="height: 260px !important;"></a>
-              <div class="real-estate-item-price" *ngIf="(isSpecified() | async)">
-                ${{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
+            <ng-template *ngFor="let product of featuredRentalProducts" carouselSlide  [width]="300" [id]="product.id">
+              <div class="sale-flash" style="z-index: 1000;">{{getProductLabel(product)}}</div>
+               <a [routerLink]="['/rental', product.pathParam]"><img [src]="product.images[0]" [alt]="product.title" [title]="product.title" style="height: 260px !important;"></a>
+              <div class="real-estate-item-price" >
+                {{getPrice(product.nightPrice, product.minPrice, product.minTime, product.price) | async}}
               </div>
               <div class="real-estate-item-desc">
                 <h3 style="white-space: nowrap;overflow: hidden;"><a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
@@ -140,7 +138,6 @@
 
               </div>
             </ng-template>
-          </ng-container>
 
         </owl-carousel-o>
 

@@ -24,52 +24,56 @@
       <div class="table-responsive">
         <table class="table cart">
           <thead>
-          <tr>
-            <th class="cart-product-remove">&nbsp;</th>
-            <th class="cart-product-thumbnail">&nbsp;</th>
-            <th class="cart-product-name">Product</th>
-            <th class="cart-product-price">Unit Price</th>
-            <th class="cart-product-quantity">Quantity</th>
-            <th class="cart-product-subtotal">Total</th>
-          </tr>
+            <tr>
+              <th class="cart-product-remove">&nbsp;</th>
+              <th class="cart-product-thumbnail">&nbsp;</th>
+              <th class="cart-product-name">Product</th>
+              <th class="cart-product-price">Unit Price</th>
+              <th class="cart-product-quantity">Quantity</th>
+              <th class="cart-product-subtotal">Total</th>
+            </tr>
           </thead>
           <tbody>
-          <tr class="cart_item" *ngFor="let product of productsInCart">
-            <td class="cart-product-remove">
-              <button title="Remove this item" (click)="removeOrderItem(product.id)">
-                <mat-icon>remove_shopping_cart</mat-icon></button>
-            </td>
+            <tr class="cart_item" *ngFor="let product of productsInCart">
+              <td class="cart-product-remove">
+                <button title="Remove this item" (click)="removeOrderItem(product.id)">
+                  <mat-icon>remove_shopping_cart</mat-icon>
+                </button>
+              </td>
 
-            <td class="cart-product-thumbnail">
-              <a [routerLink]="['/rental', product.pathParam]"><img *ngIf="product.images?.length > 0" width="64" height="64" src="{{product.images[0]}}"
-                               alt="{{product.title}}"></a>
-            </td>
+              <td class="cart-product-thumbnail">
+                <a [routerLink]="['/rental', product.pathParam]"><img *ngIf="product.images?.length > 0" width="64"
+                    height="64" src="{{product.images[0]}}" alt="{{product.title}}"></a>
+              </td>
 
-            <td class="cart-product-name">
-              <a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
-            </td>
+              <td class="cart-product-name">
+                <a [routerLink]="['/rental', product.pathParam]">{{product.title}}</a>
+              </td>
 
-            <td class="cart-product-price">
-              <span class="amount" *ngIf="isSpecified() | async"> <ins>${{orderData.get(product.id)?.price}}</ins></span>
-            </td>
+              <td class="cart-product-price">
+                <span class="amount" *ngIf="isSpecified() | async">
+                  <ins>${{orderData.get(product.id)?.price}}</ins></span>
+              </td>
 
-            <td class="cart-product-quantity">
-              <mat-form-field *ngIf="isSpecified() | async" style="width:70px;margin-right: 20px;">
-                <!--<mat-label>Quantity</mat-label>-->
-                <mat-select (valueChange)="countChange($event, product.id)" [(value)]="orderData.get(product.id).count">
-                  <mat-option *ngFor="let count of orderData.get(product.id)?.available | async" [value]="count">{{count}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </td>
+              <td class="cart-product-quantity">
+                <mat-form-field *ngIf="isSpecified() | async" style="width:70px;margin-right: 20px;">
+                  <!--<mat-label>Quantity</mat-label>-->
+                  <mat-select (valueChange)="countChange($event, product.id)"
+                    [(value)]="orderData.get(product.id).count">
+                    <mat-option *ngFor="let count of orderData.get(product.id)?.available | async" [value]="count">
+                      {{count}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
 
-            <td class="cart-product-subtotal">
-              <span class="amount">${{orderData.get(product.id)?.count * orderData.get(product.id)?.price}}</span>
-            </td>
+              <td class="cart-product-subtotal">
+                <span class="amount">${{orderData.get(product.id)?.count * orderData.get(product.id)?.price}}</span>
+              </td>
 
-            <td *ngIf="!(orderData.get(product.id)?.available | async)?.length">
-              <span style="color: #ef0000">This product is out of stock for selected dates.</span>
-            </td>
-          </tr>
+              <td *ngIf="!(orderData.get(product.id)?.available | async)?.length">
+                <span style="color: #ef0000">This product is out of stock for selected dates.</span>
+              </td>
+            </tr>
           </tbody>
 
         </table>
@@ -82,7 +86,8 @@
 
             <div class="col_full">
               <label for="shipping-form-name">* Name / Company name:</label>
-              <input formControlName="name" type="text" id="shipping-form-name" name="shipping-form-name" value="" class="form-control" />
+              <input formControlName="name" type="text" id="shipping-form-name" name="shipping-form-name" value=""
+                class="form-control" />
               <div
                 *ngIf="shippingInformationForm.controls['name'].invalid && (shippingInformationForm.controls['name'].dirty || shippingInformationForm.controls['name'].touched)"
                 class="alert alert-danger">
@@ -94,7 +99,8 @@
 
             <div class="col_full">
               <label for="shipping-form-address">* Street Address:</label>
-              <input formControlName="address" type="text" id="shipping-form-address" name="shipping-form-address" value="" class="form-control" />
+              <input formControlName="address" type="text" id="shipping-form-address" name="shipping-form-address"
+                value="" class="form-control" />
               <div
                 *ngIf="shippingInformationForm.controls['address'].invalid && (shippingInformationForm.controls['address'].dirty || shippingInformationForm.controls['address'].touched)"
                 class="alert alert-danger">
@@ -106,7 +112,8 @@
 
             <div class="col_full">
               <label for="shipping-form-phone">* Phone:</label>
-              <input formControlName="phone" type="text" id="shipping-form-phone" name="shipping-form-phone" value="" class="form-control" />
+              <input formControlName="phone" type="text" id="shipping-form-phone" name="shipping-form-phone" value=""
+                class="form-control" />
               <div
                 *ngIf="shippingInformationForm.controls['phone'].invalid && (shippingInformationForm.controls['phone'].dirty || shippingInformationForm.controls['phone'].touched)"
                 class="alert alert-danger">
@@ -118,7 +125,8 @@
 
             <div class="col_full">
               <label for="shipping-form-phone">* Email:</label>
-              <input formControlName="email" type="text" id="shipping-form-email" name="shipping-form-email" value="" class="form-control" />
+              <input formControlName="email" type="text" id="shipping-form-email" name="shipping-form-email" value=""
+                class="form-control" />
               <div
                 *ngIf="shippingInformationForm.controls['email'].invalid && (shippingInformationForm.controls['email'].dirty || shippingInformationForm.controls['email'].touched)"
                 class="alert alert-danger">
@@ -129,10 +137,19 @@
             </div>
 
             <div class="col_full">
+              <label for="shipping-form-promoCode">Enter Promo Code:</label>
+              <input formControlName="promoCode" type="text" id="shipping-form-promoCode" name="shipping-form-promoCodel" class="form-control" />
+            </div>
+
+            <div class="col_full">
               <label for="shipping-form-phone">* Any Stairs to Setup ?</label>
-              <select id="stairs"  name="stairs" class="form-control" formControlName="stairs" (change)="stairsChange($event)">
-                <option [value]="stair.value" *ngFor="let stair of stairs">{{stair.name}}</option>
-              </select>
+              <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-select formControlName="stairs">
+                  <mat-option *ngFor="let stair of stairs" [value]="stair.value">
+                    {{stair.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
               <div
                 *ngIf="shippingInformationForm.controls['stairs'].invalid && (shippingInformationForm.controls['stairs'].dirty || shippingInformationForm.controls['stairs'].touched)"
                 class="alert alert-danger">
@@ -142,11 +159,15 @@
               </div>
             </div>
 
-            <div class="col_full">
+            <div class="col_full ">
               <label for="shipping-form-phone">* Set up surface </label>
-              <select id="setUpSurface"  name="setUpSurface" class="form-control" formControlName="setUpSurface" (change)="setUpSurfaceChange($event)">
-                <option [value]="setUpSurface.name" *ngFor="let setUpSurface of setUpSurfaces">{{setUpSurface.name}}</option>
-              </select>
+              <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-select formControlName="setUpSurface">
+                  <mat-option *ngFor="let setUpSurface of setUpSurfaces" [value]="setUpSurface.name">
+                    {{setUpSurface.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
               <div
                 *ngIf="shippingInformationForm.controls['setUpSurface'].invalid && (shippingInformationForm.controls['setUpSurface'].dirty || shippingInformationForm.controls['setUpSurface'].touched)"
                 class="alert alert-danger">
@@ -158,10 +179,12 @@
 
             <div class="col_full">
               <label for="shipping-form-instruction">Special Instruction:</label>
-              <input formControlName="instruction" type="text" id="shipping-form-instruction" name="shipping-form-instruction" value="" class="form-control" />
+              <input formControlName="instruction" type="text" id="shipping-form-instruction"
+                name="shipping-form-instruction" value="" class="form-control" />
             </div>
 
-            <button class="button button-3d button-black nomargin" id="shipping-submit" name="shipping-form-submit" value="" type="submit" style="display: none"></button>
+            <button class="button button-3d button-black nomargin" id="shipping-submit" name="shipping-form-submit"
+              value="" type="submit" style="display: none"></button>
 
           </form>
         </div>
@@ -172,55 +195,59 @@
           <div class="table-responsive">
             <table class="table cart">
               <tbody>
-              <tr class="cart_item">
-                <td class="cart-product-name">
-                  <strong>Cart Subtotal</strong>
-                </td>
+                <tr class="cart_item">
+                  <td class="cart-product-name">
+                    <strong>Cart Subtotal</strong>
+                  </td>
 
-                <td class="cart-product-name">
-                  <span class="amount">${{getSubtotalPrice()}}</span>
-                </td>
-              </tr>
-              <tr class="cart_item">
-                <td class="cart-product-name">
-                  <strong>Shipping</strong>
-                </td>
+                  <td class="cart-product-name">
+                    <span class="amount">${{getSubtotalPrice()}}</span>
+                  </td>
+                </tr>
+                <tr class="cart_item">
+                  <td class="cart-product-name">
+                    <strong>Shipping</strong>
+                  </td>
 
-                <td class="cart-product-name">
-                  <span class="amount">{{getDeliveryFee()}} </span>
-                </td>
-              </tr>
-              <tr class="cart_item">
-                <td class="cart-product-name">
-                  <strong>Additional Fees</strong>
-                </td>
+                  <td class="cart-product-name">
+                    <span class="amount">{{getDeliveryFee()}} </span>
+                  </td>
+                </tr>
+                <tr class="cart_item">
+                  <td class="cart-product-name">
+                    <strong>Additional Fees</strong>
+                  </td>
 
-                <td class="cart-product-name">
-                  <span class="amount">$ {{selectedStair}} </span>
-                </td>
-              </tr>
-              <tr class="cart_item">
-                <td class="cart-product-name">
-                  <strong>Total</strong>
-                </td>
+                  <td class="cart-product-name">
+                    <span class="amount">$ {{selectedStair}} </span>
+                  </td>
+                </tr>
+                <tr class="cart_item">
+                  <td class="cart-product-name">
+                    <strong>Total</strong>
+                  </td>
 
-                <td class="cart-product-name">
-                  <span class="amount color lead"><strong>${{getTotalPrice()}}</strong></span>
-                </td>
-              </tr>
+                  <td class="cart-product-name">
+                    <span class="amount color lead"><strong>${{getTotalPrice()}}</strong></span>
+                  </td>
+                </tr>
               </tbody>
 
             </table>
           </div>
-          <button type="button" class="button button-3d button-rounded button-green" (click)="continueShopping()">Continue shopping</button>
-          <button *ngIf="isSpecified() && getTotalPrice() > 0 && enableCheckout" id="btnContinue1" type="button" (click)="checkout()" class="button button-3d button-rounded"> Checkout </button>
-          <h6>Please, click CONTINUE on the next page, to complete the payment. It's mandatory for a successful transaction. Thank you in advance!</h6>
+          <button type="button" class="button button-3d button-rounded button-green"
+            (click)="continueShopping()">Continue shopping</button>
+          <button *ngIf="isSpecified() && getTotalPrice() > 0 && enableCheckout" id="btnContinue1" type="button"
+            (click)="checkout()" class="button button-3d button-rounded"> Checkout </button>
+          <h6>Please, click CONTINUE on the next page, to complete the payment. It's mandatory for a successful
+            transaction. Thank you in advance!</h6>
         </div>
 
         <div class="col-lg-6 clearfix">
           <h4>Rental Date & Time</h4>
           <app-location-date></app-location-date>
-          <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time quote.</h4>
+          <h4 *ngIf="!(isSpecified() | async)">Please select an event location, date and time to obtain a real-time
+            quote.</h4>
         </div>
 
       </div>

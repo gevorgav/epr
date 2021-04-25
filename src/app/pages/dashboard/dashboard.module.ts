@@ -21,6 +21,9 @@ import {MaterialModule} from '../../mat/material.module';
 import {CommonModule} from '@angular/common';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import { PromoCodeListComponent } from './promo-code-list/promo-code-list.component';
+import { PromoCodeService } from '../../shared/services/promo-coed.service';
+import {MatButtonModule} from '@angular/material/button';
 
 const dashboardRoutes: Routes = [
   {
@@ -31,6 +34,7 @@ const dashboardRoutes: Routes = [
       {path: 'product', component: ProductComponent},
       {path: 'category', component: CategoryComponent},
       {path: 'user', component: UserComponent},
+      {path: 'promo-code', component: PromoCodeListComponent},
       {path: 'settings', component: SettingsComponent},
       {path: 'additional', component: AdditionalComponent},
       {path: 'additional-category', component: AdditionalCategoryComponent},
@@ -58,6 +62,7 @@ const dashboardRoutes: Routes = [
     DashboardDeliveryChartComponent,
     ProductPopupComponent,
     DeliveryChartPopupComponent,
+    PromoCodeListComponent,
   ],
   imports: [
     RouterModule.forChild(
@@ -68,9 +73,10 @@ const dashboardRoutes: Routes = [
     CommonModule,
     MaterialModule,
     MatDatepickerModule,
-    CKEditorModule
+    CKEditorModule,
+    MatButtonModule
   ],
-  providers: [],
+  providers: [PromoCodeService],
   entryComponents: [
     ProductPopupComponent,
     DeliveryChartPopupComponent,

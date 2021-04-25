@@ -171,7 +171,15 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
   }
 
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number) {
-    return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+    this.isSpecified().pipe(
+      map(res => {
+        if (res) {
+          return '$ ' +this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+        } else{
+          return of('')
+        }
+      })
+    )
   }
 
   getQuantitiesByCount(): Observable<number[]> {
@@ -184,6 +192,15 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
       }
     }
     return of(quantities);
+  }
+
+  getProductLabel(product: ProductModel): string {
+    if(product.isNew){
+      return 'New !';
+    } else if(product.isHotDeal){
+      return 'Hot Deal !';
+    }
+    return '';
   }
 
   getQuantities(): Promise<number[]> {

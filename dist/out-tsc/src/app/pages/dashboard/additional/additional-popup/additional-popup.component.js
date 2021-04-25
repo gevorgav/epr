@@ -1,11 +1,11 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { UploadService } from '../../../../shared/services/upload.service';
 import { AdditionModel } from '../../../../shared/model/addition.model';
 import { handleError } from '../../../../shared/util/error-handler';
 import { AdditionCategoryService } from '../../../../shared/services/addition-category.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let AdditionalPopupComponent = class AdditionalPopupComponent {
     constructor(dialogRef, data, uploadService, categoryService) {
         this.dialogRef = dialogRef;
@@ -87,7 +87,7 @@ let AdditionalPopupComponent = class AdditionalPopupComponent {
     }
 };
 __decorate([
-    ViewChild('input', { static: true }),
+    ViewChild('input', { static: false }),
     __metadata("design:type", ElementRef)
 ], AdditionalPopupComponent.prototype, "inputRef", void 0);
 AdditionalPopupComponent = __decorate([

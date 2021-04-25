@@ -92,7 +92,7 @@ let HomePageComponent = class HomePageComponent {
         return 'col-lg-4';
     }
     initProducts() {
-        this.productService.getAllProducts().subscribe((res) => {
+        this.productService.getAllProducts().then((res) => {
             this.initFeaturedRentalProducts(res);
         });
     }

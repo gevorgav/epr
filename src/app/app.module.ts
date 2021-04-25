@@ -115,6 +115,10 @@ const appRoutes: Routes = [
     component: CheckoutComponent
   },
   {
+    path: 'profile/:id/:promoCodeId',
+    component: CheckoutComponent
+  },
+  {
     path: 'cart',
     component: CartComponent,
   },

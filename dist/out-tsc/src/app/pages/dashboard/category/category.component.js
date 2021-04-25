@@ -2,9 +2,10 @@ import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { CategoryService } from '../../../shared/services/category.service';
 import { CategoryModel } from '../../../shared/model/category.model';
-import { MatDialog, MatTableDataSource } from '@angular/material';
 import { CategoryPopupComponent } from './category-popup/category-popup.component';
 import { handleError } from '../../../shared/util/error-handler';
+import { MatTableDataSource } from "@angular/material/table";
+import { MatDialog } from "@angular/material/dialog";
 let CategoryComponent = class CategoryComponent {
     constructor(categoryService, dialog) {
         this.categoryService = categoryService;

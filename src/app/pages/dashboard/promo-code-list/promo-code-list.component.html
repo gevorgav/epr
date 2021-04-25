@@ -1,0 +1,74 @@
+<div class="content-wrap">
+    <div class="clearfix">
+        <div class="card-body" style="padding: 40px;">
+
+            <mat-form-field>
+                <mat-label>Shipping #</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="g8ft7e" #input>
+            </mat-form-field>
+
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="promoCode">
+                        <th mat-header-cell *matHeaderCellDef> Promo Code </th>
+                        <td mat-cell *matCellDef="let row"> {{row.code}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="discount">
+                        <th mat-header-cell *matHeaderCellDef> Discount </th>
+                        <td mat-cell *matCellDef="let row"> {{row.discount}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isUsed">
+                        <th mat-header-cell *matHeaderCellDef> Is Used </th>
+                        <td mat-cell *matCellDef="let row"> {{row.isUsed}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="shippingInfoId">
+                        <th mat-header-cell *matHeaderCellDef> Shipping # </th>
+                        <td mat-cell *matCellDef="let row"> {{row.shippingInfoId}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let row"> 
+                            <mat-icon aria-label="Edit" (click)="edit(row)">edit</mat-icon> 
+                            <mat-icon aria-label="Delete" (click)="delete(row.id)">delete</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+            </div>
+            <form [formGroup]="promoForm" *ngIf="promoForm" class="nobottommargin">
+                <div class="row clearfix"  style="margin-top: 40px;">
+                    <div class="col col_half" (click)=generateCode()>
+                        <mat-form-field fxFill >
+                            <input formControlName="promoCode" type="text" required matInput
+                                placeholder="Click For Generate Promo Code" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col col_one_fourth">
+                        <mat-form-field fxFill>
+                            <input formControlName="discount" type="number" required matInput placeholder="Discount" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col col_one_fourth">
+                        <mat-slide-toggle formControlName="isUsed">Is Used</mat-slide-toggle>
+                    </div>
+                    <div class="col col_one_fourth">
+                        <button mat-raised-button color="primary" (click)="save()" type="button">
+                            {{promoForm.get("id")?.value ? 'Save' : 'Add'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -19,9 +19,11 @@ import { ProductPopupComponent } from './product/product-popup/product-popup.com
 import { DeliveryChartPopupComponent } from './delivery-chart/delivery-chart-popup/delivery-chart-popup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../mat/material.module';
-import { MatDatepickerModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { PromoCodeListComponent } from './promo-code-list/promo-code-list.component';
+import { PromoCodeService } from '../../shared/services/promo-coed.service';
 const dashboardRoutes = [
     {
         path: '', component: DashboardComponent, children: [
@@ -31,6 +33,7 @@ const dashboardRoutes = [
             { path: 'product', component: ProductComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'user', component: UserComponent },
+            { path: 'promo-code', component: PromoCodeListComponent },
             { path: 'settings', component: SettingsComponent },
             { path: 'additional', component: AdditionalComponent },
             { path: 'additional-category', component: AdditionalCategoryComponent },
@@ -59,6 +62,7 @@ DashboardModule = __decorate([
             DashboardDeliveryChartComponent,
             ProductPopupComponent,
             DeliveryChartPopupComponent,
+            PromoCodeListComponent,
         ],
         imports: [
             RouterModule.forChild(dashboardRoutes),
@@ -69,7 +73,7 @@ DashboardModule = __decorate([
             MatDatepickerModule,
             CKEditorModule
         ],
-        providers: [],
+        providers: [PromoCodeService],
         entryComponents: [
             ProductPopupComponent,
             DeliveryChartPopupComponent,

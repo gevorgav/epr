@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, Input, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, HostListener, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
@@ -10,6 +10,7 @@ import {OwlOptions} from 'ngx-owl-carousel-o';
 import {SettingsService} from '../../shared/services/settings.service';
 import {SettingsModel} from '../../shared/model/settings.model';
 import {Meta, Title} from '@angular/platform-browser';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -119,6 +120,15 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     return 'col-lg-4';
   }
 
+  getProductLabel(product: ProductModel): string {
+    if(product.isNew){
+      return 'New !';
+    } else if(product.isHotDeal){
+      return 'Hot Deal !';
+    }
+    return '';
+  }
+
   private initProducts() {
     this.productService.getAllProducts().then((res: ProductModel[]) => {
       this.initFeaturedRentalProducts(res);
@@ -130,7 +140,15 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   getPrice(nightPrice: number, minPrice: number, minTime: number, price: number){
-    return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+    this.isSpecified().pipe(
+      map(res => {
+        if (res) {
+          return '$ ' +this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+        } else{
+          return of('')
+        }
+      })
+    )
   }
 
   public getScreenHeight() {

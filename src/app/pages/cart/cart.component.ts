@@ -1,24 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import {InitializerService} from '../../shared/services/initializer.service';
-import {OrderService} from '../../shared/services/order.service';
-import {ProductModel} from '../../shared/model/product.model';
-import {LocationDateService} from '../../shared/services/location-date.service';
-import {ProductService} from '../../shared/services/product.service';
-import {Observable} from 'rxjs/internal/Observable';
-import {OrderItemModel} from '../../shared/model/order-item.model';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ParseService} from '../../shared/services/parse.service';
-import {CheckoutService} from '../../shared/services/checkout.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ProductIdName, ShippingInfoModel} from '../../shared/model/shipping-info.model';
-import {ShippingHttpService} from '../../shared/services/shipping-http.service';
-import {from, zip} from 'rxjs';
-import {flatMap, map, switchMap} from 'rxjs/operators';
+import { InitializerService } from '../../shared/services/initializer.service';
+import { OrderService } from '../../shared/services/order.service';
+import { ProductModel } from '../../shared/model/product.model';
+import { LocationDateService } from '../../shared/services/location-date.service';
+import { ProductService } from '../../shared/services/product.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { OrderItemModel } from '../../shared/model/order-item.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ParseService } from '../../shared/services/parse.service';
+import { CheckoutService } from '../../shared/services/checkout.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProductIdName, ShippingInfoModel } from '../../shared/model/shipping-info.model';
+import { ShippingHttpService } from '../../shared/services/shipping-http.service';
+import { from, zip } from 'rxjs';
+import { PromoCodeService } from '../../shared/services/promo-coed.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
+  providers: [PromoCodeService]
 })
 export class CartComponent implements OnInit {
 
@@ -53,7 +54,7 @@ export class CartComponent implements OnInit {
     },
   ];
 
-  public setUpSurfaces  = [
+  public setUpSurfaces = [
     {
       name: 'Grass'
     },
@@ -74,7 +75,7 @@ export class CartComponent implements OnInit {
     },
   ];
 
-  private _productsInCart : ProductModel[] = [];
+  private _productsInCart: ProductModel[] = [];
 
   private _minimalTotal: number = 89;
 
@@ -90,29 +91,35 @@ export class CartComponent implements OnInit {
 
   public selectedSetUpSurface: string;
 
+  public promoCodeDiscount: number = 0;
+
   enableCheckout: boolean = true;
 
   constructor(private orderService: OrderService,
-              private locationService: LocationDateService,
-              private productService: ProductService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private parseService: ParseService,
-              private checkoutService: CheckoutService,
-              private shippingService: ShippingHttpService,
-              private initializerService: InitializerService) { }
+    private locationService: LocationDateService,
+    private productService: ProductService,
+    private router: Router,
+    private parseService: ParseService,
+    private checkoutService: CheckoutService,
+    private shippingService: ShippingHttpService,
+    private promoCodeService: PromoCodeService,
+    private initializerService: InitializerService) { }
 
   ngOnInit() {
-    this.initializerService.initialized.subscribe(res=>{
-      if (res){
+    this.initializerService.initialized.subscribe(res => {
+      if (res) {
         this.initOrderDataSelectedProducts();
         this.initShippingForm();
-        this.locationService.isSpecified.subscribe(res=>{
+        this.locationService.isSpecified.subscribe(res => {
           if (res) {
+            this.shippingInformationForm.enable();
             this.getShippingPrice();
-            if (this._productsInCart && this._productsInCart.length > 0){
+            if (this._productsInCart && this._productsInCart.length > 0) {
               this.initOrderData();
             }
+          } else {
+            this.shippingInformationForm.disable();
+            this.shippingInformationForm.reset();
           }
         })
       }
@@ -129,10 +136,10 @@ export class CartComponent implements OnInit {
 
   private initOrderDataSelectedProducts() {
     let products$: Observable<ProductModel>[] = [];
-    this.initializerService.orderModel.orderItems.forEach((item: OrderItemModel)=>{
+    this.initializerService.orderModel.orderItems.forEach((item: OrderItemModel) => {
       products$.push(from(this.productService.getProduct(item.productId)))
     });
-    zip(...products$).subscribe(res =>{
+    zip(...products$).subscribe(res => {
       this.productsInCart = res;
       this.initOrderData();
     });
@@ -141,20 +148,20 @@ export class CartComponent implements OnInit {
   getQuantities(product: ProductModel): Promise<number[]> {
     return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, product.id)
       .then(res => {
-          let quantities = [];
-          let count = product.count - res;
-          if (count > 0) {
-            let i = 1;
-            while (i <= count) {
-              quantities.push(i);
-              i++;
-            }
-            this.enableCheckout = true;
-          } else {
-            this.enableCheckout = false;
+        let quantities = [];
+        let count = product.count - res;
+        if (count > 0) {
+          let i = 1;
+          while (i <= count) {
+            quantities.push(i);
+            i++;
           }
-          return quantities;
-        })
+          this.enableCheckout = true;
+        } else {
+          this.enableCheckout = false;
+        }
+        return quantities;
+      })
   }
 
   isSpecified() {
@@ -166,20 +173,21 @@ export class CartComponent implements OnInit {
   }
 
   private initOrderData() {
-    this.initializerService.orderModel.orderItems.forEach((value: OrderItemModel)=>{
+    this.initializerService.orderModel.orderItems.forEach((value: OrderItemModel) => {
       let product: ProductModel = this.getProductById(value.productId);
-      this.orderData.set(value.productId, {count: value.count,
-                                           available: this.getQuantities(product),
-                                           price: 0
+      this.orderData.set(value.productId, {
+        count: value.count,
+        available: this.getQuantities(product),
+        price: 0
       });
-      this.getPrice(product).subscribe(res=>{
+      this.getPrice(product).subscribe(res => {
         this.orderData.get(value.productId).price = res;
       })
     });
   }
 
-  getProductById(id: string): ProductModel{
-    for (let product of this.productsInCart){
+  getProductById(id: string): ProductModel {
+    for (let product of this.productsInCart) {
       if (product.id === id) {
         return product;
       }
@@ -187,7 +195,7 @@ export class CartComponent implements OnInit {
   }
 
   private getShippingPrice() {
-    this.locationService.getShippingPrice().then(res=>{
+    this.locationService.getShippingPrice().then(res => {
       this.shippingPrice = res;
       this.setNewPrices();
     })
@@ -196,22 +204,22 @@ export class CartComponent implements OnInit {
   countChange(value: number, productId: string) {
     this.getSubtotalPrice();
     this.setNewPrices();
-    if (this.parseService.isAuth()){
+    if (this.parseService.isAuth()) {
       this.orderService.saveCount(value, productId);
     }
   }
 
-  public getDeliveryFee(): string{
+  public getDeliveryFee(): string {
     let subTotal = this.getSubtotalPrice() + this.shippingPrice;
-    if (subTotal < this._minimalTotal){
+    if (subTotal < this._minimalTotal) {
       return '$ ' + (this.shippingPrice + this._minimalDeliver);
     }
-    return this.shippingPrice?'$ ' + this.shippingPrice:'Free Delivery';
+    return this.shippingPrice ? '$ ' + this.shippingPrice : 'Free Delivery';
   }
 
   getTotalPrice() {
     let subTotal = this.getSubtotalPrice() + this.shippingPrice;
-    if (subTotal < this._minimalTotal){
+    if (subTotal < this._minimalTotal) {
       return subTotal + this._minimalDeliver + this.selectedStair;
     }
     return subTotal + this.selectedStair;
@@ -226,10 +234,10 @@ export class CartComponent implements OnInit {
   }
 
   removeOrderItem(productId: string) {
-    this.orderService.removeOrderItem(productId).then(res=>{
-      if (res){
-        this.productsInCart = this.productsInCart.filter(value=> value.id !== productId);
-        this.initializerService.orderModel.orderItems = this.initializerService.orderModel.orderItems.filter(value=> value.productId !== productId);
+    this.orderService.removeOrderItem(productId).then(res => {
+      if (res) {
+        this.productsInCart = this.productsInCart.filter(value => value.id !== productId);
+        this.initializerService.orderModel.orderItems = this.initializerService.orderModel.orderItems.filter(value => value.productId !== productId);
         this.orderData.delete(productId);
       }
     })
@@ -241,38 +249,51 @@ export class CartComponent implements OnInit {
 
   checkout() {
     this.enableCheckout = false;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.enableCheckout = true;
     }, 3000);
     document.getElementById("shipping-submit").click();
   }
 
-  public redirect(){
-    this.checkoutService.getToken().subscribe(res=>{
+  public redirect() {
+    this.checkoutService.getToken().subscribe(res => {
       document.getElementById("payTok")['value'] = res;
       document.getElementById("btnContinue").click();
     })
   }
 
   private setNewPrices() {
-    CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
-    CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+    if (this.locationService.locationDate.location) {
+      CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
+      CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+    }
   }
 
   onSubmitShippingForm() {
-    if (this.shippingInformationForm.valid){
-      let shippingModel = new ShippingInfoModel(null,this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value,
-        this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value,
-        this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
-        this.parseService.isAuth()? this.parseService.getCurrentUser(): null, null,
-        this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(),
-        this.initializerService.orderModel.orderItems, this.getStairName(), this.selectedSetUpSurface);
-      this.shippingService.saveShipping(shippingModel).subscribe(res=>{
+    if (this.shippingInformationForm.valid) {
+      let total = this.getTotalPrice();
+      let promoCodeId: string;
+      this.promoCodeService.getPromoCodeByCode(this.shippingInformationForm.get('promoCode').value).then(res => {
+        if (res && !res.isUsed) {
+          promoCodeId = res.id;
+          total -= res.discount;
+        }
+        let shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value,
+          this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value,
+          this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false,
+          this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null,
+          this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, total, this.getProductCount(),
+          this.initializerService.orderModel.orderItems, this.getStairName(), this.selectedSetUpSurface);
+        return shippingModel
+      }).then(res => {
+        return this.shippingService.saveShipping(res);
+      }).then(res => {
+        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = total.toString();
         CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
-          "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
+          "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + (promoCodeId ? "/" + promoCodeId : "") + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
         this.redirect();
-      });
-    }else {
+      })
+    } else {
       this.markFormGroupTouched(this.shippingInformationForm);
     }
   }
@@ -291,6 +312,7 @@ export class CartComponent implements OnInit {
       'email': new FormControl('', [
         Validators.required
       ]),
+      'promoCode': new FormControl(''),
       'stairs': new FormControl('', [
         Validators.required
       ]),
@@ -299,26 +321,39 @@ export class CartComponent implements OnInit {
       ]),
       'instruction': new FormControl('', [])
     });
+
+    if (!this.locationService.locationDate.location) {
+      this.shippingInformationForm.disable();
+    }
+
+    this.shippingInformationForm.get('stairs').valueChanges.subscribe(value => {
+      this.selectedStair = Number(value);
+      this.setNewPrices();
+    })
+
+    this.shippingInformationForm.get('setUpSurface').valueChanges.subscribe(value => {
+      this.selectedSetUpSurface = value;
+    })
   }
 
   private getProductsIds(productsInCart: ProductModel[]): ProductIdName[] {
     let ids = [];
-    productsInCart.forEach(value=>{
-      ids.push({id: value.id, title: value.title })
+    productsInCart.forEach(value => {
+      ids.push({ id: value.id, title: value.title })
     });
     return ids;
   }
 
   private getProductCount(): ProductCount[] {
     let productCount: ProductCount[] = [];
-    this.orderData.forEach((value: ProductInCartCalculation, key: string)=>{
-      productCount.push({productId: key, count: value.count, name: ""})
+    this.orderData.forEach((value: ProductInCartCalculation, key: string) => {
+      productCount.push({ productId: key, count: value.count, name: "" })
     });
     return productCount;
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    (<any> Object).values(formGroup.controls).forEach(control => {
+    (<any>Object).values(formGroup.controls).forEach(control => {
       control.markAsTouched();
       if (control.controls) {
         this.markFormGroupTouched(control);
@@ -326,21 +361,12 @@ export class CartComponent implements OnInit {
     });
   }
 
-  stairsChange($event: any) {
-    this.selectedStair = Number($event.target.value);
-    this.setNewPrices();
-  }
-
   private getStairName(): string {
-    for (let stair of this.stairs){
+    for (let stair of this.stairs) {
       if (stair.value == this.selectedStair)
         return stair.name;
     }
     throw new Error();
-  }
-
-  public setUpSurfaceChange($event: any) {
-    this.selectedSetUpSurface = $event.target.value;
   }
 }
 

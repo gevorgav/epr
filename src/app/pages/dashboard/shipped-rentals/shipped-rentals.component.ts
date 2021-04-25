@@ -13,7 +13,7 @@ export class ShippedRentalsComponent implements OnInit {
   public shippingModels: ShippingInfoModel[] = [];
   public panelOpenState: boolean = false;
   dataSource = new MatTableDataSource(this.shippingModels);
-  displayedColumns = ['startDate', 'endDate', 'zipCode', 'address/street', 'paid', 'details'];
+  displayedColumns = ['orderId', 'endDate', 'zipCode', 'address/street', 'paid', 'details'];
 
 
   constructor(private _shippingService: ShippingHttpService) { }

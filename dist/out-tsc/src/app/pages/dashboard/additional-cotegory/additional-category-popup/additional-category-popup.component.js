@@ -1,8 +1,8 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AdditionCategoryModel } from '../../../../shared/model/addition-category.model';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let AdditionalCategoryPopupComponent = class AdditionalCategoryPopupComponent {
     constructor(dialogRef, data) {
         this.dialogRef = dialogRef;

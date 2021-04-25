@@ -2,11 +2,12 @@ import { __decorate, __metadata } from "tslib";
 import { Component } from '@angular/core';
 import { ProductService } from "../../../shared/services/product.service";
 import { handleError } from "../../../shared/util/error-handler";
-import { MatDialog, MatTableDataSource } from "@angular/material";
 import { ProductPopupComponent } from "./product-popup/product-popup.component";
 import { ProductModel } from "../../../shared/model/product.model";
 import { CategoryService } from "../../../shared/services/category.service";
 import { zip } from "rxjs";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatDialog } from "@angular/material/dialog";
 let ProductComponent = class ProductComponent {
     constructor(productService, categoryService, dialog) {
         this.productService = productService;

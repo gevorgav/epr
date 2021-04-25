@@ -1,6 +1,6 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let ShippingPopupComponent = class ShippingPopupComponent {
     constructor(dialogRef, data) {
         this.dialogRef = dialogRef;
@@ -8,13 +8,19 @@ let ShippingPopupComponent = class ShippingPopupComponent {
         this.shippingModel = this.data.shippingInfoModel;
     }
     ngOnInit() {
+        this.shippingModel.relationOrderItems.subscribe(res => {
+            this.orderItems = res;
+        });
+        this.shippingModel.relationProducts.subscribe(res => {
+            this.productIdNames = res;
+        });
     }
     close() {
         this.dialogRef.close(null);
     }
     getProduct(productId) {
         let productCount;
-        this.shippingModel.products.forEach(value => {
+        this.productIdNames.forEach(value => {
             if (productId === value.id) {
                 productCount = this.shippingModel.productCount.find(value1 => value.id === value1.productId);
                 productCount.name = value.name;

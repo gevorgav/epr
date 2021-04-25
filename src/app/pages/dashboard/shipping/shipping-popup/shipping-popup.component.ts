@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {ProductIdName, ShippingInfoModel} from '../../../../shared/model/shipping-info.model';
-import {ProductCount} from '../../../cart/cart.component';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { Component, Inject, OnInit } from '@angular/core';
+import { ProductIdName, ShippingInfoModel } from '../../../../shared/model/shipping-info.model';
+import { ProductCount } from '../../../cart/cart.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { OrderItemModel } from '../../../../shared/model/order-item.model';
 
 @Component({
@@ -15,7 +15,7 @@ export class ShippingPopupComponent implements OnInit {
   public productIdNames: ProductIdName[];
 
   constructor(public dialogRef: MatDialogRef<ShippingPopupComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,) {
+    @Inject(MAT_DIALOG_DATA) public data: any,) {
     this.shippingModel = this.data.shippingInfoModel;
   }
 
@@ -35,7 +35,7 @@ export class ShippingPopupComponent implements OnInit {
   getProduct(productId: string): ProductCount {
     let productCount: ProductCount;
     this.productIdNames.forEach(value => {
-      if (productId ===  value.id){
+      if (productId === value.id) {
         productCount = this.shippingModel.productCount.find(value1 => value.id === value1.productId);
         productCount.name = value.name;
       }
@@ -46,7 +46,7 @@ export class ShippingPopupComponent implements OnInit {
   getProductWithCount(shippingModel: ShippingInfoModel, product: ProductIdName): string {
     let text: string = '';
     for (let prodCount of shippingModel.productCount) {
-      if (prodCount.productId === product.id){
+      if (prodCount.productId === product.id) {
         return product.name;
       }
     }
@@ -57,7 +57,7 @@ export class ShippingPopupComponent implements OnInit {
   getProductHowMany(shippingModel: ShippingInfoModel, product: ProductIdName) {
     let text: string = '';
     for (let prodCount of shippingModel.productCount) {
-      if (prodCount.productId === product.id){
+      if (prodCount.productId === product.id) {
         return prodCount.count;
       }
     }

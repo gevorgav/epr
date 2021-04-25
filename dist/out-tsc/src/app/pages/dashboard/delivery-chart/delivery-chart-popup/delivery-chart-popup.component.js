@@ -1,8 +1,8 @@
 import { __decorate, __metadata, __param } from "tslib";
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { DeliveryChartModel, ZipCode } from "../../../../shared/model/delivery-chart.model";
 import { FormBuilder, Validators } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 let DeliveryChartPopupComponent = class DeliveryChartPopupComponent {
     constructor(dialogRef, data) {
         this.dialogRef = dialogRef;
