@@ -13,6 +13,10 @@ const scripts = readFileSync('dist/browser/index.html').toString();
 
 const window = createWindow(scripts) as any;
 
+import 'localstorage-polyfill';
+
+global['localStorage'] = localStorage;
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
   const server = express();
