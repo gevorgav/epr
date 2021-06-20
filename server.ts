@@ -26,32 +26,6 @@ global['localStorage'] = localStorage;
 export function app() {
   const server = express();
 
-  server.put('/api/home-page' , (req, res) => {
-    const SettingsParse = Parse.Object.extend('Settings');
-    const settingsParse = new SettingsParse();
-    const query = new Parse.Query(settingsParse);
-    query.first().then(value => {
-      res.status(200).send(value);
-    });
-  });
-
-  server.put('/api/category/:categoryTitle', (req, res) => {
-    const category = Parse.Object.extend('Category');
-    const query = new Parse.Query(category).equalTo('pathParam', req.params.categoryTitle);
-    query.first().then(value => {
-      res.status(200).send(value);
-    });
-  });
-
-  server.put('/api/product/:productId' , (req, res) => {
-    const Product = Parse.Object.extend('Product');
-    const query = new Parse.Query(Product);
-    query.equalTo('pathParam', req.params.productId);
-    query.first().then((result) => {
-      res.status(200).send(result);
-    });
-  });
-
   const distFolder = join(process.cwd(), 'dist/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
