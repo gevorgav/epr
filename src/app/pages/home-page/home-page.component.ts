@@ -27,10 +27,10 @@ export class HomePageComponent implements OnInit, AfterViewInit {
               private productService: ProductService,
               private settingsService: SettingsService,
               private seoService: SeoTagHttpService) {
-    this.seoService.getHomePageSeo().subscribe(res => {
-      this.titleService.setTitle(res.title);
-      this.metaService.updateTag({name: 'description', content: res.description});
-    });
+    // this.seoService.getHomePageSeo().subscribe(res => {
+    //   this.titleService.setTitle(res.title);
+    //   this.metaService.updateTag({name: 'description', content: res.description});
+    // });
   }
 
   public customOptions: OwlOptions = {
