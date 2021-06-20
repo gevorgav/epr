@@ -34,6 +34,32 @@ export function app() {
     bootstrap: AppServerModule,
   }));
 
+  server.route('/api/home-page').put((req, res) => {
+    const SettingsParse = Parse.Object.extend('Settings');
+    const settingsParse = new SettingsParse();
+    const query = new Parse.Query(settingsParse);
+    query.first().then(value => {
+      res.status(200).send(value);
+    });
+  });
+
+  server.route('/api/category/:categoryTitle').put((req, res) => {
+    const category = Parse.Object.extend('Category');
+    const query = new Parse.Query(category).equalTo('pathParam', req.params.categoryTitle);
+    query.first().then(value => {
+      res.status(200).send(value);
+    });
+  });
+
+  server.route('/api/product/:productId').put( (req, res) => {
+    const Product = Parse.Object.extend('Product');
+    const query = new Parse.Query(Product);
+    query.equalTo('pathParam', req.params.productId);
+    query.first().then((result) => {
+      res.status(200).send(result);
+    });
+  });
+
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
