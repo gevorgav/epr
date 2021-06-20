@@ -30,7 +30,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
               private categoryService: CategoryService,
               private locationDateService: LocationDateService,
               private seoService: SeoTagHttpService) {
-    // this.setSeo();
+    this.setSeo();
   }
 
   ngOnInit() {
