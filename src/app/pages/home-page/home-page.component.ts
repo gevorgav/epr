@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, HostListener, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../shared/services/category.service';
 import {CategoryModel} from '../../shared/model/category.model';
@@ -11,6 +11,7 @@ import {SettingsService} from '../../shared/services/settings.service';
 import {SettingsModel} from '../../shared/model/settings.model';
 import {Meta, Title} from '@angular/platform-browser';
 import { of } from 'rxjs';
+import {SeoTagHttpService} from '../../shared/services/seo-tag-http.service';
 
 @Component({
   selector: 'app-home-page',
@@ -24,8 +25,12 @@ export class HomePageComponent implements OnInit, AfterViewInit {
               private locationDateService: LocationDateService,
               private categoryService: CategoryService,
               private productService: ProductService,
-              private settingsService: SettingsService) {
-    this.onResize();
+              private settingsService: SettingsService,
+              private seoService: SeoTagHttpService) {
+    this.seoService.getHomePageSeo().subscribe(res => {
+      this.titleService.setTitle(res.title);
+      this.metaService.updateTag({name: 'description', content: res.description});
+    });
   }
 
   public customOptions: OwlOptions = {
@@ -54,19 +59,19 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     nav: true
   };
 
-  @Input() settings: SettingsModel;
+  settings: SettingsModel;
 
   public categories: CategoryModel[] = [];
 
   public screenHeight: number;
 
   public featuredRentalProducts: ProductModel[] = [];
-  private _imageUrl: string;
-  private sliderIndex = 0;
-  private maxImages = 0;
+  public sliderIndex = 0;
   public sliderReady: boolean = false;
   public showLocationDate: boolean = false;
   public isMobile: boolean = false;
+
+  private maxImages = 0;
 
   ngOnInit() {
     this.initCategories();
@@ -166,8 +171,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private initSettings() {
     this.settingsService.getSettings().then(res=>{
       this.settings = res;
-      this.titleService.setTitle(this.settings.title);
-      this.metaService.addTag({ name: 'description', content: this.settings.homePageMetaDescription });
       this.initImage();
       let i = 1;
       while (this.settings['imageUrl'+i]){

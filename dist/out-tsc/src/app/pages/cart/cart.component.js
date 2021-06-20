@@ -4,23 +4,24 @@ import { InitializerService } from '../../shared/services/initializer.service';
 import { OrderService } from '../../shared/services/order.service';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { ProductService } from '../../shared/services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ParseService } from '../../shared/services/parse.service';
 import { CheckoutService } from '../../shared/services/checkout.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ShippingInfoModel } from '../../shared/model/shipping-info.model';
 import { ShippingHttpService } from '../../shared/services/shipping-http.service';
 import { from, zip } from 'rxjs';
+import { PromoCodeService } from '../../shared/services/promo-coed.service';
 let CartComponent = class CartComponent {
-    constructor(orderService, locationService, productService, route, router, parseService, checkoutService, shippingService, initializerService) {
+    constructor(orderService, locationService, productService, router, parseService, checkoutService, shippingService, promoCodeService, initializerService) {
         this.orderService = orderService;
         this.locationService = locationService;
         this.productService = productService;
-        this.route = route;
         this.router = router;
         this.parseService = parseService;
         this.checkoutService = checkoutService;
         this.shippingService = shippingService;
+        this.promoCodeService = promoCodeService;
         this.initializerService = initializerService;
         this.stairs = [
             {
@@ -77,6 +78,7 @@ let CartComponent = class CartComponent {
         this._minimalDeliver = 35;
         this.orderData = new Map();
         this.selectedStair = 0;
+        this.promoCodeDiscount = 0;
         this.enableCheckout = true;
     }
     ngOnInit() {
@@ -86,10 +88,15 @@ let CartComponent = class CartComponent {
                 this.initShippingForm();
                 this.locationService.isSpecified.subscribe(res => {
                     if (res) {
+                        this.shippingInformationForm.enable();
                         this.getShippingPrice();
                         if (this._productsInCart && this._productsInCart.length > 0) {
                             this.initOrderData();
                         }
+                    }
+                    else {
+                        this.shippingInformationForm.disable();
+                        this.shippingInformationForm.reset();
                     }
                 });
             }
@@ -139,7 +146,8 @@ let CartComponent = class CartComponent {
     initOrderData() {
         this.initializerService.orderModel.orderItems.forEach((value) => {
             let product = this.getProductById(value.productId);
-            this.orderData.set(value.productId, { count: value.count,
+            this.orderData.set(value.productId, {
+                count: value.count,
                 available: this.getQuantities(product),
                 price: 0
             });
@@ -215,15 +223,28 @@ let CartComponent = class CartComponent {
         });
     }
     setNewPrices() {
-        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
-        CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+        if (this.locationService.locationDate.location) {
+            CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = this.getTotalPrice().toString();
+            CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.billTo.zip = this.locationService.locationDate.location.zipCode;
+        }
     }
     onSubmitShippingForm() {
         if (this.shippingInformationForm.valid) {
-            let shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.getTotalPrice(), this.getProductCount(), this.initializerService.orderModel.orderItems, this.getStairName(), this.selectedSetUpSurface);
-            this.shippingService.saveShipping(shippingModel).subscribe(res => {
+            let total = this.getTotalPrice();
+            let promoCodeId;
+            this.promoCodeService.getPromoCodeByCode(this.shippingInformationForm.get('promoCode').value).then(res => {
+                if (res && !res.isUsed) {
+                    promoCodeId = res.id;
+                    total -= res.discount;
+                }
+                let shippingModel = new ShippingInfoModel(null, this.shippingInformationForm.get('name').value, this.shippingInformationForm.get('address').value, this.shippingInformationForm.get('phone').value, this.shippingInformationForm.get('email').value, this.shippingInformationForm.get('instruction').value, this.locationService.locationDate.location.id, this.getProductsIds(this.productsInCart), false, false, this.parseService.isAuth() ? this.parseService.getCurrentUser() : null, null, this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, total, this.getProductCount(), this.initializerService.orderModel.orderItems, this.getStairName(), this.selectedSetUpSurface);
+                return shippingModel;
+            }).then(res => {
+                return this.shippingService.saveShipping(res);
+            }).then(res => {
+                CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.transactionRequest.amount = total.toString();
                 CheckoutService.PAYMENT_OBJ.getHostedPaymentPageRequest.hostedPaymentSettings.setting[0].settingValue =
-                    "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
+                    "{\"showReceipt\": true, \"url\": \"https://entertainmentpartyrentals.com/profile/" + res.id + (promoCodeId ? "/" + promoCodeId : "") + "\", \"urlText\": \"Continue\", \"cancelUrl\": \"https://entertainmentpartyrentals.com/cart\", \"cancelUrlText\": \"Cancel\"}";
                 this.redirect();
             });
         }
@@ -245,6 +266,7 @@ let CartComponent = class CartComponent {
             'email': new FormControl('', [
                 Validators.required
             ]),
+            'promoCode': new FormControl(''),
             'stairs': new FormControl('', [
                 Validators.required
             ]),
@@ -252,6 +274,16 @@ let CartComponent = class CartComponent {
                 Validators.required
             ]),
             'instruction': new FormControl('', [])
+        });
+        if (!this.locationService.locationDate.location) {
+            this.shippingInformationForm.disable();
+        }
+        this.shippingInformationForm.get('stairs').valueChanges.subscribe(value => {
+            this.selectedStair = Number(value);
+            this.setNewPrices();
+        });
+        this.shippingInformationForm.get('setUpSurface').valueChanges.subscribe(value => {
+            this.selectedSetUpSurface = value;
         });
     }
     getProductsIds(productsInCart) {
@@ -276,10 +308,6 @@ let CartComponent = class CartComponent {
             }
         });
     }
-    stairsChange($event) {
-        this.selectedStair = Number($event.target.value);
-        this.setNewPrices();
-    }
     getStairName() {
         for (let stair of this.stairs) {
             if (stair.value == this.selectedStair)
@@ -287,24 +315,22 @@ let CartComponent = class CartComponent {
         }
         throw new Error();
     }
-    setUpSurfaceChange($event) {
-        this.selectedSetUpSurface = $event.target.value;
-    }
 };
 CartComponent = __decorate([
     Component({
         selector: 'app-cart',
         templateUrl: './cart.component.html',
-        styleUrls: ['./cart.component.css']
+        styleUrls: ['./cart.component.css'],
+        providers: [PromoCodeService]
     }),
     __metadata("design:paramtypes", [OrderService,
         LocationDateService,
         ProductService,
-        ActivatedRoute,
         Router,
         ParseService,
         CheckoutService,
         ShippingHttpService,
+        PromoCodeService,
         InitializerService])
 ], CartComponent);
 export { CartComponent };

@@ -11,9 +11,14 @@ import { createWindow } from 'domino';
 
 const scripts = readFileSync('dist/browser/index.html').toString();
 
-const window = createWindow(scripts) as any;
+
+global['window'] = createWindow(scripts) as any;
 
 import 'localstorage-polyfill';
+global['Parse']  = require('parse/node') ;
+
+Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
+(Parse as any).serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
 
 global['localStorage'] = localStorage;
 
@@ -37,6 +42,32 @@ export function app() {
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'
   }));
+
+  server.get('/api/home-page' , (req, res) => {
+    const SettingsParse = Parse.Object.extend('Settings');
+    const settingsParse = new SettingsParse();
+    const query = new Parse.Query(settingsParse);
+    query.first().then(value => {
+      res.status(200).send(value);
+    });
+  });
+
+  server.get('/api/category/:categoryTitle', (req, res) => {
+    const category = Parse.Object.extend('Category');
+    const query = new Parse.Query(category).equalTo('pathParam', req.params.categoryTitle);
+    query.first().then(value => {
+      res.status(200).send(value);
+    });
+  });
+
+  server.get('/api/product/:productId' , (req, res) => {
+    const Product = Parse.Object.extend('Product');
+    const query = new Parse.Query(Product);
+    query.equalTo('pathParam', req.params.productId);
+    query.first().then((result) => {
+      res.status(200).send(result);
+    });
+  });
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {

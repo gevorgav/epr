@@ -20,6 +20,7 @@ import {AdditionModel} from '../../shared/model/addition.model';
 import {map} from 'rxjs/operators';
 import {ShippingHttpService} from '../../shared/services/shipping-http.service';
 import {NgxGalleryAnimation} from "@kolkov/ngx-gallery";
+import {SeoTagHttpService} from '../../shared/services/seo-tag-http.service';
 declare var $: any;
 
 @Component({
@@ -99,14 +100,25 @@ export class RentalItemComponent implements OnInit, AfterViewInit {
               private initializerService: InitializerService,
               private parseService: ParseService,
               private shippingService: ShippingHttpService,
-              private additionCategoryService: AdditionCategoryService) {
+              private additionCategoryService: AdditionCategoryService,
+              private seoService: SeoTagHttpService) {
   }
 
   ngOnInit() {
     this.getRouteParams();
+    this.setSeo();
     this.routingService.itemIdSubject.subscribe(res => {
       // console.log(res);
     });
+  }
+
+  setSeo(product = this.route.snapshot.params.title){
+    if (product) {
+      this.seoService.getProductSeo(product).subscribe(res => {
+        this.titleService.setTitle(res.title);
+        this.metaService.updateTag({name: 'description', content: res.description});
+      });
+    }
   }
 
   private getSelectedProduct(productPatch: string) {

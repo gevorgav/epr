@@ -93,7 +93,7 @@ const appRoutes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'reset-password',

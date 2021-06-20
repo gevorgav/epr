@@ -7,6 +7,7 @@ import {map} from 'rxjs/operators';
 import {LocationDateService} from '../../shared/services/location-date.service';
 import {Meta, Title} from '@angular/platform-browser';
 import {from, zip} from 'rxjs';
+import {SeoTagHttpService} from '../../shared/services/seo-tag-http.service';
 
 
 @Component({
@@ -27,7 +28,9 @@ export class RentalsComponent implements OnInit, AfterViewInit {
               private titleService: Title,
               private metaService: Meta,
               private categoryService: CategoryService,
-              private locationDateService: LocationDateService) {
+              private locationDateService: LocationDateService,
+              private seoService: SeoTagHttpService) {
+    this.setSeo();
   }
 
   ngOnInit() {
@@ -54,6 +57,15 @@ export class RentalsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  setSeo(categoryName = this.route.snapshot.params.title){
+    if (categoryName) {
+      this.seoService.getCategorySeo(categoryName).subscribe(res => {
+        this.titleService.setTitle(res.title);
+        this.metaService.updateTag({name: 'description', content: res.description});
+      });
+    }
+  }
+
   private getPathParam() {
     return this.title$.pipe(map((params: ParamMap) => {
       return params.get('title');
@@ -62,6 +74,7 @@ export class RentalsComponent implements OnInit, AfterViewInit {
 
   categoryOnClick(category: CategoryModel) {
     this.navigate(category.id, category.pathParam);
+    this.setSeo(category.pathParam);
     this.activeCategory = category;
   }
 
@@ -94,8 +107,6 @@ export class RentalsComponent implements OnInit, AfterViewInit {
 
     this.categoryService.getCategoriesByPathParamWithDependency(pathParam).then(res=>{
       this.activeCategory = res;
-      this.titleService.setTitle(res.pageTitle? res.pageTitle: res.title);
-      this.metaService.updateTag({ name: 'description', content: res.metaDescription });
     });
   }
 

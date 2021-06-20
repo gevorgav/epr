@@ -92,7 +92,7 @@ const appRoutes = [
     {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
     },
     {
         path: 'reset-password',
@@ -111,6 +111,10 @@ const appRoutes = [
     },
     {
         path: 'profile/:id',
+        component: CheckoutComponent
+    },
+    {
+        path: 'profile/:id/:promoCodeId',
         component: CheckoutComponent
     },
     {
@@ -156,7 +160,7 @@ AppModule = __decorate([
             PageNotFoundComponent
         ],
         imports: [
-            RouterModule.forRoot(appRoutes, { enableTracing: false } // <-- debugging purposes only
+            RouterModule.forRoot(appRoutes, { enableTracing: false, initialNavigation: 'enabled' } // <-- debugging purposes only
             ),
             BrowserModule.withServerTransition({ appId: 'serverApp' }),
             FormsModule,

@@ -5,22 +5,31 @@ import { ShippingHttpService } from '../../shared/services/shipping-http.service
 import { OrderService } from '../../shared/services/order.service';
 import { map } from 'rxjs/operators';
 import { MailService } from '../../shared/services/mail.service';
+import { zip } from 'rxjs';
+import { PromoCodeService } from '../../shared/services/promo-coed.service';
 let CheckoutComponent = class CheckoutComponent {
-    constructor(route, router, orderService, shippingService, mailService) {
+    constructor(route, router, orderService, shippingService, mailService, promoCodeService) {
         this.route = route;
         this.router = router;
         this.orderService = orderService;
         this.shippingService = shippingService;
         this.mailService = mailService;
+        this.promoCodeService = promoCodeService;
         this.id$ = this.route.paramMap;
     }
     ngOnInit() {
         this.id$.subscribe((params) => {
             let id = params.get('id');
+            let promoCodeId = params.get('promoCodeId');
             if (id) {
                 this.setShippedTrue(params.get('id')).subscribe(res => {
                     if (res) {
-                        this.removeProductsFromOrder().subscribe(res => {
+                        let observables = [];
+                        observables.push(this.removeProductsFromOrder());
+                        if (promoCodeId) {
+                            observables.push(this.promoCodeService.setShippingId(promoCodeId, id));
+                        }
+                        zip(...observables).subscribe(res => {
                             this.router.navigateByUrl('/rentals').then(res => {
                                 location.reload();
                             });
@@ -52,13 +61,15 @@ CheckoutComponent = __decorate([
     Component({
         selector: 'app-checkout',
         templateUrl: './checkout.component.html',
-        styleUrls: ['./checkout.component.css']
+        styleUrls: ['./checkout.component.css'],
+        providers: [PromoCodeService]
     }),
     __metadata("design:paramtypes", [ActivatedRoute,
         Router,
         OrderService,
         ShippingHttpService,
-        MailService])
+        MailService,
+        PromoCodeService])
 ], CheckoutComponent);
 export { CheckoutComponent };
 //# sourceMappingURL=checkout.component.js.map

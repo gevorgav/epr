@@ -17,9 +17,6 @@
     "dev:ssr": "ng run my-dream-app:serve-ssr",
     "prerender": "ng run my-dream-app:prerender"
   },
-  "browser": {
-    "crypto": false
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^9.1.13",
@@ -40,6 +37,7 @@
     "@nguniversal/express-engine": "^9.1.1",
     "@types/luxon": "^1.21.0",
     "@webpack-cli/init": "^0.3.0",
+    "child_process": "^1.0.2",
     "compression": "^1.7.4",
     "core-js": "^2.5.4",
     "express": "^4.15.2",
@@ -57,6 +55,7 @@
     "parse": "3.2.0",
     "rxjs": "~6.6.7",
     "tslib": "^1.10.0",
+    "xmlhttprequest": "^1.8.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

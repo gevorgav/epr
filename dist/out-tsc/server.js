@@ -1,55 +1,76 @@
 import 'zone.js/dist/zone-node';
-import { enableProdMode } from '@angular/core';
-// Express Engine
 import { ngExpressEngine } from '@nguniversal/express-engine';
-// Import module map for lazy loading
-import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
-const Parse = require('parse/node');
-// Faster server renders w/ Prod mode (dev mode never needed)
-enableProdMode();
-// Express server
-const app = express();
-const domino = require("domino");
-const fs = require("fs");
-const compression = require("compression");
-const path = require("path");
-const templateA = fs
-    .readFileSync(path.join("dist/browser", "index.html"))
-    .toString();
-const win = domino.createWindow(templateA);
-const window = domino.createWindow(templateA);
-app.use(compression());
-global['document'] = win.document;
-global['KeyboardEvent'] = null;
-global['Event'] = null;
-global['window'] = window;
-const PORT = process.env.PORT || 4200;
-const DIST_FOLDER = join(process.cwd(), 'dist/browser');
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
-// Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
-    ]
-}));
-app.set('view engine', 'html');
-app.set('views', DIST_FOLDER);
-// Example Express Rest API endpoints
-// app.get('/api/**', (req, res) => { });
-// Serve static files from /browser
-app.get('*.*', express.static(DIST_FOLDER, {
-    maxAge: '1y'
-}));
-// All regular routes use the Universal engine
-app.get('*', (req, res) => {
-    res.render('index', { req });
-});
-// Start up the Node server
-app.listen(PORT, () => {
-    console.log(`Node Express server listening on http://localhost:${PORT}`);
-});
+import { APP_BASE_HREF } from '@angular/common';
+import { existsSync, readFileSync } from 'fs';
+import { AppServerModule } from './src/main.server';
+import { createWindow } from 'domino';
+const scripts = readFileSync('dist/browser/index.html').toString();
+global['window'] = createWindow(scripts);
+import 'localstorage-polyfill';
+global['Parse'] = require('parse/node');
+Parse.initialize('myAppId', 'javascriptkey'); // use your appID & your js key
+Parse.serverURL = 'https://entertainmentpartyrentals.com/parse'; // use your server url
+global['localStorage'] = localStorage;
+// The Express app is exported so that it can be used by serverless Functions.
+export function app() {
+    const server = express();
+    const distFolder = join(process.cwd(), 'dist/browser');
+    const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+    // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+    server.engine('html', ngExpressEngine({
+        bootstrap: AppServerModule,
+    }));
+    server.set('view engine', 'html');
+    server.set('views', distFolder);
+    // Example Express Rest API endpoints
+    // server.get('/api/**', (req, res) => { });
+    // Serve static files from /browser
+    server.get('*.*', express.static(distFolder, {
+        maxAge: '1y'
+    }));
+    server.get('/api/home-page', (req, res) => {
+        const SettingsParse = Parse.Object.extend('Settings');
+        const settingsParse = new SettingsParse();
+        const query = new Parse.Query(settingsParse);
+        query.first().then(value => {
+            res.status(200).send(value);
+        });
+    });
+    server.get('/api/category/:categoryTitle', (req, res) => {
+        const category = Parse.Object.extend('Category');
+        const query = new Parse.Query(category).equalTo('title', req.params.categoryTitle);
+        query.first().then(value => {
+            res.status(200).send(value);
+        });
+    });
+    server.get('/api/product/:productId', (req, res) => {
+        const Product = Parse.Object.extend('Product');
+        const query = new Parse.Query(Product);
+        query.equalTo('objectId', req.params.productId);
+        query.first().then((result) => {
+            res.status(200).send(result);
+        });
+    });
+    // All regular routes use the Universal engine
+    server.get('*', (req, res) => {
+        res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+    });
+    return server;
+}
+function run() {
+    const port = process.env.PORT || 4200;
+    // Start up the Node server
+    const server = app();
+    server.listen(port, () => {
+        console.log(`Node Express server listening on http://localhost:${port}`);
+    });
+}
+const mainModule = __non_webpack_require__.main;
+const moduleFilename = mainModule && mainModule.filename || '';
+if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
+    run();
+}
+export * from './src/main.server';
 //# sourceMappingURL=server.js.map

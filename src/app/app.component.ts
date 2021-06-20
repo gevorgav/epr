@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {filter, map, mergeMap} from 'rxjs/operators';
-import {LocationDateService} from './shared/services/location-date.service';
-import {OrderService} from './shared/services/order.service';
-import {InitializerService} from './shared/services/initializer.service';
-import {ParseService} from './shared/services/parse.service';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { filter, map, mergeMap } from 'rxjs/operators';
+import { LocationDateService } from './shared/services/location-date.service';
+import { OrderService } from './shared/services/order.service';
+import { InitializerService } from './shared/services/initializer.service';
+import { ParseService } from './shared/services/parse.service';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +15,11 @@ import {ParseService} from './shared/services/parse.service';
 export class AppComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
-              private parseService: ParseService,
-              private activatedRoute: ActivatedRoute,
-              private locationService: LocationDateService,
-              private orderService: OrderService,
-              private initializerService: InitializerService) {
+    public parseService: ParseService,
+    private activatedRoute: ActivatedRoute,
+    private locationService: LocationDateService,
+    private orderService: OrderService,
+    private initializerService: InitializerService) {
   }
 
   ngOnInit(): void {
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // this.deliveryService.syncDeliveryChart().subscribe(res=>{
     //   console.log(res);
     // })
+
 
   }
 

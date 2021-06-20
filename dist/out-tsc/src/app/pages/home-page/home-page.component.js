@@ -1,15 +1,16 @@
 import { __decorate, __metadata } from "tslib";
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../shared/services/category.service';
 import { ProductService } from '../../shared/services/product.service';
 import { map } from 'rxjs/operators';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { SettingsService } from '../../shared/services/settings.service';
-import { SettingsModel } from '../../shared/model/settings.model';
 import { Meta, Title } from '@angular/platform-browser';
+import { of } from 'rxjs';
+import { SeoTagHttpService } from '../../shared/services/seo-tag-http.service';
 let HomePageComponent = class HomePageComponent {
-    constructor(router, titleService, metaService, locationDateService, categoryService, productService, settingsService) {
+    constructor(router, titleService, metaService, locationDateService, categoryService, productService, settingsService, seoService) {
         this.router = router;
         this.titleService = titleService;
         this.metaService = metaService;
@@ -17,6 +18,7 @@ let HomePageComponent = class HomePageComponent {
         this.categoryService = categoryService;
         this.productService = productService;
         this.settingsService = settingsService;
+        this.seoService = seoService;
         this.customOptions = {
             loop: false,
             mouseDrag: true,
@@ -45,11 +47,14 @@ let HomePageComponent = class HomePageComponent {
         this.categories = [];
         this.featuredRentalProducts = [];
         this.sliderIndex = 0;
-        this.maxImages = 0;
         this.sliderReady = false;
         this.showLocationDate = false;
         this.isMobile = false;
-        this.onResize();
+        this.maxImages = 0;
+        this.seoService.getHomePageSeo().subscribe(res => {
+            this.titleService.setTitle(res.title);
+            this.metaService.addTag({ name: 'description', content: res.description });
+        });
     }
     ngOnInit() {
         this.initCategories();
@@ -91,6 +96,15 @@ let HomePageComponent = class HomePageComponent {
         }
         return 'col-lg-4';
     }
+    getProductLabel(product) {
+        if (product.isNew) {
+            return 'New !';
+        }
+        else if (product.isHotDeal) {
+            return 'Hot Deal !';
+        }
+        return '';
+    }
     initProducts() {
         this.productService.getAllProducts().then((res) => {
             this.initFeaturedRentalProducts(res);
@@ -100,7 +114,14 @@ let HomePageComponent = class HomePageComponent {
         return this.locationDateService.isSpecified;
     }
     getPrice(nightPrice, minPrice, minTime, price) {
-        return this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+        this.isSpecified().pipe(map(res => {
+            if (res) {
+                return '$ ' + this.locationDateService.getCalculation(nightPrice, minPrice, minTime, price);
+            }
+            else {
+                return of('');
+            }
+        }));
     }
     getScreenHeight() {
         return this.screenHeight - 80;
@@ -114,8 +135,6 @@ let HomePageComponent = class HomePageComponent {
     initSettings() {
         this.settingsService.getSettings().then(res => {
             this.settings = res;
-            this.titleService.setTitle(this.settings.title);
-            this.metaService.addTag({ name: 'description', content: this.settings.homePageMetaDescription });
             this.initImage();
             let i = 1;
             while (this.settings['imageUrl' + i]) {
@@ -126,10 +145,6 @@ let HomePageComponent = class HomePageComponent {
         });
     }
 };
-__decorate([
-    Input(),
-    __metadata("design:type", SettingsModel)
-], HomePageComponent.prototype, "settings", void 0);
 __decorate([
     HostListener('window:resize', ['$event']),
     __metadata("design:type", Function),
@@ -148,7 +163,8 @@ HomePageComponent = __decorate([
         LocationDateService,
         CategoryService,
         ProductService,
-        SettingsService])
+        SettingsService,
+        SeoTagHttpService])
 ], HomePageComponent);
 export { HomePageComponent };
 //# sourceMappingURL=home-page.component.js.map

@@ -29,8 +29,9 @@ let LoginPageComponent = class LoginPageComponent {
         }
     }
     onSubmitRegistration() {
+        var _a;
         if (this.userRegisterForm.valid) {
-            let user = new this.parseService.parse.User();
+            let user = (_a = new this.parseService.parse) === null || _a === void 0 ? void 0 : _a.User();
             user.setUsername(this.userRegisterForm.get('username').value.toLowerCase().trim());
             user.setEmail(this.userRegisterForm.get('email').value);
             user.setPassword(this.userRegisterForm.get('password').value);
@@ -59,16 +60,18 @@ let LoginPageComponent = class LoginPageComponent {
         }
     }
     checkMail(control) {
-        let Stores = this.parseService.parse.Object.extend("User");
-        const query = new this.parseService.parse.Query(Stores);
+        var _a, _b;
+        let Stores = (_a = this.parseService.parse) === null || _a === void 0 ? void 0 : _a.Object.extend("User");
+        const query = (_b = new this.parseService.parse) === null || _b === void 0 ? void 0 : _b.Query(Stores);
         query.equalTo("email", control.value.trim());
         return query.find().then(function (results) {
             return results.length == 0 ? null : { emailTaken: true };
         });
     }
     checkUsername(control) {
-        let Stores = this.parseService.parse.Object.extend("User");
-        const query = new this.parseService.parse.Query(Stores);
+        var _a, _b;
+        let Stores = (_a = this.parseService.parse) === null || _a === void 0 ? void 0 : _a.Object.extend("User");
+        const query = (_b = new this.parseService.parse) === null || _b === void 0 ? void 0 : _b.Query(Stores);
         query.equalTo("username", control.value.trim());
         return query.find().then(function (results) {
             return results.length == 0 ? null : { usernameTaken: true };

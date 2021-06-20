@@ -15,8 +15,7 @@ let ShippingHttpService = ShippingHttpService_1 = class ShippingHttpService {
     saveShipping(shipping) {
         const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);
         const ZipCode = this.parseService.parse.Object.extend(ShippingHttpService_1.ZIP_CODE);
-        let promise;
-        promise = this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res => {
+        return this.orderService.saveAndGetOrderItems(shipping.orderItems).then(res => {
             res.forEach((value, index) => {
                 shipping.orderItems[index].id = value.id;
             });
@@ -45,7 +44,6 @@ let ShippingHttpService = ShippingHttpService_1 = class ShippingHttpService {
                 return res;
             });
         });
-        return from(promise);
     }
     setPayed(id) {
         const ShippingInfo = this.parseService.parse.Object.extend(ShippingHttpService_1.SHIPPING_INFO);

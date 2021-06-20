@@ -13,6 +13,7 @@ import { OrderItemModel } from '../../shared/model/order-item.model';
 import { InitializerService } from '../../shared/services/initializer.service';
 import { AdditionCategoryService } from '../../shared/services/addition-category.service';
 import { from, of, zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ShippingHttpService } from '../../shared/services/shipping-http.service';
 import { NgxGalleryAnimation } from "@kolkov/ngx-gallery";
 let RentalItemComponent = class RentalItemComponent {
@@ -143,7 +144,14 @@ let RentalItemComponent = class RentalItemComponent {
         return Array.from(this.selectedProduct.setupPolicy.keys());
     }
     getPrice(nightPrice, minPrice, minTime, price) {
-        return this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+        this.isSpecified().pipe(map(res => {
+            if (res) {
+                return '$ ' + this.locationService.getCalculation(nightPrice, minPrice, minTime, price);
+            }
+            else {
+                return of('');
+            }
+        }));
     }
     getQuantitiesByCount() {
         let quantities = [];
@@ -155,6 +163,15 @@ let RentalItemComponent = class RentalItemComponent {
             }
         }
         return of(quantities);
+    }
+    getProductLabel(product) {
+        if (product.isNew) {
+            return 'New !';
+        }
+        else if (product.isHotDeal) {
+            return 'Hot Deal !';
+        }
+        return '';
     }
     getQuantities() {
         return this.shippingService.getInaccessibleCountForProductInDate(this.locationService.locationDate.startDateTime, this.locationService.locationDate.endDateTime, this.selectedProduct.id)

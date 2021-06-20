@@ -44,7 +44,7 @@ export class LoginPageComponent implements OnInit {
 
   onSubmitRegistration(){
     if (this.userRegisterForm.valid){
-      let user = new this.parseService.parse.User();
+      let user = new this.parseService.parse?.User();
       user.setUsername(this.userRegisterForm.get('username').value.toLowerCase().trim());
       user.setEmail(this.userRegisterForm.get('email').value);
       user.setPassword(this.userRegisterForm.get('password').value);
@@ -78,8 +78,8 @@ export class LoginPageComponent implements OnInit {
   }
 
   private checkMail(control: AbstractControl){
-    let Stores = this.parseService.parse.Object.extend("User");
-    const query = new this.parseService.parse.Query(Stores);
+    let Stores = this.parseService.parse?.Object.extend("User");
+    const query = new this.parseService.parse?.Query(Stores);
     query.equalTo("email", control.value.trim());
     return query.find().then(function(results) {
       return results.length == 0 ? null : { emailTaken: true } ;
@@ -87,8 +87,8 @@ export class LoginPageComponent implements OnInit {
   }
 
   private checkUsername(control: AbstractControl){
-    let Stores = this.parseService.parse.Object.extend("User");
-    const query = new this.parseService.parse.Query(Stores);
+    let Stores = this.parseService.parse?.Object.extend("User");
+    const query = new this.parseService.parse?.Query(Stores);
     query.equalTo("username", control.value.trim());
     return query.find().then(function(results) {
       return results.length == 0 ? null : { usernameTaken: true } ;

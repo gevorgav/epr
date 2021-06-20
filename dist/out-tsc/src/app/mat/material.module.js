@@ -15,6 +15,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
 let MaterialModule = class MaterialModule {
 };
 MaterialModule = __decorate([
@@ -34,7 +35,8 @@ MaterialModule = __decorate([
             MatSlideToggleModule,
             MatTabsModule,
             MatNativeDateModule,
-            MatPaginatorModule
+            MatPaginatorModule,
+            MatCardModule
         ]
     })
 ], MaterialModule);

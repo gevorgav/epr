@@ -24,6 +24,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { PromoCodeListComponent } from './promo-code-list/promo-code-list.component';
 import { PromoCodeService } from '../../shared/services/promo-coed.service';
+import { MatButtonModule } from '@angular/material/button';
 const dashboardRoutes = [
     {
         path: '', component: DashboardComponent, children: [
@@ -71,7 +72,8 @@ DashboardModule = __decorate([
             CommonModule,
             MaterialModule,
             MatDatepickerModule,
-            CKEditorModule
+            CKEditorModule,
+            MatButtonModule
         ],
         providers: [PromoCodeService],
         entryComponents: [

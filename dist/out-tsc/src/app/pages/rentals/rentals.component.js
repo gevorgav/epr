@@ -7,8 +7,9 @@ import { map } from 'rxjs/operators';
 import { LocationDateService } from '../../shared/services/location-date.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { from, zip } from 'rxjs';
+import { SeoTagHttpService } from '../../shared/services/seo-tag-http.service';
 let RentalsComponent = class RentalsComponent {
-    constructor(router, routingService, route, titleService, metaService, categoryService, locationDateService) {
+    constructor(router, routingService, route, titleService, metaService, categoryService, locationDateService, seoService) {
         this.router = router;
         this.routingService = routingService;
         this.route = route;
@@ -16,10 +17,16 @@ let RentalsComponent = class RentalsComponent {
         this.metaService = metaService;
         this.categoryService = categoryService;
         this.locationDateService = locationDateService;
+        this.seoService = seoService;
         this.categories = [];
+        this.isMobile = false;
         this.title$ = this.route.paramMap;
+        this.setSeo();
     }
     ngOnInit() {
+        if (window.innerWidth && window.innerWidth < 990) {
+            this.isMobile = true;
+        }
         zip(from(this.categoryService.getCategories()).pipe(map(arr => arr.sort((a, b) => {
             return a.order - b.order;
         }))), this.getPathParam()).subscribe(res => {
@@ -32,11 +39,20 @@ let RentalsComponent = class RentalsComponent {
                         });
                 });
             }
-            else {
+            else if (!this.isMobile) {
                 this.navigate(res[0][0].id, res[0][0].pathParam);
             }
             this.subscribeAndInit();
         });
+    }
+    setSeo() {
+        let categoryName = this.route.snapshot.params.title;
+        if (categoryName) {
+            this.seoService.getCategorySeo(categoryName).subscribe(res => {
+                this.titleService.setTitle(res.title);
+                this.metaService.addTag({ name: 'description', content: res.description });
+            });
+        }
     }
     getPathParam() {
         return this.title$.pipe(map((params) => {
@@ -94,7 +110,8 @@ RentalsComponent = __decorate([
         Title,
         Meta,
         CategoryService,
-        LocationDateService])
+        LocationDateService,
+        SeoTagHttpService])
 ], RentalsComponent);
 export { RentalsComponent };
 //# sourceMappingURL=rentals.component.js.map
