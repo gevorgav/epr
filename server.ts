@@ -36,13 +36,6 @@ export function app() {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
-  }));
-
   server.get('/api/home-page' , (req, res) => {
     const SettingsParse = Parse.Object.extend('Settings');
     const settingsParse = new SettingsParse();
@@ -68,6 +61,13 @@ export function app() {
       res.status(200).send(result);
     });
   });
+
+  // Example Express Rest API endpoints
+  // server.get('/api/**', (req, res) => { });
+  // Serve static files from /browser
+  server.get('*.*', express.static(distFolder, {
+    maxAge: '1y'
+  }));
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
