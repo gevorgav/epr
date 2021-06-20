@@ -36,31 +36,31 @@ export function app() {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  server.get('/api/home-page' , (req, res) => {
-    const SettingsParse = Parse.Object.extend('Settings');
-    const settingsParse = new SettingsParse();
-    const query = new Parse.Query(settingsParse);
-    query.first().then(value => {
-      res.status(200).send(value);
-    });
-  });
-
-  server.get('/api/category/:categoryTitle', (req, res) => {
-    const category = Parse.Object.extend('Category');
-    const query = new Parse.Query(category).equalTo('pathParam', req.params.categoryTitle);
-    query.first().then(value => {
-      res.status(200).send(value);
-    });
-  });
-
-  server.get('/api/product/:productId' , (req, res) => {
-    const Product = Parse.Object.extend('Product');
-    const query = new Parse.Query(Product);
-    query.equalTo('pathParam', req.params.productId);
-    query.first().then((result) => {
-      res.status(200).send(result);
-    });
-  });
+  // server.get('/api/home-page' , (req, res) => {
+  //   const SettingsParse = Parse.Object.extend('Settings');
+  //   const settingsParse = new SettingsParse();
+  //   const query = new Parse.Query(settingsParse);
+  //   query.first().then(value => {
+  //     res.status(200).send(value);
+  //   });
+  // });
+  //
+  // server.get('/api/category/:categoryTitle', (req, res) => {
+  //   const category = Parse.Object.extend('Category');
+  //   const query = new Parse.Query(category).equalTo('pathParam', req.params.categoryTitle);
+  //   query.first().then(value => {
+  //     res.status(200).send(value);
+  //   });
+  // });
+  //
+  // server.get('/api/product/:productId' , (req, res) => {
+  //   const Product = Parse.Object.extend('Product');
+  //   const query = new Parse.Query(Product);
+  //   query.equalTo('pathParam', req.params.productId);
+  //   query.first().then((result) => {
+  //     res.status(200).send(result);
+  //   });
+  // });
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
