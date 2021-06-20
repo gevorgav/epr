@@ -12,7 +12,7 @@ export class SeoTagHttpService {
   }
 
   public getHomePageSeo(): Observable<SeoTagsModel> {
-    return this.http.get(`${environment.url}home-page`).pipe(
+    return this.http.put(`${environment.url}home-page`, {}).pipe(
       map((res) => {
         const seoTagsModel = new SeoTagsModel();
         seoTagsModel.title = res['homePageTitle'];
@@ -24,7 +24,7 @@ export class SeoTagHttpService {
   }
 
   public getCategorySeo(categoryTitle: string): Observable<SeoTagsModel> {
-    return this.http.get(`${environment.url}category/${categoryTitle}`).pipe(
+    return this.http.put(`${environment.url}category/${categoryTitle}`, {}).pipe(
       map((res) => {
         const seoTagsModel = new SeoTagsModel();
         seoTagsModel.title = res['pageTitle']? res['pageTitle'] : res['title'];
@@ -36,7 +36,7 @@ export class SeoTagHttpService {
   }
 
   public getProductSeo(product): Observable<SeoTagsModel> {
-    return this.http.get(`${environment.url}product/${product}`).pipe(
+    return this.http.put(`${environment.url}product/${product}`, {}).pipe(
       map((res) => {
         const seoTagsModel = new SeoTagsModel();
         seoTagsModel.title = res['pageTitle']? res['pageTitle'] : res['title'];
