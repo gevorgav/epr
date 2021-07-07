@@ -5,10 +5,10 @@ import {map} from 'rxjs/operators';
 
 @Injectable()
 export class CheckoutService {
-  
+
   constructor(private httpClient: HttpClient) {
   }
-  
+
   public getToken(): Observable<string>{
     return this.httpClient.post(this.URL, CheckoutService.PAYMENT_OBJ).pipe(
       map(res=>{
@@ -20,13 +20,13 @@ export class CheckoutService {
       })
     )
   }
-  
+
   private URL = 'https://api.authorize.net/xml/v1/request.api';
   public static PAYMENT_OBJ = {
     getHostedPaymentPageRequest: {
       merchantAuthentication: {
-        name: "3Vpb69UJ6",
-        transactionKey: "9Ut347QY48FJ9bs9"
+        name: "8cEGh93a3A",
+        transactionKey: "4xV3u4PqwV6R76X7"
       },
       transactionRequest: {
         transactionType: "authCaptureTransaction",

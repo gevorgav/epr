@@ -274,7 +274,7 @@ export class CartComponent implements OnInit {
       let total = this.getTotalPrice();
       let promoCodeId: string;
       this.promoCodeService.getPromoCodeByCode(this.shippingInformationForm.get('promoCode').value).then(res => {
-        if (res && !res.isUsed) {
+        if (res && Object.keys(res).length !== 0 && res.isUsed === false) {
           promoCodeId = res.id;
           total -= res.discount;
         }

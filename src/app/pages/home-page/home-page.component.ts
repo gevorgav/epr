@@ -80,6 +80,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     if (window.innerWidth && window.innerWidth < 990) {
       this.isMobile = true;
     }
+    this.screenHeight = window.innerHeight;
   }
 
   ngAfterViewInit(): void {
