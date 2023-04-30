@@ -46,7 +46,7 @@
     "hammerjs": "^2.0.8",
     "init": "^0.1.2",
     "localstorage-polyfill": "^1.0.1",
-    "luxon": "^1.21.3",
+    "luxon": "^1.28.1",
     "moment": "^2.24.0",
     "ng-recaptcha": "^7.0.1",
     "ngx-material-timepicker": "5.5.3",
